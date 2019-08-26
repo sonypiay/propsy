@@ -1,20 +1,27 @@
 
 // Body
-$body-bg: #f8fafc;
+$body-bg: #efefef;
 
 // Typography
-$font-family-sans-serif: "Nunito", sans-serif;
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Nunito:300,600,700,900&display=swap');
+
+$font-primary: "Lato", sans-serif;
+$font-secondary: "Nunito", sans-serif;
 $font-size-base: 0.9rem;
 $line-height-base: 1.6;
 
 // Colors
-$blue: #3490dc;
-$indigo: #6574cd;
-$purple: #9561e2;
-$pink: #f66D9b;
-$red: #e3342f;
-$orange: #f6993f;
-$yellow: #ffed4a;
-$green: #38c172;
-$teal: #4dc0b5;
-$cyan: #6cb2eb;
+$color1: #00b7b8;
+$color2: #07bec0;
+$color3: #1fc8c9;
+$color4: #aae5e6;
+
+@mixin fontsetting( $type, $size, $weight, $style, $stretch, $spacing ) {
+  font-size: $size;
+  font-style: $style;
+  font-stretch: $stretch;
+  font-family: $type;
+  font-weight: $weight;
+  letter-spacing: $spacing;
+}

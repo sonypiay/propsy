@@ -1,0 +1,45 @@
+.main-header {
+  background: #ffffff;
+  .main-navbar {
+    .navbar-logo {
+      img {
+        width: 75px;
+        margin-top: 6px;
+      }
+    }
+    .main-nav {
+      li {
+        a {
+          @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+          text-transform: capitalize;
+          &:hover {
+            color: $color3;
+          }
+          span {
+            border-radius: 4px;
+          }
+        }
+        .navlogin {
+          span {
+            border: 1px solid $color3;
+            padding: 10px 30px;
+            color: $color3;
+          }
+          &:hover {
+            span {
+              background: $color3;
+              color: #ffffff;
+            }
+          }
+        }
+        .navjoin {
+          span {
+            background: $color3;
+            padding: 10px 30px;
+            color: #ffffff;
+          }
+        }
+      }
+    }
+  }
+}

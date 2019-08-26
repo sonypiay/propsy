@@ -1,0 +1,81 @@
+/* Layout */
+// banner homepage
+.banner-homepage {
+  .banner-overlay-hmpg {}
+  .banner-content {
+    @include fontsetting( $font-primary, 48px, 300, normal, normal, 0.4px );
+    color: #efefef;
+    strong {
+      font-weight: 600 !important;
+    }
+    .learnmore {
+      background: $color2;
+      color: #efefef;
+      @include fontsetting( $font-primary, 16px, 400, normal, normal, 0.4px );
+      padding: 6px 20px;
+      text-transform: capitalize;
+      border-radius: 4px;
+    }
+  }
+}
+
+// what is maps
+.whatis-maps {
+  background: #f9f9f9;
+  color: #666666;
+  border-radius: 0 0 25% 25%;
+  .maps-logo {}
+  .maps-summary {
+    @include fontsetting( $font-primary, 28px, 300, normal, normal, 0.4px );
+    text-align: center;
+    strong {
+      color: $color3;
+      font-weight: 600 !important;
+    }
+  }
+}
+
+// homepage list project
+.hpmg-listproject {
+  .hpmg-listproject-heading {
+    @include fontsetting( $font-primary, 28px, 600, normal, normal, 0.4px );
+    color: #666666;
+    text-align: center;
+  }
+  .browse_project_btn {
+    background: $color3;
+    color: #ffffff;
+    @include fontsetting( $font-primary, 16px, 600, normal, normal, 0.4px );
+    text-transform: capitalize;
+    border-radius: 4px;
+  }
+}
+
+// footer
+.footer {
+  background: $color3;
+  .footer-top {
+    padding-bottom: 20px;
+    .footer-nav {
+      a {
+        @include fontsetting( $font-primary, 16px, 400, normal, normal, 0.4px );
+        color: #ffffff;
+        margin-right: 10px;
+        text-decoration: none;
+      }
+    }
+    .footer-nav-socialmedia {
+      a {
+        color: #ffffff;
+        margin-right: 20px;
+      }
+    }
+  }
+  .footer-bottom {
+    padding-top: 20px;
+    border-top: 1px solid #ffffff;
+    text-align: center;
+    color: #ffffff;
+  }
+}
+/* Layout */

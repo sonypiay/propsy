@@ -1,1 +1,153 @@
-@import url(https://fonts.googleapis.com/css?family=Nunito);@import url(https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap);@import url(https://fonts.googleapis.com/css?family=Nunito:300,600,700,900&display=swap);.main-header{background:#fff}.main-header .main-navbar .navbar-logo img{width:75px;margin-top:6px}.main-header .main-navbar .main-nav li a{font-size:13px;font-style:normal;font-stretch:normal;font-family:Lato,sans-serif;font-weight:400;letter-spacing:.4px;text-transform:capitalize}.main-header .main-navbar .main-nav li a:hover{color:#1fc8c9}.main-header .main-navbar .main-nav li a span{border-radius:4px}.main-header .main-navbar .main-nav li .navlogin span{border:1px solid #1fc8c9;padding:10px 30px;color:#1fc8c9}.main-header .main-navbar .main-nav li .navlogin:hover span{background:#1fc8c9;color:#fff}.main-header .main-navbar .main-nav li .navjoin span{background:#1fc8c9;padding:10px 30px;color:#fff}.banner-homepage .banner-content{font-size:48px;font-style:normal;font-stretch:normal;font-family:Lato,sans-serif;font-weight:300;letter-spacing:.4px;color:#efefef}.banner-homepage .banner-content strong{font-weight:600!important}.banner-homepage .banner-content .learnmore{background:#07bec0;color:#efefef;font-size:16px;font-style:normal;font-stretch:normal;font-family:Lato,sans-serif;font-weight:400;letter-spacing:.4px;padding:6px 20px;text-transform:capitalize;border-radius:4px}.whatis-maps{background:#f9f9f9;color:#666;border-radius:0 0 25% 25%}.whatis-maps .maps-summary{font-size:28px;font-style:normal;font-stretch:normal;font-family:Lato,sans-serif;font-weight:300;letter-spacing:.4px;text-align:center}.whatis-maps .maps-summary strong{color:#1fc8c9;font-weight:600!important}.hpmg-listproject .hpmg-listproject-heading{font-size:28px;color:#666;text-align:center}.hpmg-listproject .browse_project_btn,.hpmg-listproject .hpmg-listproject-heading{font-style:normal;font-stretch:normal;font-family:Lato,sans-serif;font-weight:600;letter-spacing:.4px}.hpmg-listproject .browse_project_btn{background:#1fc8c9;color:#fff;font-size:16px;text-transform:capitalize;border-radius:4px}.footer{background:#1fc8c9}.footer .footer-top{padding-bottom:20px}.footer .footer-top .footer-nav a{font-size:16px;font-style:normal;font-stretch:normal;font-family:Lato,sans-serif;font-weight:400;letter-spacing:.4px;color:#fff;margin-right:10px;text-decoration:none}.footer .footer-top .footer-nav-socialmedia a{color:#fff;margin-right:20px}.footer .footer-bottom{padding-top:20px;border-top:1px solid #fff;text-align:center;color:#fff}
+@import url(https://fonts.googleapis.com/css?family=Nunito);@import url(https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap);@import url(https://fonts.googleapis.com/css?family=Nunito:300,600,700,900&display=swap);.main-header {
+  background: #ffffff;
+}
+
+.main-header .main-navbar .navbar-logo img {
+  width: 75px;
+  margin-top: 6px;
+}
+
+.main-header .main-navbar .main-nav li a {
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  text-transform: capitalize;
+}
+
+.main-header .main-navbar .main-nav li a:hover {
+  color: #1fc8c9;
+}
+
+.main-header .main-navbar .main-nav li a span {
+  border-radius: 4px;
+}
+
+.main-header .main-navbar .main-nav li .navlogin span {
+  border: 1px solid #1fc8c9;
+  padding: 10px 30px;
+  color: #1fc8c9;
+}
+
+.main-header .main-navbar .main-nav li .navlogin:hover span {
+  background: #1fc8c9;
+  color: #ffffff;
+}
+
+.main-header .main-navbar .main-nav li .navjoin span {
+  background: #1fc8c9;
+  padding: 10px 30px;
+  color: #ffffff;
+}
+
+/* Layout */
+
+.banner-homepage .banner-content {
+  font-size: 48px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.4px;
+  color: #efefef;
+}
+
+.banner-homepage .banner-content strong {
+  font-weight: 600 !important;
+}
+
+.banner-homepage .banner-content .learnmore {
+  background: #07bec0;
+  color: #efefef;
+  font-size: 16px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  padding: 6px 20px;
+  text-transform: capitalize;
+  border-radius: 4px;
+}
+
+.whatis-maps {
+  background: #f9f9f9;
+  color: #666666;
+  border-radius: 0 0 25% 25%;
+}
+
+.whatis-maps .maps-summary {
+  font-size: 28px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.4px;
+  text-align: center;
+}
+
+.whatis-maps .maps-summary strong {
+  color: #1fc8c9;
+  font-weight: 600 !important;
+}
+
+.hpmg-listproject .hpmg-listproject-heading {
+  font-size: 28px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #666666;
+  text-align: center;
+}
+
+.hpmg-listproject .browse_project_btn {
+  background: #1fc8c9;
+  color: #ffffff;
+  font-size: 16px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: capitalize;
+  border-radius: 4px;
+}
+
+.footer {
+  background: #1fc8c9;
+}
+
+.footer .footer-top {
+  padding-bottom: 20px;
+}
+
+.footer .footer-top .footer-nav a {
+  font-size: 16px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #ffffff;
+  margin-right: 10px;
+  text-decoration: none;
+}
+
+.footer .footer-top .footer-nav-socialmedia a {
+  color: #ffffff;
+  margin-right: 20px;
+}
+
+.footer .footer-bottom {
+  padding-top: 20px;
+  border-top: 1px solid #ffffff;
+  text-align: center;
+  color: #ffffff;
+}
+
+/* Layout */
+

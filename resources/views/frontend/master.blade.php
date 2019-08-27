@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="app()->getLocale()">
+<html lang="{{ app()->getLocale() }}">
 <head>
   @include('frontend.inc.meta_header')
   <title>@yield('tag_title')</title>

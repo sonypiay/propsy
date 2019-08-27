@@ -9,26 +9,18 @@ use App\Http\Controllers\Controller;
 
 class HomepageController extends Controller
 {
-  public function index( Request $request )
+  public function index( Request $request, DeveloperUser $developeruser, MarketingUser $marketinguser )
   {
     $data['request'] = $request;
     if( session()->has('isMarketing') )
     {
-      $marketinguser = MarketingUser::where('mkt_user_id', session()->get('mkt_user_id'))
-      ->select(
-        'mkt_user_id',
-        'mkt_username',
-        'mkt_email',
-        'mkt_password',
-        'mkt_phone_number',
-        'mkt_mobile_phone',
-        'mkt_city',
-        'mkt_region',
-        'mkt_biography',
-        'mkt_profile_photo'
-      )
-      ->first();
-      $data['session_user'] = $marketinguser;
+      $mktuser = $marketinguser->getinfo();
+      $data['session_user'] = $mktuser;
+    }
+    else
+    {
+      $devuser = $developeruser->getinfo();
+      $data['session_user'] = $devuser;
     }
 
     return response()->view('frontend.pages.homepage', $data)

@@ -45,9 +45,10 @@
   .browse_project_btn {
     background: $color3;
     color: #ffffff;
-    @include fontsetting( $font-primary, 16px, 600, normal, normal, 0.4px );
+    @include fontsetting( $font-primary, 16px, 400, normal, normal, 0.4px );
     text-transform: capitalize;
     border-radius: 4px;
+    box-shadow: 0 4px 8px 2px rgba(0,0,0,0.1);
   }
 }
 
@@ -79,3 +80,49 @@
   }
 }
 /* Layout */
+
+/* modal */
+.modal-login {
+  .modal-login-title {
+    @include fontsetting( $font-primary, 28px, 600, normal, normal, 0.4px );
+    text-align: center;
+  }
+  .modal-btn-tab {
+    @include fontsetting( $font-primary, 12px, 400, normal, normal, 0.4px );
+    text-transform: capitalize;
+    background: #f2f2f2;
+    color: #777777;
+    border-radius: 30px;
+    &:hover {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+  }
+  .modal-btn-tabactive {
+    background: $color3;
+    color: #ffffff;
+  }
+  .modal-form-mustcomplete {
+    @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+    color: #333333;
+  }
+  .modal-login-form {
+    .modal-login-label {
+      @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+      color: #333333;
+    }
+    .modal-login-input {
+      border-radius: 4px;
+      @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+      color: #666666;
+      &:hover, &:focus { border: 1px solid $color3; }
+    }
+    .modal-login-submit {
+      @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+      text-transform: capitalize;
+      background: $color3;
+      color: #ffffff;
+      border-radius: 4px;
+    }
+  }
+}
+/* modal */

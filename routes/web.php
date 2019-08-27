@@ -11,4 +11,13 @@
 |
 */
 
-Route::get('/', 'Frontend\HomepageController@index');
+Route::get('/', 'Frontend\HomepageController@index')->name('homepage');
+Route::group(['prefix' => 'authentication'], function() {
+  Route::post('/login/developer', 'Frontend\Developer\AuthController@do_login');
+  Route::post('/login/marketing', 'Frontend\Marketing\AuthController@do_login');
+});
+
+Route::group(['prefix' => 'registration'], function() {
+  //Route::post('/developer', 'Frontend\Developer\AuthController@do_register');
+  Route::post('/marketing', 'Frontend\Marketing\AuthController@do_register');
+});

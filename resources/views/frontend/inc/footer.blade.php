@@ -22,7 +22,7 @@
   <div class="uk-container">
     <div class="footer-bottom">
       <div class="footer-copyright">
-        &copy; 2019 MaPS | Made with <span uk-icon="heart"></span> by Mahasiswa.
+        &copy; {{ date('Y') }} MaPS | Made with <span uk-icon="heart"></span> by Mahasiswa.
       </div>
     </div>
   </div>

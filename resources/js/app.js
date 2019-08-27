@@ -5,7 +5,8 @@ window.swal = require('sweetalert');
 window.moment = require('moment');
 window.numeral = require('numeral');
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('modal-login-component', require('./components/Frontend/LoginComponent.vue').default);
+Vue.component('modal-signup-component', require('./components/Frontend/SignUpComponent.vue').default);
 
 const app = new Vue({
     el: '#app',

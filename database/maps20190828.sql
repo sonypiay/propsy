@@ -104,7 +104,7 @@ CREATE TABLE `marketing_user` (
 
 /*Data for the table `marketing_user` */
 
-insert  into `marketing_user`(`mkt_user_id`,`mkt_fullname`,`mkt_email`,`mkt_username`,`mkt_password`,`mkt_phone_number`,`mkt_mobile_phone`,`mkt_city`,`mkt_region`,`mkt_biography`,`mkt_profile_photo`,`created_at`,`updated_at`) values (1,'Diwantara Anugerah Putra','diwantara@gmail.com','diwantara','d5f3b4c238382e41fbe4b404e882cc73','0212995588','08561969052',189,6,'Youtuber gamer ganteng idaman. Kungkingkangkingking',NULL,'2019-08-27 21:45:27','2019-08-28 16:20:55'),(2,'Sony Darmawan','sonypiay@mail.com','sonypiay','d5f3b4c238382e41fbe4b404e882cc73',NULL,NULL,NULL,NULL,NULL,NULL,'2019-08-28 16:24:34','2019-08-28 16:27:30');
+insert  into `marketing_user`(`mkt_user_id`,`mkt_fullname`,`mkt_email`,`mkt_username`,`mkt_password`,`mkt_phone_number`,`mkt_mobile_phone`,`mkt_city`,`mkt_region`,`mkt_biography`,`mkt_profile_photo`,`created_at`,`updated_at`) values (1,'Diwantara Anugerah Putra','diwantara@gmail.com','diwantara','d5f3b4c238382e41fbe4b404e882cc73','0212995588','08561969052',189,6,'Youtuber gamer ganteng idaman. Kungkingkangkingking','jqmwcMIN0sZlduG8XCzbXZnOpAV5xwDFhDeMkyi6.jpeg','2019-08-27 21:45:27','2019-08-28 17:29:53'),(2,'Sony Darmawan','sonypiay@mail.com','sonypiay','d5f3b4c238382e41fbe4b404e882cc73',NULL,NULL,NULL,NULL,NULL,'dIrpUIzvO0mvsOOavXmwtwYhbSAnJxKphk2zndH9.jpeg','2019-08-28 16:24:34','2019-08-28 17:26:00');
 
 /*Table structure for table `project_gallery` */
 

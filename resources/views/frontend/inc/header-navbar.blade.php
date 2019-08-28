@@ -19,7 +19,7 @@
               <ul class="uk-nav uk-dropdown-nav">
                 <li><a href="{{ route('marketing_dashboard_page') }}">Dashboard</a></li>
                 <li><a href="{{ route('marketing_profile_page') }}">Lihat Akun</a></li>
-                <li><a href="{{ route('marketing_settings_page') }}">Pengaturan</a></li>
+                <li class="uk-nav-divider"></li>
                 <li><a href="{{ route('auth_logout_mkt') }}">Keluar</a></li>
               </ul>
             </div>

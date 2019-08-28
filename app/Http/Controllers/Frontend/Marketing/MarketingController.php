@@ -150,7 +150,7 @@ class MarketingController extends Controller
     $filename = $photo_profile->hashName();
     $storage = Storage::disk('assets');
     $getinfo = $marketinguser->getinfo();
-    $path_img = public_path('images/avatar');
+    $path_img = 'images/avatar';
     if( ! empty( $getinfo->mkt_profile_photo ) )
     {
       if( $storage->exists( $path_img . '/' . $getinfo->mkt_profile_photo ) )

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend\Marketing;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use App\Database\MarketingUser;
 use App\Http\Controllers\Controller;
 
@@ -140,6 +141,27 @@ class MarketingController extends Controller
       }
     }
 
+    return response()->json( $res, $res['status'] );
+  }
+
+  public function upload_photo_profile( Request $request, MarketingUser $marketinguser )
+  {
+    $photo_profile = $request->photo_profie;
+    $filename = $photo_profile->hashName();
+    $storage = Storage::disk('assets');
+    $getinfo = $marketinguser->getinfo();
+    $path_img = public_path('images/avatar');
+    if( ! empty( $getinfo->mkt_profile_photo ) )
+    {
+      if( $storage->exists( $path_img . '/' . $getinfo->mkt_profile_photo ) )
+      {
+        $storage->delete( $path_img . '/' . $getinfo->mkt_profile_photo );
+      }
+    }
+    $getinfo->mkt_profile_photo = $filename;
+    $getinfo->save();
+    $storage->putFileAs('images/avatar', $photo_profile, $filename );
+    $res = ['status' => 200, 'statusText' => 'upload success'];
     return response()->json( $res, $res['status'] );
   }
 }

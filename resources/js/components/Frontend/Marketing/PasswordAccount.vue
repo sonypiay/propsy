@@ -4,13 +4,13 @@
     <div v-show="errors.errorMessage !== null" class="uk-margin uk-alert-danger" uk-alert>{{ errors.errorMessage }}</div>
     <form class="uk-form-stacked content-form" @submit.prevent="onChangePassword">
       <div class="uk-margin">
-        <label class="content-form-label">Ganti Password</label>
+        <label class="uk-form-label content-form-label">Ganti Password</label>
         <div class="uk-form-controls">
           <input type="password" v-model="forms.password" class="uk-width-1-2 uk-input content-form-input">
         </div>
       </div>
       <div class="uk-margin">
-        <label class="content-form-label">Konfirmasi Password</label>
+        <label class="uk-form-label content-form-label">Konfirmasi Password</label>
         <div class="uk-form-controls">
           <input type="password" v-model="forms.confirmpassword" class="uk-width-1-2 uk-input content-form-input">
         </div>

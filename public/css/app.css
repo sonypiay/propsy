@@ -160,6 +160,12 @@ body {
   color: #ffffff;
 }
 
+.content-form .content-upload-picture {
+  background: #f9f9f9;
+  text-align: center;
+  border-radius: 4px;
+}
+
 /* Layout */
 
 .banner-homepage .banner-content {

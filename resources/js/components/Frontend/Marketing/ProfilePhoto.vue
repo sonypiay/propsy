@@ -2,17 +2,20 @@
   <div>
     <div class="uk-heading-line uk-text-center uk-margin-bottom side-content-profile-heading"><span>Foto Profil</span></div>
     <div v-show="errors.errorMessage !== null" class="uk-margin uk-alert-danger" uk-alert>{{ errors.errorMessage }}</div>
-    <form class="uk-form-stacked content-form" @submit.prevent="onChangePassword">
+    <form class="uk-form-stacked content-form" @submit.prevent="onUploadPhoto">
       <div class="uk-margin">
-        <label class="content-form-label">Ganti Password</label>
+        <label class="uk-form-label content-form-label">Unggah Foto</label>
         <div class="uk-form-controls">
-          <input type="password" v-model="forms.password" class="uk-width-1-2 uk-input content-form-input">
-        </div>
-      </div>
-      <div class="uk-margin">
-        <label class="content-form-label">Konfirmasi Password</label>
-        <div class="uk-form-controls">
-          <input type="password" v-model="forms.confirmpassword" class="uk-width-1-2 uk-input content-form-input">
+          <div class="uk-width-1-4 uk-margin-small-top" uk-form-custom>
+            <input accept="image/*" type="file" @change="onGetFileData">
+            <div v-if="forms.photo === ''" class="uk-tile uk-tile-default content-upload-picture">
+              <span uk-icon="icon: plus-circle;"></span>
+              <div class="uk-text-small">Choose a picture or drag here</div>
+            </div>
+            <div v-else class="content-upload-picture">
+              <img :src="forms.photo" alt="">
+            </div>
+          </div>
         </div>
       </div>
       <div class="uk-margin">
@@ -28,8 +31,8 @@ export default {
   data() {
     return {
       forms: {
-        password: '',
-        confirmpassword: '',
+        photo: '',
+        filedata: '',
         submit: 'Simpan'
       },
       errors: {
@@ -39,45 +42,40 @@ export default {
     }
   },
   methods: {
-    onChangePassword()
+    onGetFileData(event)
+    {
+      this.forms.filedata = '';
+      if( event.target.files.length !== 0 )
+      {
+        this.forms.filedata = event.target.files[0];
+        this.forms.photo = URL.createObjectURL( this.forms.filedata );
+      }
+    },
+    onUploadPhoto()
     {
       this.errors.errorMessage = null;
       this.errors.iserror = false;
 
-      if( this.forms.password === '' || this.forms.confirmpassword === '' )
+      if( this.forms.filedata === '' )
       {
-        this.errors.errorMessage = 'Whoops, kolom password tidak boleh kosong.';
+        this.errors.errorMessage = 'File tidak boleh kosong.';
         return false;
       }
 
-      if( this.forms.password.length < 8 )
-      {
-        this.errors.errorMessage = 'Password terlalu pendek. Password minimal 8 (delapan) karakter.';
-        return false;
-      }
-
-      if( this.forms.password !== this.forms.confirmpassword )
-      {
-        this.errors.errorMessage = 'Password tidak sama.';
-        return false;
-      }
-
+      let formdata = new FormData();
+      formdata.append('photo_profie', this.forms.filedata);
       this.forms.submit = '<span uk-spinner></span>';
-      axios({
-        method: 'put',
-        url: this.$root.url + '/marketing/profile/change_password',
-        params: { password: this.forms.password }
-      }).then( res => {
+
+      axios.post( this.$root.url + '/marketing/profile/upload_photo_profile', formdata).then( res => {
         swal({
           title: 'Sukses',
-          text: 'Berhasil melakukan perubahan password.',
+          text: 'Foto profil berhasil diunggah.',
           icon: 'success'
         });
-        this.forms.password = '';
-        this.forms.confirmpassword = '';
-        this.forms.submit = 'Simpan';
+        setTimeout(() => { document.location = ''; }, 2000);
       }).catch( err => {
-        this.errors.errorMessage = err.response.statusText;
+        if( err.response.status === 500 ) this.errors.errorMessage = err.response.statusText;
+        else this.errors.errorMessage = err.response.data.statusText;
       });
     }
   }

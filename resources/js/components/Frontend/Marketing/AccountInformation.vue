@@ -4,33 +4,33 @@
     <div v-show="errors.errorMessage" class="uk-margin uk-alert-danger" uk-alert>{{ errors.errorMessage }}</div>
     <form class="uk-form-stacked uk-grid-small content-form" @submit.prevent="onChangeEmail" uk-grid>
       <div class="uk-width-1-2">
-        <label class="content-form-label">Nama Lengkap</label>
+        <label class="uk-form-label content-form-label">Nama Lengkap</label>
         <div class="uk-form-controls">
           <input type="text" v-model="forms.fullname" class="uk-input content-form-input">
         </div>
         <div v-show="errors.name.fullname" class="uk-text-danger uk-text-small">{{ errors.name.fullname }}</div>
       </div>
       <div class="uk-width-1-2">
-        <label class="content-form-label">Username</label>
+        <label class="uk-form-label content-form-label">Username</label>
         <div class="uk-form-controls">
           <input type="text" v-model="forms.username" class="uk-input content-form-input">
         </div>
         <div v-show="errors.name.username" class="uk-text-danger uk-text-small">{{ errors.name.username }}</div>
       </div>
       <div class="uk-width-1-2">
-        <label class="content-form-label">Telepon Kantor / Rumah</label>
+        <label class="uk-form-label content-form-label">Telepon Kantor / Rumah</label>
         <div class="uk-form-controls">
           <input type="text" v-model="forms.phone_number" class="uk-input content-form-input">
         </div>
       </div>
       <div class="uk-width-1-2">
-        <label class="content-form-label">No. Handphone / Whatsapp </label>
+        <label class="uk-form-label content-form-label">No. Handphone / Whatsapp </label>
         <div class="uk-form-controls">
           <input type="text" v-model="forms.mobile_phone" class="uk-input content-form-input">
         </div>
       </div>
       <div class="uk-width-1-2">
-        <label class="content-form-label">Provinsi</label>
+        <label class="uk-form-label content-form-label">Provinsi</label>
         <div class="uk-form-controls">
           <select class="uk-select content-form-input" v-model="forms.region" @change="getRegionData()">
             <option value="">-- Pilih --</option>
@@ -39,7 +39,7 @@
         </div>
       </div>
       <div class="uk-width-1-2">
-        <label class="content-form-label">Kota</label>
+        <label class="uk-form-label content-form-label">Kota</label>
         <div class="uk-form-controls">
           <select class="uk-select content-form-input" v-model="forms.city">
             <option value="">-- Pilih --</option>
@@ -48,7 +48,7 @@
         </div>
       </div>
       <div class="uk-width-1-1">
-        <label class="content-form-label">Deskripsikan Anda</label>
+        <label class="uk-form-label content-form-label">Deskripsikan Anda</label>
         <div class="uk-form-controls">
           <textarea class="uk-textarea uk-height-small content-form-input" v-model="forms.biography"></textarea>
         </div>

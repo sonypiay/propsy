@@ -2300,13 +2300,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user', 'isMenuActive'],
   data: function data() {
     return {
       forms: {
-        password: '',
-        confirmpassword: '',
+        photo: '',
+        filedata: '',
         submit: 'Simpan'
       },
       errors: {
@@ -2316,45 +2319,39 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    onChangePassword: function onChangePassword() {
+    onGetFileData: function onGetFileData(event) {
+      this.forms.filedata = '';
+
+      if (event.target.files.length !== 0) {
+        this.forms.filedata = event.target.files[0];
+        this.forms.photo = URL.createObjectURL(this.forms.filedata);
+      }
+    },
+    onUploadPhoto: function onUploadPhoto() {
       var _this = this;
 
       this.errors.errorMessage = null;
       this.errors.iserror = false;
 
-      if (this.forms.password === '' || this.forms.confirmpassword === '') {
-        this.errors.errorMessage = 'Whoops, kolom password tidak boleh kosong.';
+      if (this.forms.filedata === '') {
+        this.errors.errorMessage = 'File tidak boleh kosong.';
         return false;
       }
 
-      if (this.forms.password.length < 8) {
-        this.errors.errorMessage = 'Password terlalu pendek. Password minimal 8 (delapan) karakter.';
-        return false;
-      }
-
-      if (this.forms.password !== this.forms.confirmpassword) {
-        this.errors.errorMessage = 'Password tidak sama.';
-        return false;
-      }
-
+      var formdata = new FormData();
+      formdata.append('photo_profie', this.forms.filedata);
       this.forms.submit = '<span uk-spinner></span>';
-      axios({
-        method: 'put',
-        url: this.$root.url + '/marketing/profile/change_password',
-        params: {
-          password: this.forms.password
-        }
-      }).then(function (res) {
+      axios.post(this.$root.url + '/marketing/profile/upload_photo_profile', formdata).then(function (res) {
         swal({
           title: 'Sukses',
-          text: 'Berhasil melakukan perubahan password.',
+          text: 'Foto profil berhasil diunggah.',
           icon: 'success'
         });
-        _this.forms.password = '';
-        _this.forms.confirmpassword = '';
-        _this.forms.submit = 'Simpan';
+        setTimeout(function () {
+          document.location = '';
+        }, 2000);
       })["catch"](function (err) {
-        _this.errors.errorMessage = err.response.statusText;
+        if (err.response.status === 500) _this.errors.errorMessage = err.response.statusText;else _this.errors.errorMessage = err.response.data.statusText;
       });
     }
   }
@@ -56798,7 +56795,7 @@ var render = function() {
       },
       [
         _c("div", { staticClass: "uk-width-1-2" }, [
-          _c("label", { staticClass: "content-form-label" }, [
+          _c("label", { staticClass: "uk-form-label content-form-label" }, [
             _vm._v("Nama Lengkap")
           ]),
           _vm._v(" "),
@@ -56844,7 +56841,7 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "uk-width-1-2" }, [
-          _c("label", { staticClass: "content-form-label" }, [
+          _c("label", { staticClass: "uk-form-label content-form-label" }, [
             _vm._v("Username")
           ]),
           _vm._v(" "),
@@ -56890,7 +56887,7 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "uk-width-1-2" }, [
-          _c("label", { staticClass: "content-form-label" }, [
+          _c("label", { staticClass: "uk-form-label content-form-label" }, [
             _vm._v("Telepon Kantor / Rumah")
           ]),
           _vm._v(" "),
@@ -56920,7 +56917,7 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "uk-width-1-2" }, [
-          _c("label", { staticClass: "content-form-label" }, [
+          _c("label", { staticClass: "uk-form-label content-form-label" }, [
             _vm._v("No. Handphone / Whatsapp ")
           ]),
           _vm._v(" "),
@@ -56950,7 +56947,7 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "uk-width-1-2" }, [
-          _c("label", { staticClass: "content-form-label" }, [
+          _c("label", { staticClass: "uk-form-label content-form-label" }, [
             _vm._v("Provinsi")
           ]),
           _vm._v(" "),
@@ -57007,7 +57004,9 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "uk-width-1-2" }, [
-          _c("label", { staticClass: "content-form-label" }, [_vm._v("Kota")]),
+          _c("label", { staticClass: "uk-form-label content-form-label" }, [
+            _vm._v("Kota")
+          ]),
           _vm._v(" "),
           _c("div", { staticClass: "uk-form-controls" }, [
             _c(
@@ -57055,7 +57054,7 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "uk-width-1-1" }, [
-          _c("label", { staticClass: "content-form-label" }, [
+          _c("label", { staticClass: "uk-form-label content-form-label" }, [
             _vm._v("Deskripsikan Anda")
           ]),
           _vm._v(" "),
@@ -57186,7 +57185,7 @@ var render = function() {
       },
       [
         _c("div", { staticClass: "uk-margin" }, [
-          _c("label", { staticClass: "content-form-label" }, [
+          _c("label", { staticClass: "uk-form-label content-form-label" }, [
             _vm._v("Ganti Email")
           ]),
           _vm._v(" "),
@@ -57294,7 +57293,7 @@ var render = function() {
       },
       [
         _c("div", { staticClass: "uk-margin" }, [
-          _c("label", { staticClass: "content-form-label" }, [
+          _c("label", { staticClass: "uk-form-label content-form-label" }, [
             _vm._v("Ganti Password")
           ]),
           _vm._v(" "),
@@ -57324,7 +57323,7 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "uk-margin" }, [
-          _c("label", { staticClass: "content-form-label" }, [
+          _c("label", { staticClass: "uk-form-label content-form-label" }, [
             _vm._v("Konfirmasi Password")
           ]),
           _vm._v(" "),
@@ -57436,10 +57435,12 @@ var render = function() {
                           { staticClass: "uk-margin side-profile-photo" },
                           [
                             _c("img", {
-                              staticClass: "uk-width-1-1 uk-border-pill",
+                              staticClass: "uk-width-1-1 uk-border-circle",
                               attrs: {
                                 src:
-                                  _vm.$root.url + "/images/avatar/avatar.jpg",
+                                  _vm.$root.url +
+                                  "/images/avatar/" +
+                                  _vm.session_user.mkt_profile_photo,
                                 alt: ""
                               }
                             })
@@ -57700,68 +57701,51 @@ var render = function() {
         on: {
           submit: function($event) {
             $event.preventDefault()
-            return _vm.onChangePassword($event)
+            return _vm.onUploadPhoto($event)
           }
         }
       },
       [
         _c("div", { staticClass: "uk-margin" }, [
-          _c("label", { staticClass: "content-form-label" }, [
-            _vm._v("Ganti Password")
+          _c("label", { staticClass: "uk-form-label content-form-label" }, [
+            _vm._v("Unggah Foto")
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "uk-form-controls" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.forms.password,
-                  expression: "forms.password"
-                }
-              ],
-              staticClass: "uk-width-1-2 uk-input content-form-input",
-              attrs: { type: "password" },
-              domProps: { value: _vm.forms.password },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.forms, "password", $event.target.value)
-                }
-              }
-            })
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "uk-margin" }, [
-          _c("label", { staticClass: "content-form-label" }, [
-            _vm._v("Konfirmasi Password")
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "uk-form-controls" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.forms.confirmpassword,
-                  expression: "forms.confirmpassword"
-                }
-              ],
-              staticClass: "uk-width-1-2 uk-input content-form-input",
-              attrs: { type: "password" },
-              domProps: { value: _vm.forms.confirmpassword },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.forms, "confirmpassword", $event.target.value)
-                }
-              }
-            })
+            _c(
+              "div",
+              {
+                staticClass: "uk-width-1-4 uk-margin-small-top",
+                attrs: { "uk-form-custom": "" }
+              },
+              [
+                _c("input", {
+                  attrs: { accept: "image/*", type: "file" },
+                  on: { change: _vm.onGetFileData }
+                }),
+                _vm._v(" "),
+                _vm.forms.photo === ""
+                  ? _c(
+                      "div",
+                      {
+                        staticClass:
+                          "uk-tile uk-tile-default content-upload-picture"
+                      },
+                      [
+                        _c("span", {
+                          attrs: { "uk-icon": "icon: plus-circle;" }
+                        }),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "uk-text-small" }, [
+                          _vm._v("Choose a picture or drag here")
+                        ])
+                      ]
+                    )
+                  : _c("div", { staticClass: "content-upload-picture" }, [
+                      _c("img", { attrs: { src: _vm.forms.photo, alt: "" } })
+                    ])
+              ]
+            )
           ])
         ]),
         _vm._v(" "),

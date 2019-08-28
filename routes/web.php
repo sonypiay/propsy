@@ -35,5 +35,6 @@ Route::group(['prefix' => 'marketing'], function() {
     Route::put('/change_password', 'Frontend\Marketing\MarketingController@change_password');
     Route::put('/change_email', 'Frontend\Marketing\MarketingController@change_email');
     Route::put('/change_account_information', 'Frontend\Marketing\MarketingController@change_account_information');
+    Route::post('/upload_photo_profile', 'Frontend\Marketing\MarketingController@upload_photo_profile');
   });
 });

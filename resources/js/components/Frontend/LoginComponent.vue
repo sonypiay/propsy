@@ -93,12 +93,12 @@ export default {
       }).then( res => {
         swal({
           title: 'Sukses',
-          text: 'Mengarahkan ke halaman dashboard...',
+          text: 'Mengarahkan ke halaman profil...',
           icon: 'success'
         });
         var redirect = this.$root.url;
-        if( this.isTabActive === 'dev' ) redirect = redirect + '/developer/dashboard';
-        else redirect = redirect + '/marketing/dashboard';
+        if( this.isTabActive === 'dev' ) redirect = redirect + '/developer/profile';
+        else redirect = redirect + '/marketing/profile';
         setTimeout(() => { document.location = redirect; }, 2000);
       }).catch( err => {
         this.forms.submit = 'Masuk';

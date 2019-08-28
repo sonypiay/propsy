@@ -188,7 +188,7 @@ export default {
           icon: 'success'
         });
         setTimeout(() => {
-          document.location = this.$root.url;
+          document.location = this.$root.url + '/marketing/profile';
         }, 2000);
       }).catch( err => {
         this.forms.submit = 'Daftar';

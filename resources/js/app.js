@@ -19,8 +19,8 @@ const app = new Vue({
       formatNumeral(str, format) {
         return numeral(str).format(format);
       },
-      formatDate(str, format) {
-        var res = moment(str).locale('en').format(format);
+      formatDate(str, format, locale) {
+        var res = moment(str).locale(locale).format(format);
         return res;
       },
       toPercentage( current, total )

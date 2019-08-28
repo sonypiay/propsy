@@ -30,4 +30,10 @@ Route::group(['prefix' => 'marketing'], function() {
   Route::get('/dashboard', 'Frontend\Marketing\MarketingController@index')->name('marketing_dashboard_page');
   Route::get('/settings', 'Frontend\Marketing\MarketingController@settings_page')->name('marketing_settings_page');
   Route::get('/profile', 'Frontend\Marketing\MarketingController@profile_page')->name('marketing_profile_page');
+
+  Route::group(['prefix' => 'profile'], function() {
+    Route::put('/change_password', 'Frontend\Marketing\MarketingController@change_password');
+    Route::put('/change_email', 'Frontend\Marketing\MarketingController@change_email');
+    Route::put('/change_account_information', 'Frontend\Marketing\MarketingController@change_account_information');
+  });
 });

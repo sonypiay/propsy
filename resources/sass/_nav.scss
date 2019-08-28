@@ -60,3 +60,36 @@
     }
   }
 }
+.side-navbar-profile {
+  ul {
+    li {
+      a {
+        color: #666666;
+        @include fontsetting( $font-primary, 14px, 600, normal, normal, 0.4px );
+        &:hover {
+          border-left: 2px solid $color3;
+          color: $color3;
+        }
+      }
+      .navactive {
+        border-left: 2px solid $color3;
+        color: $color3;
+      }
+    }
+  }
+  .side-profile-info {
+    .side-profile-photo {
+      span, i {
+        color: #333333; background: #f9f9f9; border-radius: 70px;
+        padding: 40px;
+       }
+       img {}
+    }
+    .side-profile-joined {
+      color: #666666;
+      @include fontsetting( $font-primary, 14px, 600, normal, normal, 0.4px );
+      text-align: center;
+      .profile-joined-date { font-size: 12px !important; }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+.content-form {
+  .content-form-label {
+    @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+    color: #666666;
+  }
+  .content-form-input {
+    color: #666666;
+    border-radius: 4px;
+    @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+    &:hover, &:focus {
+      border: 1px solid $color3;
+      color: $color3;
+    }
+  }
+  .content-form-btn {
+    border: 1px solid $color3;
+    background: #ffffff;
+    color: $color3;
+    border-radius: 4px;
+    @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+    text-transform: capitalize;
+    &:hover, &:focus {
+      background: $color3;
+      color: #ffffff;
+    }
+  }
+  .content-upload-picture {
+    background: #f9f9f9;
+    text-align: center;
+    border-radius: 4px;
+  }
+}

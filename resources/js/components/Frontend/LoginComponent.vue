@@ -21,12 +21,15 @@
           <div v-show="errors.name.password" class="uk-text-danger uk-text-small">{{ errors.name.password }}</div>
         </div>
         <div class="uk-margin">
-          <div class="uk-grid-small" uk-grid>
-            <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
-              <a :class="{ 'modal-btn-tabactive': forms.isTabActive === 'dev' }" class="uk-width-1-1 uk-button uk-button-primary modal-btn-tab">Developer</a>
-            </div>
-            <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
-              <a :class="{ 'modal-btn-tabactive': forms.isTabActive === 'mkt' }" class="uk-width-1-1 uk-button uk-button-primary modal-btn-tab">Marketing</a>
+          <label class="uk-form-label modal-login-label">Login sebagai</label>
+          <div class="uk-form-controls">
+            <div class="uk-grid-small" uk-grid>
+              <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
+                <a @click="forms.isTabActive = 'dev'" :class="{ 'modal-btn-tabactive': forms.isTabActive === 'dev' }" class="uk-width-1-1 uk-button uk-button-primary modal-btn-tab">Developer</a>
+              </div>
+              <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
+                <a @click="forms.isTabActive = 'mkt'" :class="{ 'modal-btn-tabactive': forms.isTabActive === 'mkt' }" class="uk-width-1-1 uk-button uk-button-primary modal-btn-tab">Marketing</a>
+              </div>
             </div>
           </div>
         </div>
@@ -93,6 +96,10 @@ export default {
           text: 'Mengarahkan ke halaman profil...',
           icon: 'success'
         });
+        var redirect = this.$root.url;
+        if( this.isTabActive === 'dev' ) redirect = redirect + '/developer/profile';
+        else redirect = redirect + '/marketing/profile';
+        setTimeout(() => { document.location = redirect; }, 2000);
       }).catch( err => {
         this.forms.submit = 'Masuk';
         if( err.response.status === 500 )

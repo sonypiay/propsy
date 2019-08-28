@@ -1,3 +1,10 @@
+html, body {
+  font-family: $font-primary;
+  background: #ffffff;
+}
+
+@import 'form';
+
 /* Layout */
 // banner homepage
 .banner-homepage {
@@ -77,6 +84,13 @@
     border-top: 1px solid #ffffff;
     text-align: center;
     color: #ffffff;
+  }
+}
+
+.side-content-profile {
+  .side-content-profile-heading {
+    @include fontsetting( $font-primary, 22px, 600, normal, normal, 0.4px );
+    color: #666666;
   }
 }
 /* Layout */

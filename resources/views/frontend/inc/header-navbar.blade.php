@@ -12,6 +12,25 @@
       </div>
       <div class="uk-navbar-right">
         <ul class="uk-navbar-nav main-nav">
+          @if( session()->has('isMarketing') )
+          <li>
+            <a href="#">{{ $session_user->mkt_fullname }}</a>
+            <div class="uk-navbar-dropdown main-nav-dropdown">
+              <ul class="uk-nav uk-dropdown-nav">
+                <li><a href="{{ route('marketing_dashboard_page') }}">Dashboard</a></li>
+                <li><a href="{{ route('marketing_profile_page') }}">Lihat Akun</a></li>
+                <li class="uk-nav-divider"></li>
+                <li><a href="{{ route('auth_logout_mkt') }}">Keluar</a></li>
+              </ul>
+            </div>
+          </li>
+          @elseif( session()->has('isDeveloper') )
+          <li>
+            <a href="#">
+              John Doe
+            </a>
+          </li>
+          @else
           <li>
             <a class="navlogin" uk-toggle="target: #modal-login">
               <span>Masuk</span>
@@ -22,6 +41,7 @@
               <span>Daftar</span>
             </a>
           </li>
+          @endif
         </ul>
       </div>
     </nav>

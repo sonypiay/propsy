@@ -8,6 +8,10 @@ window.numeral = require('numeral');
 Vue.component('modal-login-component', require('./components/Frontend/LoginComponent.vue').default);
 Vue.component('modal-signup-component', require('./components/Frontend/SignUpComponent.vue').default);
 
+Vue.component('marketing-dashboard-page', require('./components/Frontend/Marketing/Dashboard.vue').default);
+Vue.component('marketing-setting-page', require('./components/Frontend/Marketing/Settings.vue').default);
+Vue.component('marketing-profile-page', require('./components/Frontend/Marketing/Profile.vue').default);
+
 const app = new Vue({
     el: '#app',
     data: {
@@ -15,8 +19,8 @@ const app = new Vue({
       formatNumeral(str, format) {
         return numeral(str).format(format);
       },
-      formatDate(str, format) {
-        var res = moment(str).locale('en').format(format);
+      formatDate(str, format, locale) {
+        var res = moment(str).locale(locale).format(format);
         return res;
       },
       toPercentage( current, total )

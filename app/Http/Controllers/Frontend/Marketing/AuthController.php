@@ -36,6 +36,11 @@ class AuthController extends Controller
           'status' => 200,
           'statusText' => 'login success'
         ];
+
+        session()->put('isMarketing', true);
+        session()->put('mkt_user_id', $result->mkt_user_id);
+        session()->put('mkt_email', $result->mkt_email);
+        session()->put('mkt_login_date', date('Y-m-d H:i:s'));
       }
       else
       {
@@ -98,10 +103,24 @@ class AuthController extends Controller
       session()->put('mkt_user_id', $getuser->mkt_user_id);
       session()->put('mkt_email', $getuser->mkt_email);
       session()->put('mkt_login_date', date('Y-m-d H:i:s'));
-      
+
       $res = ['status' => 200, 'statusText' => 'success'];
     }
 
     return response()->json( $res, $res['status'] );
+  }
+
+  public function do_logout()
+  {
+    if( session()->has('isMarketing') )
+    {
+      session()->forget('mkt_user_id');
+      session()->forget('mkt_user_id');
+      session()->forget('mkt_email');
+      session()->forget('mkt_login_date');
+      session()->flush();
+    }
+
+    return redirect()->route('homepage');
   }
 }

@@ -10,8 +10,9 @@
     .main-nav {
       li {
         a {
-          @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+          @include fontsetting( $font-primary, 13px, 700, normal, normal, 0.4px );
           text-transform: capitalize;
+          color: #666666;
           &:hover {
             color: $color3;
           }
@@ -43,6 +44,52 @@
           }
         }
       }
+    }
+  }
+}
+
+.side-navbar {
+  background: $color3;
+  .side-nav {
+    border-top: 1px solid #efefef;
+    li {
+      a {
+        color: #ffffff;
+        @include fontsetting( $font-primary, 16px, 600, normal, normal, 0.4px );
+      }
+    }
+  }
+}
+.side-navbar-profile {
+  ul {
+    li {
+      a {
+        color: #666666;
+        @include fontsetting( $font-primary, 14px, 600, normal, normal, 0.4px );
+        &:hover {
+          border-left: 2px solid $color3;
+          color: $color3;
+        }
+      }
+      .navactive {
+        border-left: 2px solid $color3;
+        color: $color3;
+      }
+    }
+  }
+  .side-profile-info {
+    .side-profile-photo {
+      span, i {
+        color: #333333; background: #f9f9f9; border-radius: 70px;
+        padding: 40px;
+       }
+       img {}
+    }
+    .side-profile-joined {
+      color: #666666;
+      @include fontsetting( $font-primary, 14px, 600, normal, normal, 0.4px );
+      text-align: center;
+      .profile-joined-date { font-size: 12px !important; }
     }
   }
 }

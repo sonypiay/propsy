@@ -27,23 +27,6 @@ class MarketingController extends Controller
     }
   }
 
-  public function settings_page( Request $request, MarketingUser $marketinguser )
-  {
-    if( session()->has('isMarketing') )
-    {
-      $data = [
-        'request' => $request,
-        'session_user' => $marketinguser->getinfo()
-      ];
-
-      return response()->view('frontend.pages.marketing.settings_page', $data);
-    }
-    else
-    {
-      return redirect()->route('homepage');
-    }
-  }
-
   public function profile_page( Request $request, MarketingUser $marketinguser )
   {
     if( session()->has('isMarketing') )
@@ -108,16 +91,19 @@ class MarketingController extends Controller
     $region = $request->region;
     $biography = $request->biography;
     $username = $request->username;
+    $address = $request->address;
     $getinfo = $marketinguser->getinfo();
+
+    $getinfo->mkt_fullname = $fullname;
+    $getinfo->mkt_phone_number = $phone_number;
+    $getinfo->mkt_mobile_phone = $mobile_phone;
+    $getinfo->mkt_city = $city;
+    $getinfo->mkt_region = $region;
+    $getinfo->mkt_biography = $biography;
+    $getinfo->mkt_address = $address;
 
     if( $getinfo->mkt_username == $username )
     {
-      $getinfo->mkt_fullname = $fullname;
-      $getinfo->mkt_phone_number = $phone_number;
-      $getinfo->mkt_mobile_phone = $mobile_phone;
-      $getinfo->mkt_city = $city;
-      $getinfo->mkt_region = $region;
-      $getinfo->mkt_biography = $biography;
       $getinfo->save();
       $res = ['status' => 200, 'statusText' => 'success'];
     }
@@ -130,12 +116,7 @@ class MarketingController extends Controller
       }
       else
       {
-        $getinfo->mkt_fullname = $fullname;
-        $getinfo->mkt_phone_number = $phone_number;
-        $getinfo->mkt_mobile_phone = $mobile_phone;
-        $getinfo->mkt_city = $city;
-        $getinfo->mkt_region = $region;
-        $getinfo->mkt_biography = $biography;
+        $getinfo->mkt_username = $username;
         $getinfo->save();
         $res = ['status' => 200, 'statusText' => 'success'];
       }
@@ -160,7 +141,7 @@ class MarketingController extends Controller
     }
     $getinfo->mkt_profile_photo = $filename;
     $getinfo->save();
-    $storage->putFileAs('images/avatar', $photo_profile, $filename );
+    $storage->putFileAs($path_img, $photo_profile, $filename );
     $res = ['status' => 200, 'statusText' => 'upload success'];
     return response()->json( $res, $res['status'] );
   }

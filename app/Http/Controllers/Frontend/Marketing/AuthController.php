@@ -75,14 +75,14 @@ class AuthController extends Controller
     {
       $res = [
         'status' => 409,
-        'statusText' => $username . ' sudah terdaftar'
+        'statusText' => $username . ' sudah digunakan'
       ];
     }
     else if( $check_email->count() > 0 )
     {
       $res = [
         'status' => 409,
-        'statusText' => $email . ' sudah terdaftar'
+        'statusText' => $email . ' sudah digunakan'
       ];
     }
     else

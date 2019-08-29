@@ -16,6 +16,7 @@ class DeveloperUser extends Model
     $developeruser = $this::where('dev_user_id', session()->get('dev_user_id'))
     ->select(
       'dev_user_id',
+      'dev_logo',
       'dev_ownername',
       'dev_name',
       'dev_email',
@@ -28,7 +29,6 @@ class DeveloperUser extends Model
       'dev_phone_office',
       'dev_mobile_phone',
       'dev_ownership',
-      'dev_gmaps',
       'created_at',
       'updated_at'
     )->first();

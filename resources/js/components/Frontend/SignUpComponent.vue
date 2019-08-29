@@ -5,10 +5,10 @@
     </div>
     <div class="uk-margin uk-grid-small" uk-grid>
       <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
-        <a @click="onSwitchSignUp('dev')" :class="{ 'modal-btn-tabactive': forms.isTabActive === 'dev' }" class="uk-width-1-1 uk-button uk-button-primary modal-btn-tab">Developer</a>
+        <a @click="forms.isTabActive = 'dev'" :class="{ 'modal-btn-tabactive': forms.isTabActive === 'dev' }" class="uk-width-1-1 uk-button uk-button-primary modal-btn-tab">Developer</a>
       </div>
       <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
-        <a @click="onSwitchSignUp('mkt')" :class="{ 'modal-btn-tabactive': forms.isTabActive === 'mkt' }" class="uk-width-1-1 uk-button uk-button-primary modal-btn-tab">Marketing</a>
+        <a @click="forms.isTabActive = 'mkt'" :class="{ 'modal-btn-tabactive': forms.isTabActive === 'mkt' }" class="uk-width-1-1 uk-button uk-button-primary modal-btn-tab">Marketing</a>
       </div>
     </div>
 
@@ -16,27 +16,6 @@
     <!-- developer -->
     <p class="modal-form-mustcomplete">Lengkapi Formulir dibawah ini</p>
     <form class="uk-margin uk-form-stacked modal-login-form" @submit.prevent="onSignUpDeveloper" v-if="forms.isTabActive === 'dev'">
-      <div class="uk-margin">
-        <label class="uk-form-label modal-login-label">*Email</label>
-        <div class="uk-form-controls">
-          <input type="email" class="uk-width-1-1 uk-input modal-login-input" v-model="forms.developer.email">
-        </div>
-        <div v-show="errors.name.dev_email" class="uk-text-danger uk-text-small">{{ errors.name.dev_email }}</div>
-      </div>
-      <div class="uk-margin">
-        <label class="uk-form-label modal-login-label">*Nama Pemilik</label>
-        <div class="uk-form-controls">
-          <input type="text" class="uk-width-1-1 uk-input modal-login-input" v-model="forms.developer.ownername">
-        </div>
-        <div v-show="errors.name.dev_ownername" class="uk-text-danger uk-text-small">{{ errors.name.dev_ownername }}</div>
-      </div>
-      <div class="uk-margin">
-        <label class="uk-form-label modal-login-label">Tentang Pengembang</label>
-        <div class="uk-form-controls">
-          <textarea class="uk-width-1-1 uk-textarea uk-height-small modal-login-input" v-model="forms.developer.biography"></textarea>
-        </div>
-      </div>
-      <hr>
       <div class="uk-margin">
         <label class="uk-form-label modal-login-label">*Username</label>
         <div class="uk-form-controls">
@@ -50,6 +29,47 @@
           <input type="password" class="uk-width-1-1 uk-input modal-login-input" v-model="forms.developer.password">
         </div>
         <div v-show="errors.name.dev_password" class="uk-text-danger uk-text-small">{{ errors.name.dev_password }}</div>
+      </div>
+      <div class="uk-margin">
+        <label class="uk-form-label modal-login-label">*Email</label>
+        <div class="uk-form-controls">
+          <input type="email" class="uk-width-1-1 uk-input modal-login-input" v-model="forms.developer.email">
+        </div>
+        <div v-show="errors.name.dev_email" class="uk-text-danger uk-text-small">{{ errors.name.dev_email }}</div>
+      </div>
+      <hr>
+      <div class="uk-margin">
+        <label class="uk-form-label modal-login-label">*Nama Pengembang</label>
+        <div class="uk-form-controls">
+          <input type="text" class="uk-width-1-1 uk-input modal-login-input" v-model="forms.developer.name">
+        </div>
+        <div v-show="errors.name.dev_name" class="uk-text-danger uk-text-small">{{ errors.name.dev_name }}</div>
+      </div>
+      <div class="uk-margin">
+        <label class="uk-form-label modal-login-label">*Nama Pemilik</label>
+        <div class="uk-form-controls">
+          <input type="text" class="uk-width-1-1 uk-input modal-login-input" v-model="forms.developer.ownername">
+        </div>
+        <div v-show="errors.name.dev_ownername" class="uk-text-danger uk-text-small">{{ errors.name.dev_ownername }}</div>
+      </div>
+      <div class="uk-margin">
+        <label class="uk-form-label modal-login-label">Jenis Pengembang</label>
+        <div class="uk-form-controls">
+          <div class="uk-grid-small" uk-grid>
+            <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
+              <a @click="forms.developer.ownership = 'perusahaan'" :class="{ 'modal-btn-tabactive': forms.developer.ownership === 'perusahaan' }" class="uk-width-1-1 uk-button uk-button-primary modal-btn-tab">Perusahaan</a>
+            </div>
+            <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
+              <a @click="forms.developer.ownership = 'individu'" :class="{ 'modal-btn-tabactive': forms.developer.ownership === 'individu' }" class="uk-width-1-1 uk-button uk-button-primary modal-btn-tab">Individu</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="uk-margin">
+        <label class="uk-form-label modal-login-label">Tentang Pengembang</label>
+        <div class="uk-form-controls">
+          <textarea class="uk-width-1-1 uk-textarea uk-height-small modal-login-input" v-model="forms.developer.biography"></textarea>
+        </div>
       </div>
       <div class="uk-margin">
         <button class="uk-width-1-1 uk-button uk-button-primary modal-login-submit" v-html="forms.submit"></button>
@@ -102,11 +122,13 @@ export default {
       forms: {
         isTabActive: 'dev',
         developer: {
+          name: '',
           email: '',
           ownername: '',
           biography: '',
           username: '',
-          password: ''
+          password: '',
+          ownership: 'perusahaan',
         },
         marketing: {
           fullname: '',
@@ -130,7 +152,73 @@ export default {
     },
     onSignUpDeveloper()
     {
+      this.errors.name = {};
+      this.errors.errorMessage = '';
+      this.errors.iserror = false;
 
+      if( this.forms.developer.username === '' )
+      {
+        this.errors.name.dev_username = 'Masukkan username Anda';
+        this.errors.iserror = true;
+      }
+      if( this.forms.developer.password === '' )
+      {
+        this.errors.name.dev_password = 'Masukkan password Anda';
+        this.errors.iserror = true;
+      }
+      if( this.forms.developer.email === '' )
+      {
+        this.errors.name.dev_email = 'Masukkan email Anda';
+        this.errors.iserror = true;
+      }
+      if( this.forms.developer.name === '' )
+      {
+        this.errors.name.dev_name = 'Masukkan nama pengembang';
+        this.errors.iserror = true;
+      }
+      if( this.forms.developer.ownername === '' )
+      {
+        this.errors.name.dev_ownername = 'Masukkan nama pemilik pengembang';
+        this.errors.iserror = true;
+      }
+      if( this.errors.iserror === true ) return false;
+
+      if( this.forms.developer.password.length < 8 )
+      {
+        swal({
+          title: 'Password terlalu pendek',
+          text: 'Password minimal 8 (delapan) karakter.',
+          icon: 'warning',
+          dangerMode: true
+        });
+        return false;
+      }
+      this.forms.submit = '<span uk-spinner></span>';
+
+      axios({
+        method: 'post',
+        url: this.$root.url + '/registration/developer',
+        params: this.forms.developer
+      }).then( res => {
+        swal({
+          title: 'Registrasi Sukses',
+          text: 'Mengarahkan ke halaman profil...',
+          icon: 'success'
+        });
+        setTimeout(() => {
+          document.location = this.$root.url + '/developer/profile';
+        }, 2000);
+      }).catch( err => {
+        this.forms.submit = 'Daftar';
+        if( err.response.status === 500 )
+        {
+          this.errors.errorMessage = err.response.statusText;
+        }
+        else
+        {
+          this.errors.errorMessage = err.response.data.statusText;
+        }
+      });
     },
     onSignUpMarketing()
     {
@@ -175,12 +263,7 @@ export default {
       axios({
         method: 'post',
         url: this.$root.url + '/registration/marketing',
-        params: {
-          fullname: this.forms.marketing.fullname,
-          email: this.forms.marketing.email,
-          username: this.forms.marketing.username,
-          password: this.forms.marketing.password
-        }
+        params: this.forms.marketing
       }).then( res => {
         swal({
           title: 'Registrasi Sukses',

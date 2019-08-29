@@ -5,13 +5,13 @@
         <div class="uk-width-1-4">
           <div class="uk-card uk-card-body uk-card-default side-navbar-profile">
             <div class="uk-margin side-profile-info">
-              <div v-if="session_user.mkt_profile_photo === null" class="uk-tile uk-tile-default uk-margin side-profile-photo">
+              <div v-if="session_user.dev_logo === null" class="uk-tile uk-tile-default uk-margin side-profile-photo">
                 <div class="uk-position-center">
-                  <span uk-icon="icon: user; ratio: 3"></span>
+                  <span uk-icon="icon: users; ratio: 3"></span>
                 </div>
               </div>
               <div v-else class="uk-margin side-profile-photo">
-                <img class="uk-width-1-1" :src="$root.url + '/images/avatar/' + session_user.mkt_profile_photo" alt="">
+                <img class="uk-width-1-1" :src="$root.url + '/images/devlogo/' + session_user.dev_logo" alt="">
               </div>
               <div class="uk-margin side-profile-joined">
                 Bergabung pada <br>
@@ -23,9 +23,9 @@
               <li><a :class="{ 'navactive': isMenuActive === 'account_info' }" @click="isMenuActive = 'account_info'">Informasi Akun</a></li>
               <li><a :class="{ 'navactive': isMenuActive === 'password' }" @click="isMenuActive = 'password'">Password</a></li>
               <li><a :class="{ 'navactive': isMenuActive === 'email' }" @click="isMenuActive = 'email'">Alamat Email</a></li>
-              <li><a :class="{ 'navactive': isMenuActive === 'profile_photo' }" @click="isMenuActive = 'profile_photo'">Foto Profil</a></li>
-              <li><a :href="$root.url + '/marketing/dashboard'">Dashboard</a></li>
-              <li><a :href="$root.url + '/authentication/logout/marketing'">Keluar</a></li>
+              <li><a :class="{ 'navactive': isMenuActive === 'logo_brand' }" @click="isMenuActive = 'logo_brand'">Logo</a></li>
+              <li><a :href="$root.url + '/developer/dashboard'">Dashboard</a></li>
+              <li><a :href="$root.url + '/authentication/logout/developer'">Keluar</a></li>
             </ul>
           </div>
         </div>
@@ -41,7 +41,7 @@
               <EmailAccount :session_user="session_user" :isMenuActive="isMenuActive" />
             </div>
             <div v-else>
-              <ProfilePhoto :session_user="session_user" :isMenuActive="isMenuActive" />
+              <LogoBrand :session_user="session_user" :isMenuActive="isMenuActive" />
             </div>
           </div>
         </div>
@@ -55,7 +55,7 @@
 import AccountInformation from './AccountInformation.vue';
 import PasswordAccount from './PasswordAccount.vue';
 import EmailAccount from './EmailAccount.vue';
-import ProfilePhoto from './ProfilePhoto.vue';
+import LogoBrand from './LogoBrand.vue';
 
 export default {
   props: ['session_user'],
@@ -63,16 +63,14 @@ export default {
     AccountInformation,
     PasswordAccount,
     EmailAccount,
-    ProfilePhoto
+    LogoBrand
   },
   data() {
     return {
       isMenuActive: 'account_info'
     }
   },
-  methods: {
-
-  },
+  methods: {},
   mounted() {}
 }
 </script>

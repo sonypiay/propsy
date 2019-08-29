@@ -1,5 +1,5 @@
 @extends('frontend.pages.developer.master')
-@section('tag_title', 'Marketing Dashboard')
+@section('tag_title', 'Developer Dashboard')
 @section('main_content')
 <div style="height: 474px;" class="uk-padding uk-overflow-auto">
   <div class="uk-grid-small uk-grid-match" uk-grid>

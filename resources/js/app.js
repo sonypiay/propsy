@@ -8,9 +8,13 @@ window.numeral = require('numeral');
 Vue.component('modal-login-component', require('./components/Frontend/LoginComponent.vue').default);
 Vue.component('modal-signup-component', require('./components/Frontend/SignUpComponent.vue').default);
 
+// marketing
 Vue.component('marketing-dashboard-page', require('./components/Frontend/Marketing/Dashboard.vue').default);
-Vue.component('marketing-setting-page', require('./components/Frontend/Marketing/Settings.vue').default);
 Vue.component('marketing-profile-page', require('./components/Frontend/Marketing/Profile.vue').default);
+
+// developer
+Vue.component('developer-dashboard-page', require('./components/Frontend/Developer/Dashboard.vue').default);
+Vue.component('developer-profile-page', require('./components/Frontend/Developer/Profile.vue').default);
 
 const app = new Vue({
     el: '#app',

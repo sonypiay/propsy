@@ -2,13 +2,29 @@
   <div>
     <div class="uk-heading-line uk-text-center uk-margin-bottom side-content-profile-heading"><span>Informasi Akun</span></div>
     <div v-show="errors.errorMessage" class="uk-margin uk-alert-danger" uk-alert>{{ errors.errorMessage }}</div>
-    <form class="uk-form-stacked uk-grid-small content-form" @submit.prevent="onChangeAccountInfo" uk-grid>
+    <form class="uk-form-stacked uk-grid-small content-form" @submit.prevent="onUpdateAccountInfo" uk-grid>
       <div class="uk-width-1-2">
-        <label class="uk-form-label content-form-label">Nama Lengkap</label>
+        <label class="uk-form-label content-form-label">Nama Pengembang</label>
         <div class="uk-form-controls">
-          <input type="text" v-model="forms.fullname" class="uk-input content-form-input">
+          <input type="text" v-model="forms.name" class="uk-input content-form-input">
         </div>
-        <div v-show="errors.name.fullname" class="uk-text-danger uk-text-small">{{ errors.name.fullname }}</div>
+        <div v-show="errors.name.name" class="uk-text-danger uk-text-small">{{ errors.name.name }}</div>
+      </div>
+      <div class="uk-width-1-2">
+        <label class="uk-form-label content-form-label">Nama Pemilik</label>
+        <div class="uk-form-controls">
+          <input type="text" v-model="forms.ownername" class="uk-input content-form-input">
+        </div>
+        <div v-show="errors.name.ownername" class="uk-text-danger uk-text-small">{{ errors.name.ownername }}</div>
+      </div>
+      <div class="uk-width-1-2">
+        <label class="uk-form-label content-form-label">Jenis Pengembang</label>
+        <div class="uk-form-controls">
+          <select class="uk-select content-form-input" v-model="forms.ownership">
+            <option value="perusahaan">Perusahaan</option>
+            <option value="individu">Individu</option>
+          </select>
+        </div>
       </div>
       <div class="uk-width-1-2">
         <label class="uk-form-label content-form-label">Username</label>
@@ -18,9 +34,9 @@
         <div v-show="errors.name.username" class="uk-text-danger uk-text-small">{{ errors.name.username }}</div>
       </div>
       <div class="uk-width-1-2">
-        <label class="uk-form-label content-form-label">Telepon Kantor / Rumah</label>
+        <label class="uk-form-label content-form-label">Telepon Kantor</label>
         <div class="uk-form-controls">
-          <input type="text" v-model="forms.phone_number" class="uk-input content-form-input">
+          <input type="text" v-model="forms.phone_office" class="uk-input content-form-input">
         </div>
       </div>
       <div class="uk-width-1-2">
@@ -54,7 +70,7 @@
         </div>
       </div>
       <div class="uk-width-1-1">
-        <label class="uk-form-label content-form-label">Deskripsikan Anda</label>
+        <label class="uk-form-label content-form-label">Tentang Pengembang</label>
         <div class="uk-form-controls">
           <textarea class="uk-textarea uk-height-small content-form-input" v-model="forms.biography"></textarea>
         </div>
@@ -72,14 +88,16 @@ export default {
   data() {
     return {
       forms: {
-        fullname: this.session_user.mkt_fullname,
-        phone_number: this.session_user.mkt_phone_number,
-        mobile_phone: this.session_user.mkt_mobile_phone,
-        city: this.session_user.mkt_city === null ? '' : this.session_user.mkt_city,
-        region: this.session_user.mkt_region === null ? '' : this.session_user.mkt_region,
-        biography: this.session_user.mkt_biography,
-        address: this.session_user.mkt_address,
-        username: this.session_user.mkt_username,
+        name: this.session_user.dev_name,
+        ownername: this.session_user.dev_ownername,
+        ownership: this.session_user.dev_ownership,
+        phone_office: this.session_user.dev_phone_office,
+        mobile_phone: this.session_user.dev_mobile_phone,
+        city: this.session_user.dev_city === null ? '' : this.session_user.dev_city,
+        region: this.session_user.dev_region === null ? '' : this.session_user.dev_region,
+        biography: this.session_user.dev_biography,
+        username: this.session_user.dev_username,
+        address: this.session_user.dev_address,
         submit: 'Simpan'
       },
       getregion: {},
@@ -119,15 +137,20 @@ export default {
         console.log( err.response.statusText );
       });
     },
-    onChangeAccountInfo()
+    onUpdateAccountInfo()
     {
       this.errors.name = {};
       this.errors.errorMessage = '';
       this.errors.iserror = false;
 
-      if( this.forms.fullname === '' )
+      if( this.forms.name === '' )
       {
-        this.errors.name.fullname = 'Nama lengkap tidak boleh kosong';
+        this.errors.name.name = 'Nama Pengembang tidak boleh kosong';
+        this.errors.iserror = true;
+      }
+      if( this.forms.ownername === '' )
+      {
+        this.errors.name.ownername = 'Nama Pemilik tidak boleh kosong';
         this.errors.iserror = true;
       }
       if( this.forms.username === '' )
@@ -135,17 +158,12 @@ export default {
         this.errors.name.username = 'Username tidak boleh kosong';
         this.errors.iserror = true;
       }
-      if( this.forms.fullname === '' )
-      {
-        this.errors.name.fullname = 'Nama lengkap tidak boleh kosong';
-        this.errors.iserror = true;
-      }
       if( this.errors.iserror === true ) return false;
 
       this.forms.submit = '<span uk-spinner></span>';
       axios({
         method: 'put',
-        url: this.$root.url + '/marketing/profile/change_account_information',
+        url: this.$root.url + '/developer/profile/change_account_information',
         params: this.forms
       }).then( res => {
         swal({
@@ -154,6 +172,7 @@ export default {
           icon: 'success'
         });
         this.forms.submit = 'Simpan';
+        setTimeout(() => { document.location = ''; }, 2000);
       }).catch( err => {
         if( err.response.status === 500 ) this.errors.errorMessage = err.response.statusText;
         else this.errors.errorMessage = err.response.data.statusText;

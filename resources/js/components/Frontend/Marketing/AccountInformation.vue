@@ -2,7 +2,7 @@
   <div>
     <div class="uk-heading-line uk-text-center uk-margin-bottom side-content-profile-heading"><span>Informasi Akun</span></div>
     <div v-show="errors.errorMessage" class="uk-margin uk-alert-danger" uk-alert>{{ errors.errorMessage }}</div>
-    <form class="uk-form-stacked uk-grid-small content-form" @submit.prevent="onChangeEmail" uk-grid>
+    <form class="uk-form-stacked uk-grid-small content-form" @submit.prevent="onChangeAccountInfo" uk-grid>
       <div class="uk-width-1-2">
         <label class="uk-form-label content-form-label">Nama Lengkap</label>
         <div class="uk-form-controls">
@@ -119,7 +119,7 @@ export default {
         console.log( err.response.statusText );
       });
     },
-    onChangeEmail()
+    onChangeAccountInfo()
     {
       this.errors.name = {};
       this.errors.errorMessage = '';

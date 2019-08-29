@@ -91,16 +91,19 @@ class MarketingController extends Controller
     $region = $request->region;
     $biography = $request->biography;
     $username = $request->username;
+    $address = $request->address;
     $getinfo = $marketinguser->getinfo();
+
+    $getinfo->mkt_fullname = $fullname;
+    $getinfo->mkt_phone_number = $phone_number;
+    $getinfo->mkt_mobile_phone = $mobile_phone;
+    $getinfo->mkt_city = $city;
+    $getinfo->mkt_region = $region;
+    $getinfo->mkt_biography = $biography;
+    $getinfo->mkt_address = $address;
 
     if( $getinfo->mkt_username == $username )
     {
-      $getinfo->mkt_fullname = $fullname;
-      $getinfo->mkt_phone_number = $phone_number;
-      $getinfo->mkt_mobile_phone = $mobile_phone;
-      $getinfo->mkt_city = $city;
-      $getinfo->mkt_region = $region;
-      $getinfo->mkt_biography = $biography;
       $getinfo->save();
       $res = ['status' => 200, 'statusText' => 'success'];
     }
@@ -113,12 +116,6 @@ class MarketingController extends Controller
       }
       else
       {
-        $getinfo->mkt_fullname = $fullname;
-        $getinfo->mkt_phone_number = $phone_number;
-        $getinfo->mkt_mobile_phone = $mobile_phone;
-        $getinfo->mkt_city = $city;
-        $getinfo->mkt_region = $region;
-        $getinfo->mkt_biography = $biography;
         $getinfo->mkt_username = $username;
         $getinfo->save();
         $res = ['status' => 200, 'statusText' => 'success'];

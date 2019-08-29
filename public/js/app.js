@@ -2519,7 +2519,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(err.response.statusText);
       });
     },
-    onChangeEmail: function onChangeEmail() {
+    onChangeAccountInfo: function onChangeAccountInfo() {
       var _this3 = this;
 
       this.errors.name = {};
@@ -58593,7 +58593,7 @@ var render = function() {
         on: {
           submit: function($event) {
             $event.preventDefault()
-            return _vm.onChangeEmail($event)
+            return _vm.onChangeAccountInfo($event)
           }
         }
       },
@@ -59268,7 +59268,7 @@ var render = function() {
                           { staticClass: "uk-margin side-profile-photo" },
                           [
                             _c("img", {
-                              staticClass: "uk-width-1-1 uk-border-circle",
+                              staticClass: "uk-width-1-1",
                               attrs: {
                                 src:
                                   _vm.$root.url +

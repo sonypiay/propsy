@@ -30,10 +30,10 @@
   @endphp
 @endif
 
-<div class="uk-card uk-card-body uk-height-viewport side-navbar">
+<div class="uk-width-1-5 uk-card uk-card-body uk-height-viewport uk-position-absolute side-navbar">
   <div class="uk-margin">
     <div class="uk-text-center">
-      <a href="{{ route('homepage') }}"><img class="uk-width-1-1" src="{{ asset('images/brand/logo_maps_secondary.png') }}" alt=""></a>
+      <a href="{{ route('homepage') }}"><img class="uk-width-1-2" src="{{ asset('images/brand/logo_maps_secondary.png') }}" alt=""></a>
     </div>
   </div>
   <ul class="uk-nav-default uk-nav-parent-icon side-nav" uk-nav>

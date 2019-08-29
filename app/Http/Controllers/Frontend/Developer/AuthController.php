@@ -32,6 +32,11 @@ class AuthController extends Controller
     {
       if( $result->dev_password === md5( $password ) )
       {
+        session()->put('isDeveloper', true);
+        session()->put('dev_user_id', $result->dev_user_id);
+        session()->put('dev_email', $result->dev_email);
+        session()->put('dev_login_date', date('Y-m-d H:i:s'));
+
         $res = [
           'status' => 200,
           'statusText' => 'login success'

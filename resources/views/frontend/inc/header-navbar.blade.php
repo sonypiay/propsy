@@ -26,9 +26,15 @@
           </li>
           @elseif( session()->has('isDeveloper') )
           <li>
-            <a href="#">
-              John Doe
-            </a>
+            <a href="#">{{ $session_user->dev_ownername }}</a>
+            <div class="uk-navbar-dropdown main-nav-dropdown">
+              <ul class="uk-nav uk-dropdown-nav">
+                <li><a href="{{ route('developer_dashboard_page') }}">Dashboard</a></li>
+                <li><a href="{{ route('developer_profile_page') }}">Lihat Akun</a></li>
+                <li class="uk-nav-divider"></li>
+                <li><a href="{{ route('auth_logout_dev') }}">Keluar</a></li>
+              </ul>
+            </div>
           </li>
           @else
           <li>

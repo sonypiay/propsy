@@ -23,8 +23,11 @@ class MarketingUser extends Model
       'mkt_mobile_phone',
       'mkt_city',
       'mkt_region',
+      'mkt_address',
       'mkt_biography',
-      'mkt_profile_photo'
+      'mkt_profile_photo',
+      'created_at',
+      'updated_at'
     )->first();
 
     return $marketinguser;

@@ -56,11 +56,70 @@ class AuthController extends Controller
     return response()->json( $res, $res['status'] );
   }
 
+  public function do_register( Request $request, DeveloperUser $developeruser )
+  {
+    $username = $request->username;
+    $password = $request->password;
+    $email = $request->email;
+    $ownername = $request->ownername;
+    $biography = $request->biography;
+    $name = $request->name;
+    $ownership = $request->ownership;
+    $hash_password = md5( $password );
+    $check_username = $developeruser->where('dev_username', $username);
+    $check_email = $developeruser->where('dev_email', $email);
+
+    if( $check_username->count() > 0 )
+    {
+      $res = [
+        'status' => 409,
+        'statusText' => $username . ' sudah digunakan'
+      ];
+    }
+    else if( $check_email->count() > 0 )
+    {
+      $res = [
+        'status' => 409,
+        'statusText' => $email . ' sudah digunakan'
+      ];
+    }
+    else
+    {
+      $insert = new $developeruser;
+      $insert->dev_name = $name;
+      $insert->dev_slug = str_slug( $name );
+      $insert->dev_ownername = $ownername;
+      $insert->dev_username = $username;
+      $insert->dev_password = $hash_password;
+      $insert->dev_email = $email;
+      $insert->dev_biography = $biography;
+      $insert->dev_ownership = $ownership;
+      $insert->save();
+
+      $res = [ 'status' => 200, 'statusText' => 'success' ];
+      $getuser = $developeruser->where([
+        ['dev_username', $username],
+        ['dev_password', $hash_password]
+      ])->first();
+
+      session()->put('isDeveloper', true);
+      session()->put('dev_user_id', $getuser->dev_user_id);
+      session()->put('dev_email', $getuser->dev_email);
+      session()->put('dev_login_date', date('Y-m-d H:i:s'));
+    }
+
+    return response()->json( $res, $res['status'] );
+  }
+
   public function do_logout()
   {
     if( session()->has('isDeveloper') )
     {
-
+      session()->forget('isDeveloper');
+      session()->forget('dev_user_id');
+      session()->forget('dev_email');
+      session()->forget('dev_login_date');
+      session()->flush();
     }
 
     return redirect()->route('homepage');

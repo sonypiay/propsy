@@ -20,7 +20,7 @@ Route::group(['prefix' => 'authentication'], function() {
 });
 
 Route::group(['prefix' => 'registration'], function() {
-  //Route::post('/developer', 'Frontend\Developer\AuthController@do_register');
+  Route::post('/developer', 'Frontend\Developer\AuthController@do_register');
   Route::post('/marketing', 'Frontend\Marketing\AuthController@do_register');
 });
 
@@ -28,7 +28,6 @@ Route::group(['prefix' => 'registration'], function() {
 Route::group(['prefix' => 'marketing'], function() {
   Route::get('/', function() { return redirect()->route('marketing_dashboard_page'); });
   Route::get('/dashboard', 'Frontend\Marketing\MarketingController@index')->name('marketing_dashboard_page');
-  Route::get('/settings', 'Frontend\Marketing\MarketingController@settings_page')->name('marketing_settings_page');
   Route::get('/profile', 'Frontend\Marketing\MarketingController@profile_page')->name('marketing_profile_page');
 
   Route::group(['prefix' => 'profile'], function() {
@@ -36,5 +35,18 @@ Route::group(['prefix' => 'marketing'], function() {
     Route::put('/change_email', 'Frontend\Marketing\MarketingController@change_email');
     Route::put('/change_account_information', 'Frontend\Marketing\MarketingController@change_account_information');
     Route::post('/upload_photo_profile', 'Frontend\Marketing\MarketingController@upload_photo_profile');
+  });
+});
+
+Route::group(['prefix' => 'developer'], function() {
+  Route::get('/', function() { return redirect()->route('developer_dashboard_page'); });
+  Route::get('/dashboard', 'Frontend\Developer\DeveloperController@index')->name('developer_dashboard_page');
+  Route::get('/profile', 'Frontend\Developer\DeveloperController@profile_page')->name('developer_profile_page');
+
+  Route::group(['prefix' => 'profile'], function() {
+    Route::put('/change_account_information', 'Frontend\Developer\DeveloperController@change_account_information');
+    Route::put('/change_password', 'Frontend\Developer\DeveloperController@change_password');
+    Route::put('/change_email', 'Frontend\Developer\DeveloperController@change_email');
+    Route::post('/upload_logo', 'Frontend\Developer\DeveloperController@upload_logo');
   });
 });

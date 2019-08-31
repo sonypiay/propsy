@@ -156,4 +156,21 @@ class DeveloperController extends Controller
     $res = ['status' => 200, 'statusText' => 'upload success'];
     return response()->json( $res, $res['status'] );
   }
+
+  public function dev_manage_project( Request $request, DeveloperUser $developeruser )
+  {
+    if( session()->has('isDeveloper') )
+    {
+      $data = [
+        'request' => $request,
+        'session_user' => $developeruser->getinfo()
+      ];
+
+      return response()->view('frontend.pages.developer.projects', $data);
+    }
+    else
+    {
+      return redirect()->route('homepage');
+    }
+  }
 }

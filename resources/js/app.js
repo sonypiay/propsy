@@ -15,6 +15,7 @@ Vue.component('marketing-profile-page', require('./components/Frontend/Marketing
 // developer
 Vue.component('developer-dashboard-page', require('./components/Frontend/Developer/Dashboard.vue').default);
 Vue.component('developer-profile-page', require('./components/Frontend/Developer/Profile.vue').default);
+Vue.component('developer-manage-project', require('./components/Frontend/Developer/Projects.vue').default);
 
 const app = new Vue({
     el: '#app',

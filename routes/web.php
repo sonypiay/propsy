@@ -42,6 +42,9 @@ Route::group(['prefix' => 'developer'], function() {
   Route::get('/', function() { return redirect()->route('developer_dashboard_page'); });
   Route::get('/dashboard', 'Frontend\Developer\DeveloperController@index')->name('developer_dashboard_page');
   Route::get('/profile', 'Frontend\Developer\DeveloperController@profile_page')->name('developer_profile_page');
+  Route::group(['prefix' => 'project'], function() {
+    Route::get('/manage_project', 'Frontend\Developer\DeveloperController@dev_manage_project')->name('developer_manage_project');
+  });
 
   Route::group(['prefix' => 'profile'], function() {
     Route::put('/change_account_information', 'Frontend\Developer\DeveloperController@change_account_information');

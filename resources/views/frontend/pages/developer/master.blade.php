@@ -11,7 +11,7 @@
   </div>
   <div class="uk-width-expand">
     @include('frontend.inc.header-dashboard')
-    <div class="uk-position-relative">
+    <div class="uk-padding uk-overflow-auto dashboard-container">
       @yield('main_content')
     </div>
   </div>

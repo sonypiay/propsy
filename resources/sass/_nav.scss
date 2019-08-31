@@ -51,12 +51,18 @@
 .side-navbar {
   background: $color3;
   .side-nav {
-    border-top: 1px solid #efefef;
     li {
       a {
         color: #ffffff;
-        @include fontsetting( $font-primary, 16px, 600, normal, normal, 0.4px );
+        @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+        transition: all 0.10s linear 0s;
+        -moz-transition: all 0.10s linear 0s;
+        -webkit-transition: all 0.10s linear 0s;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        &:hover { border-left: 2px solid #ffffff; }
       }
+      .active { border-left: 2px solid #ffffff; }
     }
   }
 }

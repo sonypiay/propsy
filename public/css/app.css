@@ -50,18 +50,27 @@
   background: #1fc8c9;
 }
 
-.side-navbar .side-nav {
-  border-top: 1px solid #efefef;
-}
-
 .side-navbar .side-nav li a {
   color: #ffffff;
-  font-size: 16px;
+  font-size: 14px;
   font-style: normal;
   font-stretch: normal;
   font-family: "Lato", sans-serif;
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: 0.4px;
+  transition: all 0.1s linear 0s;
+  -moz-transition: all 0.1s linear 0s;
+  -webkit-transition: all 0.1s linear 0s;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.side-navbar .side-nav li a:hover {
+  border-left: 2px solid #ffffff;
+}
+
+.side-navbar .side-nav li .active {
+  border-left: 2px solid #ffffff;
 }
 
 .side-navbar-profile ul li a {
@@ -165,6 +174,91 @@ body {
   text-align: center;
   border-radius: 4px;
 }
+
+/* modal */
+
+.modal-login .modal-login-title {
+  font-size: 28px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-align: center;
+}
+
+.modal-login .modal-btn-tab {
+  font-size: 12px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  text-transform: capitalize;
+  background: #f2f2f2;
+  color: #777777;
+  border-radius: 30px;
+}
+
+.modal-login .modal-btn-tab:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-login .modal-btn-tabactive {
+  background: #1fc8c9;
+  color: #ffffff;
+}
+
+.modal-login .modal-form-mustcomplete {
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #333333;
+}
+
+.modal-login .modal-login-form .modal-login-label {
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #333333;
+}
+
+.modal-login .modal-login-form .modal-login-input {
+  border-radius: 4px;
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #666666;
+}
+
+.modal-login .modal-login-form .modal-login-input:hover,
+.modal-login .modal-login-form .modal-login-input:focus {
+  border: 1px solid #1fc8c9;
+}
+
+.modal-login .modal-login-form .modal-login-submit {
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  text-transform: capitalize;
+  background: #1fc8c9;
+  color: #ffffff;
+  border-radius: 4px;
+}
+
+/* modal */
 
 /* Layout */
 
@@ -284,90 +378,9 @@ body {
   color: #666666;
 }
 
+.dashboard-container {
+  height: 474px;
+}
+
 /* Layout */
-
-/* modal */
-
-.modal-login .modal-login-title {
-  font-size: 28px;
-  font-style: normal;
-  font-stretch: normal;
-  font-family: "Lato", sans-serif;
-  font-weight: 600;
-  letter-spacing: 0.4px;
-  text-align: center;
-}
-
-.modal-login .modal-btn-tab {
-  font-size: 12px;
-  font-style: normal;
-  font-stretch: normal;
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  letter-spacing: 0.4px;
-  text-transform: capitalize;
-  background: #f2f2f2;
-  color: #777777;
-  border-radius: 30px;
-}
-
-.modal-login .modal-btn-tab:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.modal-login .modal-btn-tabactive {
-  background: #1fc8c9;
-  color: #ffffff;
-}
-
-.modal-login .modal-form-mustcomplete {
-  font-size: 13px;
-  font-style: normal;
-  font-stretch: normal;
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  letter-spacing: 0.4px;
-  color: #333333;
-}
-
-.modal-login .modal-login-form .modal-login-label {
-  font-size: 13px;
-  font-style: normal;
-  font-stretch: normal;
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  letter-spacing: 0.4px;
-  color: #333333;
-}
-
-.modal-login .modal-login-form .modal-login-input {
-  border-radius: 4px;
-  font-size: 13px;
-  font-style: normal;
-  font-stretch: normal;
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  letter-spacing: 0.4px;
-  color: #666666;
-}
-
-.modal-login .modal-login-form .modal-login-input:hover,
-.modal-login .modal-login-form .modal-login-input:focus {
-  border: 1px solid #1fc8c9;
-}
-
-.modal-login .modal-login-form .modal-login-submit {
-  font-size: 13px;
-  font-style: normal;
-  font-stretch: normal;
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  letter-spacing: 0.4px;
-  text-transform: capitalize;
-  background: #1fc8c9;
-  color: #ffffff;
-  border-radius: 4px;
-}
-
-/* modal */
 

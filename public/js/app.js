@@ -2277,13 +2277,279 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user'],
   data: function data() {
-    return {};
+    return {
+      forms: {
+        isEdit: false,
+        project_name: '',
+        project_description: '',
+        project_address: '',
+        project_city: '',
+        project_region: '',
+        project_gmaps: '',
+        project_status: 'available',
+        project_id: null,
+        submit: 'Tambah'
+      },
+      files: null,
+      getregion: {},
+      getcity: {},
+      errors: {
+        name: {},
+        errorMessage: '',
+        iserror: false
+      }
+    };
   },
-  methods: {},
-  mounted: function mounted() {}
+  methods: {
+    onSelectFile: function onSelectFile(event) {
+      this.forms.project_thumbnail = '';
+      this.files = null;
+
+      if (event.target.files.length !== 0) {
+        this.forms.project_thumbnail = event.target.files[0];
+        this.files = URL.createObjectURL(this.forms.project_thumbnail);
+      }
+    },
+    onPopUpModal: function onPopUpModal(data) {
+      if (data === undefined) {
+        this.forms.project_name = '';
+        this.forms.project_description = '';
+        this.forms.project_address = '';
+        this.forms.project_city = '';
+        this.forms.project_region = '';
+        this.forms.project_gmaps = '';
+        this.forms.project_status = 'available';
+        this.forms.isEdit = false;
+        this.forms.submit = 'Tambah';
+      } else {
+        this.forms.project_name = data.project_name;
+        this.forms.project_description = data.project_description;
+        this.forms.project_address = data.project_address;
+        this.forms.project_city = data.project_city;
+        this.forms.project_region = data.project_region;
+        this.forms.project_gmaps = data.project_gmaps;
+        this.forms.project_status = data.project_status;
+        this.forms.project_id = data.project_id;
+        this.forms.isEdit = true;
+        this.forms.submit = 'Simpan';
+      }
+
+      UIkit.modal('#modal-proyek').show();
+    },
+    getRegionData: function getRegionData() {
+      var _this = this;
+
+      axios({
+        method: 'get',
+        url: this.$root.url + '/api/region/provinsi/all'
+      }).then(function (res) {
+        var results = res.data;
+        _this.getregion = results.results.data;
+
+        _this.getCityData();
+      })["catch"](function (err) {
+        console.log(err.response.statusText);
+      });
+    },
+    getCityData: function getCityData() {
+      var _this2 = this;
+
+      var region = 0;
+      if (this.forms.project_region !== '') region = this.forms.project_region;
+      axios({
+        method: 'get',
+        url: this.$root.url + '/api/region/kabupaten/all/' + region
+      }).then(function (res) {
+        var results = res.data;
+        _this2.getcity = results.results.data.kabupaten;
+      })["catch"](function (err) {
+        console.log(err.response.statusText);
+      });
+    },
+    onAddOrSaveProject: function onAddOrSaveProject() {
+      var _this3 = this;
+
+      this.errors.name = {};
+      this.errors.errorMessage = '';
+      this.errors.iserror = false;
+
+      if (this.forms.project_name === '') {
+        this.errors.name.project_name = 'Silahkan isi nama proyek';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.project_region === '') {
+        this.errors.name.project_region = 'Silahkan pilih provinsi';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.project_city === '') {
+        this.errors.name.project_city = 'Silahkan pilih kota';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.project_address === '') {
+        this.errors.name.project_address = 'Silahkan isi alamat';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.project_description === '') {
+        this.errors.name.project_description = 'Silahkan isi deskripsi proyek';
+        this.errors.iserror = true;
+      }
+
+      if (this.errors.iserror === true) return false;
+      this.forms.submit = '<span uk-spinner></span>';
+      axios({
+        method: 'post',
+        url: this.$root.url + '/developer/project/add_project',
+        params: {
+          project_name: this.forms.project_name,
+          project_region: this.forms.project_region,
+          project_city: this.forms.project_city,
+          project_address: this.forms.project_address,
+          project_description: this.forms.project_description,
+          project_status: this.forms.project_status,
+          project_gmaps: this.forms.project_gmaps
+        }
+      }).then(function (res) {
+        var result = res.data;
+        swal({
+          title: 'Sukses',
+          text: 'Proyek baru berhasil ditambah',
+          icon: 'success'
+        });
+        setTimeout(function () {
+          _this3.getProjectList();
+
+          UIkit.modal('#modal-proyek').hide();
+        }, 2000);
+      })["catch"](function (err) {
+        console.log(err.response.statusText);
+      });
+    },
+    getProjectList: function getProjectList() {}
+  },
+  mounted: function mounted() {
+    this.getRegionData();
+  }
 });
 
 /***/ }),
@@ -58355,9 +58621,589 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("\n  This is a manage project\n")])
+  return _c("div", [
+    _c("div", { attrs: { id: "modal-proyek", "uk-modal": "" } }, [
+      _c("div", { staticClass: "uk-modal-dialog modal-form" }, [
+        _c(
+          "form",
+          {
+            staticClass: "uk-form-stacked",
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.onAddOrSaveProject($event)
+              }
+            }
+          },
+          [
+            _c("div", { staticClass: "uk-modal-header" }, [
+              _vm.forms.isEdit
+                ? _c("h3", { staticClass: "modal-form-heading" }, [
+                    _vm._v("Ubah Proyek")
+                  ])
+                : _c("h3", { staticClass: "modal-form-heading" }, [
+                    _vm._v("Tambah Proyek")
+                  ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "uk-modal-body",
+                attrs: { "uk-overflow-auto": "" }
+              },
+              [
+                _c("div", { staticClass: "uk-text-small uk-margin-bottom" }, [
+                  _vm._v("Lengkapi formulir dibawah ini (*)")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "uk-form-stacked" }, [
+                  _c("div", { staticClass: "uk-margin" }, [
+                    _c("label", { staticClass: "uk-form-label modal-label" }, [
+                      _vm._v("*Nama Proyek")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "uk-form-controls" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.forms.project_name,
+                            expression: "forms.project_name"
+                          }
+                        ],
+                        staticClass: "uk-input modal-input",
+                        attrs: { type: "text" },
+                        domProps: { value: _vm.forms.project_name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.forms,
+                              "project_name",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.errors.name.project_name,
+                            expression: "errors.name.project_name"
+                          }
+                        ],
+                        staticClass: "uk-text-small uk-text-danger"
+                      },
+                      [_vm._v(_vm._s(_vm.errors.name.project_name))]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-margin" }, [
+                    _c("label", { staticClass: "uk-form-label modal-label" }, [
+                      _vm._v("*Provinsi")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "uk-form-controls" }, [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.forms.project_region,
+                              expression: "forms.project_region"
+                            }
+                          ],
+                          staticClass: "uk-select modal-input",
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.forms,
+                                  "project_region",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                return _vm.getRegionData()
+                              }
+                            ]
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "" } }, [
+                            _vm._v("-- Pilih --")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.getregion, function(reg) {
+                            return _c(
+                              "option",
+                              { domProps: { value: reg.area_id } },
+                              [_vm._v(_vm._s(reg.area_name))]
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.errors.name.project_region,
+                            expression: "errors.name.project_region"
+                          }
+                        ],
+                        staticClass: "uk-text-small uk-text-danger"
+                      },
+                      [_vm._v(_vm._s(_vm.errors.name.project_region))]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-margin" }, [
+                    _c("label", { staticClass: "uk-form-label modal-label" }, [
+                      _vm._v("*Kota")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "uk-form-controls" }, [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.forms.project_city,
+                              expression: "forms.project_city"
+                            }
+                          ],
+                          staticClass: "uk-select modal-input",
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.forms,
+                                "project_city",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "" } }, [
+                            _vm._v("-- Pilih --")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.getcity, function(city) {
+                            return _c(
+                              "option",
+                              { domProps: { value: city.area_id } },
+                              [_vm._v(_vm._s(city.area_name))]
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.errors.name.project_city,
+                            expression: "errors.name.project_city"
+                          }
+                        ],
+                        staticClass: "uk-text-small uk-text-danger"
+                      },
+                      [_vm._v(_vm._s(_vm.errors.name.project_city))]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-margin" }, [
+                    _c("label", { staticClass: "uk-form-label modal-label" }, [
+                      _vm._v("*Alamat")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "uk-form-controls" }, [
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.forms.project_address,
+                            expression: "forms.project_address"
+                          }
+                        ],
+                        staticClass: "uk-textarea uk-height-small modal-input",
+                        domProps: { value: _vm.forms.project_address },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.forms,
+                              "project_address",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.errors.name.project_address,
+                            expression: "errors.name.project_address"
+                          }
+                        ],
+                        staticClass: "uk-text-small uk-text-danger"
+                      },
+                      [_vm._v(_vm._s(_vm.errors.name.project_address))]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-margin" }, [
+                    _c("label", { staticClass: "uk-form-label modal-label" }, [
+                      _vm._v("Link Google Maps")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "uk-form-controls" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.forms.project_gmaps,
+                            expression: "forms.project_gmaps"
+                          }
+                        ],
+                        staticClass: "uk-input modal-input",
+                        attrs: { type: "text" },
+                        domProps: { value: _vm.forms.project_gmaps },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.forms,
+                              "project_gmaps",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-margin" }, [
+                    _c("label", { staticClass: "uk-form-label modal-label" }, [
+                      _vm._v("*Deskripsi Proyek")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "uk-form-controls" }, [
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.forms.project_description,
+                            expression: "forms.project_description"
+                          }
+                        ],
+                        staticClass: "uk-textarea uk-height-small modal-input",
+                        domProps: { value: _vm.forms.project_description },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.forms,
+                              "project_description",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.errors.name.project_description,
+                            expression: "errors.name.project_description"
+                          }
+                        ],
+                        staticClass: "uk-text-small uk-text-danger"
+                      },
+                      [_vm._v(_vm._s(_vm.errors.name.project_description))]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-margin" }, [
+                    _c("label", { staticClass: "uk-form-label modal-label" }, [
+                      _vm._v("Status Proyek")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "uk-form-controls" }, [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.forms.project_status,
+                              expression: "forms.project_status"
+                            }
+                          ],
+                          staticClass: "uk-select modal-input",
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.forms,
+                                "project_status",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "available" } }, [
+                            _vm._v("Available")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "prelaunch" } }, [
+                            _vm._v("Pre-Launch")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "hold" } }, [
+                            _vm._v("Hold")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "booked" } }, [
+                            _vm._v("Booked")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "sold" } }, [
+                            _vm._v("Sold")
+                          ])
+                        ]
+                      )
+                    ])
+                  ])
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-modal-footer uk-text-right" }, [
+              _c("button", {
+                staticClass: "uk-button uk-button-primary modal-form-add",
+                domProps: { innerHTML: _vm._s(_vm.forms.submit) }
+              }),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass:
+                    "uk-button uk-button-primary modal-form-cancel uk-modal-close"
+                },
+                [_vm._v("Batal")]
+              )
+            ])
+          ]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "uk-card dashboard-content" }, [
+      _c(
+        "div",
+        { staticClass: "uk-card-title uk-margin dashboard-content-heading" },
+        [_vm._v("Proyek")]
+      ),
+      _vm._v(" "),
+      _c(
+        "a",
+        {
+          staticClass: "uk-button uk-button-primary uk-margin dash-btn",
+          on: {
+            click: function($event) {
+              return _vm.onPopUpModal()
+            }
+          }
+        },
+        [_vm._v("Tambah Proyek")]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "uk-grid-small uk-grid-match",
+          attrs: { "uk-grid": "" }
+        },
+        [
+          _c("div", { staticClass: "uk-width-1-3" }, [
+            _c(
+              "div",
+              { staticClass: "uk-card uk-card-default dash-grid-box" },
+              [
+                _c("div", { staticClass: "uk-card-media-top" }, [
+                  _c("img", {
+                    attrs: {
+                      src: _vm.$root.url + "/images/banner/homepage1.jpg",
+                      alt: ""
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _vm._m(0),
+                _vm._v(" "),
+                _vm._m(1)
+              ]
+            )
+          ])
+        ]
+      )
+    ])
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "uk-card-body uk-card-small" }, [
+      _c(
+        "div",
+        { staticClass: "uk-margin-small uk-card-title grid-box-title" },
+        [_vm._v("Project Meikarta, Karawang")]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "uk-margin-small grid-box-lead" }, [
+        _vm._v("\n              12 Jun, 2019\n            ")
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "uk-text-truncate uk-margin-small grid-box-content" },
+        [
+          _vm._v(
+            "\n              Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.\n            "
+          )
+        ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "uk-position-relative uk-margin-bottom grid-box-footer" },
+      [
+        _c(
+          "div",
+          { staticClass: "uk-grid-collapse", attrs: { "uk-grid": "" } },
+          [
+            _c("div", { staticClass: "uk-width-1-3" }, [
+              _c(
+                "a",
+                {
+                  staticClass:
+                    "uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"
+                },
+                [_c("i", { staticClass: "icon ion-ios-create" })]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-width-1-3" }, [
+              _c(
+                "a",
+                {
+                  staticClass:
+                    "uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"
+                },
+                [_c("i", { staticClass: "icon ion-ios-trash" })]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-width-1-3" }, [
+              _c(
+                "a",
+                {
+                  staticClass:
+                    "uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"
+                },
+                [_c("i", { staticClass: "icon ion-ios-more" })]
+              )
+            ])
+          ]
+        )
+      ]
+    )
+  }
+]
 render._withStripped = true
 
 

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Database\DeveloperUser;
+use App\Database\ProjectList;
 use App\Http\Controllers\Controller;
 
 class DeveloperController extends Controller
@@ -172,5 +173,58 @@ class DeveloperController extends Controller
     {
       return redirect()->route('homepage');
     }
+  }
+
+  public function add_project( Request $request, DeveloperUser $developeruser, ProjectList $project_list )
+  {
+    $project_name = $request->project_name;
+    $project_slug = str_slug( $project_name );
+    $project_region = $request->project_region;
+    $project_city = $request->project_city;
+    $project_address = $request->project_address;
+    $project_gmaps = $request->project_gmaps;
+    $project_description = $request->project_description;
+    $project_status = $request->project_status;
+
+    $insert = new $project_list;
+    $insert->project_name = $project_name;
+    $insert->project_slug = $project_slug;
+    $insert->project_region = $project_region;
+    $insert->project_city = $project_city;
+    $insert->project_address = $project_address;
+    $insert->project_gmaps = $project_gmaps;
+    $insert->project_description = $project_description;
+    $insert->project_status = $project_status;
+    $insert->dev_user_id = session()->get('dev_user_id');
+    $insert->save();
+    $res = [ 'status' => 200, 'statusText' => 'success' ];
+
+    return response()->json( $res, $res['status'] );
+  }
+
+  public function save_project( Request $request, DeveloperUser $developeruser, ProjectList $project_list, $project_id )
+  {
+    $project_name = $request->project_name;
+    $project_slug = str_slug( $project_name );
+    $project_region = $request->project_region;
+    $project_city = $request->project_city;
+    $project_address = $request->project_address;
+    $project_gmaps = $request->project_gmaps;
+    $project_description = $request->project_description;
+    $project_status = $request->project_status;
+
+    $update = $project_list->where('project_id', $project_id)->first();
+    $update->project_name = $project_name;
+    $update->project_slug = $project_slug;
+    $update->project_region = $project_region;
+    $update->project_city = $project_city;
+    $update->project_address = $project_address;
+    $update->project_gmaps = $project_gmaps;
+    $update->project_description = $project_description;
+    $update->project_status = $project_status;
+    $update->save();
+    $res = [ 'status' => 200, 'statusText' => 'success' ];
+
+    return response()->json( $res, $res['status'] );
   }
 }

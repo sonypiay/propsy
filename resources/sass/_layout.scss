@@ -49,6 +49,47 @@ html, body {
     }
   }
 }
+
+.modal-form {
+  .modal-form-heading {
+    @include fontsetting( $font-primary, 18px, 600, normal, normal, 0.4px );
+    color: #333333;
+  }
+  .modal-label {
+    @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+    color: #333333;
+  }
+  .modal-input {
+    border-radius: 4px;
+    @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+    color: #666666;
+    &:hover, &:focus { border: 1px solid $color3; }
+  }
+  .modal-submit, .modal-form-add {
+    @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+    text-transform: capitalize;
+    background: #ffffff;
+    color: $color3;
+    border: 1px solid $color3;
+    border-radius: 4px;
+    &:hover {
+      background: $color3;
+      color: #ffffff;
+    }
+  }
+  .modal-form-cancel {
+    border: 1px solid #e02c2c;
+    color: #e02c2c;
+    @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+    text-transform: capitalize;
+    background: #ffffff;
+    border-radius: 4px;
+    &:hover {
+      background: #e02c2c;
+      color: #ffffff;
+    }
+  }
+}
 /* modal */
 
 /* Layout */
@@ -142,5 +183,38 @@ html, body {
 
 .dashboard-container {
   height: 474px;
+  .dashboard-content {
+    .dashboard-content-heading {
+      @include fontsetting( $font-primary, 26px, 600, normal, normal, 0.4px );
+      color: #666666;
+    }
+    .dash-btn {
+      background: #ffffff;
+      border: 1px solid $color3;
+      color: $color3;
+      @include fontsetting( $font-primary, 12px, 600, normal, normal, 0.4px );
+      border-radius: 4px;
+      text-transform: capitalize;
+      &:hover { background: $color3; color: #ffffff; }
+    }
+    .dash-btn-action {
+      border-radius: 0 !important;
+      border: none !important;
+      color: #666666;
+      font-size: 24px !important;
+      &:hover { background: none !important; color: $color3; }
+    }
+    .dash-grid-box {
+      .grid-box-title {
+        color: #666666;
+        @include fontsetting( $font-primary, 18px, 600, normal, normal, 0.4px );
+        &:hover { color: $color3; }
+      }
+      .grid-box-lead {
+        color: #999999;
+        @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+      }
+    }
+  }
 }
 /* Layout */

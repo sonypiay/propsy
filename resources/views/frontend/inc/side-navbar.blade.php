@@ -22,7 +22,7 @@
   @php
     $link_nav = [
       'dashboard' => '#',
-      'project' => '#',
+      'project' => route('developer_manage_project'),
       'marketing' => '#',
       'pelanggan' => '#',
       'laporan' => '#'
@@ -38,17 +38,16 @@
   </div>
   <ul class="uk-nav-default uk-nav-parent-icon side-nav" uk-nav>
     @if( session()->has('isMarketing') )
-    <li><a href="#">Dashboard</a></li>
-    <li><a href="#">Proyek</a></li>
-    <li><a href="#">Marketing</a></li>
-    <li><a href="#">Pelanggan</a></li>
-    <li><a href="#">Laporan</a></li>
+    <li><a href="{{ $link_nav['dashboard'] }}">Dashboard</a></li>
+    <li><a href="{{ $link_nav['project'] }}">Proyek</a></li>
+    <li><a href="{{ $link_nav['pelanggan'] }}">Pelanggan</a></li>
+    <li><a href="{{ $link_nav['laporan'] }}">Laporan</a></li>
     @else
-    <li><a href="#">Dashboard</a></li>
-    <li><a href="#">Proyek</a></li>
-    <li><a href="#">Survey</a></li>
-    <li><a href="#">Pelanggan</a></li>
-    <li><a href="#">Laporan</a></li>
+    <li><a href="{{ $link_nav['dashboard'] }}">Dashboard</a></li>
+    <li><a href="{{ $link_nav['project'] }}">Proyek</a></li>
+    <li><a href="{{ $link_nav['pelanggan'] }}">Pelanggan</a></li>
+    <li><a href="{{ $link_nav['marketing'] }}">Marketing</a></li>
+    <li><a href="{{ $link_nav['laporan'] }}">Laporan</a></li>
     @endif
   </ul>
 </div>

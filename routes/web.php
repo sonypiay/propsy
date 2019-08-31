@@ -44,6 +44,8 @@ Route::group(['prefix' => 'developer'], function() {
   Route::get('/profile', 'Frontend\Developer\DeveloperController@profile_page')->name('developer_profile_page');
   Route::group(['prefix' => 'project'], function() {
     Route::get('/manage_project', 'Frontend\Developer\DeveloperController@dev_manage_project')->name('developer_manage_project');
+    Route::post('/add_project', 'Frontend\Developer\DeveloperController@add_project');
+    Route::put('/save_project', 'Frontend\Developer\DeveloperController@save_project');
   });
 
   Route::group(['prefix' => 'profile'], function() {

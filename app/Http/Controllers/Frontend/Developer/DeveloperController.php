@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Database\DeveloperUser;
 use App\Database\ProjectList;
+use App\Database\ProjectGallery;
 use App\Http\Controllers\Controller;
 
 class DeveloperController extends Controller
@@ -274,5 +275,47 @@ class DeveloperController extends Controller
     }
     $res = [ 'status' => 200, 'statusText' => 'success' ];
     return response()->json( $res, $res['status'] );
+  }
+
+  public function project_gallery( Request $request, DeveloperUser $developeruser, $project_id )
+  {
+    if( session()->has('isDeveloper') )
+    {
+      $data = [
+        'request' => $request,
+        'session_user' => $developeruser->getinfo(),
+        'project_id' => $project_id
+      ];
+
+      return response()->view('frontend.pages.developer.gallery', $data);
+    }
+    else
+    {
+      return redirect()->route('homepage');
+    }
+  }
+
+  public function get_gallery( Request $request, DeveloperUser $developeruser, ProjectGallery $gallery, $project_id )
+  {
+    $gallery = new $gallery;
+    $query = $gallery->select(
+      'project_gallery.gallery_id',
+      'project_gallery.gallery_filename',
+      'project_gallery.gallery_description',
+      'project_gallery.created_at',
+      'project_gallery.updated_at',
+      'project_list.project_id',
+      'project_list.project_name'
+    )
+    ->join('project_list', 'project_gallery.project_id', '=', 'project_list.project_id')
+    ->orderBy('project_gallery.created_at', 'desc');
+    $data = [
+      'data' => [
+        'total' => $query->count(),
+        'row' => $query->get()
+      ]
+    ];
+
+    return response()->json( $data, 200 );
   }
 }

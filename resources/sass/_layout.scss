@@ -236,6 +236,27 @@ html, body {
         color: #999999;
         @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
       }
+      .grid-upload-gallery {
+        background: #f9f9f9;
+      }
+      .grid-box-footer {
+        .grid-dropdown-nav {
+          padding: 0;
+          ul {
+            li {
+              a {
+                color: #666666;
+                @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+                padding: 14px 20px;
+                &:hover {
+                  color: #ffffff;
+                  background: $color3;
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

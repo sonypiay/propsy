@@ -48,6 +48,9 @@ Route::group(['prefix' => 'developer'], function() {
     Route::put('/save_project/{project_id}', 'Frontend\Developer\DeveloperController@save_project');
     Route::get('/list_project', 'Frontend\Developer\DeveloperController@getProjectList');
     Route::delete('/delete_project/{project_id}', 'Frontend\Developer\DeveloperController@delete_project');
+
+    Route::get('/gallery/{project_id}', 'Frontend\Developer\DeveloperController@project_gallery')->name('developer_project_gallery');
+    Route::get('/data_gallery/{project_id}', 'Frontend\Developer\DeveloperController@get_gallery');
   });
 
   Route::group(['prefix' => 'profile'], function() {

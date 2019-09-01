@@ -148,11 +148,11 @@ CREATE TABLE `project_list` (
   PRIMARY KEY (`project_id`),
   KEY `fk_project_dev_idx` (`dev_user_id`),
   CONSTRAINT `fk_project_dev_idx` FOREIGN KEY (`dev_user_id`) REFERENCES `developer_user` (`dev_user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_list` */
 
-insert  into `project_list`(`project_id`,`project_name`,`project_slug`,`project_thumbnail`,`project_description`,`project_address`,`project_city`,`project_region`,`project_gmaps`,`project_status`,`dev_user_id`,`created_at`,`updated_at`) values (1,'Proyek Meikarta','proyek-meikarta',NULL,'Karawang','Karawang',208,9,NULL,'available',1,'2019-09-01 02:23:58','2019-09-01 02:23:58');
+insert  into `project_list`(`project_id`,`project_name`,`project_slug`,`project_thumbnail`,`project_description`,`project_address`,`project_city`,`project_region`,`project_gmaps`,`project_status`,`dev_user_id`,`created_at`,`updated_at`) values (1,'Proyek Meikarta','proyek-meikarta',NULL,'Karawang','Karawang',208,9,NULL,'hold',1,'2019-09-01 02:23:58','2019-09-01 14:03:29'),(3,'Pulau Reklamasi B','pulau-reklamasi-b',NULL,'Pulau Reklamasi B','Pulau Reklamasi B',192,6,NULL,'booked',1,'2019-09-01 13:57:21','2019-09-01 14:03:15'),(4,'Pulau Reklamasi A','pulau-reklamasi-a',NULL,'Pulau Reklamasi A','Pulau Reklamasi A',192,6,NULL,'available',1,'2019-09-01 13:59:55','2019-09-01 13:59:55'),(5,'Pulau Reklamasi C','pulau-reklamasi-c',NULL,'Pulau Reklamasi C','Pulau Reklamasi C',192,6,NULL,'prelaunch',1,'2019-09-01 14:00:31','2019-09-01 14:01:04'),(6,'Pulau Reklamasi D','pulau-reklamasi-d',NULL,'Pulau Reklamasi D','Pulau Reklamasi D',192,6,NULL,'sold',1,'2019-09-01 14:04:29','2019-09-01 14:04:29');
 
 /*Table structure for table `project_marketing` */
 

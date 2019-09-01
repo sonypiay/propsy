@@ -9,6 +9,7 @@
             <h3 class="modal-form-heading" v-else>Tambah Proyek</h3>
           </div>
           <div class="uk-modal-body" uk-overflow-auto>
+            <div v-show="errors.errorMessage" class="uk-alert-danger" uk-alert>{{ errors.errorMessage }}</div>
             <div class="uk-text-small uk-margin-bottom">Lengkapi formulir dibawah ini (*)</div>
             <div class="uk-form-stacked">
               <div class="uk-margin">
@@ -155,6 +156,14 @@
                   </div>
                   <div class="uk-width-1-3">
                     <a class="uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"><i class="icon ion-ios-more"></i></a>
+                    <div class="grid-dropdown-nav" uk-dropdown="pos: top-right">
+                      <ul class="uk-nav uk-dropdown-nav">
+                        <li><a :href="$root.url + '/developer/project/detail/' + project.project_id"><span class="uk-margin-small-right" uk-icon="forward"></span> Lihat Proyek</a></li>
+                        <li><a :href="$root.url + '/developer/project/gallery/' + project.project_id"><span class="uk-margin-small-right" uk-icon="image"></span> Galeri</a></li>
+                        <li><a><span class="uk-margin-small-right" uk-icon="plus"></span> Tambah Unit</a></li>
+                        <li><a><span class="uk-margin-small-right" uk-icon="plus"></span> Tambah Tipe Unit</a></li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -209,17 +218,6 @@ export default {
     }
   },
   methods: {
-    onSelectFile( event )
-    {
-      this.forms.project_thumbnail = '';
-      this.files = null;
-
-      if( event.target.files.length !== 0 )
-      {
-        this.forms.project_thumbnail = event.target.files[0];
-        this.files = URL.createObjectURL( this.forms.project_thumbnail );
-      }
-    },
     onPopUpModal( data )
     {
       if( data === undefined )

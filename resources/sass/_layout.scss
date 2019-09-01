@@ -204,7 +204,29 @@ html, body {
       font-size: 24px !important;
       &:hover { background: none !important; color: $color3; }
     }
+    .dash-form-input {
+      border-radius: 4px;
+      @include fontsetting( $font-primary, 12px, 600, normal, normal, 0.4px );
+      color: #666666;
+      &:hover, &:focus {
+        color: $color3;
+        border: 1px solid $color3;
+      }
+    }
     .dash-grid-box {
+      .grid-image {
+        background: $color3; color: #ffffff;
+      }
+      .grid-badge {
+        padding: 10px;
+        .uk-label {
+          background: #ffffff;
+          color: $color3;
+          border-radius: 10px;
+          text-transform: capitalize;
+          @include fontsetting( $font-secondary, 13px, 600, normal, normal, 0.4px );
+        }
+      }
       .grid-box-title {
         color: #666666;
         @include fontsetting( $font-primary, 18px, 600, normal, normal, 0.4px );

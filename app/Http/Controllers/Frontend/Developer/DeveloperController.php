@@ -227,4 +227,52 @@ class DeveloperController extends Controller
 
     return response()->json( $res, $res['status'] );
   }
+
+  public function getProjectList( Request $request, ProjectList $project_list )
+  {
+    $keywords = $request->keywords;
+    $status = $request->status;
+    $project = new $project_list;
+
+    if( empty( $keywords ) )
+    {
+      $query = $project->orderBy('created_at', 'desc');
+      if( $status !== 'all' )
+      {
+        $query = $project->where('project_status', $status)
+        ->orderBy('created_at', 'desc');
+      }
+    }
+    else
+    {
+      $query = $project->where('project_name', 'like', '%' . $keywords . '%')
+      ->orderBy('created_at', 'desc');
+      if( $status !== 'all' )
+      {
+        $query = $project->where([
+          ['project_status', $status],
+          ['project_name', 'like', '%' . $keywords . '%']
+        ])
+        ->orderBy('created_at', 'desc');
+      }
+    }
+    $fetchdata = $query->paginate( 6 );
+    $data = [
+      'status' => 200,
+      'statusText' => 'success',
+      'results' => $fetchdata
+    ];
+    return response()->json( $data, $data['status'] );
+  }
+
+  public function delete_project( Request $request, ProjectList $project_list, $project_id )
+  {
+    $getproject = $project_list->where('project_id', $project_id);
+    if( $getproject->count() !== 0 )
+    {
+      $getproject->delete();
+    }
+    $res = [ 'status' => 200, 'statusText' => 'success' ];
+    return response()->json( $res, $res['status'] );
+  }
 }

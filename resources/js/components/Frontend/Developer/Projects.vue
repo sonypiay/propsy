@@ -79,35 +79,83 @@
         </form>
       </div>
     </div>
+
     <!-- modal tambah proyek -->
     <div class="uk-card dashboard-content">
       <div class="uk-card-title uk-margin dashboard-content-heading">Proyek</div>
-      <a class="uk-button uk-button-primary uk-margin dash-btn" @click="onPopUpModal()">Tambah Proyek</a>
-      <div class="uk-grid-small uk-grid-match" uk-grid>
-        <div class="uk-width-1-3">
-          <div class="uk-card uk-card-default dash-grid-box">
-            <div class="uk-card-media-top">
-              <img :src="$root.url + '/images/banner/homepage1.jpg'" alt="">
-            </div>
-            <div class="uk-card-body uk-card-small">
-              <div class="uk-margin-small uk-card-title grid-box-title">Project Meikarta, Karawang</div>
-              <div class="uk-margin-small grid-box-lead">
-                12 Jun, 2019
-              </div>
-              <div class="uk-text-truncate uk-margin-small grid-box-content">
-                Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
-              </div>
-            </div>
-            <div class="uk-position-relative uk-margin-bottom grid-box-footer">
-              <div class="uk-grid-collapse" uk-grid>
-                <div class="uk-width-1-3">
-                  <a class="uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"><i class="icon ion-ios-create"></i></a>
+      <div class="uk-margin uk-grid-small uk-child-width-auto" uk-grid>
+        <div>
+          <a class="uk-button uk-button-primary uk-margin dash-btn" @click="onPopUpModal()">Tambah Proyek</a>
+        </div>
+        <div>
+          <select class="uk-select dash-form-input" v-model="forms.getstatus" @change="getProjectList()">
+            <option value="all">Semua</option>
+            <option value="available">Available</option>
+            <option value="prelaunch">Pre-Launch</option>
+            <option value="hold">Hold</option>
+            <option value="booked">Booked</option>
+            <option value="sold">Sold</option>
+          </select>
+        </div>
+        <div>
+          <div class="uk-inline">
+            <a @click="getProjectList()" class="uk-form-icon" uk-icon="search"></a>
+            <input @keyup.enter="getProjectList()" type="search" v-model="forms.keywords" class="uk-input dash-form-input" placeholder="Cari proyek...">
+          </div>
+        </div>
+      </div>
+      <div v-if="project_list.isLoading === true" class="uk-text-center">
+        <span uk-spinner></span>
+      </div>
+      <div v-else>
+        <div v-if="project_list.total === 0" class="uk-alert-warning" uk-alert>
+          Belum ada proyek.
+        </div>
+        <div v-else class="uk-grid-small uk-grid-match" uk-grid>
+          <div v-for="project in project_list.results" class="uk-width-1-3@xl uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s">
+            <div class="uk-card uk-card-default dash-grid-box">
+              <div class="uk-card-media-top">
+                <div v-if="project.project_thumbnail === null" class="uk-tile uk-tile-default grid-image">
+                  <div class="uk-position-top-right">
+                    <div class="grid-badge">
+                      <label class="uk-label">
+                        <span v-if="project.project_status === 'available'">Available</span>
+                        <span v-else-if="project.project_status === 'prelaunch'">Pre-Launch</span>
+                        <span v-else-if="project.project_status === 'hold'">Hold</span>
+                        <span v-else-if="project.project_status === 'booked'">Booked</span>
+                        <span v-else>Sold</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="uk-text-center">
+                    <span uk-icon="icon: image; ratio: 3"></span>
+                  </div>
                 </div>
-                <div class="uk-width-1-3">
-                  <a class="uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"><i class="icon ion-ios-trash"></i></a>
+                <div v-else class="uk-inline">
+                  <img :src="$root.url + '/images/banner/homepage1.jpg'" alt="">
+                  <div class="uk-overlay uk-overlay-default uk-position-top">
+                    <p>Top</p>
+                  </div>
                 </div>
-                <div class="uk-width-1-3">
-                  <a class="uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"><i class="icon ion-ios-more"></i></a>
+              </div>
+              <div class="uk-card-body uk-card-small">
+                <div class="uk-margin-small uk-card-title grid-box-title">{{ project.project_name }}</div>
+                <div class="uk-margin-small grid-box-lead">
+                  Terakhir diubah: {{ $root.formatDate( project.created_at, 'DD MMM YYYY', 'id' ) }}
+                </div>
+                <div class="uk-text-truncate uk-margin-small grid-box-content">{{ project.project_description }}</div>
+              </div>
+              <div class="uk-position-relative uk-margin-bottom grid-box-footer">
+                <div class="uk-grid-collapse" uk-grid>
+                  <div class="uk-width-1-3">
+                    <a @click="onPopUpModal( project )" class="uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"><i class="icon ion-ios-create"></i></a>
+                  </div>
+                  <div class="uk-width-1-3">
+                    <a @click="onDeleteProject( project.project_id )" class="uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"><i class="icon ion-ios-trash"></i></a>
+                  </div>
+                  <div class="uk-width-1-3">
+                    <a class="uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"><i class="icon ion-ios-more"></i></a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -133,11 +181,26 @@ export default {
         project_gmaps: '',
         project_status: 'available',
         project_id: null,
-        submit: 'Tambah'
+        submit: 'Tambah',
+        keywords: '',
+        getstatus: 'all'
       },
       files: null,
       getregion: {},
       getcity: {},
+      project_list: {
+        isLoading: true,
+        errorMessage: null,
+        total: 0,
+        results: [],
+        pagination: {
+          current_page: 1,
+          last_page: 1,
+          prev_page_url: null,
+          next_page_url: null,
+          path: this.$root.url + '/developer/project/list_project'
+        }
+      },
       errors: {
         name: {},
         errorMessage: '',
@@ -168,6 +231,7 @@ export default {
         this.forms.project_region = '';
         this.forms.project_gmaps = '';
         this.forms.project_status = 'available';
+        this.forms.project_id = null;
         this.forms.isEdit = false;
         this.forms.submit = 'Tambah';
       }
@@ -184,6 +248,7 @@ export default {
         this.forms.isEdit = true;
         this.forms.submit = 'Simpan';
       }
+      this.getRegionData();
       UIkit.modal('#modal-proyek').show();
     },
     getRegionData()
@@ -218,6 +283,8 @@ export default {
       this.errors.name = {};
       this.errors.errorMessage = '';
       this.errors.iserror = false;
+      let url = '';
+      let method = 'post';
 
       if( this.forms.project_name === '' )
       {
@@ -246,10 +313,19 @@ export default {
       }
       if( this.errors.iserror === true ) return false;
 
+      if( this.forms.project_id === null ) {
+        url = this.$root.url + '/developer/project/add_project';
+        method: 'post';
+      }
+      else {
+        url = this.$root.url + '/developer/project/save_project/' + this.forms.project_id;
+        method = 'put';
+      }
+
       this.forms.submit = '<span uk-spinner></span>';
       axios({
-        method: 'post',
-        url: this.$root.url + '/developer/project/add_project',
+        method: method,
+        url: url,
         params: {
           project_name: this.forms.project_name,
           project_region: this.forms.project_region,
@@ -263,7 +339,7 @@ export default {
         let result = res.data;
         swal({
           title: 'Sukses',
-          text: 'Proyek baru berhasil ditambah',
+          text: this.forms.isEdit === false ? 'Proyek baru berhasil ditambah' : 'Proyek berhasil diubah',
           icon: 'success'
         });
         setTimeout(() => {
@@ -274,13 +350,65 @@ export default {
         console.log( err.response.statusText );
       });
     },
-    getProjectList()
+    getProjectList( p )
     {
+      this.project_list.isLoading = true;
+      var paramurl = 'keywords=' + this.forms.keywords + '&status=' + this.forms.getstatus;
+      var url = this.project_list.pagination.path + '?page=' + this.project_list.pagination.current_page + '&' + paramurl;
+      if( p !== undefined ) url = p + '&' + paramurl;
 
+      axios({
+        method: 'get',
+        url: url
+      }).then( res => {
+        let result = res.data;
+        this.project_list.results = result.results.data;
+        this.project_list.total = result.results.total;
+        this.project_list.pagination = {
+          current_page: result.results.current_page,
+          last_page: result.results.last_page,
+          prev_page_url: result.results.prev_page_url,
+          next_page_url: result.results.next_page_url,
+          path: result.results.path
+        };
+        this.project_list.isLoading = false;
+      }).catch( err => {
+        this.project_list.errorMessage = err.response.statusText;
+      });
+    },
+    onDeleteProject( id )
+    {
+      swal({
+        title: 'Konfirmasi',
+        text: 'Apakah anda ingin menghapus proyek ini?',
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Batal',
+          confirm: { text: 'Ya', value: true }
+        }
+      }).then( val => {
+        if( val )
+        {
+          axios({
+            method: 'delete',
+            url: this.$root.url + '/developer/project/delete_project/' + id
+          }).then( res => {
+            swal({
+              title: 'Sukses',
+              text: 'Proyek berhasil dihapus',
+              icon: 'success'
+            });
+            setTimeout(() => {
+              this.getProjectList();
+            }, 2000);
+          });
+        }
+      });
     }
   },
   mounted() {
-    this.getRegionData();
+    this.getProjectList();
   }
 }
 </script>

@@ -2391,6 +2391,54 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user'],
   data: function data() {
@@ -2405,11 +2453,26 @@ __webpack_require__.r(__webpack_exports__);
         project_gmaps: '',
         project_status: 'available',
         project_id: null,
-        submit: 'Tambah'
+        submit: 'Tambah',
+        keywords: '',
+        getstatus: 'all'
       },
       files: null,
       getregion: {},
       getcity: {},
+      project_list: {
+        isLoading: true,
+        errorMessage: null,
+        total: 0,
+        results: [],
+        pagination: {
+          current_page: 1,
+          last_page: 1,
+          prev_page_url: null,
+          next_page_url: null,
+          path: this.$root.url + '/developer/project/list_project'
+        }
+      },
       errors: {
         name: {},
         errorMessage: '',
@@ -2436,6 +2499,7 @@ __webpack_require__.r(__webpack_exports__);
         this.forms.project_region = '';
         this.forms.project_gmaps = '';
         this.forms.project_status = 'available';
+        this.forms.project_id = null;
         this.forms.isEdit = false;
         this.forms.submit = 'Tambah';
       } else {
@@ -2451,6 +2515,7 @@ __webpack_require__.r(__webpack_exports__);
         this.forms.submit = 'Simpan';
       }
 
+      this.getRegionData();
       UIkit.modal('#modal-proyek').show();
     },
     getRegionData: function getRegionData() {
@@ -2489,6 +2554,8 @@ __webpack_require__.r(__webpack_exports__);
       this.errors.name = {};
       this.errors.errorMessage = '';
       this.errors.iserror = false;
+      var url = '';
+      var method = 'post';
 
       if (this.forms.project_name === '') {
         this.errors.name.project_name = 'Silahkan isi nama proyek';
@@ -2516,10 +2583,20 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       if (this.errors.iserror === true) return false;
+
+      if (this.forms.project_id === null) {
+        url = this.$root.url + '/developer/project/add_project';
+
+        method: 'post';
+      } else {
+        url = this.$root.url + '/developer/project/save_project/' + this.forms.project_id;
+        method = 'put';
+      }
+
       this.forms.submit = '<span uk-spinner></span>';
       axios({
-        method: 'post',
-        url: this.$root.url + '/developer/project/add_project',
+        method: method,
+        url: url,
         params: {
           project_name: this.forms.project_name,
           project_region: this.forms.project_region,
@@ -2533,7 +2610,7 @@ __webpack_require__.r(__webpack_exports__);
         var result = res.data;
         swal({
           title: 'Sukses',
-          text: 'Proyek baru berhasil ditambah',
+          text: _this3.forms.isEdit === false ? 'Proyek baru berhasil ditambah' : 'Proyek berhasil diubah',
           icon: 'success'
         });
         setTimeout(function () {
@@ -2545,10 +2622,68 @@ __webpack_require__.r(__webpack_exports__);
         console.log(err.response.statusText);
       });
     },
-    getProjectList: function getProjectList() {}
+    getProjectList: function getProjectList(p) {
+      var _this4 = this;
+
+      this.project_list.isLoading = true;
+      var paramurl = 'keywords=' + this.forms.keywords + '&status=' + this.forms.getstatus;
+      var url = this.project_list.pagination.path + '?page=' + this.project_list.pagination.current_page + '&' + paramurl;
+      if (p !== undefined) url = p + '&' + paramurl;
+      axios({
+        method: 'get',
+        url: url
+      }).then(function (res) {
+        var result = res.data;
+        _this4.project_list.results = result.results.data;
+        _this4.project_list.total = result.results.total;
+        _this4.project_list.pagination = {
+          current_page: result.results.current_page,
+          last_page: result.results.last_page,
+          prev_page_url: result.results.prev_page_url,
+          next_page_url: result.results.next_page_url,
+          path: result.results.path
+        };
+        _this4.project_list.isLoading = false;
+      })["catch"](function (err) {
+        _this4.project_list.errorMessage = err.response.statusText;
+      });
+    },
+    onDeleteProject: function onDeleteProject(id) {
+      var _this5 = this;
+
+      swal({
+        title: 'Konfirmasi',
+        text: 'Apakah anda ingin menghapus proyek ini?',
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Batal',
+          confirm: {
+            text: 'Ya',
+            value: true
+          }
+        }
+      }).then(function (val) {
+        if (val) {
+          axios({
+            method: 'delete',
+            url: _this5.$root.url + '/developer/project/delete_project/' + id
+          }).then(function (res) {
+            swal({
+              title: 'Sukses',
+              text: 'Proyek berhasil dihapus',
+              icon: 'success'
+            });
+            setTimeout(function () {
+              _this5.getProjectList();
+            }, 2000);
+          });
+        }
+      });
+    }
   },
   mounted: function mounted() {
-    this.getRegionData();
+    this.getProjectList();
   }
 });
 
@@ -59083,47 +59218,351 @@ var render = function() {
       ),
       _vm._v(" "),
       _c(
-        "a",
-        {
-          staticClass: "uk-button uk-button-primary uk-margin dash-btn",
-          on: {
-            click: function($event) {
-              return _vm.onPopUpModal()
-            }
-          }
-        },
-        [_vm._v("Tambah Proyek")]
-      ),
-      _vm._v(" "),
-      _c(
         "div",
         {
-          staticClass: "uk-grid-small uk-grid-match",
+          staticClass: "uk-margin uk-grid-small uk-child-width-auto",
           attrs: { "uk-grid": "" }
         },
         [
-          _c("div", { staticClass: "uk-width-1-3" }, [
+          _c("div", [
             _c(
-              "div",
-              { staticClass: "uk-card uk-card-default dash-grid-box" },
-              [
-                _c("div", { staticClass: "uk-card-media-top" }, [
-                  _c("img", {
-                    attrs: {
-                      src: _vm.$root.url + "/images/banner/homepage1.jpg",
-                      alt: ""
+              "a",
+              {
+                staticClass: "uk-button uk-button-primary uk-margin dash-btn",
+                on: {
+                  click: function($event) {
+                    return _vm.onPopUpModal()
+                  }
+                }
+              },
+              [_vm._v("Tambah Proyek")]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", [
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.forms.getstatus,
+                    expression: "forms.getstatus"
+                  }
+                ],
+                staticClass: "uk-select dash-form-input",
+                on: {
+                  change: [
+                    function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.forms,
+                        "getstatus",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    },
+                    function($event) {
+                      return _vm.getProjectList()
                     }
-                  })
+                  ]
+                }
+              },
+              [
+                _c("option", { attrs: { value: "all" } }, [_vm._v("Semua")]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "available" } }, [
+                  _vm._v("Available")
                 ]),
                 _vm._v(" "),
-                _vm._m(0),
+                _c("option", { attrs: { value: "prelaunch" } }, [
+                  _vm._v("Pre-Launch")
+                ]),
                 _vm._v(" "),
-                _vm._m(1)
+                _c("option", { attrs: { value: "hold" } }, [_vm._v("Hold")]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "booked" } }, [
+                  _vm._v("Booked")
+                ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "sold" } }, [_vm._v("Sold")])
               ]
             )
+          ]),
+          _vm._v(" "),
+          _c("div", [
+            _c("div", { staticClass: "uk-inline" }, [
+              _c("a", {
+                staticClass: "uk-form-icon",
+                attrs: { "uk-icon": "search" },
+                on: {
+                  click: function($event) {
+                    return _vm.getProjectList()
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.forms.keywords,
+                    expression: "forms.keywords"
+                  }
+                ],
+                staticClass: "uk-input dash-form-input",
+                attrs: { type: "search", placeholder: "Cari proyek..." },
+                domProps: { value: _vm.forms.keywords },
+                on: {
+                  keyup: function($event) {
+                    if (
+                      !$event.type.indexOf("key") &&
+                      _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                    ) {
+                      return null
+                    }
+                    return _vm.getProjectList()
+                  },
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.forms, "keywords", $event.target.value)
+                  }
+                }
+              })
+            ])
           ])
         ]
-      )
+      ),
+      _vm._v(" "),
+      _vm.project_list.isLoading === true
+        ? _c("div", { staticClass: "uk-text-center" }, [
+            _c("span", { attrs: { "uk-spinner": "" } })
+          ])
+        : _c("div", [
+            _vm.project_list.total === 0
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "uk-alert-warning",
+                    attrs: { "uk-alert": "" }
+                  },
+                  [_vm._v("\n        Belum ada proyek.\n      ")]
+                )
+              : _c(
+                  "div",
+                  {
+                    staticClass: "uk-grid-small uk-grid-match",
+                    attrs: { "uk-grid": "" }
+                  },
+                  _vm._l(_vm.project_list.results, function(project) {
+                    return _c(
+                      "div",
+                      {
+                        staticClass:
+                          "uk-width-1-3@xl uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s"
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "uk-card uk-card-default dash-grid-box"
+                          },
+                          [
+                            _c("div", { staticClass: "uk-card-media-top" }, [
+                              project.project_thumbnail === null
+                                ? _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "uk-tile uk-tile-default grid-image"
+                                    },
+                                    [
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass: "uk-position-top-right"
+                                        },
+                                        [
+                                          _c(
+                                            "div",
+                                            { staticClass: "grid-badge" },
+                                            [
+                                              _c(
+                                                "label",
+                                                { staticClass: "uk-label" },
+                                                [
+                                                  project.project_status ===
+                                                  "available"
+                                                    ? _c("span", [
+                                                        _vm._v("Available")
+                                                      ])
+                                                    : project.project_status ===
+                                                      "prelaunch"
+                                                    ? _c("span", [
+                                                        _vm._v("Pre-Launch")
+                                                      ])
+                                                    : project.project_status ===
+                                                      "hold"
+                                                    ? _c("span", [
+                                                        _vm._v("Hold")
+                                                      ])
+                                                    : project.project_status ===
+                                                      "booked"
+                                                    ? _c("span", [
+                                                        _vm._v("Booked")
+                                                      ])
+                                                    : _c("span", [
+                                                        _vm._v("Sold")
+                                                      ])
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _vm._m(0, true)
+                                    ]
+                                  )
+                                : _c("div", { staticClass: "uk-inline" }, [
+                                    _c("img", {
+                                      attrs: {
+                                        src:
+                                          _vm.$root.url +
+                                          "/images/banner/homepage1.jpg",
+                                        alt: ""
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _vm._m(1, true)
+                                  ])
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "uk-card-body uk-card-small" },
+                              [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "uk-margin-small uk-card-title grid-box-title"
+                                  },
+                                  [_vm._v(_vm._s(project.project_name))]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass: "uk-margin-small grid-box-lead"
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                Terakhir diubah: " +
+                                        _vm._s(
+                                          _vm.$root.formatDate(
+                                            project.created_at,
+                                            "DD MMM YYYY",
+                                            "id"
+                                          )
+                                        ) +
+                                        "\n              "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "uk-text-truncate uk-margin-small grid-box-content"
+                                  },
+                                  [_vm._v(_vm._s(project.project_description))]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "uk-position-relative uk-margin-bottom grid-box-footer"
+                              },
+                              [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass: "uk-grid-collapse",
+                                    attrs: { "uk-grid": "" }
+                                  },
+                                  [
+                                    _c("div", { staticClass: "uk-width-1-3" }, [
+                                      _c(
+                                        "a",
+                                        {
+                                          staticClass:
+                                            "uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action",
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.onPopUpModal(project)
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c("i", {
+                                            staticClass: "icon ion-ios-create"
+                                          })
+                                        ]
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "uk-width-1-3" }, [
+                                      _c(
+                                        "a",
+                                        {
+                                          staticClass:
+                                            "uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action",
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.onDeleteProject(
+                                                project.project_id
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c("i", {
+                                            staticClass: "icon ion-ios-trash"
+                                          })
+                                        ]
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _vm._m(2, true)
+                                  ]
+                                )
+                              ]
+                            )
+                          ]
+                        )
+                      ]
+                    )
+                  }),
+                  0
+                )
+          ])
     ])
   ])
 }
@@ -59132,26 +59571,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "uk-card-body uk-card-small" }, [
-      _c(
-        "div",
-        { staticClass: "uk-margin-small uk-card-title grid-box-title" },
-        [_vm._v("Project Meikarta, Karawang")]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "uk-margin-small grid-box-lead" }, [
-        _vm._v("\n              12 Jun, 2019\n            ")
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "uk-text-truncate uk-margin-small grid-box-content" },
-        [
-          _vm._v(
-            "\n              Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.\n            "
-          )
-        ]
-      )
+    return _c("div", { staticClass: "uk-text-center" }, [
+      _c("span", { attrs: { "uk-icon": "icon: image; ratio: 3" } })
     ])
   },
   function() {
@@ -59160,48 +59581,24 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "uk-position-relative uk-margin-bottom grid-box-footer" },
-      [
-        _c(
-          "div",
-          { staticClass: "uk-grid-collapse", attrs: { "uk-grid": "" } },
-          [
-            _c("div", { staticClass: "uk-width-1-3" }, [
-              _c(
-                "a",
-                {
-                  staticClass:
-                    "uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"
-                },
-                [_c("i", { staticClass: "icon ion-ios-create" })]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "uk-width-1-3" }, [
-              _c(
-                "a",
-                {
-                  staticClass:
-                    "uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"
-                },
-                [_c("i", { staticClass: "icon ion-ios-trash" })]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "uk-width-1-3" }, [
-              _c(
-                "a",
-                {
-                  staticClass:
-                    "uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"
-                },
-                [_c("i", { staticClass: "icon ion-ios-more" })]
-              )
-            ])
-          ]
-        )
-      ]
+      { staticClass: "uk-overlay uk-overlay-default uk-position-top" },
+      [_c("p", [_vm._v("Top")])]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "uk-width-1-3" }, [
+      _c(
+        "a",
+        {
+          staticClass:
+            "uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"
+        },
+        [_c("i", { staticClass: "icon ion-ios-more" })]
+      )
+    ])
   }
 ]
 render._withStripped = true

@@ -7,10 +7,10 @@
 <body>
 <div class="uk-grid-collapse" uk-grid>
   <div class="uk-width-1-5@xl uk-width-1-5@l uk-width-1-4@m uk-width-1-1@s">
-    @include('frontend.inc.side-navbar')
+    @include('frontend.layout.side-navbar')
   </div>
   <div class="uk-width-expand">
-    @include('frontend.inc.header-dashboard')
+    @include('frontend.layout.header-dashboard')
     <div class="uk-position-relative">
       @yield('main_content')
     </div>

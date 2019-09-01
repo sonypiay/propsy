@@ -5,6 +5,93 @@ html, body {
 
 @import 'form';
 
+/* modal */
+.modal-login {
+  .modal-login-title {
+    @include fontsetting( $font-primary, 28px, 600, normal, normal, 0.4px );
+    text-align: center;
+  }
+  .modal-btn-tab {
+    @include fontsetting( $font-primary, 12px, 400, normal, normal, 0.4px );
+    text-transform: capitalize;
+    background: #f2f2f2;
+    color: #777777;
+    border-radius: 30px;
+    &:hover {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+  }
+  .modal-btn-tabactive {
+    background: $color3;
+    color: #ffffff;
+  }
+  .modal-form-mustcomplete {
+    @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+    color: #333333;
+  }
+  .modal-login-form {
+    .modal-login-label {
+      @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+      color: #333333;
+    }
+    .modal-login-input {
+      border-radius: 4px;
+      @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+      color: #666666;
+      &:hover, &:focus { border: 1px solid $color3; }
+    }
+    .modal-login-submit {
+      @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+      text-transform: capitalize;
+      background: $color3;
+      color: #ffffff;
+      border-radius: 4px;
+    }
+  }
+}
+
+.modal-form {
+  .modal-form-heading {
+    @include fontsetting( $font-primary, 18px, 600, normal, normal, 0.4px );
+    color: #333333;
+  }
+  .modal-label {
+    @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+    color: #333333;
+  }
+  .modal-input {
+    border-radius: 4px;
+    @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+    color: #666666;
+    &:hover, &:focus { border: 1px solid $color3; }
+  }
+  .modal-submit, .modal-form-add {
+    @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+    text-transform: capitalize;
+    background: #ffffff;
+    color: $color3;
+    border: 1px solid $color3;
+    border-radius: 4px;
+    &:hover {
+      background: $color3;
+      color: #ffffff;
+    }
+  }
+  .modal-form-cancel {
+    border: 1px solid #e02c2c;
+    color: #e02c2c;
+    @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+    text-transform: capitalize;
+    background: #ffffff;
+    border-radius: 4px;
+    &:hover {
+      background: #e02c2c;
+      color: #ffffff;
+    }
+  }
+}
+/* modal */
+
 /* Layout */
 // banner homepage
 .banner-homepage {
@@ -93,50 +180,84 @@ html, body {
     color: #666666;
   }
 }
-/* Layout */
 
-/* modal */
-.modal-login {
-  .modal-login-title {
-    @include fontsetting( $font-primary, 28px, 600, normal, normal, 0.4px );
-    text-align: center;
-  }
-  .modal-btn-tab {
-    @include fontsetting( $font-primary, 12px, 400, normal, normal, 0.4px );
-    text-transform: capitalize;
-    background: #f2f2f2;
-    color: #777777;
-    border-radius: 30px;
-    &:hover {
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-  }
-  .modal-btn-tabactive {
-    background: $color3;
-    color: #ffffff;
-  }
-  .modal-form-mustcomplete {
-    @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
-    color: #333333;
-  }
-  .modal-login-form {
-    .modal-login-label {
-      @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
-      color: #333333;
-    }
-    .modal-login-input {
-      border-radius: 4px;
-      @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+.dashboard-container {
+  height: 474px;
+  .dashboard-content {
+    .dashboard-content-heading {
+      @include fontsetting( $font-primary, 26px, 600, normal, normal, 0.4px );
       color: #666666;
-      &:hover, &:focus { border: 1px solid $color3; }
     }
-    .modal-login-submit {
-      @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
-      text-transform: capitalize;
-      background: $color3;
-      color: #ffffff;
+    .dash-btn {
+      background: #ffffff;
+      border: 1px solid $color3;
+      color: $color3;
+      @include fontsetting( $font-primary, 12px, 600, normal, normal, 0.4px );
       border-radius: 4px;
+      text-transform: capitalize;
+      &:hover { background: $color3; color: #ffffff; }
+    }
+    .dash-btn-action {
+      border-radius: 0 !important;
+      border: none !important;
+      color: #666666;
+      font-size: 24px !important;
+      &:hover { background: none !important; color: $color3; }
+    }
+    .dash-form-input {
+      border-radius: 4px;
+      @include fontsetting( $font-primary, 12px, 600, normal, normal, 0.4px );
+      color: #666666;
+      &:hover, &:focus {
+        color: $color3;
+        border: 1px solid $color3;
+      }
+    }
+    .dash-grid-box {
+      .grid-image {
+        background: $color3; color: #ffffff;
+      }
+      .grid-badge {
+        padding: 10px;
+        .uk-label {
+          background: #ffffff;
+          color: $color3;
+          border-radius: 10px;
+          text-transform: capitalize;
+          @include fontsetting( $font-secondary, 13px, 600, normal, normal, 0.4px );
+        }
+      }
+      .grid-box-title {
+        color: #666666;
+        @include fontsetting( $font-primary, 18px, 600, normal, normal, 0.4px );
+        &:hover { color: $color3; }
+      }
+      .grid-box-lead {
+        color: #999999;
+        @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+      }
+      .grid-upload-gallery {
+        background: #f9f9f9;
+      }
+      .grid-box-footer {
+        .grid-dropdown-nav {
+          padding: 0;
+          ul {
+            li {
+              a {
+                color: #666666;
+                @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+                padding: 14px 20px;
+                &:hover {
+                  color: #ffffff;
+                  background: $color3;
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
-/* modal */
+/* Layout */

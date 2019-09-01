@@ -5,8 +5,8 @@
   <title>@yield('tag_title')</title>
 </head>
 <body>
-@include('frontend.inc.header-navbar')
+@include('frontend.layout.header-navbar')
 @yield('main_content')
-@include('frontend.inc.footer')
+@include('frontend.layout.footer')
 </body>
 </html>

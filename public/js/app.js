@@ -2262,6 +2262,537 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/ProjectGallery.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Frontend/Developer/ProjectGallery.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['session_user', 'projectid'],
+  data: function data() {
+    return {
+      files: {
+        data: null,
+        photo: null
+      },
+      galleries: {
+        isLoading: false,
+        submit: 'Unggah',
+        total: 0,
+        results: [],
+        errorMessage: ''
+      }
+    };
+  },
+  methods: {
+    getGalleries: function getGalleries() {
+      var _this = this;
+
+      this.galleries.isLoading = true;
+      axios({
+        method: 'get',
+        url: this.$root.url + '/developer/project/data_gallery/' + this.projectid
+      }).then(function (res) {
+        var result = res.data;
+        _this.galleries.total = result.data.total;
+        _this.galleries.results = result.data.row;
+        _this.galleries.isLoading = false;
+      })["catch"](function (err) {
+        _this.galleries.errorMessage = err.response.statusText;
+      });
+    },
+    onSelectFile: function onSelectFile(event) {
+      this.files.photo = null;
+      this.files.data = null;
+
+      if (event.target.files.length !== 0) {
+        this.files.data = event.target.files[0];
+        this.files.photos = URL.createObjectURL(this.files.data);
+      }
+    },
+    onUploadGallery: function onUploadGallery(gallery_id) {
+      if (gallery_id === undefined) {} else {}
+    }
+  },
+  mounted: function mounted() {
+    this.getGalleries();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/Projects.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Frontend/Developer/Projects.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['session_user'],
+  data: function data() {
+    return {
+      forms: {
+        isEdit: false,
+        project_name: '',
+        project_description: '',
+        project_address: '',
+        project_city: '',
+        project_region: '',
+        project_gmaps: '',
+        project_status: 'available',
+        project_id: null,
+        submit: 'Tambah',
+        keywords: '',
+        getstatus: 'all'
+      },
+      files: null,
+      getregion: {},
+      getcity: {},
+      project_list: {
+        isLoading: true,
+        errorMessage: null,
+        total: 0,
+        results: [],
+        pagination: {
+          current_page: 1,
+          last_page: 1,
+          prev_page_url: null,
+          next_page_url: null,
+          path: this.$root.url + '/developer/project/list_project'
+        }
+      },
+      errors: {
+        name: {},
+        errorMessage: '',
+        iserror: false
+      }
+    };
+  },
+  methods: {
+    onPopUpModal: function onPopUpModal(data) {
+      if (data === undefined) {
+        this.forms.project_name = '';
+        this.forms.project_description = '';
+        this.forms.project_address = '';
+        this.forms.project_city = '';
+        this.forms.project_region = '';
+        this.forms.project_gmaps = '';
+        this.forms.project_status = 'available';
+        this.forms.project_id = null;
+        this.forms.isEdit = false;
+        this.forms.submit = 'Tambah';
+      } else {
+        this.forms.project_name = data.project_name;
+        this.forms.project_description = data.project_description;
+        this.forms.project_address = data.project_address;
+        this.forms.project_city = data.project_city;
+        this.forms.project_region = data.project_region;
+        this.forms.project_gmaps = data.project_gmaps;
+        this.forms.project_status = data.project_status;
+        this.forms.project_id = data.project_id;
+        this.forms.isEdit = true;
+        this.forms.submit = 'Simpan';
+      }
+
+      this.getRegionData();
+      UIkit.modal('#modal-proyek').show();
+    },
+    getRegionData: function getRegionData() {
+      var _this = this;
+
+      axios({
+        method: 'get',
+        url: this.$root.url + '/api/region/provinsi/all'
+      }).then(function (res) {
+        var results = res.data;
+        _this.getregion = results.results.data;
+
+        _this.getCityData();
+      })["catch"](function (err) {
+        console.log(err.response.statusText);
+      });
+    },
+    getCityData: function getCityData() {
+      var _this2 = this;
+
+      var region = 0;
+      if (this.forms.project_region !== '') region = this.forms.project_region;
+      axios({
+        method: 'get',
+        url: this.$root.url + '/api/region/kabupaten/all/' + region
+      }).then(function (res) {
+        var results = res.data;
+        _this2.getcity = results.results.data.kabupaten;
+      })["catch"](function (err) {
+        console.log(err.response.statusText);
+      });
+    },
+    onAddOrSaveProject: function onAddOrSaveProject() {
+      var _this3 = this;
+
+      this.errors.name = {};
+      this.errors.errorMessage = '';
+      this.errors.iserror = false;
+      var url = '';
+      var method = 'post';
+
+      if (this.forms.project_name === '') {
+        this.errors.name.project_name = 'Silahkan isi nama proyek';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.project_region === '') {
+        this.errors.name.project_region = 'Silahkan pilih provinsi';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.project_city === '') {
+        this.errors.name.project_city = 'Silahkan pilih kota';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.project_address === '') {
+        this.errors.name.project_address = 'Silahkan isi alamat';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.project_description === '') {
+        this.errors.name.project_description = 'Silahkan isi deskripsi proyek';
+        this.errors.iserror = true;
+      }
+
+      if (this.errors.iserror === true) return false;
+
+      if (this.forms.project_id === null) {
+        url = this.$root.url + '/developer/project/add_project';
+
+        method: 'post';
+      } else {
+        url = this.$root.url + '/developer/project/save_project/' + this.forms.project_id;
+        method = 'put';
+      }
+
+      this.forms.submit = '<span uk-spinner></span>';
+      axios({
+        method: method,
+        url: url,
+        params: {
+          project_name: this.forms.project_name,
+          project_region: this.forms.project_region,
+          project_city: this.forms.project_city,
+          project_address: this.forms.project_address,
+          project_description: this.forms.project_description,
+          project_status: this.forms.project_status,
+          project_gmaps: this.forms.project_gmaps
+        }
+      }).then(function (res) {
+        var result = res.data;
+        swal({
+          title: 'Sukses',
+          text: _this3.forms.isEdit === false ? 'Proyek baru berhasil ditambah' : 'Proyek berhasil diubah',
+          icon: 'success'
+        });
+        setTimeout(function () {
+          _this3.getProjectList();
+
+          UIkit.modal('#modal-proyek').hide();
+        }, 2000);
+      })["catch"](function (err) {
+        console.log(err.response.statusText);
+      });
+    },
+    getProjectList: function getProjectList(p) {
+      var _this4 = this;
+
+      this.project_list.isLoading = true;
+      var paramurl = 'keywords=' + this.forms.keywords + '&status=' + this.forms.getstatus;
+      var url = this.project_list.pagination.path + '?page=' + this.project_list.pagination.current_page + '&' + paramurl;
+      if (p !== undefined) url = p + '&' + paramurl;
+      axios({
+        method: 'get',
+        url: url
+      }).then(function (res) {
+        var result = res.data;
+        _this4.project_list.results = result.results.data;
+        _this4.project_list.total = result.results.total;
+        _this4.project_list.pagination = {
+          current_page: result.results.current_page,
+          last_page: result.results.last_page,
+          prev_page_url: result.results.prev_page_url,
+          next_page_url: result.results.next_page_url,
+          path: result.results.path
+        };
+        _this4.project_list.isLoading = false;
+      })["catch"](function (err) {
+        _this4.project_list.errorMessage = err.response.statusText;
+      });
+    },
+    onDeleteProject: function onDeleteProject(id) {
+      var _this5 = this;
+
+      swal({
+        title: 'Konfirmasi',
+        text: 'Apakah anda ingin menghapus proyek ini?',
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Batal',
+          confirm: {
+            text: 'Ya',
+            value: true
+          }
+        }
+      }).then(function (val) {
+        if (val) {
+          axios({
+            method: 'delete',
+            url: _this5.$root.url + '/developer/project/delete_project/' + id
+          }).then(function (res) {
+            swal({
+              title: 'Sukses',
+              text: 'Proyek berhasil dihapus',
+              icon: 'success'
+            });
+            setTimeout(function () {
+              _this5.getProjectList();
+            }, 2000);
+          });
+        }
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.getProjectList();
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/LoginComponent.vue?vue&type=script&lang=js&":
 /*!**********************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Frontend/LoginComponent.vue?vue&type=script&lang=js& ***!
@@ -58314,6 +58845,1179 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/ProjectGallery.vue?vue&type=template&id=dac5e3c0&":
+/*!************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Frontend/Developer/ProjectGallery.vue?vue&type=template&id=dac5e3c0& ***!
+  \************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "uk-card dashboard-content" }, [
+      _c(
+        "div",
+        { staticClass: "uk-card-title uk-margin dashboard-content-heading" },
+        [_vm._v("Galeri Proyek")]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.galleries.errorMessage,
+              expression: "galleries.errorMessage"
+            }
+          ],
+          staticClass: "uk-alert-danger",
+          attrs: { "uk-alert": "" }
+        },
+        [_vm._v(_vm._s(_vm.galleries.errorMessage))]
+      ),
+      _vm._v(" "),
+      _vm.galleries.isLoading === true
+        ? _c("div", { staticClass: "uk-text-center" }, [
+            _c("span", { attrs: { "uk-spinner": "" } })
+          ])
+        : _c("div", { staticClass: "dash-grid-box" }, [
+            _vm.galleries.total === 0
+              ? _c("div", [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "uk-margin uk-alert-warning",
+                      attrs: { "uk-alert": "" }
+                    },
+                    [_vm._v("Tidak ada galeri yang ditampilkan.")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "uk-margin uk-width-1-4@xl uk-width-1-4@l uk-width-1-2@m uk-width-1-1@s"
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "uk-width-1-1",
+                          attrs: { "uk-form-custom": "" }
+                        },
+                        [
+                          _c("input", {
+                            attrs: { type: "file", accept: "image/*" },
+                            on: { change: _vm.onSelectFile }
+                          }),
+                          _vm._v(" "),
+                          _vm._m(0)
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("button", {
+                        staticClass:
+                          "uk-width-1-1 uk-button uk-button-primary uk-margin dash-btn",
+                        domProps: { innerHTML: _vm._s(_vm.galleries.submit) },
+                        on: { click: function($event) {} }
+                      })
+                    ]
+                  )
+                ])
+              : _c(
+                  "div",
+                  {
+                    staticClass: "uk-margin uk-grid-small",
+                    attrs: {
+                      "uk-grid": "masonry: true",
+                      "uk-lightbox": "animation: slide"
+                    }
+                  },
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "uk-width-1-3@xl uk-width-1-3@l uk-width-1-3@m uk-width-1-1@s"
+                      },
+                      [
+                        _c("div", { attrs: { "uk-form-custom": "" } }, [
+                          _c("input", {
+                            attrs: { type: "file", accept: "image/*" },
+                            on: { change: _vm.onSelectFile }
+                          }),
+                          _vm._v(" "),
+                          _vm._m(1)
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm._l(_vm.galleries.results, function(gallery) {
+                      return _c(
+                        "div",
+                        {
+                          staticClass:
+                            "uk-width-1-3@xl uk-width-1-3@l uk-width-1-3@m uk-width-1-1@s"
+                        },
+                        [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "uk-inline",
+                              attrs: {
+                                href:
+                                  _vm.$root.url +
+                                  "/images/banner/homepage2.jpg",
+                                "data-caption": "Caption 1"
+                              }
+                            },
+                            [
+                              _c("img", {
+                                attrs: {
+                                  src:
+                                    _vm.$root.url +
+                                    "/images/banner/homepage2.jpg",
+                                  alt: ""
+                                }
+                              })
+                            ]
+                          )
+                        ]
+                      )
+                    })
+                  ],
+                  2
+                )
+          ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "uk-tile uk-tile-default uk-text-center grid-upload-gallery"
+      },
+      [_c("span", { attrs: { "uk-icon": "icon: plus-circle; ratio: 3" } })]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "uk-tile uk-tile-default uk-text-center grid-upload-gallery"
+      },
+      [_c("span", { attrs: { "uk-icon": "icon: plus-circle; ratio: 4" } })]
+    )
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/Projects.vue?vue&type=template&id=0bc8a13e&":
+/*!******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Frontend/Developer/Projects.vue?vue&type=template&id=0bc8a13e& ***!
+  \******************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { attrs: { id: "modal-proyek", "uk-modal": "" } }, [
+      _c("div", { staticClass: "uk-modal-dialog modal-form" }, [
+        _c(
+          "form",
+          {
+            staticClass: "uk-form-stacked",
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.onAddOrSaveProject($event)
+              }
+            }
+          },
+          [
+            _c("div", { staticClass: "uk-modal-header" }, [
+              _vm.forms.isEdit
+                ? _c("h3", { staticClass: "modal-form-heading" }, [
+                    _vm._v("Ubah Proyek")
+                  ])
+                : _c("h3", { staticClass: "modal-form-heading" }, [
+                    _vm._v("Tambah Proyek")
+                  ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "uk-modal-body",
+                attrs: { "uk-overflow-auto": "" }
+              },
+              [
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.errors.errorMessage,
+                        expression: "errors.errorMessage"
+                      }
+                    ],
+                    staticClass: "uk-alert-danger",
+                    attrs: { "uk-alert": "" }
+                  },
+                  [_vm._v(_vm._s(_vm.errors.errorMessage))]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "uk-text-small uk-margin-bottom" }, [
+                  _vm._v("Lengkapi formulir dibawah ini (*)")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "uk-form-stacked" }, [
+                  _c("div", { staticClass: "uk-margin" }, [
+                    _c("label", { staticClass: "uk-form-label modal-label" }, [
+                      _vm._v("*Nama Proyek")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "uk-form-controls" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.forms.project_name,
+                            expression: "forms.project_name"
+                          }
+                        ],
+                        staticClass: "uk-input modal-input",
+                        attrs: { type: "text" },
+                        domProps: { value: _vm.forms.project_name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.forms,
+                              "project_name",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.errors.name.project_name,
+                            expression: "errors.name.project_name"
+                          }
+                        ],
+                        staticClass: "uk-text-small uk-text-danger"
+                      },
+                      [_vm._v(_vm._s(_vm.errors.name.project_name))]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-margin" }, [
+                    _c("label", { staticClass: "uk-form-label modal-label" }, [
+                      _vm._v("*Provinsi")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "uk-form-controls" }, [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.forms.project_region,
+                              expression: "forms.project_region"
+                            }
+                          ],
+                          staticClass: "uk-select modal-input",
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.forms,
+                                  "project_region",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                return _vm.getRegionData()
+                              }
+                            ]
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "" } }, [
+                            _vm._v("-- Pilih --")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.getregion, function(reg) {
+                            return _c(
+                              "option",
+                              { domProps: { value: reg.area_id } },
+                              [_vm._v(_vm._s(reg.area_name))]
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.errors.name.project_region,
+                            expression: "errors.name.project_region"
+                          }
+                        ],
+                        staticClass: "uk-text-small uk-text-danger"
+                      },
+                      [_vm._v(_vm._s(_vm.errors.name.project_region))]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-margin" }, [
+                    _c("label", { staticClass: "uk-form-label modal-label" }, [
+                      _vm._v("*Kota")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "uk-form-controls" }, [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.forms.project_city,
+                              expression: "forms.project_city"
+                            }
+                          ],
+                          staticClass: "uk-select modal-input",
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.forms,
+                                "project_city",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "" } }, [
+                            _vm._v("-- Pilih --")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.getcity, function(city) {
+                            return _c(
+                              "option",
+                              { domProps: { value: city.area_id } },
+                              [_vm._v(_vm._s(city.area_name))]
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.errors.name.project_city,
+                            expression: "errors.name.project_city"
+                          }
+                        ],
+                        staticClass: "uk-text-small uk-text-danger"
+                      },
+                      [_vm._v(_vm._s(_vm.errors.name.project_city))]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-margin" }, [
+                    _c("label", { staticClass: "uk-form-label modal-label" }, [
+                      _vm._v("*Alamat")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "uk-form-controls" }, [
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.forms.project_address,
+                            expression: "forms.project_address"
+                          }
+                        ],
+                        staticClass: "uk-textarea uk-height-small modal-input",
+                        domProps: { value: _vm.forms.project_address },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.forms,
+                              "project_address",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.errors.name.project_address,
+                            expression: "errors.name.project_address"
+                          }
+                        ],
+                        staticClass: "uk-text-small uk-text-danger"
+                      },
+                      [_vm._v(_vm._s(_vm.errors.name.project_address))]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-margin" }, [
+                    _c("label", { staticClass: "uk-form-label modal-label" }, [
+                      _vm._v("Link Google Maps")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "uk-form-controls" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.forms.project_gmaps,
+                            expression: "forms.project_gmaps"
+                          }
+                        ],
+                        staticClass: "uk-input modal-input",
+                        attrs: { type: "text" },
+                        domProps: { value: _vm.forms.project_gmaps },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.forms,
+                              "project_gmaps",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-margin" }, [
+                    _c("label", { staticClass: "uk-form-label modal-label" }, [
+                      _vm._v("*Deskripsi Proyek")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "uk-form-controls" }, [
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.forms.project_description,
+                            expression: "forms.project_description"
+                          }
+                        ],
+                        staticClass: "uk-textarea uk-height-small modal-input",
+                        domProps: { value: _vm.forms.project_description },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.forms,
+                              "project_description",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.errors.name.project_description,
+                            expression: "errors.name.project_description"
+                          }
+                        ],
+                        staticClass: "uk-text-small uk-text-danger"
+                      },
+                      [_vm._v(_vm._s(_vm.errors.name.project_description))]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-margin" }, [
+                    _c("label", { staticClass: "uk-form-label modal-label" }, [
+                      _vm._v("Status Proyek")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "uk-form-controls" }, [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.forms.project_status,
+                              expression: "forms.project_status"
+                            }
+                          ],
+                          staticClass: "uk-select modal-input",
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.forms,
+                                "project_status",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "available" } }, [
+                            _vm._v("Available")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "prelaunch" } }, [
+                            _vm._v("Pre-Launch")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "hold" } }, [
+                            _vm._v("Hold")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "booked" } }, [
+                            _vm._v("Booked")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "sold" } }, [
+                            _vm._v("Sold")
+                          ])
+                        ]
+                      )
+                    ])
+                  ])
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-modal-footer uk-text-right" }, [
+              _c("button", {
+                staticClass: "uk-button uk-button-primary modal-form-add",
+                domProps: { innerHTML: _vm._s(_vm.forms.submit) }
+              }),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass:
+                    "uk-button uk-button-primary modal-form-cancel uk-modal-close"
+                },
+                [_vm._v("Batal")]
+              )
+            ])
+          ]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "uk-card dashboard-content" }, [
+      _c(
+        "div",
+        { staticClass: "uk-card-title uk-margin dashboard-content-heading" },
+        [_vm._v("Proyek")]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "uk-margin uk-grid-small uk-child-width-auto",
+          attrs: { "uk-grid": "" }
+        },
+        [
+          _c("div", [
+            _c(
+              "a",
+              {
+                staticClass: "uk-button uk-button-primary uk-margin dash-btn",
+                on: {
+                  click: function($event) {
+                    return _vm.onPopUpModal()
+                  }
+                }
+              },
+              [_vm._v("Tambah Proyek")]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", [
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.forms.getstatus,
+                    expression: "forms.getstatus"
+                  }
+                ],
+                staticClass: "uk-select dash-form-input",
+                on: {
+                  change: [
+                    function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.forms,
+                        "getstatus",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    },
+                    function($event) {
+                      return _vm.getProjectList()
+                    }
+                  ]
+                }
+              },
+              [
+                _c("option", { attrs: { value: "all" } }, [_vm._v("Semua")]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "available" } }, [
+                  _vm._v("Available")
+                ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "prelaunch" } }, [
+                  _vm._v("Pre-Launch")
+                ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "hold" } }, [_vm._v("Hold")]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "booked" } }, [
+                  _vm._v("Booked")
+                ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "sold" } }, [_vm._v("Sold")])
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", [
+            _c("div", { staticClass: "uk-inline" }, [
+              _c("a", {
+                staticClass: "uk-form-icon",
+                attrs: { "uk-icon": "search" },
+                on: {
+                  click: function($event) {
+                    return _vm.getProjectList()
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.forms.keywords,
+                    expression: "forms.keywords"
+                  }
+                ],
+                staticClass: "uk-input dash-form-input",
+                attrs: { type: "search", placeholder: "Cari proyek..." },
+                domProps: { value: _vm.forms.keywords },
+                on: {
+                  keyup: function($event) {
+                    if (
+                      !$event.type.indexOf("key") &&
+                      _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                    ) {
+                      return null
+                    }
+                    return _vm.getProjectList()
+                  },
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.forms, "keywords", $event.target.value)
+                  }
+                }
+              })
+            ])
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _vm.project_list.isLoading === true
+        ? _c("div", { staticClass: "uk-text-center" }, [
+            _c("span", { attrs: { "uk-spinner": "" } })
+          ])
+        : _c("div", [
+            _vm.project_list.total === 0
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "uk-alert-warning",
+                    attrs: { "uk-alert": "" }
+                  },
+                  [_vm._v("\n        Belum ada proyek.\n      ")]
+                )
+              : _c(
+                  "div",
+                  {
+                    staticClass: "uk-grid-small uk-grid-match",
+                    attrs: { "uk-grid": "" }
+                  },
+                  _vm._l(_vm.project_list.results, function(project) {
+                    return _c(
+                      "div",
+                      {
+                        staticClass:
+                          "uk-width-1-3@xl uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s"
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "uk-card uk-card-default dash-grid-box"
+                          },
+                          [
+                            _c("div", { staticClass: "uk-card-media-top" }, [
+                              project.project_thumbnail === null
+                                ? _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "uk-tile uk-tile-default grid-image"
+                                    },
+                                    [
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass: "uk-position-top-right"
+                                        },
+                                        [
+                                          _c(
+                                            "div",
+                                            { staticClass: "grid-badge" },
+                                            [
+                                              _c(
+                                                "label",
+                                                { staticClass: "uk-label" },
+                                                [
+                                                  project.project_status ===
+                                                  "available"
+                                                    ? _c("span", [
+                                                        _vm._v("Available")
+                                                      ])
+                                                    : project.project_status ===
+                                                      "prelaunch"
+                                                    ? _c("span", [
+                                                        _vm._v("Pre-Launch")
+                                                      ])
+                                                    : project.project_status ===
+                                                      "hold"
+                                                    ? _c("span", [
+                                                        _vm._v("Hold")
+                                                      ])
+                                                    : project.project_status ===
+                                                      "booked"
+                                                    ? _c("span", [
+                                                        _vm._v("Booked")
+                                                      ])
+                                                    : _c("span", [
+                                                        _vm._v("Sold")
+                                                      ])
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _vm._m(0, true)
+                                    ]
+                                  )
+                                : _c("div", { staticClass: "uk-inline" }, [
+                                    _c("img", {
+                                      attrs: {
+                                        src:
+                                          _vm.$root.url +
+                                          "/images/banner/homepage1.jpg",
+                                        alt: ""
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _vm._m(1, true)
+                                  ])
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "uk-card-body uk-card-small" },
+                              [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "uk-margin-small uk-card-title grid-box-title"
+                                  },
+                                  [_vm._v(_vm._s(project.project_name))]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass: "uk-margin-small grid-box-lead"
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                Terakhir diubah: " +
+                                        _vm._s(
+                                          _vm.$root.formatDate(
+                                            project.created_at,
+                                            "DD MMM YYYY",
+                                            "id"
+                                          )
+                                        ) +
+                                        "\n              "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "uk-text-truncate uk-margin-small grid-box-content"
+                                  },
+                                  [_vm._v(_vm._s(project.project_description))]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "uk-position-relative uk-margin-bottom grid-box-footer"
+                              },
+                              [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass: "uk-grid-collapse",
+                                    attrs: { "uk-grid": "" }
+                                  },
+                                  [
+                                    _c("div", { staticClass: "uk-width-1-3" }, [
+                                      _c(
+                                        "a",
+                                        {
+                                          staticClass:
+                                            "uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action",
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.onPopUpModal(project)
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c("i", {
+                                            staticClass: "icon ion-ios-create"
+                                          })
+                                        ]
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "uk-width-1-3" }, [
+                                      _c(
+                                        "a",
+                                        {
+                                          staticClass:
+                                            "uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action",
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.onDeleteProject(
+                                                project.project_id
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c("i", {
+                                            staticClass: "icon ion-ios-trash"
+                                          })
+                                        ]
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "uk-width-1-3" }, [
+                                      _vm._m(2, true),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass: "grid-dropdown-nav",
+                                          attrs: {
+                                            "uk-dropdown": "pos: top-right"
+                                          }
+                                        },
+                                        [
+                                          _c(
+                                            "ul",
+                                            {
+                                              staticClass:
+                                                "uk-nav uk-dropdown-nav"
+                                            },
+                                            [
+                                              _c("li", [
+                                                _c(
+                                                  "a",
+                                                  {
+                                                    attrs: {
+                                                      href:
+                                                        _vm.$root.url +
+                                                        "/developer/project/detail/" +
+                                                        project.project_id
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("span", {
+                                                      staticClass:
+                                                        "uk-margin-small-right",
+                                                      attrs: {
+                                                        "uk-icon": "forward"
+                                                      }
+                                                    }),
+                                                    _vm._v(" Lihat Proyek")
+                                                  ]
+                                                )
+                                              ]),
+                                              _vm._v(" "),
+                                              _c("li", [
+                                                _c(
+                                                  "a",
+                                                  {
+                                                    attrs: {
+                                                      href:
+                                                        _vm.$root.url +
+                                                        "/developer/project/gallery/" +
+                                                        project.project_id
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("span", {
+                                                      staticClass:
+                                                        "uk-margin-small-right",
+                                                      attrs: {
+                                                        "uk-icon": "image"
+                                                      }
+                                                    }),
+                                                    _vm._v(" Galeri")
+                                                  ]
+                                                )
+                                              ]),
+                                              _vm._v(" "),
+                                              _vm._m(3, true),
+                                              _vm._v(" "),
+                                              _vm._m(4, true)
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ])
+                                  ]
+                                )
+                              ]
+                            )
+                          ]
+                        )
+                      ]
+                    )
+                  }),
+                  0
+                )
+          ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "uk-text-center" }, [
+      _c("span", { attrs: { "uk-icon": "icon: image; ratio: 3" } })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "uk-overlay uk-overlay-default uk-position-top" },
+      [_c("p", [_vm._v("Top")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass:
+          "uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"
+      },
+      [_c("i", { staticClass: "icon ion-ios-more" })]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [
+      _c("a", [
+        _c("span", {
+          staticClass: "uk-margin-small-right",
+          attrs: { "uk-icon": "plus" }
+        }),
+        _vm._v(" Tambah Unit")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [
+      _c("a", [
+        _c("span", {
+          staticClass: "uk-margin-small-right",
+          attrs: { "uk-icon": "plus" }
+        }),
+        _vm._v(" Tambah Tipe Unit")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/LoginComponent.vue?vue&type=template&id=0f450c36&scoped=true&":
 /*!**************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Frontend/LoginComponent.vue?vue&type=template&id=0f450c36&scoped=true& ***!
@@ -72504,6 +74208,8 @@ Vue.component('marketing-profile-page', __webpack_require__(/*! ./components/Fro
 
 Vue.component('developer-dashboard-page', __webpack_require__(/*! ./components/Frontend/Developer/Dashboard.vue */ "./resources/js/components/Frontend/Developer/Dashboard.vue")["default"]);
 Vue.component('developer-profile-page', __webpack_require__(/*! ./components/Frontend/Developer/Profile.vue */ "./resources/js/components/Frontend/Developer/Profile.vue")["default"]);
+Vue.component('developer-manage-project', __webpack_require__(/*! ./components/Frontend/Developer/Projects.vue */ "./resources/js/components/Frontend/Developer/Projects.vue")["default"]);
+Vue.component('developer-project-gallery', __webpack_require__(/*! ./components/Frontend/Developer/ProjectGallery.vue */ "./resources/js/components/Frontend/Developer/ProjectGallery.vue")["default"]);
 var app = new Vue({
   el: '#app',
   data: {
@@ -73001,6 +74707,145 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Profile_vue_vue_type_template_id_521aaedc___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Profile_vue_vue_type_template_id_521aaedc___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Frontend/Developer/ProjectGallery.vue":
+/*!***********************************************************************!*\
+  !*** ./resources/js/components/Frontend/Developer/ProjectGallery.vue ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ProjectGallery_vue_vue_type_template_id_dac5e3c0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ProjectGallery.vue?vue&type=template&id=dac5e3c0& */ "./resources/js/components/Frontend/Developer/ProjectGallery.vue?vue&type=template&id=dac5e3c0&");
+/* harmony import */ var _ProjectGallery_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ProjectGallery.vue?vue&type=script&lang=js& */ "./resources/js/components/Frontend/Developer/ProjectGallery.vue?vue&type=script&lang=js&");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _ProjectGallery_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _ProjectGallery_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ProjectGallery_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ProjectGallery_vue_vue_type_template_id_dac5e3c0___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ProjectGallery_vue_vue_type_template_id_dac5e3c0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Frontend/Developer/ProjectGallery.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Frontend/Developer/ProjectGallery.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************!*\
+  !*** ./resources/js/components/Frontend/Developer/ProjectGallery.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ProjectGallery_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./ProjectGallery.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/ProjectGallery.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ProjectGallery_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Frontend/Developer/ProjectGallery.vue?vue&type=template&id=dac5e3c0&":
+/*!******************************************************************************************************!*\
+  !*** ./resources/js/components/Frontend/Developer/ProjectGallery.vue?vue&type=template&id=dac5e3c0& ***!
+  \******************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProjectGallery_vue_vue_type_template_id_dac5e3c0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./ProjectGallery.vue?vue&type=template&id=dac5e3c0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/ProjectGallery.vue?vue&type=template&id=dac5e3c0&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProjectGallery_vue_vue_type_template_id_dac5e3c0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProjectGallery_vue_vue_type_template_id_dac5e3c0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Frontend/Developer/Projects.vue":
+/*!*****************************************************************!*\
+  !*** ./resources/js/components/Frontend/Developer/Projects.vue ***!
+  \*****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Projects_vue_vue_type_template_id_0bc8a13e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Projects.vue?vue&type=template&id=0bc8a13e& */ "./resources/js/components/Frontend/Developer/Projects.vue?vue&type=template&id=0bc8a13e&");
+/* harmony import */ var _Projects_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Projects.vue?vue&type=script&lang=js& */ "./resources/js/components/Frontend/Developer/Projects.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Projects_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Projects_vue_vue_type_template_id_0bc8a13e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Projects_vue_vue_type_template_id_0bc8a13e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Frontend/Developer/Projects.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Frontend/Developer/Projects.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/Frontend/Developer/Projects.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Projects_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Projects.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/Projects.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Projects_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Frontend/Developer/Projects.vue?vue&type=template&id=0bc8a13e&":
+/*!************************************************************************************************!*\
+  !*** ./resources/js/components/Frontend/Developer/Projects.vue?vue&type=template&id=0bc8a13e& ***!
+  \************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Projects_vue_vue_type_template_id_0bc8a13e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Projects.vue?vue&type=template&id=0bc8a13e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/Projects.vue?vue&type=template&id=0bc8a13e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Projects_vue_vue_type_template_id_0bc8a13e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Projects_vue_vue_type_template_id_0bc8a13e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

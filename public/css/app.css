@@ -50,18 +50,27 @@
   background: #1fc8c9;
 }
 
-.side-navbar .side-nav {
-  border-top: 1px solid #efefef;
-}
-
 .side-navbar .side-nav li a {
   color: #ffffff;
-  font-size: 16px;
+  font-size: 14px;
   font-style: normal;
   font-stretch: normal;
   font-family: "Lato", sans-serif;
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: 0.4px;
+  transition: all 0.1s linear 0s;
+  -moz-transition: all 0.1s linear 0s;
+  -webkit-transition: all 0.1s linear 0s;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.side-navbar .side-nav li a:hover {
+  border-left: 2px solid #ffffff;
+}
+
+.side-navbar .side-nav li .active {
+  border-left: 2px solid #ffffff;
 }
 
 .side-navbar-profile ul li a {
@@ -165,6 +174,167 @@ body {
   text-align: center;
   border-radius: 4px;
 }
+
+/* modal */
+
+.modal-login .modal-login-title {
+  font-size: 28px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-align: center;
+}
+
+.modal-login .modal-btn-tab {
+  font-size: 12px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  text-transform: capitalize;
+  background: #f2f2f2;
+  color: #777777;
+  border-radius: 30px;
+}
+
+.modal-login .modal-btn-tab:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-login .modal-btn-tabactive {
+  background: #1fc8c9;
+  color: #ffffff;
+}
+
+.modal-login .modal-form-mustcomplete {
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #333333;
+}
+
+.modal-login .modal-login-form .modal-login-label {
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #333333;
+}
+
+.modal-login .modal-login-form .modal-login-input {
+  border-radius: 4px;
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #666666;
+}
+
+.modal-login .modal-login-form .modal-login-input:hover,
+.modal-login .modal-login-form .modal-login-input:focus {
+  border: 1px solid #1fc8c9;
+}
+
+.modal-login .modal-login-form .modal-login-submit {
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  text-transform: capitalize;
+  background: #1fc8c9;
+  color: #ffffff;
+  border-radius: 4px;
+}
+
+.modal-form .modal-form-heading {
+  font-size: 18px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #333333;
+}
+
+.modal-form .modal-label {
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #333333;
+}
+
+.modal-form .modal-input {
+  border-radius: 4px;
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #666666;
+}
+
+.modal-form .modal-input:hover,
+.modal-form .modal-input:focus {
+  border: 1px solid #1fc8c9;
+}
+
+.modal-form .modal-submit,
+.modal-form .modal-form-add {
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  text-transform: capitalize;
+  background: #ffffff;
+  color: #1fc8c9;
+  border: 1px solid #1fc8c9;
+  border-radius: 4px;
+}
+
+.modal-form .modal-submit:hover,
+.modal-form .modal-form-add:hover {
+  background: #1fc8c9;
+  color: #ffffff;
+}
+
+.modal-form .modal-form-cancel {
+  border: 1px solid #e02c2c;
+  color: #e02c2c;
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  text-transform: capitalize;
+  background: #ffffff;
+  border-radius: 4px;
+}
+
+.modal-form .modal-form-cancel:hover {
+  background: #e02c2c;
+  color: #ffffff;
+}
+
+/* modal */
 
 /* Layout */
 
@@ -284,90 +454,137 @@ body {
   color: #666666;
 }
 
-/* Layout */
+.dashboard-container {
+  height: 474px;
+}
 
-/* modal */
-
-.modal-login .modal-login-title {
-  font-size: 28px;
+.dashboard-container .dashboard-content .dashboard-content-heading {
+  font-size: 26px;
   font-style: normal;
   font-stretch: normal;
   font-family: "Lato", sans-serif;
   font-weight: 600;
   letter-spacing: 0.4px;
-  text-align: center;
+  color: #666666;
 }
 
-.modal-login .modal-btn-tab {
+.dashboard-container .dashboard-content .dash-btn {
+  background: #ffffff;
+  border: 1px solid #1fc8c9;
+  color: #1fc8c9;
   font-size: 12px;
   font-style: normal;
   font-stretch: normal;
   font-family: "Lato", sans-serif;
-  font-weight: 400;
+  font-weight: 600;
   letter-spacing: 0.4px;
+  border-radius: 4px;
   text-transform: capitalize;
-  background: #f2f2f2;
-  color: #777777;
-  border-radius: 30px;
 }
 
-.modal-login .modal-btn-tab:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.modal-login .modal-btn-tabactive {
+.dashboard-container .dashboard-content .dash-btn:hover {
   background: #1fc8c9;
   color: #ffffff;
 }
 
-.modal-login .modal-form-mustcomplete {
-  font-size: 13px;
-  font-style: normal;
-  font-stretch: normal;
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  letter-spacing: 0.4px;
-  color: #333333;
+.dashboard-container .dashboard-content .dash-btn-action {
+  border-radius: 0 !important;
+  border: none !important;
+  color: #666666;
+  font-size: 24px !important;
 }
 
-.modal-login .modal-login-form .modal-login-label {
-  font-size: 13px;
-  font-style: normal;
-  font-stretch: normal;
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  letter-spacing: 0.4px;
-  color: #333333;
+.dashboard-container .dashboard-content .dash-btn-action:hover {
+  background: none !important;
+  color: #1fc8c9;
 }
 
-.modal-login .modal-login-form .modal-login-input {
+.dashboard-container .dashboard-content .dash-form-input {
   border-radius: 4px;
-  font-size: 13px;
+  font-size: 12px;
   font-style: normal;
   font-stretch: normal;
   font-family: "Lato", sans-serif;
-  font-weight: 400;
+  font-weight: 600;
   letter-spacing: 0.4px;
   color: #666666;
 }
 
-.modal-login .modal-login-form .modal-login-input:hover,
-.modal-login .modal-login-form .modal-login-input:focus {
+.dashboard-container .dashboard-content .dash-form-input:hover,
+.dashboard-container .dashboard-content .dash-form-input:focus {
+  color: #1fc8c9;
   border: 1px solid #1fc8c9;
 }
 
-.modal-login .modal-login-form .modal-login-submit {
+.dashboard-container .dashboard-content .dash-grid-box .grid-image {
+  background: #1fc8c9;
+  color: #ffffff;
+}
+
+.dashboard-container .dashboard-content .dash-grid-box .grid-badge {
+  padding: 10px;
+}
+
+.dashboard-container .dashboard-content .dash-grid-box .grid-badge .uk-label {
+  background: #ffffff;
+  color: #1fc8c9;
+  border-radius: 10px;
+  text-transform: capitalize;
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Nunito", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+.dashboard-container .dashboard-content .dash-grid-box .grid-box-title {
+  color: #666666;
+  font-size: 18px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+.dashboard-container .dashboard-content .dash-grid-box .grid-box-title:hover {
+  color: #1fc8c9;
+}
+
+.dashboard-container .dashboard-content .dash-grid-box .grid-box-lead {
+  color: #999999;
   font-size: 13px;
   font-style: normal;
   font-stretch: normal;
   font-family: "Lato", sans-serif;
   font-weight: 400;
   letter-spacing: 0.4px;
-  text-transform: capitalize;
-  background: #1fc8c9;
-  color: #ffffff;
-  border-radius: 4px;
 }
 
-/* modal */
+.dashboard-container .dashboard-content .dash-grid-box .grid-upload-gallery {
+  background: #f9f9f9;
+}
+
+.dashboard-container .dashboard-content .dash-grid-box .grid-box-footer .grid-dropdown-nav {
+  padding: 0;
+}
+
+.dashboard-container .dashboard-content .dash-grid-box .grid-box-footer .grid-dropdown-nav ul li a {
+  color: #666666;
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  padding: 14px 20px;
+}
+
+.dashboard-container .dashboard-content .dash-grid-box .grid-box-footer .grid-dropdown-nav ul li a:hover {
+  color: #ffffff;
+  background: #1fc8c9;
+}
+
+/* Layout */
 

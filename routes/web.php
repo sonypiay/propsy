@@ -42,6 +42,16 @@ Route::group(['prefix' => 'developer'], function() {
   Route::get('/', function() { return redirect()->route('developer_dashboard_page'); });
   Route::get('/dashboard', 'Frontend\Developer\DeveloperController@index')->name('developer_dashboard_page');
   Route::get('/profile', 'Frontend\Developer\DeveloperController@profile_page')->name('developer_profile_page');
+  Route::group(['prefix' => 'project'], function() {
+    Route::get('/manage_project', 'Frontend\Developer\DeveloperController@dev_manage_project')->name('developer_manage_project');
+    Route::post('/add_project', 'Frontend\Developer\DeveloperController@add_project');
+    Route::put('/save_project/{project_id}', 'Frontend\Developer\DeveloperController@save_project');
+    Route::get('/list_project', 'Frontend\Developer\DeveloperController@getProjectList');
+    Route::delete('/delete_project/{project_id}', 'Frontend\Developer\DeveloperController@delete_project');
+
+    Route::get('/gallery/{project_id}', 'Frontend\Developer\DeveloperController@project_gallery')->name('developer_project_gallery');
+    Route::get('/data_gallery/{project_id}', 'Frontend\Developer\DeveloperController@get_gallery');
+  });
 
   Route::group(['prefix' => 'profile'], function() {
     Route::put('/change_account_information', 'Frontend\Developer\DeveloperController@change_account_information');

@@ -51,6 +51,9 @@ Route::group(['prefix' => 'developer'], function() {
 
     Route::get('/gallery/{project_id}', 'Frontend\Developer\DeveloperController@project_gallery')->name('developer_project_gallery');
     Route::get('/data_gallery/{project_id}', 'Frontend\Developer\DeveloperController@get_gallery');
+    Route::post('/upload_gallery/{project_id}', 'Frontend\Developer\DeveloperController@upload_gallery');
+    Route::delete('/delete_gallery/{gallery_id}', 'Frontend\Developer\DeveloperController@delete_gallery');
+    Route::put('/set_asthumbnail/{gallery_id}', 'Frontend\Developer\DeveloperController@gallery_asThumbnail');
   });
 
   Route::group(['prefix' => 'profile'], function() {

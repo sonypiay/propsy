@@ -133,9 +133,19 @@
                   </div>
                 </div>
                 <div v-else class="uk-inline">
-                  <img :src="$root.url + '/images/banner/homepage1.jpg'" alt="">
-                  <div class="uk-overlay uk-overlay-default uk-position-top">
-                    <p>Top</p>
+                  <img :src="$root.url + '/images/project/gallery/' + project.project_thumbnail" alt="">
+                  <div class="uk-overlay uk-position-top">
+                    <div class="uk-position-top-right">
+                      <div class="grid-badge">
+                        <label class="uk-label">
+                          <span v-if="project.project_status === 'available'">Available</span>
+                          <span v-else-if="project.project_status === 'prelaunch'">Pre-Launch</span>
+                          <span v-else-if="project.project_status === 'hold'">Hold</span>
+                          <span v-else-if="project.project_status === 'booked'">Booked</span>
+                          <span v-else>Sold</span>
+                        </label>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

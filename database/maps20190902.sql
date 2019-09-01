@@ -123,9 +123,11 @@ CREATE TABLE `project_gallery` (
   PRIMARY KEY (`gallery_id`),
   KEY `fk_gallery_project_idx` (`project_id`),
   CONSTRAINT `fk_gallery_project_idx` FOREIGN KEY (`project_id`) REFERENCES `project_list` (`project_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_gallery` */
+
+insert  into `project_gallery`(`gallery_id`,`gallery_filename`,`gallery_description`,`project_id`,`created_at`,`updated_at`) values (1,'OxXSm8IJYohYuh0dY1K4I3KmxPjR4i5IaQT5Keze.jpeg',NULL,6,'2019-09-01 23:05:41','2019-09-01 23:05:41'),(2,'naNYXkJOEP3tpEvw8vdGx05W9buSommle9TOJHmT.jpeg',NULL,6,'2019-09-01 23:10:03','2019-09-01 23:10:03'),(7,'C7nV4KjDLQLhCaoawgafsxaKzOIRzY1Cmz0VqMFW.jpeg',NULL,6,'2019-09-01 23:14:10','2019-09-01 23:14:10'),(9,'LajcJ1iWzCmipjMZgrkCNY6dV53aGrG3cYIMjJTV.jpeg',NULL,6,'2019-09-01 23:15:21','2019-09-01 23:15:21'),(10,'j0YB5nJLpqBE7wuAraZTMURPEjrY5c4RxgvjaLmV.jpeg',NULL,5,'2019-09-02 00:11:34','2019-09-02 00:11:34'),(11,'gYjulvZYrCyg1ZlN4RWL3ixLqv67C8QU0DCUXjl1.jpeg',NULL,4,'2019-09-02 00:12:06','2019-09-02 00:12:06'),(12,'AMSI7Qbay12OgwA3nzwzwJcqkM4eSWBtLqOZ8NWV.jpeg',NULL,4,'2019-09-02 00:12:17','2019-09-02 00:12:17');
 
 /*Table structure for table `project_list` */
 
@@ -148,9 +150,11 @@ CREATE TABLE `project_list` (
   PRIMARY KEY (`project_id`),
   KEY `fk_project_dev_idx` (`dev_user_id`),
   CONSTRAINT `fk_project_dev_idx` FOREIGN KEY (`dev_user_id`) REFERENCES `developer_user` (`dev_user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_list` */
+
+insert  into `project_list`(`project_id`,`project_name`,`project_slug`,`project_thumbnail`,`project_description`,`project_address`,`project_city`,`project_region`,`project_gmaps`,`project_status`,`dev_user_id`,`created_at`,`updated_at`) values (3,'Pulau Reklamasi B','pulau-reklamasi-b',NULL,'Pulau Reklamasi B','Pulau Reklamasi B',192,6,NULL,'booked',1,'2019-09-01 13:57:21','2019-09-01 14:03:15'),(4,'Pulau Reklamasi A','pulau-reklamasi-a','gYjulvZYrCyg1ZlN4RWL3ixLqv67C8QU0DCUXjl1.jpeg','Pulau Reklamasi A','Pulau Reklamasi A',192,6,NULL,'available',1,'2019-09-01 13:59:55','2019-09-02 00:12:23'),(5,'Pulau Reklamasi C','pulau-reklamasi-c','j0YB5nJLpqBE7wuAraZTMURPEjrY5c4RxgvjaLmV.jpeg','Pulau Reklamasi C','Pulau Reklamasi C',192,6,NULL,'prelaunch',1,'2019-09-01 14:00:31','2019-09-02 00:11:42'),(6,'Pulau Reklamasi D','pulau-reklamasi-d','naNYXkJOEP3tpEvw8vdGx05W9buSommle9TOJHmT.jpeg','Pulau Reklamasi D','Pulau Reklamasi D',192,6,NULL,'sold',1,'2019-09-01 14:04:29','2019-09-02 00:27:36');
 
 /*Table structure for table `project_marketing` */
 

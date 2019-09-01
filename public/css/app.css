@@ -566,6 +566,12 @@ body {
   background: #f9f9f9;
 }
 
+.dashboard-container .dashboard-content .dash-grid-box .grid-overlay-icon {
+  color: #ffffff;
+  font-size: 28px;
+  background: none;
+}
+
 .dashboard-container .dashboard-content .dash-grid-box .grid-box-footer .grid-dropdown-nav {
   padding: 0;
 }

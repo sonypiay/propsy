@@ -266,25 +266,43 @@ class DeveloperController extends Controller
     return response()->json( $data, $data['status'] );
   }
 
-  public function delete_project( Request $request, ProjectList $project_list, $project_id )
+  public function delete_project( Request $request, ProjectList $project_list, ProjectGallery $gallery, $project_id )
   {
+    $path_img = 'images/project/gallery';
+    $storage = Storage::disk('assets');
     $getproject = $project_list->where('project_id', $project_id);
     if( $getproject->count() !== 0 )
     {
+      $getgallery = $gallery->where('project_id', $project_id);
+      if( $getgallery->count() !== 0 )
+      {
+        foreach( $getgallery->get() as $g ):
+          if( $storage->exists( $path_img . '/' . $g->gallery_filename ) )
+          {
+            $storage->delete( $path_img . '/' . $g->gallery_filename );
+          }
+        endforeach;
+        $getgallery->delete();
+      }
       $getproject->delete();
     }
     $res = [ 'status' => 200, 'statusText' => 'success' ];
     return response()->json( $res, $res['status'] );
   }
 
-  public function project_gallery( Request $request, DeveloperUser $developeruser, $project_id )
+  public function project_gallery( Request $request, DeveloperUser $developeruser, ProjectList $project_list, $project_id )
   {
     if( session()->has('isDeveloper') )
     {
+      $getproject = $project_list->select(
+        'project_id',
+        'project_name'
+      )
+      ->where('project_id', $project_id)->first();
       $data = [
         'request' => $request,
         'session_user' => $developeruser->getinfo(),
-        'project_id' => $project_id
+        'projects' => $getproject
       ];
 
       return response()->view('frontend.pages.developer.gallery', $data);
@@ -308,6 +326,7 @@ class DeveloperController extends Controller
       'project_list.project_name'
     )
     ->join('project_list', 'project_gallery.project_id', '=', 'project_list.project_id')
+    ->where('project_gallery.project_id', $project_id)
     ->orderBy('project_gallery.created_at', 'desc');
     $data = [
       'data' => [
@@ -317,5 +336,50 @@ class DeveloperController extends Controller
     ];
 
     return response()->json( $data, 200 );
+  }
+
+  public function upload_gallery( Request $request, ProjectGallery $gallery, $project_id )
+  {
+    $image = $request->image;
+    $filename = $image->hashName();
+    $path_img = 'images/project/gallery';
+    $storage = Storage::disk('assets');
+
+    $gallery = new $gallery;
+    $gallery->gallery_filename = $filename;
+    $gallery->project_id = $project_id;
+    $gallery->save();
+    $storage->putFileAs( $path_img, $image, $filename );
+
+    $res = [ 'status' => 200, 'statusText' => 'success' ];
+    return response()->json( $res, $res['status'] );
+  }
+
+  public function gallery_asThumbnail( ProjectList $project_list, ProjectGallery $gallery, $gallery_id )
+  {
+    $getgallery = $gallery->where('gallery_id', $gallery_id)->first();
+    $getproject = $project_list->where('project_id', $getgallery->project_id)->first();
+    $getproject->project_thumbnail = $getgallery->gallery_filename;
+    $getproject->save();
+    $res = [ 'status' => 200, 'statusText' => 'success' ];
+    return response()->json( $res, $res['status'] );
+  }
+
+  public function delete_gallery( ProjectGallery $gallery, $gallery_id )
+  {
+    $path_img = 'images/project/gallery';
+    $storage = Storage::disk('assets');
+    $getgallery = $gallery->where('gallery_id', $gallery_id);
+    if( $getgallery->count() != 0 )
+    {
+      $result = $getgallery->first();
+      if( $storage->exists( $path_img . '/' . $result->gallery_filename ) )
+      {
+        $storage->delete( $path_img . '/' . $result->gallery_filename );
+      }
+      $getgallery->delete();
+    }
+    $res = [ 'status' => 200, 'statusText' => 'success' ];
+    return response()->json( $res, $res['status'] );
   }
 }

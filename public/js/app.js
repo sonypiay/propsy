@@ -2312,13 +2312,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['session_user', 'projectid'],
+  props: ['session_user', 'projects'],
   data: function data() {
     return {
       files: {
         data: null,
-        photo: null
+        photo: null,
+        uploadProgress: 0
       },
       galleries: {
         isLoading: false,
@@ -2336,7 +2360,7 @@ __webpack_require__.r(__webpack_exports__);
       this.galleries.isLoading = true;
       axios({
         method: 'get',
-        url: this.$root.url + '/developer/project/data_gallery/' + this.projectid
+        url: this.$root.url + '/developer/project/data_gallery/' + this.projects.project_id
       }).then(function (res) {
         var result = res.data;
         _this.galleries.total = result.data.total;
@@ -2352,11 +2376,122 @@ __webpack_require__.r(__webpack_exports__);
 
       if (event.target.files.length !== 0) {
         this.files.data = event.target.files[0];
-        this.files.photos = URL.createObjectURL(this.files.data);
+        this.files.photo = URL.createObjectURL(this.files.data);
       }
     },
-    onUploadGallery: function onUploadGallery(gallery_id) {
-      if (gallery_id === undefined) {} else {}
+    onUploadGallery: function onUploadGallery() {
+      var _this2 = this;
+
+      if (this.files.data === null) return false;
+      this.files.uploadProgress = 0;
+      var url = this.$root.url + '/developer/project/upload_gallery/' + this.projects.project_id;
+      var formdata = new FormData();
+      formdata.append('image', this.files.data);
+      axios.post(url, formdata, {
+        onUploadProgress: function (e) {
+          this.files.uploadProgress = parseInt(Math.round(e.loaded * 100) / e.total);
+        }.bind(this)
+      }).then(function (res) {
+        var result = res.data;
+        swal({
+          title: 'Sukses',
+          text: 'Gambar berhasil diunggah.',
+          icon: 'success'
+        });
+        setTimeout(function () {
+          _this2.files.uploadProgress = 0;
+          _this2.files.data = null;
+          _this2.files.photo = null;
+
+          _this2.getGalleries();
+        }, 2000);
+      })["catch"](function (err) {
+        swal({
+          title: 'Whoops',
+          text: 'Terjadi kesalahan.' + err.response.statusText,
+          icon: 'error',
+          dangerMode: true
+        });
+      });
+    },
+    setAsThumbnail: function setAsThumbnail(id) {
+      var _this3 = this;
+
+      swal({
+        text: 'Jadikan sebagai thumbnail proyek?',
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Batal',
+          confirm: {
+            value: true,
+            text: 'Ya'
+          }
+        }
+      }).then(function (val) {
+        if (val) {
+          axios({
+            method: 'put',
+            url: _this3.$root.url + '/developer/project/set_asthumbnail/' + id
+          }).then(function (res) {
+            swal({
+              title: 'Sukses',
+              text: 'Berhasil dijadikan sebagai thumbnail',
+              icon: 'success'
+            });
+            setTimeout(function () {
+              document.location = _this3.$root.url + '/developer/project/manage_project';
+            }, 2000);
+          })["catch"](function (err) {
+            swal({
+              title: 'Whoops',
+              text: 'Terjadi kesalahan.' + err.response.statusText,
+              icon: 'error',
+              dangerMode: true
+            });
+          });
+        }
+      });
+    },
+    onDeleteGallery: function onDeleteGallery(id) {
+      var _this4 = this;
+
+      swal({
+        title: 'Konfirmasi',
+        text: 'Apakah anda ingin menghapus foto ini?',
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Batal',
+          confirm: {
+            value: true,
+            text: 'Ya'
+          }
+        }
+      }).then(function (val) {
+        if (val) {
+          axios({
+            method: 'delete',
+            url: _this4.$root.url + '/developer/project/delete_gallery/' + id
+          }).then(function (res) {
+            swal({
+              title: 'Sukses',
+              text: 'Foto berhasil dihapus',
+              icon: 'success'
+            });
+            setTimeout(function () {
+              _this4.getGalleries();
+            }, 2000);
+          })["catch"](function (err) {
+            swal({
+              title: 'Whoops',
+              text: 'Terjadi kesalahan.' + err.response.statusText,
+              icon: 'error',
+              dangerMode: true
+            });
+          });
+        }
+      });
     }
   },
   mounted: function mounted() {
@@ -2375,6 +2510,16 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -58865,7 +59010,7 @@ var render = function() {
       _c(
         "div",
         { staticClass: "uk-card-title uk-margin dashboard-content-heading" },
-        [_vm._v("Galeri Proyek")]
+        [_vm._v("Galeri Proyek - " + _vm._s(_vm.projects.project_name))]
       ),
       _vm._v(" "),
       _c(
@@ -58908,6 +59053,20 @@ var render = function() {
                         "uk-margin uk-width-1-4@xl uk-width-1-4@l uk-width-1-2@m uk-width-1-1@s"
                     },
                     [
+                      _c("progress", {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.files.uploadProgress !== 0,
+                            expression: "files.uploadProgress !== 0"
+                          }
+                        ],
+                        staticClass: "uk-progress",
+                        attrs: { max: "100" },
+                        domProps: { value: _vm.files.uploadProgress }
+                      }),
+                      _vm._v(" "),
                       _c(
                         "div",
                         {
@@ -58920,7 +59079,33 @@ var render = function() {
                             on: { change: _vm.onSelectFile }
                           }),
                           _vm._v(" "),
-                          _vm._m(0)
+                          _vm.files.photo === null
+                            ? _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "uk-tile uk-tile-default uk-text-center grid-upload-gallery"
+                                },
+                                [
+                                  _c("span", {
+                                    attrs: {
+                                      "uk-icon": "icon: plus-circle; ratio: 3"
+                                    }
+                                  })
+                                ]
+                              )
+                            : _c(
+                                "div",
+                                { staticClass: "grid-upload-gallery" },
+                                [
+                                  _c("img", {
+                                    attrs: {
+                                      src: _vm.files.photo,
+                                      alt: _vm.files.photo
+                                    }
+                                  })
+                                ]
+                              )
                         ]
                       ),
                       _vm._v(" "),
@@ -58928,7 +59113,11 @@ var render = function() {
                         staticClass:
                           "uk-width-1-1 uk-button uk-button-primary uk-margin dash-btn",
                         domProps: { innerHTML: _vm._s(_vm.galleries.submit) },
-                        on: { click: function($event) {} }
+                        on: {
+                          click: function($event) {
+                            return _vm.onUploadGallery()
+                          }
+                        }
                       })
                     ]
                   )
@@ -58950,14 +59139,72 @@ var render = function() {
                           "uk-width-1-3@xl uk-width-1-3@l uk-width-1-3@m uk-width-1-1@s"
                       },
                       [
-                        _c("div", { attrs: { "uk-form-custom": "" } }, [
-                          _c("input", {
-                            attrs: { type: "file", accept: "image/*" },
-                            on: { change: _vm.onSelectFile }
-                          }),
-                          _vm._v(" "),
-                          _vm._m(1)
-                        ])
+                        _c("progress", {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.files.uploadProgress !== 0,
+                              expression: "files.uploadProgress !== 0"
+                            }
+                          ],
+                          staticClass: "uk-progress",
+                          attrs: { max: "100" },
+                          domProps: { value: _vm.files.uploadProgress }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass: "uk-width-1-1",
+                            attrs: { "uk-form-custom": "" }
+                          },
+                          [
+                            _c("input", {
+                              attrs: { type: "file", accept: "image/*" },
+                              on: { change: _vm.onSelectFile }
+                            }),
+                            _vm._v(" "),
+                            _vm.files.photo === null
+                              ? _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "uk-tile uk-tile-default uk-text-center grid-upload-gallery"
+                                  },
+                                  [
+                                    _c("span", {
+                                      attrs: {
+                                        "uk-icon": "icon: plus-circle; ratio: 3"
+                                      }
+                                    })
+                                  ]
+                                )
+                              : _c(
+                                  "div",
+                                  { staticClass: "grid-upload-gallery" },
+                                  [
+                                    _c("img", {
+                                      attrs: {
+                                        src: _vm.files.photo,
+                                        alt: _vm.files.photo
+                                      }
+                                    })
+                                  ]
+                                )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("button", {
+                          staticClass:
+                            "uk-width-1-1 uk-button uk-button-primary uk-margin dash-btn",
+                          domProps: { innerHTML: _vm._s(_vm.galleries.submit) },
+                          on: {
+                            click: function($event) {
+                              return _vm.onUploadGallery()
+                            }
+                          }
+                        })
                       ]
                     ),
                     _vm._v(" "),
@@ -58970,25 +59217,104 @@ var render = function() {
                         },
                         [
                           _c(
-                            "a",
+                            "div",
                             {
-                              staticClass: "uk-inline",
-                              attrs: {
-                                href:
-                                  _vm.$root.url +
-                                  "/images/banner/homepage2.jpg",
-                                "data-caption": "Caption 1"
-                              }
+                              staticClass: "uk-inline-clip uk-transition-toggle"
                             },
                             [
                               _c("img", {
+                                staticClass:
+                                  "uk-transition-scale-up uk-transition-opaque",
                                 attrs: {
                                   src:
                                     _vm.$root.url +
-                                    "/images/banner/homepage2.jpg",
-                                  alt: ""
+                                    "/images/project/gallery/" +
+                                    gallery.gallery_filename,
+                                  alt:
+                                    _vm.$root.url +
+                                    "/images/project/gallery/" +
+                                    gallery.gallery_name
                                 }
-                              })
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "uk-transition-fade uk-overlay uk-overlay-primary uk-position-cover"
+                                },
+                                [
+                                  _c(
+                                    "div",
+                                    { staticClass: "uk-position-center" },
+                                    [
+                                      _c(
+                                        "a",
+                                        {
+                                          staticClass:
+                                            "uk-button uk-button-primary uk-button-small grid-overlay-icon",
+                                          attrs: {
+                                            href:
+                                              _vm.$root.url +
+                                              "/images/project/gallery/" +
+                                              gallery.gallery_filename
+                                          }
+                                        },
+                                        [
+                                          _c("i", {
+                                            staticClass: "icon ion-ios-eye"
+                                          })
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "button",
+                                        {
+                                          staticClass:
+                                            "uk-button uk-button-primary uk-button-small grid-overlay-icon",
+                                          attrs: {
+                                            "uk-tooltip":
+                                              "Jadikan sebagai thumbnail"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.setAsThumbnail(
+                                                gallery.gallery_id
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c("i", {
+                                            staticClass: "icon ion-ios-image"
+                                          })
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "button",
+                                        {
+                                          staticClass:
+                                            "uk-button uk-button-primary uk-button-small grid-overlay-icon",
+                                          attrs: { "uk-tooltip": "Hapus" },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.onDeleteGallery(
+                                                gallery.gallery_id
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c("i", {
+                                            staticClass: "icon ion-ios-trash"
+                                          })
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
                             ]
                           )
                         ]
@@ -59001,34 +59327,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "uk-tile uk-tile-default uk-text-center grid-upload-gallery"
-      },
-      [_c("span", { attrs: { "uk-icon": "icon: plus-circle; ratio: 3" } })]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "uk-tile uk-tile-default uk-text-center grid-upload-gallery"
-      },
-      [_c("span", { attrs: { "uk-icon": "icon: plus-circle; ratio: 4" } })]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -59752,12 +60051,64 @@ var render = function() {
                                       attrs: {
                                         src:
                                           _vm.$root.url +
-                                          "/images/banner/homepage1.jpg",
+                                          "/images/project/gallery/" +
+                                          project.project_thumbnail,
                                         alt: ""
                                       }
                                     }),
                                     _vm._v(" "),
-                                    _vm._m(1, true)
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "uk-overlay uk-position-top"
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "uk-position-top-right"
+                                          },
+                                          [
+                                            _c(
+                                              "div",
+                                              { staticClass: "grid-badge" },
+                                              [
+                                                _c(
+                                                  "label",
+                                                  { staticClass: "uk-label" },
+                                                  [
+                                                    project.project_status ===
+                                                    "available"
+                                                      ? _c("span", [
+                                                          _vm._v("Available")
+                                                        ])
+                                                      : project.project_status ===
+                                                        "prelaunch"
+                                                      ? _c("span", [
+                                                          _vm._v("Pre-Launch")
+                                                        ])
+                                                      : project.project_status ===
+                                                        "hold"
+                                                      ? _c("span", [
+                                                          _vm._v("Hold")
+                                                        ])
+                                                      : project.project_status ===
+                                                        "booked"
+                                                      ? _c("span", [
+                                                          _vm._v("Booked")
+                                                        ])
+                                                      : _c("span", [
+                                                          _vm._v("Sold")
+                                                        ])
+                                                  ]
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    )
                                   ])
                             ]),
                             _vm._v(" "),
@@ -59862,7 +60213,7 @@ var render = function() {
                                     ]),
                                     _vm._v(" "),
                                     _c("div", { staticClass: "uk-width-1-3" }, [
-                                      _vm._m(2, true),
+                                      _vm._m(1, true),
                                       _vm._v(" "),
                                       _c(
                                         "div",
@@ -59928,9 +60279,9 @@ var render = function() {
                                                 )
                                               ]),
                                               _vm._v(" "),
-                                              _vm._m(3, true),
+                                              _vm._m(2, true),
                                               _vm._v(" "),
-                                              _vm._m(4, true)
+                                              _vm._m(3, true)
                                             ]
                                           )
                                         ]
@@ -59959,16 +60310,6 @@ var staticRenderFns = [
     return _c("div", { staticClass: "uk-text-center" }, [
       _c("span", { attrs: { "uk-icon": "icon: image; ratio: 3" } })
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "uk-overlay uk-overlay-default uk-position-top" },
-      [_c("p", [_vm._v("Top")])]
-    )
   },
   function() {
     var _vm = this
@@ -74716,15 +75057,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!***********************************************************************!*\
   !*** ./resources/js/components/Frontend/Developer/ProjectGallery.vue ***!
   \***********************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ProjectGallery_vue_vue_type_template_id_dac5e3c0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ProjectGallery.vue?vue&type=template&id=dac5e3c0& */ "./resources/js/components/Frontend/Developer/ProjectGallery.vue?vue&type=template&id=dac5e3c0&");
 /* harmony import */ var _ProjectGallery_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ProjectGallery.vue?vue&type=script&lang=js& */ "./resources/js/components/Frontend/Developer/ProjectGallery.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _ProjectGallery_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _ProjectGallery_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -74754,7 +75094,7 @@ component.options.__file = "resources/js/components/Frontend/Developer/ProjectGa
 /*!************************************************************************************************!*\
   !*** ./resources/js/components/Frontend/Developer/ProjectGallery.vue?vue&type=script&lang=js& ***!
   \************************************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

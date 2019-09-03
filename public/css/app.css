@@ -468,6 +468,16 @@ body {
   color: #666666;
 }
 
+.dashboard-container .dashboard-content .dashboard-content-subheading {
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #666666;
+}
+
 .dashboard-container .dashboard-content .dash-btn {
   background: #ffffff;
   border: 1px solid #1fc8c9;

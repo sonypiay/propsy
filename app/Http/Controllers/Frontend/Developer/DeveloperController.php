@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Database\DeveloperUser;
 use App\Database\ProjectList;
 use App\Database\ProjectGallery;
+use App\Database\ProjectUnit;
+use App\Database\AreaDB;
 use App\Http\Controllers\Controller;
 
 class DeveloperController extends Controller
@@ -381,5 +383,77 @@ class DeveloperController extends Controller
     }
     $res = [ 'status' => 200, 'statusText' => 'success' ];
     return response()->json( $res, $res['status'] );
+  }
+
+  public function project_add_unit( Request $request, ProjectUnit $project_unit, $project_id )
+  {
+    $unit_name = $request->unit_name;
+    $unit_number = $request->unit_number;
+    $unit = new $project_unit;
+    $rowColumn = [];
+    $check_unit = $project_unit->where([
+      ['project_unit_name', $unit_name],
+      ['project_id', $project_id]
+    ])
+    ->orderBy('project_unit_number', 'desc');
+
+    if( $check_unit->count() === 0 )
+    {
+      $new_unit = 1;
+    }
+    else
+    {
+      $getunit = $check_unit->first();
+      $new_unit = $getunit->project_unit_number + 1;
+      $unit_number = $check_unit->count() + $unit_number;
+    }
+
+    if( $unit_number > 1 )
+    {
+      $now = date('Y-m-d H:i:s');
+      for( $i = $new_unit; $i <= $unit_number; $i++ )
+      {
+        $rowColumn[] = [
+          'project_unit_name' => $unit_name,
+          'project_unit_number' => $i,
+          'project_id' => $project_id,
+          'created_at' => $now,
+          'updated_at' => $now
+        ];
+      }
+      $unit->insert($rowColumn);
+    }
+    else
+    {
+      $unit->project_unit_name = $unit_name;
+      $unit->project_unit_number = $new_unit;
+      $unit->project_id = $project_id;
+      $unit->save();
+    }
+
+    return response()->json( $rowColumn );
+  }
+
+  public function detail_project( Request $request, DeveloperUser $developeruser, ProjectList $project_list, AreaDB $area, $project_id )
+  {
+    if( session()->has('isDeveloper') )
+    {
+      $getproject = $project_list->where('project_id', $project_id)->first();
+      $getkota = $area->where('area_id', $getproject->project_city)->first();
+      $getprovinsi = $area->where('area_id', $getproject->project_region)->first();
+      $getarea = [ 'kota' => $getkota, 'provinsi' => $getprovinsi ];
+
+      $data = [
+        'request' => $request,
+        'session_user' => $developeruser->getinfo(),
+        'projects' => $getproject,
+        'getarea' => $getarea
+      ];
+      return response()->view('frontend.pages.developer.detail_project', $data);
+    }
+    else
+    {
+      return redirect()->route('homepage');
+    }
   }
 }

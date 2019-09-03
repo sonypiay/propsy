@@ -43,6 +43,7 @@ Route::group(['prefix' => 'developer'], function() {
   Route::get('/dashboard', 'Frontend\Developer\DeveloperController@index')->name('developer_dashboard_page');
   Route::get('/profile', 'Frontend\Developer\DeveloperController@profile_page')->name('developer_profile_page');
   Route::group(['prefix' => 'project'], function() {
+    Route::get('/detail/{project_id}', 'Frontend\Developer\DeveloperController@detail_project')->name('developer_detail_project');
     Route::get('/manage_project', 'Frontend\Developer\DeveloperController@dev_manage_project')->name('developer_manage_project');
     Route::post('/add_project', 'Frontend\Developer\DeveloperController@add_project');
     Route::put('/save_project/{project_id}', 'Frontend\Developer\DeveloperController@save_project');
@@ -54,6 +55,8 @@ Route::group(['prefix' => 'developer'], function() {
     Route::post('/upload_gallery/{project_id}', 'Frontend\Developer\DeveloperController@upload_gallery');
     Route::delete('/delete_gallery/{gallery_id}', 'Frontend\Developer\DeveloperController@delete_gallery');
     Route::put('/set_asthumbnail/{gallery_id}', 'Frontend\Developer\DeveloperController@gallery_asThumbnail');
+
+    Route::post('/add_unit/{project_id}', 'Frontend\Developer\DeveloperController@project_add_unit');
   });
 
   Route::group(['prefix' => 'profile'], function() {

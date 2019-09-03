@@ -188,6 +188,10 @@ html, body {
       @include fontsetting( $font-primary, 26px, 600, normal, normal, 0.4px );
       color: #666666;
     }
+    .dashboard-content-subheading {
+      @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+      color: #666666;
+    }
     .dash-btn {
       background: #ffffff;
       border: 1px solid $color3;

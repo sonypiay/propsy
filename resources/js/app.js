@@ -17,6 +17,7 @@ Vue.component('developer-dashboard-page', require('./components/Frontend/Develop
 Vue.component('developer-profile-page', require('./components/Frontend/Developer/Profile.vue').default);
 Vue.component('developer-manage-project', require('./components/Frontend/Developer/Projects.vue').default);
 Vue.component('developer-project-gallery', require('./components/Frontend/Developer/ProjectGallery.vue').default);
+Vue.component('developer-detail-project', require('./components/Frontend/Developer/DetailProject.vue').default);
 
 const app = new Vue({
     el: '#app',

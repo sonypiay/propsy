@@ -80,8 +80,42 @@
         </form>
       </div>
     </div>
-
     <!-- modal tambah proyek -->
+
+    <!-- modal tambah unit -->
+    <div id="modal-add-unit" uk-modal>
+      <div class="uk-modal-dialog uk-modal-body modal-form">
+        <a class="uk-modal-close-default uk-modal-close" uk-close></a>
+        <h3 class="modal-form-heading">Tambah Unit Baru</h3>
+        <form class="uk-form-stacked" @submit.prevent="onAddUnit">
+          <div class="uk-margin">
+            <label class="uk-form-label modal-label">Nama Unit</label>
+            <div class="uk-form-controls">
+              <input type="text" class="uk-input modal-input" v-model="forms.unit.unit_name" placeholder="Contoh: Blok A">
+            </div>
+            <div v-show="errors.name.unit_name" class="uk-text-danger uk-text-small">{{ errors.name.unit_name }}</div>
+          </div>
+          <div class="uk-margin">
+            <label class="uk-form-label modal-label">Banyak Unit</label>
+            <div class="uk-form-controls">
+              <input type="number" class="uk-input modal-input" v-model="forms.unit.unit_number" max="100">
+            </div>
+            <div v-show="errors.name.unit_number" class="uk-text-danger uk-text-small">{{ errors.name.unit_number }}</div>
+          </div>
+          <div class="uk-margin">
+            <label class="uk-form-label modal-label">Contoh Penamaan Blok</label>
+            <div class="uk-form-controls">
+              <textarea v-model="unitName" class="uk-textarea modal-input" disabled></textarea>
+            </div>
+          </div>
+          <div class="uk-margin">
+            <button class="uk-button uk-button-primary modal-form-add" v-html="forms.unit.submit"></button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- modal tambah unit -->
+
     <div class="uk-card dashboard-content">
       <div class="uk-card-title uk-margin dashboard-content-heading">Proyek</div>
       <div class="uk-margin uk-grid-small uk-child-width-auto" uk-grid>
@@ -170,7 +204,7 @@
                       <ul class="uk-nav uk-dropdown-nav">
                         <li><a :href="$root.url + '/developer/project/detail/' + project.project_id"><span class="uk-margin-small-right" uk-icon="forward"></span> Lihat Proyek</a></li>
                         <li><a :href="$root.url + '/developer/project/gallery/' + project.project_id"><span class="uk-margin-small-right" uk-icon="image"></span> Galeri</a></li>
-                        <li><a><span class="uk-margin-small-right" uk-icon="plus"></span> Tambah Unit</a></li>
+                        <li><a @click="onPopUpModalUnit( project.project_id )"><span class="uk-margin-small-right" uk-icon="plus"></span> Tambah Unit</a></li>
                         <li><a><span class="uk-margin-small-right" uk-icon="plus"></span> Tambah Tipe Unit</a></li>
                       </ul>
                     </div>
@@ -202,7 +236,13 @@ export default {
         project_id: null,
         submit: 'Tambah',
         keywords: '',
-        getstatus: 'all'
+        getstatus: 'all',
+        unit: {
+          project_id: null,
+          unit_name: '',
+          unit_number: 1,
+          submit: 'Tambah'
+        }
       },
       files: null,
       getregion: {},
@@ -258,6 +298,11 @@ export default {
       }
       this.getRegionData();
       UIkit.modal('#modal-proyek').show();
+    },
+    onPopUpModalUnit( id )
+    {
+      this.forms.unit.project_id = id;
+      UIkit.modal('#modal-add-unit').show();
     },
     getRegionData()
     {
@@ -413,6 +458,64 @@ export default {
           });
         }
       });
+    },
+    onAddUnit()
+    {
+      this.errors.name = {};
+      this.errors.errorMessage = '';
+      this.errors.iserror = false;
+      if( this.forms.unit.project_id === null ) return false;
+
+      if( this.forms.unit.unit_name === '' )
+      {
+        this.errors.name.unit_name = 'Nama unit harap diisi';
+        this.errors.iserror = true;
+      }
+      if( this.forms.unit.unit_number < 1 || this.forms.unit.unit_number === '' )
+      {
+        this.errors.name.unit_number = 'Silakan masukkan minimal 1 unit';
+        this.errors.iserror = true;
+      }
+      if( this.errors.iserror === true ) return false;
+
+      axios({
+        method: 'post',
+        url: this.$root.url + '/developer/project/add_unit/' + this.forms.unit.project_id,
+        params: this.forms.unit
+      }).then( res => {
+        let result = res.data;
+        swal({
+          title: 'Sukses',
+          text: 'Unit baru berhasil ditambah',
+          icon: 'success'
+        });
+        setTimeout(() => {
+          document.location = this.$root.url + '/developer/project/detail/' + this.forms.unit.project_id;
+        }, 2000);
+      }).catch( err => {
+        this.errors.errorMessage = err.response.statusText;
+      });
+    }
+  },
+  computed: {
+    unitName()
+    {
+      var name = this.forms.unit.unit_name;
+      var unit_name = [];
+      if( name === '' || name === null ) name = 'Blok X';
+      if( this.forms.unit.unit_number > 1 )
+      {
+        for( var i = 1; i <= this.forms.unit.unit_number; i++ )
+        {
+          unit_name.push(name + ' No. ' + i);
+        }
+      }
+      else
+      {
+        unit_name.push(name + ' No. ' + this.forms.unit.unit_number);
+      }
+
+      return unit_name.join(', ');
     }
   },
   mounted() {

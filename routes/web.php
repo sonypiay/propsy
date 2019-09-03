@@ -56,7 +56,10 @@ Route::group(['prefix' => 'developer'], function() {
     Route::delete('/delete_gallery/{gallery_id}', 'Frontend\Developer\DeveloperController@delete_gallery');
     Route::put('/set_asthumbnail/{gallery_id}', 'Frontend\Developer\DeveloperController@gallery_asThumbnail');
 
+    Route::get('/get_unit/{project_id}', 'Frontend\Developer\DeveloperController@get_unit_project');
     Route::post('/add_unit/{project_id}', 'Frontend\Developer\DeveloperController@project_add_unit');
+    Route::post('/save_unit/{unit_id}', 'Frontend\Developer\DeveloperController@project_save_unit');
+    Route::delete('/delete_unit/{unit_id}', 'Frontend\Developer\DeveloperController@project_delete_unit');
   });
 
   Route::group(['prefix' => 'profile'], function() {

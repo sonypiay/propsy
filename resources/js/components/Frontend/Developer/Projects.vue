@@ -89,25 +89,25 @@
         <h3 class="modal-form-heading">Tambah Unit Baru</h3>
         <form class="uk-form-stacked" @submit.prevent="onAddUnit">
           <div class="uk-margin">
-            <label class="uk-form-label modal-label">Nama Unit</label>
+            <label class="uk-form-label modal-label">Blok / Prefix</label>
             <div class="uk-form-controls">
               <input type="text" class="uk-input modal-input" v-model="forms.unit.unit_name" placeholder="Contoh: Blok A">
             </div>
             <div v-show="errors.name.unit_name" class="uk-text-danger uk-text-small">{{ errors.name.unit_name }}</div>
           </div>
           <div class="uk-margin">
-            <label class="uk-form-label modal-label">Banyak Unit</label>
+            <label class="uk-form-label modal-label">Nomor Blok / Prefix</label>
             <div class="uk-form-controls">
-              <input type="number" class="uk-input modal-input" v-model="forms.unit.unit_number" max="100">
+              <input type="number" class="uk-input modal-input" v-model="forms.unit.unit_number">
             </div>
             <div v-show="errors.name.unit_number" class="uk-text-danger uk-text-small">{{ errors.name.unit_number }}</div>
           </div>
-          <div class="uk-margin">
+          <!--<div class="uk-margin">
             <label class="uk-form-label modal-label">Contoh Penamaan Blok</label>
             <div class="uk-form-controls">
               <textarea v-model="unitName" class="uk-textarea modal-input" disabled></textarea>
             </div>
-          </div>
+          </div>-->
           <div class="uk-margin">
             <button class="uk-button uk-button-primary modal-form-add" v-html="forms.unit.submit"></button>
           </div>
@@ -205,7 +205,6 @@
                         <li><a :href="$root.url + '/developer/project/detail/' + project.project_id"><span class="uk-margin-small-right" uk-icon="forward"></span> Lihat Proyek</a></li>
                         <li><a :href="$root.url + '/developer/project/gallery/' + project.project_id"><span class="uk-margin-small-right" uk-icon="image"></span> Galeri</a></li>
                         <li><a @click="onPopUpModalUnit( project.project_id )"><span class="uk-margin-small-right" uk-icon="plus"></span> Tambah Unit</a></li>
-                        <li><a><span class="uk-margin-small-right" uk-icon="plus"></span> Tambah Tipe Unit</a></li>
                       </ul>
                     </div>
                   </div>
@@ -497,27 +496,7 @@ export default {
       });
     }
   },
-  computed: {
-    unitName()
-    {
-      var name = this.forms.unit.unit_name;
-      var unit_name = [];
-      if( name === '' || name === null ) name = 'Blok X';
-      if( this.forms.unit.unit_number > 1 )
-      {
-        for( var i = 1; i <= this.forms.unit.unit_number; i++ )
-        {
-          unit_name.push(name + ' No. ' + i);
-        }
-      }
-      else
-      {
-        unit_name.push(name + ' No. ' + this.forms.unit.unit_number);
-      }
-
-      return unit_name.join(', ');
-    }
-  },
+  computed: {},
   mounted() {
     this.getProjectList();
   }

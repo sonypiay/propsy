@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Database\DeveloperUser;
 use App\Database\ProjectList;
 use App\Database\ProjectGallery;
+use App\Database\ProjectUnit;
+use App\Database\AreaDB;
 use App\Http\Controllers\Controller;
 
 class DeveloperController extends Controller
@@ -380,6 +382,90 @@ class DeveloperController extends Controller
       $getgallery->delete();
     }
     $res = [ 'status' => 200, 'statusText' => 'success' ];
+    return response()->json( $res, $res['status'] );
+  }
+
+  public function detail_project( Request $request, DeveloperUser $developeruser, ProjectList $project_list, AreaDB $area, $project_id )
+  {
+    if( session()->has('isDeveloper') )
+    {
+      $getproject = $project_list->where('project_id', $project_id)->first();
+      $getkota = $area->where('area_id', $getproject->project_city)->first();
+      $getprovinsi = $area->where('area_id', $getproject->project_region)->first();
+      $getarea = [ 'kota' => $getkota, 'provinsi' => $getprovinsi ];
+
+      $data = [
+        'request' => $request,
+        'session_user' => $developeruser->getinfo(),
+        'projects' => $getproject,
+        'getarea' => $getarea
+      ];
+      return response()->view('frontend.pages.developer.detail_project', $data);
+    }
+    else
+    {
+      return redirect()->route('homepage');
+    }
+  }
+
+  public function get_unit_project( Request $request, ProjectUnit $project_unit, $project_id )
+  {
+    $keywords = $request->keywords;
+    $unit = new $project_unit;
+    if( empty( $keywords ) )
+    {
+      $query = $unit->where('project_id', $project_id);
+    }
+    else
+    {
+      $query = $unit->where([
+        ['project_id', $project_id],
+        ['project_unit_name', 'like', '%' . $keywords . '%']
+      ]);
+    }
+    $result = $query->orderBy('created_at', 'desc')
+    ->paginate( 5 );
+
+    return response()->json( $result, 200 );
+  }
+
+  public function project_add_unit( Request $request, ProjectUnit $project_unit, $project_id )
+  {
+    $unit_name = $request->unit_name;
+    $unit_number = $request->unit_number;
+    $unit = new $project_unit;
+
+    $unit->project_unit_name = $unit_name;
+    $unit->project_unit_number = $unit_number;
+    $unit->project_id = $project_id;
+    $unit->save();
+
+    $res = ['status' => 200, 'statusText' => 'success'];
+    return response()->json( $res, $res['status'] );
+  }
+
+  public function project_save_unit( Request $request, ProjectUnit $project_unit, $unit_id )
+  {
+    $unit_name = $request->unit_name;
+    $unit_number = $request->unit_number;
+    $unit = $project_unit->where('project_unit_id', $unit_id)->first();
+
+    $unit->project_unit_name = $unit_name;
+    $unit->project_unit_number = $unit_number;
+    $unit->save();
+
+    $res = ['status' => 200, 'statusText' => 'success'];
+    return response()->json( $res, $res['status'] );
+  }
+
+  public function project_delete_unit( ProjectUnit $project_unit, $unit_id )
+  {
+    $unit = $project_unit->where('project_unit_id', $unit_id);
+    if( $unit->count() !== 0 )
+    {
+      $unit->delete();
+    }
+    $res = ['status' => 200, 'statusText' => 'success'];
     return response()->json( $res, $res['status'] );
   }
 }

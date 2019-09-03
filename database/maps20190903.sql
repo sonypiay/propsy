@@ -123,9 +123,11 @@ CREATE TABLE `project_gallery` (
   PRIMARY KEY (`gallery_id`),
   KEY `fk_gallery_project_idx` (`project_id`),
   CONSTRAINT `fk_gallery_project_idx` FOREIGN KEY (`project_id`) REFERENCES `project_list` (`project_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_gallery` */
+
+insert  into `project_gallery`(`gallery_id`,`gallery_filename`,`gallery_description`,`project_id`,`created_at`,`updated_at`) values (1,'OxXSm8IJYohYuh0dY1K4I3KmxPjR4i5IaQT5Keze.jpeg',NULL,6,'2019-09-01 23:05:41','2019-09-01 23:05:41'),(2,'naNYXkJOEP3tpEvw8vdGx05W9buSommle9TOJHmT.jpeg',NULL,6,'2019-09-01 23:10:03','2019-09-01 23:10:03'),(7,'C7nV4KjDLQLhCaoawgafsxaKzOIRzY1Cmz0VqMFW.jpeg',NULL,6,'2019-09-01 23:14:10','2019-09-01 23:14:10'),(9,'LajcJ1iWzCmipjMZgrkCNY6dV53aGrG3cYIMjJTV.jpeg',NULL,6,'2019-09-01 23:15:21','2019-09-01 23:15:21'),(10,'j0YB5nJLpqBE7wuAraZTMURPEjrY5c4RxgvjaLmV.jpeg',NULL,5,'2019-09-02 00:11:34','2019-09-02 00:11:34'),(11,'gYjulvZYrCyg1ZlN4RWL3ixLqv67C8QU0DCUXjl1.jpeg',NULL,4,'2019-09-02 00:12:06','2019-09-02 00:12:06'),(12,'AMSI7Qbay12OgwA3nzwzwJcqkM4eSWBtLqOZ8NWV.jpeg',NULL,4,'2019-09-02 00:12:17','2019-09-02 00:12:17');
 
 /*Table structure for table `project_list` */
 
@@ -148,11 +150,11 @@ CREATE TABLE `project_list` (
   PRIMARY KEY (`project_id`),
   KEY `fk_project_dev_idx` (`dev_user_id`),
   CONSTRAINT `fk_project_dev_idx` FOREIGN KEY (`dev_user_id`) REFERENCES `developer_user` (`dev_user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_list` */
 
-insert  into `project_list`(`project_id`,`project_name`,`project_slug`,`project_thumbnail`,`project_description`,`project_address`,`project_city`,`project_region`,`project_gmaps`,`project_status`,`dev_user_id`,`created_at`,`updated_at`) values (1,'Proyek Meikarta','proyek-meikarta',NULL,'Karawang','Karawang',208,9,NULL,'hold',1,'2019-09-01 02:23:58','2019-09-01 14:03:29'),(3,'Pulau Reklamasi B','pulau-reklamasi-b',NULL,'Pulau Reklamasi B','Pulau Reklamasi B',192,6,NULL,'booked',1,'2019-09-01 13:57:21','2019-09-01 14:03:15'),(4,'Pulau Reklamasi A','pulau-reklamasi-a',NULL,'Pulau Reklamasi A','Pulau Reklamasi A',192,6,NULL,'available',1,'2019-09-01 13:59:55','2019-09-01 13:59:55'),(5,'Pulau Reklamasi C','pulau-reklamasi-c',NULL,'Pulau Reklamasi C','Pulau Reklamasi C',192,6,NULL,'prelaunch',1,'2019-09-01 14:00:31','2019-09-01 14:01:04'),(6,'Pulau Reklamasi D','pulau-reklamasi-d',NULL,'Pulau Reklamasi D','Pulau Reklamasi D',192,6,NULL,'sold',1,'2019-09-01 14:04:29','2019-09-01 14:04:29');
+insert  into `project_list`(`project_id`,`project_name`,`project_slug`,`project_thumbnail`,`project_description`,`project_address`,`project_city`,`project_region`,`project_gmaps`,`project_status`,`dev_user_id`,`created_at`,`updated_at`) values (3,'Pulau Reklamasi B','pulau-reklamasi-b',NULL,'Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.','Ecovention Building - Ecopark, Jalan Lodan Timur No 7 Ancol Taman Impian, Jakarta Utara',192,6,NULL,'booked',1,'2019-09-01 13:57:21','2019-09-03 20:52:10'),(4,'Pulau Reklamasi A','pulau-reklamasi-a','gYjulvZYrCyg1ZlN4RWL3ixLqv67C8QU0DCUXjl1.jpeg','Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.','Ecovention Building - Ecopark, Jalan Lodan Timur No 7 Ancol Taman Impian, Jakarta Utara',192,6,NULL,'available',1,'2019-09-01 13:59:55','2019-09-03 20:52:02'),(5,'Pulau Reklamasi C','pulau-reklamasi-c','j0YB5nJLpqBE7wuAraZTMURPEjrY5c4RxgvjaLmV.jpeg','Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.','Ecovention Building - Ecopark, Jalan Lodan Timur No 7 Ancol Taman Impian, Jakarta Utara',192,6,NULL,'prelaunch',1,'2019-09-01 14:00:31','2019-09-03 20:51:41'),(6,'Pulau Reklamasi D','pulau-reklamasi-d','naNYXkJOEP3tpEvw8vdGx05W9buSommle9TOJHmT.jpeg','Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.','Ecovention Building - Ecopark, Jalan Lodan Timur No 7 Ancol Taman Impian, Jakarta Utara',192,6,NULL,'sold',1,'2019-09-01 14:04:29','2019-09-03 20:51:34');
 
 /*Table structure for table `project_marketing` */
 
@@ -188,9 +190,11 @@ CREATE TABLE `project_unit` (
   PRIMARY KEY (`project_unit_id`),
   KEY `fk_project_unit_project_idx` (`project_id`),
   CONSTRAINT `fk_project_unit_project_idx` FOREIGN KEY (`project_id`) REFERENCES `project_list` (`project_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_unit` */
+
+insert  into `project_unit`(`project_unit_id`,`project_unit_name`,`project_unit_number`,`project_unit_status`,`project_id`,`created_at`,`updated_at`) values (1,'Blok A',1,'available',4,'2019-09-03 19:53:52','2019-09-03 19:53:52'),(2,'Blok A',2,'available',4,'2019-09-03 19:53:52','2019-09-03 19:53:52'),(3,'Blok A',3,'available',4,'2019-09-03 19:53:52','2019-09-03 19:53:52'),(4,'Blok A',4,'available',4,'2019-09-03 19:53:52','2019-09-03 19:53:52'),(5,'Blok A',5,'available',4,'2019-09-03 19:53:52','2019-09-03 19:53:52');
 
 /*Table structure for table `project_unit_installment` */
 

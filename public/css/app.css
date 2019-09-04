@@ -334,6 +334,11 @@ body {
   color: #ffffff;
 }
 
+.modal-form .modal-table-active {
+  background: #00b7b8;
+  color: #ffffff;
+}
+
 /* modal */
 
 /* Layout */

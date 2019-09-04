@@ -536,4 +536,71 @@ class DeveloperController extends Controller
     $res = ['status' => 200, 'statusText' => 'success'];
     return response()->json( $res, $res['status'] );
   }
+
+  public function project_delete_unit_tipe( ProjectUnitType $unit_tipe, $id )
+  {
+    $unit = $unit_tipe->where('project_unit_type_id', $id);
+    if( $unit->count() !== 0 )
+    {
+      $unit->delete();
+    }
+    $res = ['status' => 200, 'statusText' => 'success'];
+    return response()->json( $res, $res['status'] );
+  }
+
+  public function get_installment_unit( Request $request, ProjectUnitInstallment $installment, $id )
+  {
+    $result = $installment->where('project_unit_type_id', $id)
+    ->orderBy('created_at', 'desc');
+    $res = [
+      'total' => $result->count(),
+      'data' => $result->get()
+    ];
+    return response()->json( $res, 200 );
+  }
+
+  public function add_installment_unit( Request $request, ProjectUnitInstallment $installment, $id )
+  {
+    $dp = $request->dp;
+    $angsuran = $request->angsuran;
+    $tenor = $request->tenor;
+    $tenor_tahun = $tenor * 12;
+
+    $installment->installment_dp = $dp;
+    $installment->installment_price = $angsuran;
+    $installment->installment_tenor = $tenor_tahun;
+    $installment->project_unit_type_id = $id;
+    $installment->save();
+
+    $res = ['status' => 200, 'statusText' => 'success'];
+    return response()->json( $res, $res['status'] );
+  }
+
+  public function save_installment_unit( Request $request, ProjectUnitInstallment $installment, $id )
+  {
+    $dp = $request->dp;
+    $angsuran = $request->angsuran;
+    $tenor = $request->tenor;
+    $tenor_tahun = $tenor * 12;
+
+    $getinstallment = $installment->where('installment_id', $id)->first();
+    $getinstallment->installment_dp = $dp;
+    $getinstallment->installment_price = $angsuran;
+    $getinstallment->installment_tenor = $tenor_tahun;
+    $getinstallment->save();
+
+    $res = ['status' => 200, 'statusText' => 'success', 'request' => $request->all() ];
+    return response()->json( $res, $res['status'] );
+  }
+
+  public function delete_installment_unit( ProjectUnitInstallment $installment, $id )
+  {
+    $getinstallment = $installment->where('installment_id', $id);
+    if( $getinstallment->count() !== 0 )
+    {
+      $getinstallment->delete();
+    }
+    $res = ['status' => 200, 'statusText' => 'success'];
+    return response()->json( $res, $res['status'] );
+  }
 }

@@ -60,6 +60,10 @@ Route::group(['prefix' => 'developer'], function() {
     Route::post('/add_unit/{project_id}', 'Frontend\Developer\DeveloperController@project_add_unit');
     Route::post('/save_unit/{unit_id}', 'Frontend\Developer\DeveloperController@project_save_unit');
     Route::delete('/delete_unit/{unit_id}', 'Frontend\Developer\DeveloperController@project_delete_unit');
+
+    Route::get('/get_unit_tipe/{unit_id}', 'Frontend\Developer\DeveloperController@get_unit_tipe_project');
+    Route::post('/add_unit_tipe/{unit_id}', 'Frontend\Developer\DeveloperController@project_add_unit_tipe');
+    Route::put('/save_unit_tipe/{unit_tipe_id}', 'Frontend\Developer\DeveloperController@project_save_unit_tipe');
   });
 
   Route::group(['prefix' => 'profile'], function() {

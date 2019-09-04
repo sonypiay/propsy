@@ -2130,6 +2130,111 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user', 'projects', 'getarea'],
   data: function data() {
@@ -2157,6 +2262,31 @@ __webpack_require__.r(__webpack_exports__);
           path: this.$root.url + '/developer/project/get_unit/' + this.projects.project_id
         }
       },
+      project_unit_tipe: {
+        isLoading: false,
+        total: 0,
+        results: [],
+        errorMessage: '',
+        pagination: {
+          current_page: 1,
+          last_page: 1,
+          prev_page_url: null,
+          next_page_url: null,
+          path: this.$root.url + '/developer/project/get_unit_tipe'
+        },
+        project_unit: {
+          unit_id: null,
+          unit_name: null,
+          unit_number: null
+        }
+      },
+      installment: {
+        total: 0,
+        results: [],
+        errorMessage: '',
+        isActive: false,
+        project_unit_type_id: null
+      },
       forms: {
         keywords: '',
         unit: {
@@ -2174,11 +2304,18 @@ __webpack_require__.r(__webpack_exports__);
           unit_km: 1,
           unit_price: 0,
           unit_tipe_id: null,
-          project_unit: {
-            unit_id: null,
-            unit_name: null,
-            unit_number: null
-          }
+          submit: 'Tambah',
+          isEdit: false,
+          isToggle: false
+        },
+        installment: {
+          id: null,
+          dp: 0,
+          angsuran: 0,
+          tenor: 0,
+          unit_tipe_id: null,
+          isToggle: false,
+          isEdit: false
         }
       }
     };
@@ -2226,6 +2363,47 @@ __webpack_require__.r(__webpack_exports__);
         _this2.project_unit.errorMessage = err.response.statusText;
       });
     },
+    getProjectUnitType: function getProjectUnitType(unit_id, p) {
+      var _this3 = this;
+
+      this.project_unit_tipe.isLoading = true;
+      var url = this.$root.url + '/developer/project/get_unit_tipe/' + unit_id + '?page=' + this.project_unit_tipe.pagination.current_page;
+      if (p !== undefined) url = p;
+      axios({
+        method: 'get',
+        url: url
+      }).then(function (res) {
+        var result = res.data;
+        _this3.project_unit_tipe.total = result.total;
+        _this3.project_unit_tipe.results = result.data;
+        _this3.project_unit_tipe.pagination = {
+          current_page: result.current_page,
+          last_page: result.last_page,
+          prev_page_url: result.prev_page_url,
+          next_page_url: result.next_page_url,
+          path: result.path
+        };
+        _this3.project_unit_tipe.isLoading = false;
+      })["catch"](function (err) {
+        _this3.project_unit_tipe.errorMessage = err.response.statusText;
+      });
+    },
+    onGetInstallmentUnit: function onGetInstallmentUnit(id) {
+      var _this4 = this;
+
+      axios({
+        method: 'get',
+        url: this.$root.url + '/developer/project/installment_unit/' + id
+      }).then(function (res) {
+        _this4.installment.isActive = true;
+        _this4.installment.project_unit_type_id = id;
+        var result = res.data;
+        _this4.installment.results = result.data;
+        _this4.installment.total = result.total;
+      })["catch"](function (err) {
+        _this4.installment.errorMessage = err.response.statusText;
+      });
+    },
     onPopupUnit: function onPopupUnit(data) {
       if (data === undefined) {
         this.forms.unit.unit_id = null;
@@ -2246,34 +2424,66 @@ __webpack_require__.r(__webpack_exports__);
       this.errors.iserror = false;
       UIkit.modal('#modal-add-unit').show();
     },
-    onPopupUnitType: function onPopupUnitType(unit, data) {
-      this.forms.unit_tipe.project_unit = unit;
-
+    onPopupUnitType: function onPopupUnitType(unit) {
+      this.forms.unit_tipe.isToggle = false;
+      this.project_unit_tipe.project_unit = unit;
+      this.getProjectUnitType(unit.unit_id);
+      UIkit.modal('#modal-view-unit-type').show();
+    },
+    onToggleAddUnit: function onToggleAddUnit(project_unit, data) {
       if (data === undefined) {
-        this.forms.unit_tipe.unit_tipe_id = null;
         this.forms.unit_tipe.unit_floor = 1;
-        this.forms.unit_tipe.unit_lb = 0;
-        this.forms.unit_tipe.unit_lt = 0;
+        this.forms.unit_tipe.unit_price = 0;
         this.forms.unit_tipe.unit_kt = 1;
         this.forms.unit_tipe.unit_km = 1;
-        this.forms.unit.isEdit = false;
+        this.forms.unit_tipe.unit_lb = 0;
+        this.forms.unit_tipe.unit_lt = 0;
+        this.forms.unit_tipe.unit_tipe_id = null;
+        this.forms.unit_tipe.isEdit = false;
+        this.forms.unit_tipe.submit = 'Tambah';
       } else {
-        this.forms.unit_tipe.unit_tipe_id = data.unit_tipe_id;
         this.forms.unit_tipe.unit_floor = data.unit_floor;
-        this.forms.unit_tipe.unit_lb = data.unit_lb;
-        this.forms.unit_tipe.unit_lt = data.unit_lt;
+        this.forms.unit_tipe.unit_price = data.unit_price;
         this.forms.unit_tipe.unit_kt = data.unit_kt;
         this.forms.unit_tipe.unit_km = data.unit_km;
-        this.forms.unit.isEdit = true;
+        this.forms.unit_tipe.unit_lb = data.unit_lb;
+        this.forms.unit_tipe.unit_lt = data.unit_lt;
+        this.forms.unit_tipe.unit_tipe_id = data.project_unit_type_id;
+        this.forms.unit_tipe.isEdit = true;
+        this.forms.unit_tipe.submit = 'Ubah';
       }
 
       this.errors.name = {};
       this.errors.errorMessage = '';
       this.errors.iserror = false;
-      UIkit.modal('#modal-add-unit-tipe').show();
+      if (this.forms.unit_tipe.isToggle === false) this.forms.unit_tipe.isToggle = true;
+    },
+    onToggleAddInstallment: function onToggleAddInstallment(unit_tipe, data) {
+      if (data === undefined) {
+        this.forms.installment.id = null;
+        this.forms.installment.dp = 0;
+        this.forms.installment.angsuran = 0;
+        this.forms.installment.tenor = 0;
+        this.forms.installment.unit_tipe_id = unit_tipe;
+        this.forms.installment.isEdit = false;
+        this.forms.installment.submit = 'Tambah';
+      } else {
+        this.forms.installment.id = data.installment_id;
+        this.forms.installment.dp = data.installment_dp;
+        this.forms.installment.angsuran = data.installment_price;
+        this.forms.installment.tenor = parseFloat(data.installment_tenor / 12);
+        this.forms.installment.unit_tipe_id = unit_tipe;
+        this.forms.installment.isEdit = true;
+        this.forms.installment.submit = 'Ubah';
+      }
+
+      this.errors.name = {};
+      this.errors.errorMessage = '';
+      this.errors.iserror = false;
+      if (this.forms.installment.isToggle === false) this.forms.installment.isToggle = true;
     },
     onAddOrSaveUnit: function onAddOrSaveUnit() {
-      var _this3 = this;
+      var _this5 = this;
 
       this.errors.name = {};
       this.errors.errorMessage = '';
@@ -2312,57 +2522,153 @@ __webpack_require__.r(__webpack_exports__);
         var result = res.data;
         swal({
           title: 'Sukses',
-          text: _this3.forms.unit.isEdit === false ? 'Unit baru berhasil ditambah' : 'Unit baru berhasil diubah',
+          text: _this5.forms.unit.isEdit === false ? 'Unit baru berhasil ditambah' : 'Unit baru berhasil diubah',
           icon: 'success'
         });
         setTimeout(function () {
-          _this3.getProjectUnit();
+          _this5.getProjectUnit();
 
           UIkit.modal('#modal-add-unit').hide();
         }, 2000);
       })["catch"](function (err) {
-        _this3.errors.errorMessage = err.response.statusText;
+        _this5.errors.errorMessage = err.response.statusText;
       });
     },
     onAddOrSaveUnitType: function onAddOrSaveUnitType() {
+      var _this6 = this;
+
       this.errors.name = {};
       this.errors.errorMessage = '';
       this.errors.iserror = false;
 
-      if (this.forms.unit_tipe.unit_floor === '') {
-        this.errors.name.unit_floor === 'Harap diisi';
+      if (this.forms.unit_tipe.unit_floor < 1) {
+        this.errors.name.unit_floor = 'Harap diisi';
         this.errors.iserror = true;
       }
 
-      if (this.forms.unit_tipe.unit_lb === '') {
-        this.errors.name.unit_lb === 'Harap diisi';
+      if (this.forms.unit_tipe.unit_lb < 1) {
+        this.errors.name.unit_lb = 'Harap diisi';
         this.errors.iserror = true;
       }
 
-      if (this.forms.unit_tipe.unit_lt === '') {
-        this.errors.name.unit_lt === 'Harap diisi';
+      if (this.forms.unit_tipe.unit_lt < 1) {
+        this.errors.name.unit_lt = 'Harap diisi';
         this.errors.iserror = true;
       }
 
-      if (this.forms.unit_tipe.unit_kt === '') {
-        this.errors.name.unit_kt === 'Harap diisi';
+      if (this.forms.unit_tipe.unit_kt < 1) {
+        this.errors.name.unit_kt = 'Harap diisi';
         this.errors.iserror = true;
       }
 
-      if (this.forms.unit_tipe.unit_km === '') {
-        this.errors.name.unit_km === 'Harap diisi';
+      if (this.forms.unit_tipe.unit_km < 1) {
+        this.errors.name.unit_km = 'Harap diisi';
         this.errors.iserror = true;
       }
 
-      if (this.forms.unit_tipe.unit_price === '') {
-        this.errors.name.unit_price === 'Harap diisi';
+      if (this.forms.unit_tipe.unit_price < 1) {
+        this.errors.name.unit_price = 'Harap diisi';
         this.errors.iserror = true;
       }
 
       if (this.errors.iserror === true) return false;
+      var url, method;
+
+      if (this.forms.unit_tipe.isEdit === false) {
+        url = this.$root.url + '/developer/project/add_unit_tipe/' + this.project_unit_tipe.project_unit.unit_id;
+        method = 'post';
+      } else {
+        url = this.$root.url + '/developer/project/save_unit_tipe/' + this.forms.unit_tipe.unit_tipe_id;
+        method = 'put';
+      }
+
+      this.forms.unit_tipe.submit = '<span uk-spinner></span>';
+      axios({
+        method: method,
+        url: url,
+        params: {
+          unit_floor: this.forms.unit_tipe.unit_floor,
+          unit_lb: this.forms.unit_tipe.unit_lb,
+          unit_lt: this.forms.unit_tipe.unit_lt,
+          unit_km: this.forms.unit_tipe.unit_km,
+          unit_kt: this.forms.unit_tipe.unit_kt,
+          unit_price: this.forms.unit_tipe.unit_price
+        }
+      }).then(function (res) {
+        swal({
+          title: 'Sukses',
+          text: 'Tipe unit baru berhasil ditambah',
+          icon: 'success'
+        });
+        setTimeout(function () {
+          _this6.forms.unit_tipe.isToggle = false;
+          _this6.forms.unit_tipe.submit = _this6.forms.unit_tipe.isEdit === false ? 'Tambah' : 'Ubah';
+
+          _this6.getProjectUnitType(_this6.project_unit_tipe.project_unit.unit_id);
+        }, 2000);
+      })["catch"](function (err) {
+        _this6.errors.errorMessage = err.response.statusText;
+      });
+    },
+    onAddInstallment: function onAddInstallment() {
+      var _this7 = this;
+
+      this.errors.name = {};
+      this.errors.errorMessage = '';
+      this.errors.iserror = false;
+      var url, method;
+
+      if (this.forms.installment.dp < 1 || this.forms.installment.dp === '') {
+        this.errors.name.dp = 'Harap diisi';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.installment.angsuran < 1 || this.forms.installment.angsuran === '') {
+        this.errors.name.angsuran = 'Harap diisi';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.installment.tenor < 1 || this.forms.installment.tenor === '') {
+        this.errors.name.tenor = 'Harap diisi';
+        this.errors.iserror = true;
+      }
+
+      if (this.errors.iserror === true) return false;
+
+      if (this.forms.installment.isEdit === false) {
+        url = this.$root.url + '/developer/project/add_installment/' + this.forms.installment.unit_tipe_id;
+        method = 'post';
+      } else {
+        url = this.$root.url + '/developer/project/save_installment/' + this.forms.installment.id;
+        method = 'put';
+      }
+
+      this.forms.installment.submit = '<span uk-spinner></span>';
+      axios({
+        method: method,
+        url: url,
+        params: {
+          dp: this.forms.installment.dp,
+          angsuran: this.forms.installment.angsuran,
+          tenor: this.forms.installment.tenor
+        }
+      }).then(function (res) {
+        swal({
+          title: 'Sukses',
+          text: _this7.forms.installment.isEdit === false ? 'Cicilan berhasil ditambah' : 'Cicilan berhasil diubah',
+          icon: 'success'
+        });
+        setTimeout(function () {
+          _this7.forms.installment.isToggle = false;
+
+          _this7.onGetInstallmentUnit(_this7.forms.installment.unit_tipe_id);
+        }, 2000);
+      })["catch"](function (err) {
+        _this7.errors.errorMessage = err.response.statusText;
+      });
     },
     onDeleteUnit: function onDeleteUnit(id) {
-      var _this4 = this;
+      var _this8 = this;
 
       swal({
         title: 'Konfirmasi',
@@ -2380,7 +2686,7 @@ __webpack_require__.r(__webpack_exports__);
         if (val) {
           axios({
             method: 'delete',
-            url: _this4.$root.url + '/developer/project/delete_unit/' + id
+            url: _this8.$root.url + '/developer/project/delete_unit/' + id
           }).then(function (res) {
             swal({
               title: 'Sukses',
@@ -2388,11 +2694,83 @@ __webpack_require__.r(__webpack_exports__);
               icon: 'success'
             });
             setTimeout(function () {
-              _this4.getProjectUnit();
+              _this8.getProjectUnit();
             }, 2000);
           });
         }
       });
+    },
+    onDeleteUnitType: function onDeleteUnitType(id) {
+      var _this9 = this;
+
+      swal({
+        title: 'Konfirmasi',
+        text: 'Apakah anda ingin menghapus unit ini?',
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Batal',
+          confirm: {
+            value: true,
+            text: 'Ya'
+          }
+        }
+      }).then(function (val) {
+        if (val) {
+          axios({
+            method: 'delete',
+            url: _this9.$root.url + '/developer/project/delete_unit_tipe/' + id
+          }).then(function (res) {
+            swal({
+              title: 'Sukses',
+              text: 'Unit proyek berhasil dihapus',
+              icon: 'success'
+            });
+            setTimeout(function () {
+              _this9.getProjectUnitType(_this9.project_unit_tipe.project_unit.unit_id);
+            }, 2000);
+          });
+        }
+      });
+    },
+    onDeleteInstallment: function onDeleteInstallment(id, unit) {
+      var _this10 = this;
+
+      swal({
+        title: 'Konfirmasi',
+        text: 'Apakah anda ingin menghapus unit ini?',
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Batal',
+          confirm: {
+            value: true,
+            text: 'Ya'
+          }
+        }
+      }).then(function (val) {
+        if (val) {
+          axios({
+            method: 'delete',
+            url: _this10.$root.url + '/developer/project/delete_installment/' + id
+          }).then(function (res) {
+            swal({
+              title: 'Sukses',
+              text: 'Cicilan berhasil dihapus',
+              icon: 'success',
+              timer: 1000
+            });
+            setTimeout(function () {
+              _this10.onGetInstallmentUnit(unit);
+            }, 2000);
+          });
+        }
+      });
+    },
+    calcInstallmentCredit: function calcInstallmentCredit(dp, angsuran, tenor) {
+      var res = parseInt(angsuran) * parseInt(tenor) + parseInt(dp);
+      res = this.$root.formatNumeral(res, '0,0');
+      return res;
     }
   },
   mounted: function mounted() {
@@ -59034,7 +59412,8 @@ var render = function() {
         _c(
           "a",
           {
-            staticClass: "uk-button uk-button-primary dash-btn",
+            staticClass:
+              "uk-button uk-button-primary uk-margin-small-top dash-btn",
             attrs: { "uk-toggle": "target: #modal-view-gallery" }
           },
           [_vm._v("Lihat Galeri")]
@@ -59177,388 +59556,1285 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("div", { attrs: { id: "modal-add-unit-tipe", "uk-modal": "" } }, [
-        _c("div", { staticClass: "uk-modal-dialog uk-modal-body modal-form" }, [
-          _c("a", {
-            staticClass: "uk-modal-close-default uk-modal-close",
-            attrs: { "uk-close": "" }
-          }),
-          _vm._v(" "),
-          _c("h3", { staticClass: "modal-form-heading" }, [
-            _vm.forms.unit_tipe.isEdit
-              ? _c("span", [_vm._v("Ubah Tipe Unit")])
-              : _vm._e(),
-            _vm._v(" "),
-            _c("span", [_vm._v("Tambah Tipe Unit")])
-          ]),
-          _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "uk-modal-full",
+          attrs: { id: "modal-view-unit-type", "uk-modal": "esc-close: false" }
+        },
+        [
           _c(
-            "form",
-            {
-              staticClass: "uk-form-stacked",
-              on: {
-                submit: function($event) {
-                  $event.preventDefault()
-                  return _vm.onAddOrSaveUnitType($event)
-                }
-              }
-            },
+            "div",
+            { staticClass: "uk-modal-dialog uk-modal-body uk-height-viewport" },
             [
-              _c("div", { staticClass: "uk-margin" }, [
-                _c("label", { staticClass: "uk-form-label modal-label" }, [
-                  _vm._v("Blok / Prefix")
+              _c("a", {
+                staticClass: "uk-modal-close-large uk-modal-close",
+                attrs: { "uk-close": "" }
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-card uk-card-body" }, [
+                _c("div", { staticClass: "uk-margin uk-card-title" }, [
+                  _vm._v(
+                    "Tipe Unit & Harga - " +
+                      _vm._s(
+                        _vm.project_unit_tipe.project_unit.unit_name +
+                          " No. " +
+                          _vm.project_unit_tipe.project_unit.unit_number
+                      )
+                  )
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "uk-form-controls" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value:
-                          _vm.forms.unit_tipe.project_unit.unit_name +
-                          " No ." +
-                          this.forms.unit_tipe.project_unit.unit_number,
-                        expression:
-                          "forms.unit_tipe.project_unit.unit_name + ' No .' + this.forms.unit_tipe.project_unit.unit_number"
-                      }
-                    ],
-                    staticClass: "uk-input modal-input",
-                    attrs: { type: "text", disabled: "" },
-                    domProps: {
-                      value:
-                        _vm.forms.unit_tipe.project_unit.unit_name +
-                        " No ." +
-                        this.forms.unit_tipe.project_unit.unit_number
-                    },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(
-                          _vm.forms.unit_tipe.project_unit.unit_name +
-                            " No ." +
-                            this.forms.unit_tipe.project_unit,
-                          "unit_number",
-                          $event.target.value
-                        )
-                      }
-                    }
-                  })
+                _c("div", { staticClass: "uk-margin" }, [
+                  _vm.project_unit_tipe.isLoading === true
+                    ? _c("div", { staticClass: "uk-text-center" }, [
+                        _c("span", { attrs: { "uk-spinner": "" } })
+                      ])
+                    : _c("div", { staticClass: "modal-form" }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass:
+                              "uk-button uk-button-primary uk-button-small modal-submit",
+                            on: {
+                              click: function($event) {
+                                return _vm.onToggleAddUnit(
+                                  _vm.project_unit_tipe.project_unit
+                                )
+                              }
+                            }
+                          },
+                          [_vm._v("Tambah Tipe Unit")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: this.forms.unit_tipe.isToggle === true,
+                                expression:
+                                  "this.forms.unit_tipe.isToggle === true"
+                              }
+                            ],
+                            staticClass: "uk-margin"
+                          },
+                          [
+                            _c(
+                              "div",
+                              {
+                                directives: [
+                                  {
+                                    name: "show",
+                                    rawName: "v-show",
+                                    value: _vm.errors.errorMessage,
+                                    expression: "errors.errorMessage"
+                                  }
+                                ],
+                                staticClass: "uk-alert-danger",
+                                attrs: { "uk-alert": "" }
+                              },
+                              [_vm._v(_vm._s(_vm.errors.errorMessage))]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "form",
+                              {
+                                staticClass: "uk-form-stacked uk-grid-small",
+                                attrs: { "uk-grid": "" },
+                                on: {
+                                  submit: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.onAddOrSaveUnitType($event)
+                                  }
+                                }
+                              },
+                              [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "uk-width-1-3@xl uk-width-1-3@l uk-width-1-3@m uk-width-1-2@s"
+                                  },
+                                  [
+                                    _c(
+                                      "label",
+                                      {
+                                        staticClass: "uk-form-label modal-label"
+                                      },
+                                      [_vm._v("Luas Bangunan")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "uk-form-controls" },
+                                      [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.forms.unit_tipe.unit_lb,
+                                              expression:
+                                                "forms.unit_tipe.unit_lb"
+                                            }
+                                          ],
+                                          staticClass: "uk-input modal-input",
+                                          attrs: {
+                                            type: "number",
+                                            "uk-tooltip": "m2"
+                                          },
+                                          domProps: {
+                                            value: _vm.forms.unit_tipe.unit_lb
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.forms.unit_tipe,
+                                                "unit_lb",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        directives: [
+                                          {
+                                            name: "show",
+                                            rawName: "v-show",
+                                            value: _vm.errors.name.unit_lb,
+                                            expression: "errors.name.unit_lb"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "uk-text-small uk-text-danger"
+                                      },
+                                      [_vm._v(_vm._s(_vm.errors.name.unit_lb))]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "uk-width-1-3@xl uk-width-1-3@l uk-width-1-3@m uk-width-1-2@s"
+                                  },
+                                  [
+                                    _c(
+                                      "label",
+                                      {
+                                        staticClass: "uk-form-label modal-label"
+                                      },
+                                      [_vm._v("Luas Tanah")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "uk-form-controls" },
+                                      [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.forms.unit_tipe.unit_lt,
+                                              expression:
+                                                "forms.unit_tipe.unit_lt"
+                                            }
+                                          ],
+                                          staticClass: "uk-input modal-input",
+                                          attrs: {
+                                            type: "number",
+                                            "uk-tooltip": "hektare"
+                                          },
+                                          domProps: {
+                                            value: _vm.forms.unit_tipe.unit_lt
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.forms.unit_tipe,
+                                                "unit_lt",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        directives: [
+                                          {
+                                            name: "show",
+                                            rawName: "v-show",
+                                            value: _vm.errors.name.unit_lt,
+                                            expression: "errors.name.unit_lt"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "uk-text-small uk-text-danger"
+                                      },
+                                      [_vm._v(_vm._s(_vm.errors.name.unit_lt))]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "uk-width-1-3@xl uk-width-1-3@l uk-width-1-3@m uk-width-1-2@s"
+                                  },
+                                  [
+                                    _c(
+                                      "label",
+                                      {
+                                        staticClass: "uk-form-label modal-label"
+                                      },
+                                      [_vm._v("Jumlah Lantai")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "uk-form-controls" },
+                                      [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.forms.unit_tipe.unit_floor,
+                                              expression:
+                                                "forms.unit_tipe.unit_floor"
+                                            }
+                                          ],
+                                          staticClass: "uk-input modal-input",
+                                          attrs: { type: "number" },
+                                          domProps: {
+                                            value:
+                                              _vm.forms.unit_tipe.unit_floor
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.forms.unit_tipe,
+                                                "unit_floor",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        directives: [
+                                          {
+                                            name: "show",
+                                            rawName: "v-show",
+                                            value: _vm.errors.name.unit_floor,
+                                            expression: "errors.name.unit_floor"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "uk-text-small uk-text-danger"
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(_vm.errors.name.unit_floor)
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "uk-width-1-3@xl uk-width-1-3@l uk-width-1-3@m uk-width-1-2@s"
+                                  },
+                                  [
+                                    _c(
+                                      "label",
+                                      {
+                                        staticClass: "uk-form-label modal-label"
+                                      },
+                                      [_vm._v("Jumlah Kamar Mandi")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "uk-form-controls" },
+                                      [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.forms.unit_tipe.unit_km,
+                                              expression:
+                                                "forms.unit_tipe.unit_km"
+                                            }
+                                          ],
+                                          staticClass: "uk-input modal-input",
+                                          attrs: { type: "number" },
+                                          domProps: {
+                                            value: _vm.forms.unit_tipe.unit_km
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.forms.unit_tipe,
+                                                "unit_km",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        directives: [
+                                          {
+                                            name: "show",
+                                            rawName: "v-show",
+                                            value: _vm.errors.name.unit_km,
+                                            expression: "errors.name.unit_km"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "uk-text-small uk-text-danger"
+                                      },
+                                      [_vm._v(_vm._s(_vm.errors.name.unit_km))]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "uk-width-1-3@xl uk-width-1-3@l uk-width-1-3@m uk-width-1-2@s"
+                                  },
+                                  [
+                                    _c(
+                                      "label",
+                                      {
+                                        staticClass: "uk-form-label modal-label"
+                                      },
+                                      [_vm._v("Jumlah Kamar Tidur")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "uk-form-controls" },
+                                      [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.forms.unit_tipe.unit_kt,
+                                              expression:
+                                                "forms.unit_tipe.unit_kt"
+                                            }
+                                          ],
+                                          staticClass: "uk-input modal-input",
+                                          attrs: { type: "number" },
+                                          domProps: {
+                                            value: _vm.forms.unit_tipe.unit_kt
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.forms.unit_tipe,
+                                                "unit_kt",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        directives: [
+                                          {
+                                            name: "show",
+                                            rawName: "v-show",
+                                            value: _vm.errors.name.unit_kt,
+                                            expression: "errors.name.unit_kt"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "uk-text-small uk-text-danger"
+                                      },
+                                      [_vm._v(_vm._s(_vm.errors.name.unit_kt))]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "uk-width-1-3@xl uk-width-1-3@l uk-width-1-3@m uk-width-1-2@s"
+                                  },
+                                  [
+                                    _c(
+                                      "label",
+                                      {
+                                        staticClass: "uk-form-label modal-label"
+                                      },
+                                      [_vm._v("Harga")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "uk-form-controls" },
+                                      [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.forms.unit_tipe.unit_price,
+                                              expression:
+                                                "forms.unit_tipe.unit_price"
+                                            }
+                                          ],
+                                          staticClass: "uk-input modal-input",
+                                          attrs: { type: "number" },
+                                          domProps: {
+                                            value:
+                                              _vm.forms.unit_tipe.unit_price
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.forms.unit_tipe,
+                                                "unit_price",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        directives: [
+                                          {
+                                            name: "show",
+                                            rawName: "v-show",
+                                            value: _vm.errors.name.unit_price,
+                                            expression: "errors.name.unit_price"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "uk-text-small uk-text-danger"
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(_vm.errors.name.unit_price)
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "uk-width-1-1" }, [
+                                  _c("button", {
+                                    staticClass:
+                                      "uk-button uk-button-primary uk-button-small modal-submit",
+                                    domProps: {
+                                      innerHTML: _vm._s(
+                                        _vm.forms.unit_tipe.submit
+                                      )
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass:
+                                        "uk-button uk-button-primary uk-button-small modal-submit",
+                                      on: {
+                                        click: function($event) {
+                                          _vm.forms.unit_tipe.isToggle = false
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Tutup")]
+                                  )
+                                ])
+                              ]
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _vm.project_unit_tipe.total === 0
+                          ? _c(
+                              "div",
+                              {
+                                staticClass: "uk-alert-warning",
+                                attrs: { "uk-alert": "" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                Belum ada unit ditambahkan\n              "
+                                )
+                              ]
+                            )
+                          : _c("div", [
+                              _c(
+                                "div",
+                                {
+                                  directives: [
+                                    {
+                                      name: "show",
+                                      rawName: "v-show",
+                                      value: _vm.installment.isActive === true,
+                                      expression:
+                                        "installment.isActive === true"
+                                    }
+                                  ],
+                                  staticClass: "uk-margin-large-top"
+                                },
+                                [
+                                  _c("h4", [_vm._v("Cicilan")]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass:
+                                        "uk-button uk-button-primary uk-button-small modal-submit",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.onToggleAddInstallment(
+                                            _vm.installment.project_unit_type_id
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Tambah Cicilan")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass:
+                                        "uk-button uk-button-primary uk-button-small modal-submit",
+                                      on: {
+                                        click: function($event) {
+                                          _vm.installment.isActive = false
+                                          _vm.installment.project_unit_type_id = null
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Tutup")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      directives: [
+                                        {
+                                          name: "show",
+                                          rawName: "v-show",
+                                          value:
+                                            _vm.forms.installment.isToggle ===
+                                            true,
+                                          expression:
+                                            "forms.installment.isToggle === true"
+                                        }
+                                      ],
+                                      staticClass: "uk-margin"
+                                    },
+                                    [
+                                      _c(
+                                        "form",
+                                        {
+                                          staticClass:
+                                            "uk-form-stacked uk-grid-small",
+                                          attrs: { "uk-grid": "" },
+                                          on: {
+                                            submit: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.onAddInstallment(
+                                                $event
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c(
+                                            "div",
+                                            {
+                                              staticClass:
+                                                "uk-width-1-3@xl uk-width-1-3@l uk-width-1-3@m uk-width-1-2@s"
+                                            },
+                                            [
+                                              _c(
+                                                "label",
+                                                {
+                                                  staticClass:
+                                                    "uk-form-label modal-label"
+                                                },
+                                                [_vm._v("DP")]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "div",
+                                                {
+                                                  staticClass:
+                                                    "uk-form-controls"
+                                                },
+                                                [
+                                                  _c("input", {
+                                                    directives: [
+                                                      {
+                                                        name: "model",
+                                                        rawName: "v-model",
+                                                        value:
+                                                          _vm.forms.installment
+                                                            .dp,
+                                                        expression:
+                                                          "forms.installment.dp"
+                                                      }
+                                                    ],
+                                                    staticClass:
+                                                      "uk-input modal-input",
+                                                    attrs: { type: "number" },
+                                                    domProps: {
+                                                      value:
+                                                        _vm.forms.installment.dp
+                                                    },
+                                                    on: {
+                                                      input: function($event) {
+                                                        if (
+                                                          $event.target
+                                                            .composing
+                                                        ) {
+                                                          return
+                                                        }
+                                                        _vm.$set(
+                                                          _vm.forms.installment,
+                                                          "dp",
+                                                          $event.target.value
+                                                        )
+                                                      }
+                                                    }
+                                                  })
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "div",
+                                                {
+                                                  directives: [
+                                                    {
+                                                      name: "show",
+                                                      rawName: "v-show",
+                                                      value: _vm.errors.name.dp,
+                                                      expression:
+                                                        "errors.name.dp"
+                                                    }
+                                                  ],
+                                                  staticClass:
+                                                    "uk-text-small uk-text-danger"
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(_vm.errors.name.dp)
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "div",
+                                            {
+                                              staticClass:
+                                                "uk-width-1-3@xl uk-width-1-3@l uk-width-1-3@m uk-width-1-2@s"
+                                            },
+                                            [
+                                              _c(
+                                                "label",
+                                                {
+                                                  staticClass:
+                                                    "uk-form-label modal-label"
+                                                },
+                                                [_vm._v("Angsuran")]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "div",
+                                                {
+                                                  staticClass:
+                                                    "uk-form-controls"
+                                                },
+                                                [
+                                                  _c("input", {
+                                                    directives: [
+                                                      {
+                                                        name: "model",
+                                                        rawName: "v-model",
+                                                        value:
+                                                          _vm.forms.installment
+                                                            .angsuran,
+                                                        expression:
+                                                          "forms.installment.angsuran"
+                                                      }
+                                                    ],
+                                                    staticClass:
+                                                      "uk-input modal-input",
+                                                    attrs: { type: "number" },
+                                                    domProps: {
+                                                      value:
+                                                        _vm.forms.installment
+                                                          .angsuran
+                                                    },
+                                                    on: {
+                                                      input: function($event) {
+                                                        if (
+                                                          $event.target
+                                                            .composing
+                                                        ) {
+                                                          return
+                                                        }
+                                                        _vm.$set(
+                                                          _vm.forms.installment,
+                                                          "angsuran",
+                                                          $event.target.value
+                                                        )
+                                                      }
+                                                    }
+                                                  })
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "div",
+                                                {
+                                                  directives: [
+                                                    {
+                                                      name: "show",
+                                                      rawName: "v-show",
+                                                      value:
+                                                        _vm.errors.name
+                                                          .angsuran,
+                                                      expression:
+                                                        "errors.name.angsuran"
+                                                    }
+                                                  ],
+                                                  staticClass:
+                                                    "uk-text-small uk-text-danger"
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(
+                                                      _vm.errors.name.angsuran
+                                                    )
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "div",
+                                            {
+                                              staticClass:
+                                                "uk-width-1-3@xl uk-width-1-3@l uk-width-1-3@m uk-width-1-2@s"
+                                            },
+                                            [
+                                              _c(
+                                                "label",
+                                                {
+                                                  staticClass:
+                                                    "uk-form-label modal-label"
+                                                },
+                                                [_vm._v("Tenor (Tahun)")]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "div",
+                                                {
+                                                  staticClass:
+                                                    "uk-form-controls"
+                                                },
+                                                [
+                                                  _c("input", {
+                                                    directives: [
+                                                      {
+                                                        name: "model",
+                                                        rawName: "v-model",
+                                                        value:
+                                                          _vm.forms.installment
+                                                            .tenor,
+                                                        expression:
+                                                          "forms.installment.tenor"
+                                                      }
+                                                    ],
+                                                    staticClass:
+                                                      "uk-input modal-input",
+                                                    attrs: { type: "number" },
+                                                    domProps: {
+                                                      value:
+                                                        _vm.forms.installment
+                                                          .tenor
+                                                    },
+                                                    on: {
+                                                      input: function($event) {
+                                                        if (
+                                                          $event.target
+                                                            .composing
+                                                        ) {
+                                                          return
+                                                        }
+                                                        _vm.$set(
+                                                          _vm.forms.installment,
+                                                          "tenor",
+                                                          $event.target.value
+                                                        )
+                                                      }
+                                                    }
+                                                  })
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "div",
+                                                {
+                                                  directives: [
+                                                    {
+                                                      name: "show",
+                                                      rawName: "v-show",
+                                                      value:
+                                                        _vm.errors.name.tenor,
+                                                      expression:
+                                                        "errors.name.tenor"
+                                                    }
+                                                  ],
+                                                  staticClass:
+                                                    "uk-text-small uk-text-danger"
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(
+                                                      _vm.errors.name.tenor
+                                                    )
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "div",
+                                            { staticClass: "uk-width-1-1" },
+                                            [
+                                              _c("button", {
+                                                staticClass:
+                                                  "uk-button uk-button-primary modal-submit",
+                                                domProps: {
+                                                  innerHTML: _vm._s(
+                                                    _vm.forms.installment.submit
+                                                  )
+                                                }
+                                              }),
+                                              _vm._v(" "),
+                                              _c(
+                                                "a",
+                                                {
+                                                  staticClass:
+                                                    "uk-button uk-button-primary modal-submit",
+                                                  on: {
+                                                    click: function($event) {
+                                                      _vm.forms.installment.isToggle = false
+                                                    }
+                                                  }
+                                                },
+                                                [_vm._v("Batal")]
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm.installment.total === 0
+                                    ? _c(
+                                        "div",
+                                        {
+                                          staticClass: "uk-alert-warning",
+                                          attrs: { "uk-alert": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "Tidak ada cicilan yang ditambahkan"
+                                          )
+                                        ]
+                                      )
+                                    : _c(
+                                        "table",
+                                        {
+                                          staticClass:
+                                            "uk-table uk-table-divider uk-table-small uk-table-hover uk-table-striped uk-table-middle"
+                                        },
+                                        [
+                                          _vm._m(0),
+                                          _vm._v(" "),
+                                          _c(
+                                            "tbody",
+                                            _vm._l(
+                                              _vm.installment.results,
+                                              function(cicilan) {
+                                                return _c("tr", [
+                                                  _c(
+                                                    "td",
+                                                    {
+                                                      staticClass:
+                                                        "uk-width-small"
+                                                    },
+                                                    [
+                                                      _c(
+                                                        "a",
+                                                        {
+                                                          staticClass:
+                                                            "uk-button uk-button-primary uk-button-small modal-submit",
+                                                          on: {
+                                                            click: function(
+                                                              $event
+                                                            ) {
+                                                              return _vm.onToggleAddInstallment(
+                                                                cicilan.project_unit_type_id,
+                                                                cicilan
+                                                              )
+                                                            }
+                                                          }
+                                                        },
+                                                        [
+                                                          _c("i", {
+                                                            staticClass:
+                                                              "icon ion-ios-create"
+                                                          })
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "a",
+                                                        {
+                                                          staticClass:
+                                                            "uk-button uk-button-primary uk-button-small modal-submit",
+                                                          on: {
+                                                            click: function(
+                                                              $event
+                                                            ) {
+                                                              return _vm.onDeleteInstallment(
+                                                                cicilan.installment_id,
+                                                                cicilan.project_unit_type_id
+                                                              )
+                                                            }
+                                                          }
+                                                        },
+                                                        [
+                                                          _c("i", {
+                                                            staticClass:
+                                                              "icon ion-ios-trash"
+                                                          })
+                                                        ]
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "td",
+                                                    {
+                                                      staticClass:
+                                                        "uk-width-small"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        _vm._s(
+                                                          parseFloat(
+                                                            cicilan.installment_tenor /
+                                                              12
+                                                          )
+                                                        ) + " tahun"
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c("td", [
+                                                    _vm._v(
+                                                      "IDR " +
+                                                        _vm._s(
+                                                          _vm.$root.formatNumeral(
+                                                            cicilan.installment_dp,
+                                                            "0,0"
+                                                          )
+                                                        )
+                                                    )
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("td", [
+                                                    _vm._v(
+                                                      "IDR " +
+                                                        _vm._s(
+                                                          _vm.$root.formatNumeral(
+                                                            cicilan.installment_price,
+                                                            "0,0"
+                                                          )
+                                                        )
+                                                    )
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("td", [
+                                                    _vm._v(
+                                                      "IDR " +
+                                                        _vm._s(
+                                                          _vm.calcInstallmentCredit(
+                                                            cicilan.installment_dp,
+                                                            cicilan.installment_price,
+                                                            cicilan.installment_tenor
+                                                          )
+                                                        )
+                                                    )
+                                                  ])
+                                                ])
+                                              }
+                                            ),
+                                            0
+                                          )
+                                        ]
+                                      )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "table",
+                                {
+                                  staticClass:
+                                    "uk-table uk-table-divider uk-table-small uk-table-middle"
+                                },
+                                [
+                                  _vm._m(1),
+                                  _vm._v(" "),
+                                  _c(
+                                    "tbody",
+                                    _vm._l(
+                                      _vm.project_unit_tipe.results,
+                                      function(unit_tipe) {
+                                        return _c(
+                                          "tr",
+                                          {
+                                            class: {
+                                              "modal-table-active":
+                                                _vm.installment
+                                                  .project_unit_type_id ===
+                                                unit_tipe.project_unit_type_id
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "td",
+                                              { staticClass: "uk-width-small" },
+                                              [
+                                                _c(
+                                                  "a",
+                                                  {
+                                                    staticClass:
+                                                      "uk-button uk-button-primary uk-button-small modal-submit",
+                                                    on: {
+                                                      click: function($event) {
+                                                        return _vm.onToggleAddUnit(
+                                                          {
+                                                            unit_id:
+                                                              _vm
+                                                                .project_unit_tipe
+                                                                .project_unit
+                                                                .unit_id,
+                                                            unit_name:
+                                                              _vm
+                                                                .project_unit_tipe
+                                                                .project_unit
+                                                                .unit_name,
+                                                            unit_number:
+                                                              _vm
+                                                                .project_unit_tipe
+                                                                .project_unit
+                                                                .unit_number
+                                                          },
+                                                          unit_tipe
+                                                        )
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("i", {
+                                                      staticClass:
+                                                        "icon ion-ios-create"
+                                                    })
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "a",
+                                                  {
+                                                    staticClass:
+                                                      "uk-button uk-button-primary uk-button-small modal-submit",
+                                                    on: {
+                                                      click: function($event) {
+                                                        return _vm.onDeleteUnitType(
+                                                          unit_tipe.project_unit_type_id
+                                                        )
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("i", {
+                                                      staticClass:
+                                                        "icon ion-ios-trash"
+                                                    })
+                                                  ]
+                                                )
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "td",
+                                              { staticClass: "uk-width-small" },
+                                              [
+                                                _c(
+                                                  "a",
+                                                  {
+                                                    staticClass:
+                                                      "uk-button uk-button-primary uk-button-small modal-submit",
+                                                    on: {
+                                                      click: function($event) {
+                                                        return _vm.onGetInstallmentUnit(
+                                                          unit_tipe.project_unit_type_id
+                                                        )
+                                                      }
+                                                    }
+                                                  },
+                                                  [_vm._v("Lihat Cicilan")]
+                                                )
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "td",
+                                              { staticClass: "uk-width-small" },
+                                              [
+                                                _vm._v(
+                                                  _vm._s(unit_tipe.unit_floor)
+                                                )
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "td",
+                                              {
+                                                staticClass: "uk-width-medium"
+                                              },
+                                              [
+                                                _vm._v(
+                                                  _vm._s(unit_tipe.unit_lb) +
+                                                    " m2 / " +
+                                                    _vm._s(unit_tipe.unit_lt) +
+                                                    " h"
+                                                )
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "td",
+                                              { staticClass: "uk-width-small" },
+                                              [
+                                                _vm._v(
+                                                  _vm._s(unit_tipe.unit_km) +
+                                                    " / " +
+                                                    _vm._s(unit_tipe.unit_kt)
+                                                )
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c("td", [
+                                              _vm._v(
+                                                "IDR " +
+                                                  _vm._s(
+                                                    _vm.$root.formatNumeral(
+                                                      unit_tipe.unit_price,
+                                                      "0,0"
+                                                    )
+                                                  )
+                                              )
+                                            ])
+                                          ]
+                                        )
+                                      }
+                                    ),
+                                    0
+                                  )
+                                ]
+                              )
+                            ])
+                      ])
                 ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "uk-margin" }, [
-                _c("label", { staticClass: "uk-form-label modal-label" }, [
-                  _vm._v("Jumlah Lantai")
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "uk-form-controls" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.forms.unit_tipe.unit_floor,
-                        expression: "forms.unit_tipe.unit_floor"
-                      }
-                    ],
-                    staticClass: "uk-input modal-input",
-                    attrs: { type: "number" },
-                    domProps: { value: _vm.forms.unit_tipe.unit_floor },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(
-                          _vm.forms.unit_tipe,
-                          "unit_floor",
-                          $event.target.value
-                        )
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.errors.name.unit_floor,
-                        expression: "errors.name.unit_floor"
-                      }
-                    ],
-                    staticClass: "uk-text-danger uk-text-small"
-                  },
-                  [_vm._v(_vm._s(_vm.errors.name.unit_floor))]
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "uk-margin" }, [
-                _c("label", { staticClass: "uk-form-label modal-label" }, [
-                  _vm._v("Jumlah Kamar Tidur")
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "uk-form-controls" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.forms.unit_tipe.unit_kt,
-                        expression: "forms.unit_tipe.unit_kt"
-                      }
-                    ],
-                    staticClass: "uk-input modal-input",
-                    attrs: { type: "number" },
-                    domProps: { value: _vm.forms.unit_tipe.unit_kt },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(
-                          _vm.forms.unit_tipe,
-                          "unit_kt",
-                          $event.target.value
-                        )
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.errors.name.unit_kt,
-                        expression: "errors.name.unit_kt"
-                      }
-                    ],
-                    staticClass: "uk-text-danger uk-text-small"
-                  },
-                  [_vm._v(_vm._s(_vm.errors.name.unit_kt))]
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "uk-margin" }, [
-                _c("label", { staticClass: "uk-form-label modal-label" }, [
-                  _vm._v("Jumlah Kamar Mandi")
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "uk-form-controls" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.forms.unit_tipe.unit_km,
-                        expression: "forms.unit_tipe.unit_km"
-                      }
-                    ],
-                    staticClass: "uk-input modal-input",
-                    attrs: { type: "number" },
-                    domProps: { value: _vm.forms.unit_tipe.unit_km },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(
-                          _vm.forms.unit_tipe,
-                          "unit_km",
-                          $event.target.value
-                        )
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.errors.name.unit_km,
-                        expression: "errors.name.unit_km"
-                      }
-                    ],
-                    staticClass: "uk-text-danger uk-text-small"
-                  },
-                  [_vm._v(_vm._s(_vm.errors.name.unit_km))]
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "uk-margin" }, [
-                _c("label", { staticClass: "uk-form-label modal-label" }, [
-                  _vm._v("Luas Bangunan")
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "uk-form-controls" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.forms.unit_tipe.unit_lb,
-                        expression: "forms.unit_tipe.unit_lb"
-                      }
-                    ],
-                    staticClass: "uk-input modal-input",
-                    attrs: { type: "number" },
-                    domProps: { value: _vm.forms.unit_tipe.unit_lb },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(
-                          _vm.forms.unit_tipe,
-                          "unit_lb",
-                          $event.target.value
-                        )
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.errors.name.unit_lb,
-                        expression: "errors.name.unit_lb"
-                      }
-                    ],
-                    staticClass: "uk-text-danger uk-text-small"
-                  },
-                  [_vm._v(_vm._s(_vm.errors.name.unit_lb))]
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "uk-margin" }, [
-                _c("label", { staticClass: "uk-form-label modal-label" }, [
-                  _vm._v("Luas Tanah")
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "uk-form-controls" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.forms.unit_tipe.unit_lt,
-                        expression: "forms.unit_tipe.unit_lt"
-                      }
-                    ],
-                    staticClass: "uk-input modal-input",
-                    attrs: { type: "number" },
-                    domProps: { value: _vm.forms.unit_tipe.unit_lt },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(
-                          _vm.forms.unit_tipe,
-                          "unit_lt",
-                          $event.target.value
-                        )
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.errors.name.unit_lt,
-                        expression: "errors.name.unit_lt"
-                      }
-                    ],
-                    staticClass: "uk-text-danger uk-text-small"
-                  },
-                  [_vm._v(_vm._s(_vm.errors.name.unit_lt))]
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "uk-margin" }, [
-                _c("label", { staticClass: "uk-form-label modal-label" }, [
-                  _vm._v("Harga")
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "uk-form-controls" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.forms.unit_tipe.unit_price,
-                        expression: "forms.unit_tipe.unit_price"
-                      }
-                    ],
-                    staticClass: "uk-input modal-input",
-                    attrs: { type: "number" },
-                    domProps: { value: _vm.forms.unit_tipe.unit_price },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(
-                          _vm.forms.unit_tipe,
-                          "unit_price",
-                          $event.target.value
-                        )
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.errors.name.unit_price,
-                        expression: "errors.name.unit_price"
-                      }
-                    ],
-                    staticClass: "uk-text-danger uk-text-small"
-                  },
-                  [_vm._v(_vm._s(_vm.errors.name.unit_price))]
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "uk-margin" }, [
-                _c("button", {
-                  staticClass: "uk-button uk-button-primary modal-form-add",
-                  domProps: { innerHTML: _vm._s(_vm.forms.unit.submit) }
-                })
               ])
             ]
           )
-        ])
-      ]),
+        ]
+      ),
       _vm._v(" "),
       _c(
         "div",
@@ -59692,7 +60968,7 @@ var render = function() {
                           "uk-table uk-table-middle uk-table-hover uk-table-divider uk-table-small"
                       },
                       [
-                        _vm._m(0),
+                        _vm._m(2),
                         _vm._v(" "),
                         _c(
                           "tbody",
@@ -59774,34 +61050,6 @@ var render = function() {
                                                 _vm._v(" Hapus")
                                               ]
                                             )
-                                          ]),
-                                          _vm._v(" "),
-                                          _c("li", [
-                                            _c(
-                                              "a",
-                                              {
-                                                on: {
-                                                  click: function($event) {
-                                                    return _vm.onPopupUnitType({
-                                                      unit_id:
-                                                        unit.project_unit_id,
-                                                      unit_name:
-                                                        unit.project_unit_name,
-                                                      unit_number:
-                                                        unit.project_unit_number
-                                                    })
-                                                  }
-                                                }
-                                              },
-                                              [
-                                                _c("span", {
-                                                  staticClass:
-                                                    "uk-margin-small-right",
-                                                  attrs: { "uk-icon": "plus" }
-                                                }),
-                                                _vm._v(" Tambah Tipe Unit")
-                                              ]
-                                            )
                                           ])
                                         ]
                                       )
@@ -59819,6 +61067,26 @@ var render = function() {
                               ]),
                               _vm._v(" "),
                               _c("td", [_vm._v("0")]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _c(
+                                  "a",
+                                  {
+                                    staticClass:
+                                      "uk-button uk-button-primary uk-button-small dash-btn",
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.onPopupUnitType({
+                                          unit_id: unit.project_unit_id,
+                                          unit_name: unit.project_unit_name,
+                                          unit_number: unit.project_unit_number
+                                        })
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Lihat Harga")]
+                                )
+                              ]),
                               _vm._v(" "),
                               _c("td", [
                                 _vm._v(
@@ -59889,9 +61157,49 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("Aksi")]),
         _vm._v(" "),
+        _c("th", [_vm._v("Tenor")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("DP")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Angsuran")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Jumlah Kredit")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Aksi")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Cicilan")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Jumlah Lantai")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Luas Bangunan / Luas Tanah")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Kamar Mandi / Kamar Tidur")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Harga")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Aksi")]),
+        _vm._v(" "),
         _c("th", [_vm._v("Blok / Prefix")]),
         _vm._v(" "),
         _c("th", [_vm._v("Jumlah Tipe")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Harga")]),
         _vm._v(" "),
         _c("th", [_vm._v("Terakhir diubah")])
       ])

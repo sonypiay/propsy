@@ -73,6 +73,21 @@
   border-left: 2px solid #ffffff;
 }
 
+.side-navbar .side-nav li .side-nav-sub li a {
+  color: #ffffff;
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+}
+
+.side-navbar .side-nav li .side-nav-sub li a:hover {
+  border-left: 0 !important;
+  color: #ffffff;
+}
+
 .side-navbar-profile ul li a {
   color: #666666;
   font-size: 14px;

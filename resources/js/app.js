@@ -11,6 +11,7 @@ Vue.component('modal-signup-component', require('./components/Frontend/SignUpCom
 // marketing
 Vue.component('marketing-dashboard-page', require('./components/Frontend/Marketing/Dashboard.vue').default);
 Vue.component('marketing-profile-page', require('./components/Frontend/Marketing/Profile.vue').default);
+Vue.component('marketing-request-info', require('./components/Frontend/Marketing/RequestInfo.vue').default);
 
 // developer
 Vue.component('developer-dashboard-page', require('./components/Frontend/Developer/Dashboard.vue').default);

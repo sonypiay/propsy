@@ -63,6 +63,18 @@
         &:hover { border-left: 2px solid #ffffff; }
       }
       .active { border-left: 2px solid #ffffff; }
+      .side-nav-sub {
+        li {
+          a {
+            color: #ffffff;
+            @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+            &:hover {
+              border-left: 0 !important;
+              color: #ffffff;
+            }
+          }
+        }
+      }
     }
   }
 }

@@ -77,5 +77,9 @@ Route::group(['prefix' => 'developer'], function() {
     Route::put('/change_password', 'Frontend\Developer\DeveloperController@change_password');
     Route::put('/change_email', 'Frontend\Developer\DeveloperController@change_email');
     Route::post('/upload_logo', 'Frontend\Developer\DeveloperController@upload_logo');
+
+    Route::group(['prefix' => 'marketing'], function() {
+      Route::get('/customer/request', 'Frontend\Marketing\MarketingController@customer_request_page')->name('marketing_request_info');
+    });
   });
 });

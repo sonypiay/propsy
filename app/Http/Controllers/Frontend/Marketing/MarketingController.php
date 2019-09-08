@@ -145,4 +145,21 @@ class MarketingController extends Controller
     $res = ['status' => 200, 'statusText' => 'upload success'];
     return response()->json( $res, $res['status'] );
   }
+
+  public function customer_request_page( Request $request, MarketingUser $marketinguser )
+  {
+    if( session()->has('isMarketing') )
+    {
+      $data = [
+        'request' => $request,
+        'session_user' => $marketinguser->getinfo()
+      ];
+
+      return response()->view('frontend.pages.marketing.request_info', $data);
+    }
+    else
+    {
+      return redirect()->route('homepage');
+    }
+  }
 }

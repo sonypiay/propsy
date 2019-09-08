@@ -40,8 +40,12 @@
     @if( session()->has('isMarketing') )
     <li><a href="{{ $link_nav['dashboard'] }}">Dashboard</a></li>
     <li><a href="{{ $link_nav['project'] }}">Proyek</a></li>
-    <li><a href="{{ $link_nav['pelanggan'] }}">Pelanggan</a></li>
-    <li><a href="{{ $link_nav['laporan'] }}">Laporan</a></li>
+    <li class="uk-parent"><a href="#">Pelanggan</a>
+      <ul class="uk-nav-sub">
+        <li><a href="#">Permintaan</a></li>
+        <li><a href="#">Survey</a></li>
+      </ul>
+    </li>
     @else
     <li><a href="{{ $link_nav['dashboard'] }}">Dashboard</a></li>
     <li><a href="{{ $link_nav['project'] }}">Proyek</a></li>

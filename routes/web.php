@@ -15,13 +15,29 @@ Route::get('/', 'Frontend\HomepageController@index')->name('homepage');
 Route::group(['prefix' => 'authentication'], function() {
   Route::post('/login/developer', 'Frontend\Developer\AuthController@do_login');
   Route::post('/login/marketing', 'Frontend\Marketing\AuthController@do_login');
+  Route::post('/login/customer', 'Frontend\Customer\AuthController@do_login');
   Route::get('/logout/developer', 'Frontend\Developer\AuthController@do_logout')->name('auth_logout_dev');
   Route::get('/logout/marketing', 'Frontend\Marketing\AuthController@do_logout')->name('auth_logout_mkt');
+  Route::get('/logout/customer', 'Frontend\Customer\AuthController@do_logout')->name('auth_logout_customer');
 });
 
 Route::group(['prefix' => 'registration'], function() {
   Route::post('/developer', 'Frontend\Developer\AuthController@do_register');
   Route::post('/marketing', 'Frontend\Marketing\AuthController@do_register');
+  Route::post('/customer', 'Frontend\Customer\AuthController@do_register');
+});
+
+Route::group(['prefix' => 'customer'], function() {
+  Route::get('/', function() { return redirect()->route('customer_profile_page'); });
+  Route::get('/profile', 'Frontend\Customer\CustomerController@profile_page')->name('customer_profile_page');
+  Route::get('/masuk', 'Frontend\Customer\CustomerController@login_page')->name('customer_login_page');
+  Route::get('/daftar', 'Frontend\Customer\CustomerController@register_page')->name('customer_register_page');
+  Route::group(['prefix' => 'profile'], function() {
+    Route::put('/change_password', 'Frontend\Customer\CustomerController@change_password');
+    Route::put('/change_email', 'Frontend\Customer\CustomerController@change_email');
+    Route::put('/change_account_information', 'Frontend\Customer\CustomerController@change_account_information');
+    Route::post('/upload_photo_profile', 'Frontend\Customer\CustomerController@upload_photo_profile');
+  });
 });
 
 // Marketing

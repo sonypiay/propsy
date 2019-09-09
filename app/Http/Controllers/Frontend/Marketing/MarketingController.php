@@ -29,7 +29,7 @@ class MarketingController extends Controller
 
   public function login_page( Request $request )
   {
-    if( ! session()->has('isDeveloper') )
+    if( ! session()->has('isMarketing') )
     {
       $data = [
         'request' => $request,
@@ -45,7 +45,7 @@ class MarketingController extends Controller
 
   public function register_page( Request $request )
   {
-    if( ! session()->has('isDeveloper') )
+    if( ! session()->has('isMarketing') )
     {
       $data = [ 'request' => $request ];
 

@@ -5,8 +5,8 @@ window.swal = require('sweetalert');
 window.moment = require('moment');
 window.numeral = require('numeral');
 
-Vue.component('modal-login-component', require('./components/Frontend/LoginComponent.vue').default);
-Vue.component('modal-signup-component', require('./components/Frontend/SignUpComponent.vue').default);
+//Vue.component('modal-login-component', require('./components/Frontend/LoginComponent.vue').default);
+//Vue.component('modal-signup-component', require('./components/Frontend/SignUpComponent.vue').default);
 
 // marketing
 Vue.component('marketing-dashboard-page', require('./components/Frontend/Marketing/Dashboard.vue').default);
@@ -27,6 +27,7 @@ Vue.component('developer-login-page', require('./components/Frontend/Developer/M
 // customer
 Vue.component('customer-register-page', require('./components/Frontend/Customer/Daftar.vue').default);
 Vue.component('customer-login-page', require('./components/Frontend/Customer/Masuk.vue').default);
+Vue.component('customer-profile-page', require('./components/Frontend/Customer/Profile.vue').default);
 
 const app = new Vue({
     el: '#app',

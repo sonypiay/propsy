@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Frontend\Marketing;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades;
 use App\Database\MarketingUser;
 use App\Http\Controllers\Controller;
 
@@ -114,7 +113,7 @@ class AuthController extends Controller
   {
     if( session()->has('isMarketing') )
     {
-      session()->forget('mkt_user_id');
+      session()->forget('isMarketing');
       session()->forget('mkt_user_id');
       session()->forget('mkt_email');
       session()->forget('mkt_login_date');

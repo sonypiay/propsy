@@ -50,16 +50,25 @@
               </ul>
             </div>
           </li>
+          @elseif( session()->has('isCustomer') )
+          <li>
+            <a href="#">{{ $session_user->customer_name }}</a>
+            <div class="uk-navbar-dropdown main-nav-dropdown">
+              <ul class="uk-nav uk-dropdown-nav">
+                <li><a href="#">Permintaan</a></li>
+                <li><a href="#">Survey</a></li>
+                <li><a href="{{ route('customer_profile_page') }}">Lihat Akun</a></li>
+                <li class="uk-nav-divider"></li>
+                <li><a href="{{ route('auth_logout_customer') }}">Keluar</a></li>
+              </ul>
+            </div>
+          </li>
           @else
           <li>
-            <a class="navlogin" uk-toggle="target: #modal-login">
-              <span>Masuk</span>
-            </a>
+            <a href="{{ route('customer_login_page') }}">Masuk</a>
           </li>
           <li>
-            <a class="navjoin" uk-toggle="target: #modal-signup">
-              <span>Daftar</span>
-            </a>
+            <a href="{{ route('customer_register_page') }}">Daftar</a>
           </li>
           @endif
         </ul>

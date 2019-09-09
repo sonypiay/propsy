@@ -1,8 +1,8 @@
 @extends('frontend.master')
-@section('tag_title', 'Manajemen Properti')
+@section('tag_title', 'Manajemen Properti Syariah')
 @section('main_content')
 <div id="app">
-  <div id="modal-login" class="uk-modal-full" uk-modal="esc-close: false">
+  <!--<div id="modal-login" class="uk-modal-full" uk-modal="esc-close: false">
     <div class="uk-modal-dialog uk-modal-body uk-height-viewport modal-login">
       <a class="uk-modal-close-full uk-close-large" uk-close></a>
       <modal-login-component />
@@ -13,7 +13,7 @@
       <a class="uk-modal-close-full uk-close-large" uk-close></a>
       <modal-signup-component />
     </div>
-  </div>
+  </div>-->
   <div class="uk-cover-container banner-homepage">
     <canvas width="300" height="400"></canvas>
     <img src="{{ asset('images/banner/homepage2.jpg') }}" alt="" uk-cover>

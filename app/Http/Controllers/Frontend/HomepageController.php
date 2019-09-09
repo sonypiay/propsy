@@ -5,22 +5,25 @@ namespace App\Http\Controllers\Frontend;
 use Illuminate\Http\Request;
 use App\Database\DeveloperUser;
 use App\Database\MarketingUser;
+use App\Database\Customer;
 use App\Http\Controllers\Controller;
 
 class HomepageController extends Controller
 {
-  public function index( Request $request, DeveloperUser $developeruser, MarketingUser $marketinguser )
+  public function index( Request $request, DeveloperUser $developeruser, MarketingUser $marketinguser, Customer $customer )
   {
     $data['request'] = $request;
     if( session()->has('isMarketing') )
     {
-      $mktuser = $marketinguser->getinfo();
-      $data['session_user'] = $mktuser;
+      $data['session_user'] = $marketinguser->getinfo();
+    }
+    else if( session()->has('isDeveloper') )
+    {
+      $data['session_user'] = $developeruser->getinfo();
     }
     else
     {
-      $devuser = $developeruser->getinfo();
-      $data['session_user'] = $devuser;
+      $data['session_user'] = $customer->getinfo();
     }
 
     return response()->view('frontend.pages.homepage', $data)

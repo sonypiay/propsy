@@ -1,8 +1,8 @@
 @extends('frontend.master')
-@section('tag_title', 'Masuk')
+@section('tag_title', 'Daftar')
 @section('main_content')
 <div id="app">
-  <customer-login-page />
+  <customer-register-page />
 </div>
 <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
 @endsection

@@ -260,7 +260,7 @@
             Belum ada unit yang ditambahkan
           </div>
           <div v-else class="uk-margin">
-            <table class="uk-table uk-table-middle uk-table-hover uk-table-divider uk-table-small">
+            <table class="uk-table uk-table-middle uk-table-hover uk-table-divider uk-table-striped uk-table-small">
               <thead>
                 <tr>
                   <th>Aksi</th>

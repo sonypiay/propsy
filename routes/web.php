@@ -29,6 +29,8 @@ Route::group(['prefix' => 'marketing'], function() {
   Route::get('/', function() { return redirect()->route('marketing_dashboard_page'); });
   Route::get('/dashboard', 'Frontend\Marketing\MarketingController@index')->name('marketing_dashboard_page');
   Route::get('/profile', 'Frontend\Marketing\MarketingController@profile_page')->name('marketing_profile_page');
+  Route::get('/masuk', 'Frontend\Marketing\MarketingController@login_page')->name('marketing_login_page');
+  Route::get('/daftar', 'Frontend\Marketing\MarketingController@register_page')->name('marketing_register_page');
 
   Route::group(['prefix' => 'profile'], function() {
     Route::put('/change_password', 'Frontend\Marketing\MarketingController@change_password');
@@ -36,12 +38,20 @@ Route::group(['prefix' => 'marketing'], function() {
     Route::put('/change_account_information', 'Frontend\Marketing\MarketingController@change_account_information');
     Route::post('/upload_photo_profile', 'Frontend\Marketing\MarketingController@upload_photo_profile');
   });
+
+  Route::group(['prefix' => 'customer'], function() {
+    Route::get('/request', 'Frontend\Marketing\RequestInfoController@customer_request_info')->name('marketing_request_info');
+    Route::get('/get_request_info', 'Frontend\Marketing\RequestInfoController@get_request_info');
+    Route::get('/detail_request/{reqid}', 'Frontend\Marketing\RequestInfoController@get_detail_request');
+  });
 });
 
 Route::group(['prefix' => 'developer'], function() {
   Route::get('/', function() { return redirect()->route('developer_dashboard_page'); });
   Route::get('/dashboard', 'Frontend\Developer\DeveloperController@index')->name('developer_dashboard_page');
   Route::get('/profile', 'Frontend\Developer\DeveloperController@profile_page')->name('developer_profile_page');
+  Route::get('/masuk', 'Frontend\Developer\DeveloperController@login_page')->name('developer_login_page');
+  Route::get('/daftar', 'Frontend\Developer\DeveloperController@register_page')->name('developer_register_page');
   Route::group(['prefix' => 'project'], function() {
     Route::get('/detail/{project_id}', 'Frontend\Developer\ProjectListController@detail_project')->name('developer_detail_project');
     Route::get('/manage_project', 'Frontend\Developer\ProjectListController@dev_manage_project')->name('developer_manage_project');
@@ -77,9 +87,5 @@ Route::group(['prefix' => 'developer'], function() {
     Route::put('/change_password', 'Frontend\Developer\DeveloperController@change_password');
     Route::put('/change_email', 'Frontend\Developer\DeveloperController@change_email');
     Route::post('/upload_logo', 'Frontend\Developer\DeveloperController@upload_logo');
-
-    Route::group(['prefix' => 'marketing'], function() {
-      Route::get('/customer/request', 'Frontend\Marketing\MarketingController@customer_request_page')->name('marketing_request_info');
-    });
   });
 });

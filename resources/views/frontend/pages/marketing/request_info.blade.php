@@ -1,5 +1,5 @@
 @extends('frontend.pages.developer.master')
-@section('tag_title', $projects->project_name)
+@section('tag_title', 'Permintaan Pelanggan')
 @section('main_content')
 <div id="app">
   <marketing-request-info :session_user="{{ json_encode( $session_user ) }}" />

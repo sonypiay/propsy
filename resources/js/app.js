@@ -12,6 +12,8 @@ Vue.component('modal-signup-component', require('./components/Frontend/SignUpCom
 Vue.component('marketing-dashboard-page', require('./components/Frontend/Marketing/Dashboard.vue').default);
 Vue.component('marketing-profile-page', require('./components/Frontend/Marketing/Profile.vue').default);
 Vue.component('marketing-request-info', require('./components/Frontend/Marketing/RequestInfo.vue').default);
+Vue.component('marketing-register-page', require('./components/Frontend/Marketing/Daftar.vue').default);
+Vue.component('marketing-login-page', require('./components/Frontend/Marketing/Masuk.vue').default);
 
 // developer
 Vue.component('developer-dashboard-page', require('./components/Frontend/Developer/Dashboard.vue').default);
@@ -19,6 +21,12 @@ Vue.component('developer-profile-page', require('./components/Frontend/Developer
 Vue.component('developer-manage-project', require('./components/Frontend/Developer/Projects.vue').default);
 Vue.component('developer-project-gallery', require('./components/Frontend/Developer/ProjectGallery.vue').default);
 Vue.component('developer-detail-project', require('./components/Frontend/Developer/DetailProject.vue').default);
+Vue.component('developer-register-page', require('./components/Frontend/Developer/Daftar.vue').default);
+Vue.component('developer-login-page', require('./components/Frontend/Developer/Masuk.vue').default);
+
+// customer
+Vue.component('customer-register-page', require('./components/Frontend/Customer/Daftar.vue').default);
+Vue.component('customer-login-page', require('./components/Frontend/Customer/Masuk.vue').default);
 
 const app = new Vue({
     el: '#app',

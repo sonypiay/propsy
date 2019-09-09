@@ -27,6 +27,36 @@ class MarketingController extends Controller
     }
   }
 
+  public function login_page( Request $request )
+  {
+    if( ! session()->has('isDeveloper') )
+    {
+      $data = [
+        'request' => $request,
+      ];
+
+      return response()->view('frontend.pages.marketing.login', $data);
+    }
+    else
+    {
+      return redirect()->route('marketing_profile_page');
+    }
+  }
+
+  public function register_page( Request $request )
+  {
+    if( ! session()->has('isDeveloper') )
+    {
+      $data = [ 'request' => $request ];
+
+      return response()->view('frontend.pages.marketing.register', $data);
+    }
+    else
+    {
+      return redirect()->route('marketing_profile_page');
+    }
+  }
+
   public function profile_page( Request $request, MarketingUser $marketinguser )
   {
     if( session()->has('isMarketing') )
@@ -144,22 +174,5 @@ class MarketingController extends Controller
     $storage->putFileAs($path_img, $photo_profile, $filename );
     $res = ['status' => 200, 'statusText' => 'upload success'];
     return response()->json( $res, $res['status'] );
-  }
-
-  public function customer_request_page( Request $request, MarketingUser $marketinguser )
-  {
-    if( session()->has('isMarketing') )
-    {
-      $data = [
-        'request' => $request,
-        'session_user' => $marketinguser->getinfo()
-      ];
-
-      return response()->view('frontend.pages.marketing.request_info', $data);
-    }
-    else
-    {
-      return redirect()->route('homepage');
-    }
   }
 }

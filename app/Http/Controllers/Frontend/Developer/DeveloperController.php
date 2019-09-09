@@ -24,7 +24,37 @@ class DeveloperController extends Controller
     }
     else
     {
-      return redirect()->route('homepage');
+      return redirect()->route('developer_login_page');
+    }
+  }
+
+  public function login_page( Request $request )
+  {
+    if( ! session()->has('isDeveloper') )
+    {
+      $data = [
+        'request' => $request,
+      ];
+
+      return response()->view('frontend.pages.developer.login', $data);
+    }
+    else
+    {
+      return redirect()->route('developer_profile_page');
+    }
+  }
+
+  public function register_page( Request $request )
+  {
+    if( ! session()->has('isDeveloper') )
+    {
+      $data = [ 'request' => $request ];
+
+      return response()->view('frontend.pages.developer.register', $data);
+    }
+    else
+    {
+      return redirect()->route('developer_profile_page');
     }
   }
 

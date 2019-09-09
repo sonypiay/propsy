@@ -83,30 +83,39 @@ class ProjectListController extends Controller
     return response()->json( $res, $res['status'] );
   }
 
-  public function getProjectList( Request $request, ProjectList $project_list )
+  public function getProjectList( Request $request, ProjectList $project_list, DeveloperUser $developeruser )
   {
     $keywords = $request->keywords;
     $status = $request->status;
+    $devuser = $developeruser->getinfo();
     $project = new $project_list;
 
     if( empty( $keywords ) )
     {
-      $query = $project->orderBy('created_at', 'desc');
-      if( $status !== 'all' )
-      {
-        $query = $project->where('project_status', $status)
-        ->orderBy('created_at', 'desc');
-      }
-    }
-    else
-    {
-      $query = $project->where('project_name', 'like', '%' . $keywords . '%')
+      $query = $project->where('dev_user_id', $devuser->dev_user_id)
       ->orderBy('created_at', 'desc');
       if( $status !== 'all' )
       {
         $query = $project->where([
           ['project_status', $status],
-          ['project_name', 'like', '%' . $keywords . '%']
+          ['dev_user_id', $devuser->dev_user_id]
+        ])
+        ->orderBy('created_at', 'desc');
+      }
+    }
+    else
+    {
+      $query = $project->where([
+        ['project_name', 'like', '%' . $keywords . '%'],
+        ['dev_user_id', $devuser->dev_user_id]
+      ])
+      ->orderBy('created_at', 'desc');
+      if( $status !== 'all' )
+      {
+        $query = $project->where([
+          ['project_status', $status],
+          ['project_name', 'like', '%' . $keywords . '%'],
+          ['dev_user_id', $devuser->dev_user_id]
         ])
         ->orderBy('created_at', 'desc');
       }

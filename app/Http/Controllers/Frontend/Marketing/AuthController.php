@@ -63,10 +63,10 @@ class AuthController extends Controller
 
   public function do_register( Request $request, MarketingUser $marketinguser )
   {
-    $fullname = $request->fullname;
-    $email = $request->email;
-    $username = $request->username;
-    $password = $request->password;
+    $fullname = $request->mkt_fullname;
+    $email = $request->mkt_email;
+    $username = $request->mkt_username;
+    $password = $request->mkt_password;
     $hash_password = md5( $password );
     $check_username = $marketinguser->where('mkt_username', $username);
     $check_email = $marketinguser->where('mkt_email', $email);

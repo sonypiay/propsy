@@ -30,3 +30,41 @@
     border-radius: 4px;
   }
 }
+
+@mixin signupbox_form() {
+  .signup-btn-tab, .signin-btn-tab {
+    @include fontsetting( $font-primary, 12px, 400, normal, normal, 0.4px );
+    text-transform: capitalize;
+    background: #f2f2f2;
+    color: #777777;
+    border-radius: 30px;
+    &:hover {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+  }
+  .signup-btn-tabactive, .signin-btn-tabactive {
+    background: $color3;
+    color: #ffffff;
+  }
+  .signup-form-mustcomplete {
+    @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+    color: #333333;
+  }
+  .signup-form-label, .signin-form-label {
+    @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+    color: #333333;
+  }
+  .signup-form-input, .signin-form-input {
+    border-radius: 4px;
+    @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+    color: #666666;
+    &:hover, &:focus { border: 1px solid $color3; }
+  }
+  .signup-form-submit, .signin-form-submit {
+    @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+    text-transform: capitalize;
+    background: $color3;
+    color: #ffffff;
+    border-radius: 4px;
+  }
+}

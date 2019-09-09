@@ -27,6 +27,36 @@ class MarketingController extends Controller
     }
   }
 
+  public function login_page( Request $request )
+  {
+    if( ! session()->has('isMarketing') )
+    {
+      $data = [
+        'request' => $request,
+      ];
+
+      return response()->view('frontend.pages.marketing.login', $data);
+    }
+    else
+    {
+      return redirect()->route('marketing_profile_page');
+    }
+  }
+
+  public function register_page( Request $request )
+  {
+    if( ! session()->has('isMarketing') )
+    {
+      $data = [ 'request' => $request ];
+
+      return response()->view('frontend.pages.marketing.register', $data);
+    }
+    else
+    {
+      return redirect()->route('marketing_profile_page');
+    }
+  }
+
   public function profile_page( Request $request, MarketingUser $marketinguser )
   {
     if( session()->has('isMarketing') )

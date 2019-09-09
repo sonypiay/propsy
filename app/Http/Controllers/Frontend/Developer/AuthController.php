@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Frontend\Developer;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use App\Database\DeveloperUser;
 use App\Http\Controllers\Controller;
 
@@ -63,13 +62,13 @@ class AuthController extends Controller
 
   public function do_register( Request $request, DeveloperUser $developeruser )
   {
-    $username = $request->username;
-    $password = $request->password;
-    $email = $request->email;
-    $ownername = $request->ownername;
-    $biography = $request->biography;
-    $name = $request->name;
-    $ownership = $request->ownership;
+    $username = $request->dev_username;
+    $password = $request->dev_password;
+    $email = $request->dev_email;
+    $ownername = $request->dev_ownername;
+    $biography = $request->dev_biography;
+    $name = $request->dev_name;
+    $ownership = $request->dev_ownership;
     $hash_password = md5( $password );
     $check_username = $developeruser->where('dev_username', $username);
     $check_email = $developeruser->where('dev_email', $email);

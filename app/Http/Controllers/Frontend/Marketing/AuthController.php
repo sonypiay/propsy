@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Frontend\Marketing;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades;
 use App\Database\MarketingUser;
 use App\Http\Controllers\Controller;
 
@@ -63,10 +62,10 @@ class AuthController extends Controller
 
   public function do_register( Request $request, MarketingUser $marketinguser )
   {
-    $fullname = $request->fullname;
-    $email = $request->email;
-    $username = $request->username;
-    $password = $request->password;
+    $fullname = $request->mkt_fullname;
+    $email = $request->mkt_email;
+    $username = $request->mkt_username;
+    $password = $request->mkt_password;
     $hash_password = md5( $password );
     $check_username = $marketinguser->where('mkt_username', $username);
     $check_email = $marketinguser->where('mkt_email', $email);
@@ -114,7 +113,7 @@ class AuthController extends Controller
   {
     if( session()->has('isMarketing') )
     {
-      session()->forget('mkt_user_id');
+      session()->forget('isMarketing');
       session()->forget('mkt_user_id');
       session()->forget('mkt_email');
       session()->forget('mkt_login_date');

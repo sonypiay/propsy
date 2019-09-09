@@ -1,8 +1,8 @@
 @extends('frontend.master')
-@section('tag_title', 'Manajemen Properti')
+@section('tag_title', 'Manajemen Properti Syariah')
 @section('main_content')
 <div id="app">
-  <div id="modal-login" class="uk-modal-full" uk-modal="esc-close: false">
+  <!--<div id="modal-login" class="uk-modal-full" uk-modal="esc-close: false">
     <div class="uk-modal-dialog uk-modal-body uk-height-viewport modal-login">
       <a class="uk-modal-close-full uk-close-large" uk-close></a>
       <modal-login-component />
@@ -13,7 +13,7 @@
       <a class="uk-modal-close-full uk-close-large" uk-close></a>
       <modal-signup-component />
     </div>
-  </div>
+  </div>-->
   <div class="uk-cover-container banner-homepage">
     <canvas width="300" height="400"></canvas>
     <img src="{{ asset('images/banner/homepage2.jpg') }}" alt="" uk-cover>
@@ -39,36 +39,7 @@
       </div>
     </div>
   </div>
-  <div class="uk-margin-large-top uk-card uk-card-body uk-card-large hpmg-listproject">
-    <div class="uk-container">
-      <div class="uk-margin-large-bottom hpmg-listproject-heading">Proyek Pengembang yang Tersedia</div>
-      <div uk-slider="center: true">
-        <div class="uk-position-relative uk-visible-toggle uk-dark" tabindex="-1">
-          <ul class="uk-slider-items uk-child-width-1-3@s uk-grid">
-            @for( $i = 0; $i < 10; $i++ )
-            <li>
-              <div class="uk-card uk-card-default uk-card-small">
-                <div class="uk-card-media-top">
-                  <img src="{{ asset('images/banner/homepage1.jpg') }}" alt="">
-                </div>
-                <div class="uk-card-body">
-                  <h3 class="uk-card-title">Headline</h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
-                </div>
-              </div>
-            </li>
-            @endfor
-          </ul>
-          <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slider-item="previous"></a>
-          <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slider-item="next"></a>
-        </div>
-        <ul class="uk-slider-nav uk-dotnav uk-flex-center uk-margin"></ul>
-      </div>
-      <div class="uk-text-center">
-        <a class="uk-margin-top uk-button uk-button-primary browse_project_btn">Lihat Proyek Lainnya</a>
-      </div>
-    </div>
-  </div>
+  <homepage-available-project :session_user="{{ json_encode( $session_user ) }}" />
 </div>
 <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
 @endsection

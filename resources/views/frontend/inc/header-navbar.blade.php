@@ -6,8 +6,22 @@
           <img src="{{ asset('images/brand/logo_maps_primary.png') }}" alt="maps">
         </a>
         <ul class="uk-navbar-nav main-nav">
-          <li><a href="#">Menjadi Pengembang</a></li>
-          <li><a href="#">Menjadi Marketing</a></li>
+          <li><a href="#">Pengembang</a>
+            <div class="uk-navbar-dropdown">
+              <ul class="uk-nav uk-navbar-dropdown-nav">
+                <li><a href="#">Daftar</a></li>
+                <li><a href="#">Login</a></li>
+              </ul>
+            </div>
+          </li>
+          <li><a href="#">Marketing</a>
+            <div class="uk-navbar-dropdown">
+              <ul class="uk-nav uk-navbar-dropdown-nav">
+                <li><a href="#">Daftar</a></li>
+                <li><a href="#">Login</a></li>
+              </ul>
+            </div>
+          </li>
         </ul>
       </div>
       <div class="uk-navbar-right">

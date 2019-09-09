@@ -5,22 +5,26 @@ namespace App\Http\Controllers\Frontend;
 use Illuminate\Http\Request;
 use App\Database\DeveloperUser;
 use App\Database\MarketingUser;
+use App\Database\Customer;
 use App\Http\Controllers\Controller;
 
 class HomepageController extends Controller
 {
-  public function index( Request $request, DeveloperUser $developeruser, MarketingUser $marketinguser )
+  public function index( Request $request, DeveloperUser $developeruser, MarketingUser $marketinguser, Customer $customer )
   {
     $data['request'] = $request;
+    $data['session_user'] = null;
     if( session()->has('isMarketing') )
     {
-      $mktuser = $marketinguser->getinfo();
-      $data['session_user'] = $mktuser;
+      $data['session_user'] = $marketinguser->getinfo();
+    }
+    else if( session()->has('isDeveloper') )
+    {
+      $data['session_user'] = $developeruser->getinfo();
     }
     else
     {
-      $devuser = $developeruser->getinfo();
-      $data['session_user'] = $devuser;
+      $data['session_user'] = $customer->getinfo();
     }
 
     return response()->view('frontend.pages.homepage', $data)
@@ -28,19 +32,19 @@ class HomepageController extends Controller
     ->header('Accepts', 'text/html');
   }
 
-  public function signup_page( Request $request )
+  public function browse_project( Request $request, Customer $customer )
   {
-    if( session()->has('isDeveloper')  || session()->has('isMarketing') )
+    $data['session_user'] = null;
+    if( session()->has('isDeveloper') ) { return redirect()->route('developer_dashboard_page'); }
+    else if( session()->has('isMarketing') ) { return redirect()->route('marketing_dashboard_page'); }
+    else
     {
-      return redirect()->route('homepage');
+      $data['request'] = $request;
+      if( session()->has('isCustomer') ) $data['session_user'] = $customer->getinfo();
+
+      return response()->view('frontend.pages.homepage', $data)
+      ->header('Content-Type', 'text/html')
+      ->header('Accepts', 'text/html');
     }
-
-    $data = [
-      'request' => $request
-    ];
-
-    return response()->view('frontend.pages.homepage')
-    ->header('Content-Type', 'text/html')
-    ->header('Accepts', 'text/html');
   }
 }

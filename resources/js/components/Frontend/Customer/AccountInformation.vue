@@ -20,7 +20,7 @@
       <div class="uk-width-1-2">
         <label class="uk-form-label content-form-label">No. Handphone / Whatsapp </label>
         <div class="uk-form-controls">
-          <input type="text" v-model="forms.mobile_phone" class="uk-input content-form-input">
+          <input type="text" v-model="forms.phone_number" class="uk-input content-form-input">
         </div>
       </div>
       <div class="uk-width-1-2">

@@ -1,29 +1,45 @@
 <template>
   <div>
-    <div class="uk-margin-large-top uk-card uk-card-body uk-card-large hpmg-listproject">
+    <div class="uk-margin-large-top uk-padding-large hmpg-listproject">
       <div class="uk-container">
-        <div class="uk-margin-large-bottom hpmg-listproject-heading">Proyek Pengembang yang Tersedia</div>
-          <div uk-slider="center: true">
+        <div class="uk-margin-bottom hmpg-listproject-heading">Proyek Pengembang yang Tersedia</div>
+          <div class="uk-padding hmpg-slider-project" uk-slider>
             <div class="uk-position-relative uk-visible-toggle uk-dark" tabindex="-1">
-              <ul class="uk-slider-items uk-child-width-1-3@s uk-grid">
-                <li v-for="n in 10">
-                  <div class="uk-card uk-card-default uk-card-small">
+              <ul class="uk-slider-items uk-child-width-1-3@xl uk-child-width-1-3@l uk-child-width-1-3@m uk-child-width-1-2@s uk-grid uk-grid-match">
+                <li v-for="p in projects.results">
+                  <div class="uk-card uk-card-default hmpg-avail-project">
                     <div class="uk-card-media-top">
-                      <div class="uk-cover-container">
-                        <img :src="$root.url + '/images/banner/homepage1.jpg'" alt="" uk-cover>
+                      <div v-if="p.project_thumbnail === null" class="uk-background-cover uk-panel hmpg-card-noimage" :style="{'background-image': 'url(' + $root.url + '/images/banner/homepage2.jpg'}">
+                        <div class="uk-overlay uk-overlay-primary uk-position-cover uk-light hmpg-card-overlay">
+                          <div class="uk-position-center">
+                            <p>{{ p.dev_name }}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div v-else class="uk-background-cover uk-panel hmpg-card-withimage" :style="{'background-image': 'url(' + $root.url + '/images/project/gallery/' + p.project_thumbnail + ')'}">
+                        <div class="uk-overlay uk-overlay-primary uk-position-cover uk-light hmpg-card-overlay">
+                          <div class="uk-position-center">
+                            <p>{{ p.dev_name }}</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div class="uk-card-body">
-                      <h3 class="uk-card-title">Headline</h3>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+                      <a :href="$root.url + '/project/view/' + p.project_slug" class="uk-card-title hmpg-card-title">{{ p.project_name }}</a>
+                      <div class="hmpg-card-meta">{{ $root.formatDate( p.created_at, 'DD MMMM YYYY' ) }}</div>
+                      <div class="uk-text-truncate uk-margin-top hmpg-card-content">
+                        {{ p.project_description }}
+                      </div>
                     </div>
                   </div>
                 </li>
               </ul>
-              <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slider-item="previous"></a>
-              <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slider-item="next"></a>
             </div>
-            <ul class="uk-slider-nav uk-dotnav uk-flex-center uk-margin"></ul>
+            <div class="uk-margin-top uk-flex uk-flex-center">
+              <a class="uk-hidden-hover" href="#" uk-slidenav-previous uk-slider-item="previous"></a>
+              <a class="uk-hidden-hover" href="#" uk-slidenav-next uk-slider-item="next"></a>
+            </div>
+            <!--<ul class="uk-slider-nav uk-dotnav uk-flex-center uk-margin"></ul>-->
           </div>
           <div class="uk-text-center">
             <a class="uk-margin-top uk-button uk-button-primary browse_project_btn">Lihat Proyek Lainnya</a>
@@ -39,10 +55,26 @@ export default {
   props: ['session_user'],
   data() {
     return {
-
+      projects: {
+        total: 0,
+        results: []
+      }
     }
   },
-  methods: {},
-  mounted() {}
+  methods: {
+    getAvailableProject()
+    {
+      axios.get( this.$root.url + '/project/available' ).then( res => {
+        let result = res.data;
+        this.projects.total = result.results.total;
+        this.projects.results = result.results.data;
+      }).catch( err => {
+        console.log( err.response.statusText );
+      });
+    }
+  },
+  mounted() {
+    this.getAvailableProject();
+  }
 }
 </script>

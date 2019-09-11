@@ -50,6 +50,32 @@ CREATE TABLE `area_level` (
 
 insert  into `area_level`(`area_level_id`,`area_level_name`) values (1,'Provinsi'),(2,'Kabupaten Kota'),(3,'Kecamatan'),(4,'Kelurahan/Desa');
 
+/*Table structure for table `customer` */
+
+DROP TABLE IF EXISTS `customer`;
+
+CREATE TABLE `customer` (
+  `customer_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `customer_name` varchar(128) NOT NULL,
+  `customer_email` varchar(128) NOT NULL,
+  `customer_address` text DEFAULT NULL,
+  `customer_region` int(10) unsigned DEFAULT NULL,
+  `customer_city` int(10) unsigned DEFAULT NULL,
+  `customer_phone_number` varchar(16) NOT NULL,
+  `customer_username` varchar(64) NOT NULL,
+  `customer_password` varchar(64) NOT NULL,
+  `customer_photo` varchar(128) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`customer_id`),
+  UNIQUE KEY `customer_email` (`customer_email`),
+  UNIQUE KEY `customer_username` (`customer_username`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+/*Data for the table `customer` */
+
+insert  into `customer`(`customer_id`,`customer_name`,`customer_email`,`customer_address`,`customer_region`,`customer_city`,`customer_phone_number`,`customer_username`,`customer_password`,`customer_photo`,`created_at`,`updated_at`) values (1,'Sony Darmawan','sonypiay@mail.com','Jl. Intan Baiduri No. 28',6,189,'08561969052','sonypiay','a7cd37b2baf026c26c77fd7f2408296d','Ivx9owh1IdrmIvdK9ZhewBVq6sy9kHlyQ4PcPtMX.jpeg','2019-09-09 22:59:08','2019-09-09 23:21:54');
+
 /*Table structure for table `developer_user` */
 
 DROP TABLE IF EXISTS `developer_user`;
@@ -75,11 +101,11 @@ CREATE TABLE `developer_user` (
   PRIMARY KEY (`dev_user_id`),
   UNIQUE KEY `dev_username` (`dev_username`),
   UNIQUE KEY `dev_email` (`dev_email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 /*Data for the table `developer_user` */
 
-insert  into `developer_user`(`dev_user_id`,`dev_name`,`dev_ownername`,`dev_slug`,`dev_address`,`dev_city`,`dev_region`,`dev_username`,`dev_password`,`dev_email`,`dev_biography`,`dev_phone_office`,`dev_mobile_phone`,`dev_ownership`,`dev_logo`,`created_at`,`updated_at`) values (1,'Biznet Networks','Adi Saputra Kusma','biznet-networks','MidPlaza 2, 8th Floor  Jl. Jend. Sudirman 10-11 Jakarta 10220 - Indonesia',189,6,'biznetnetworks','a7cd37b2baf026c26c77fd7f2408296d','adi_kusma@biznetnetworks.com','Biznet merupakan perusahaan yang fokus di bidang telekomunikasi dan multimedia, yang memiliki komitmen untuk membangun infrastruktur modern dengan tujuan mengurangi kesenjangan digital Indonesia dengan negara berkembang lainnya. Biznet memiliki dan mengoperasikan jaringan Fiber Optic tercanggih dan data center terbesar di Indonesia.','+62-21-57998888','+62-855-1998888','perusahaan','cBbcjyEWsfd0CZ3BVltEY7hcCDGoXPkcYz48tC08.png','2019-08-29 16:27:53','2019-08-29 17:25:26');
+insert  into `developer_user`(`dev_user_id`,`dev_name`,`dev_ownername`,`dev_slug`,`dev_address`,`dev_city`,`dev_region`,`dev_username`,`dev_password`,`dev_email`,`dev_biography`,`dev_phone_office`,`dev_mobile_phone`,`dev_ownership`,`dev_logo`,`created_at`,`updated_at`) values (1,'Biznet Networks','Adi Saputra Kusma','biznet-networks','MidPlaza 2, 8th Floor  Jl. Jend. Sudirman 10-11 Jakarta 10220 - Indonesia',189,6,'biznetnetworks','a7cd37b2baf026c26c77fd7f2408296d','adi_kusma@biznetnetworks.com','Biznet merupakan perusahaan yang fokus di bidang telekomunikasi dan multimedia, yang memiliki komitmen untuk membangun infrastruktur modern dengan tujuan mengurangi kesenjangan digital Indonesia dengan negara berkembang lainnya. Biznet memiliki dan mengoperasikan jaringan Fiber Optic tercanggih dan data center terbesar di Indonesia.','+62-21-57998888','+62-855-1998888','perusahaan','cBbcjyEWsfd0CZ3BVltEY7hcCDGoXPkcYz48tC08.png','2019-08-29 16:27:53','2019-08-29 17:25:26'),(2,'PT Maju Kena Mundur Kena','Udin Sedunia','pt-maju-kena-mundur-kena',NULL,188,6,'sonypiay','d5f3b4c238382e41fbe4b404e882cc73','sonypiay@mail.com','Lorem ipsum dolor sit amet','021','0792886178','perusahaan',NULL,'2019-09-09 20:22:22','2019-09-09 20:22:58'),(3,'PT Maju Tak Gentar','Himawan Achmadi','pt-maju-tak-gentar',NULL,192,6,'himawan','25d55ad283aa400af464c76d713c07ad','himawan@maps.com',NULL,'021','0856','individu',NULL,'2019-09-09 21:25:05','2019-09-09 21:25:41'),(4,'PT Keuangan Sejati','Akhmad Syarifudin','pt-keuangan-sejati',NULL,502,3,'akhmad_syarifudin','dd9d21e22391090ddce7c6ed58c6412d','jl.pesutno14@gmail.com','Hai',NULL,NULL,'individu',NULL,'2019-09-09 21:26:37','2019-09-09 21:27:01');
 
 /*Table structure for table `marketing_user` */
 
@@ -103,11 +129,11 @@ CREATE TABLE `marketing_user` (
   PRIMARY KEY (`mkt_user_id`),
   UNIQUE KEY `mkt_username` (`mkt_username`),
   UNIQUE KEY `mkt_email` (`mkt_email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `marketing_user` */
 
-insert  into `marketing_user`(`mkt_user_id`,`mkt_fullname`,`mkt_email`,`mkt_username`,`mkt_password`,`mkt_phone_number`,`mkt_mobile_phone`,`mkt_city`,`mkt_region`,`mkt_address`,`mkt_biography`,`mkt_profile_photo`,`created_at`,`updated_at`) values (1,'Diwantara Anugerah Putra','diwantara@gmail.com','diwantara','d5f3b4c238382e41fbe4b404e882cc73','0212995588','08561969052',502,3,'Perumahan Japos','Youtuber gamer ganteng idaman. Kungkingkangkingking','87dTWKb1cT4gs1UUMuQACYWanaBNt8cxNxSJnHKw.jpeg','2019-08-27 21:45:27','2019-08-29 19:37:04'),(2,'Sony Darmawan','sonypiay@mail.com','sonypiay','d5f3b4c238382e41fbe4b404e882cc73',NULL,NULL,NULL,NULL,NULL,NULL,'dIrpUIzvO0mvsOOavXmwtwYhbSAnJxKphk2zndH9.jpeg','2019-08-28 16:24:34','2019-08-28 17:26:00');
+insert  into `marketing_user`(`mkt_user_id`,`mkt_fullname`,`mkt_email`,`mkt_username`,`mkt_password`,`mkt_phone_number`,`mkt_mobile_phone`,`mkt_city`,`mkt_region`,`mkt_address`,`mkt_biography`,`mkt_profile_photo`,`created_at`,`updated_at`) values (1,'Diwantara Anugerah Putra','diwantara@gmail.com','diwantara','d5f3b4c238382e41fbe4b404e882cc73','0212995588','08561969052',502,3,'Perumahan Japos','Youtuber gamer ganteng idaman. Kungkingkangkingking','87dTWKb1cT4gs1UUMuQACYWanaBNt8cxNxSJnHKw.jpeg','2019-08-27 21:45:27','2019-08-29 19:37:04'),(2,'Sony Darmawan','sonypiay@mail.com','sonypiay','d5f3b4c238382e41fbe4b404e882cc73','021',NULL,189,6,NULL,NULL,'dIrpUIzvO0mvsOOavXmwtwYhbSAnJxKphk2zndH9.jpeg','2019-08-28 16:24:34','2019-09-08 22:58:47'),(3,'Yoshika Kudo','kyabechi_@gmail.com','kyabechi_','25d55ad283aa400af464c76d713c07ad',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2019-09-09 22:09:28','2019-09-09 22:14:02');
 
 /*Table structure for table `project_gallery` */
 
@@ -123,11 +149,11 @@ CREATE TABLE `project_gallery` (
   PRIMARY KEY (`gallery_id`),
   KEY `fk_gallery_project_idx` (`project_id`),
   CONSTRAINT `fk_gallery_project_idx` FOREIGN KEY (`project_id`) REFERENCES `project_list` (`project_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_gallery` */
 
-insert  into `project_gallery`(`gallery_id`,`gallery_filename`,`gallery_description`,`project_id`,`created_at`,`updated_at`) values (1,'OxXSm8IJYohYuh0dY1K4I3KmxPjR4i5IaQT5Keze.jpeg',NULL,6,'2019-09-01 23:05:41','2019-09-01 23:05:41'),(2,'naNYXkJOEP3tpEvw8vdGx05W9buSommle9TOJHmT.jpeg',NULL,6,'2019-09-01 23:10:03','2019-09-01 23:10:03'),(7,'C7nV4KjDLQLhCaoawgafsxaKzOIRzY1Cmz0VqMFW.jpeg',NULL,6,'2019-09-01 23:14:10','2019-09-01 23:14:10'),(9,'LajcJ1iWzCmipjMZgrkCNY6dV53aGrG3cYIMjJTV.jpeg',NULL,6,'2019-09-01 23:15:21','2019-09-01 23:15:21'),(11,'gYjulvZYrCyg1ZlN4RWL3ixLqv67C8QU0DCUXjl1.jpeg',NULL,4,'2019-09-02 00:12:06','2019-09-02 00:12:06'),(12,'AMSI7Qbay12OgwA3nzwzwJcqkM4eSWBtLqOZ8NWV.jpeg',NULL,4,'2019-09-02 00:12:17','2019-09-02 00:12:17');
+insert  into `project_gallery`(`gallery_id`,`gallery_filename`,`gallery_description`,`project_id`,`created_at`,`updated_at`) values (1,'OxXSm8IJYohYuh0dY1K4I3KmxPjR4i5IaQT5Keze.jpeg',NULL,6,'2019-09-01 23:05:41','2019-09-01 23:05:41'),(2,'naNYXkJOEP3tpEvw8vdGx05W9buSommle9TOJHmT.jpeg',NULL,6,'2019-09-01 23:10:03','2019-09-01 23:10:03'),(7,'C7nV4KjDLQLhCaoawgafsxaKzOIRzY1Cmz0VqMFW.jpeg',NULL,6,'2019-09-01 23:14:10','2019-09-01 23:14:10'),(9,'LajcJ1iWzCmipjMZgrkCNY6dV53aGrG3cYIMjJTV.jpeg',NULL,6,'2019-09-01 23:15:21','2019-09-01 23:15:21'),(11,'gYjulvZYrCyg1ZlN4RWL3ixLqv67C8QU0DCUXjl1.jpeg',NULL,4,'2019-09-02 00:12:06','2019-09-02 00:12:06'),(12,'AMSI7Qbay12OgwA3nzwzwJcqkM4eSWBtLqOZ8NWV.jpeg',NULL,4,'2019-09-02 00:12:17','2019-09-02 00:12:17'),(23,'GvNKpdC6JhOvM5GTwxJ4ax7PDM8w8JDX7pjbb6Eo.jpeg',NULL,3,'2019-09-11 18:49:58','2019-09-11 18:49:58');
 
 /*Table structure for table `project_list` */
 
@@ -150,11 +176,11 @@ CREATE TABLE `project_list` (
   PRIMARY KEY (`project_id`),
   KEY `fk_project_dev_idx` (`dev_user_id`),
   CONSTRAINT `fk_project_dev_idx` FOREIGN KEY (`dev_user_id`) REFERENCES `developer_user` (`dev_user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_list` */
 
-insert  into `project_list`(`project_id`,`project_name`,`project_slug`,`project_thumbnail`,`project_description`,`project_address`,`project_city`,`project_region`,`project_gmaps`,`project_status`,`dev_user_id`,`created_at`,`updated_at`) values (3,'Pulau Reklamasi B','pulau-reklamasi-b',NULL,'Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.','Ecovention Building - Ecopark, Jalan Lodan Timur No 7 Ancol Taman Impian, Jakarta Utara',192,6,NULL,'booked',1,'2019-09-01 13:57:21','2019-09-03 20:52:10'),(4,'Pulau Reklamasi A','pulau-reklamasi-a','gYjulvZYrCyg1ZlN4RWL3ixLqv67C8QU0DCUXjl1.jpeg','Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.','Ecovention Building - Ecopark, Jalan Lodan Timur No 7 Ancol Taman Impian, Jakarta Utara',192,6,NULL,'available',1,'2019-09-01 13:59:55','2019-09-03 20:52:02'),(6,'Pulau Reklamasi D','pulau-reklamasi-d','naNYXkJOEP3tpEvw8vdGx05W9buSommle9TOJHmT.jpeg','Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.','Ecovention Building - Ecopark, Jalan Lodan Timur No 7 Ancol Taman Impian, Jakarta Utara',192,6,NULL,'sold',1,'2019-09-01 14:04:29','2019-09-03 20:51:34');
+insert  into `project_list`(`project_id`,`project_name`,`project_slug`,`project_thumbnail`,`project_description`,`project_address`,`project_city`,`project_region`,`project_gmaps`,`project_status`,`dev_user_id`,`created_at`,`updated_at`) values (3,'Pulau Reklamasi B','pulau-reklamasi-b','GvNKpdC6JhOvM5GTwxJ4ax7PDM8w8JDX7pjbb6Eo.jpeg','Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.','Ecovention Building - Ecopark, Jalan Lodan Timur No 7 Ancol Taman Impian, Jakarta Utara',192,6,'<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63462.898441197925!2d106.80337266040566!3d-6.206721468083562!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f402fe018b95%3A0x685821fadce7f2fa!2sBiznet%20Sudirman!5e0!3m2!1sid!2sid!4v1568187370364!5m2!1sid!2sid\" width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0;\" allowfullscreen=\"\"></iframe>','available',1,'2019-09-01 13:57:21','2019-09-11 18:50:06'),(4,'Pulau Reklamasi A','pulau-reklamasi-a','gYjulvZYrCyg1ZlN4RWL3ixLqv67C8QU0DCUXjl1.jpeg','Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.','Ecovention Building - Ecopark, Jalan Lodan Timur No 7 Ancol Taman Impian, Jakarta Utara',192,6,'<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63462.898441197925!2d106.80337266040566!3d-6.206721468083562!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f402fe018b95%3A0x685821fadce7f2fa!2sBiznet%20Sudirman!5e0!3m2!1sid!2sid!4v1568187370364!5m2!1sid!2sid\" width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0;\" allowfullscreen=\"\"></iframe>','available',1,'2019-09-01 13:59:55','2019-09-11 14:54:46'),(6,'Pulau Reklamasi D','pulau-reklamasi-d','naNYXkJOEP3tpEvw8vdGx05W9buSommle9TOJHmT.jpeg','Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.','Ecovention Building - Ecopark, Jalan Lodan Timur No 7 Ancol Taman Impian, Jakarta Utara',192,6,'<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63462.898441197925!2d106.80337266040566!3d-6.206721468083562!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f402fe018b95%3A0x685821fadce7f2fa!2sBiznet%20Sudirman!5e0!3m2!1sid!2sid!4v1568187370364!5m2!1sid!2sid\" width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0;\" allowfullscreen=\"\"></iframe>','available',1,'2019-09-01 14:04:29','2019-09-11 16:27:33'),(8,'Proyek ABC','proyek-abc',NULL,'Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.','BSD',188,6,NULL,'available',2,'2019-09-09 20:27:22','2019-09-09 20:27:22');
 
 /*Table structure for table `project_marketing` */
 
@@ -175,6 +201,30 @@ CREATE TABLE `project_marketing` (
 
 /*Data for the table `project_marketing` */
 
+/*Table structure for table `project_request` */
+
+DROP TABLE IF EXISTS `project_request`;
+
+CREATE TABLE `project_request` (
+  `request_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `mkt_user_id` int(10) unsigned NOT NULL,
+  `customer_id` int(10) unsigned NOT NULL,
+  `project_unit_type_id` int(10) unsigned NOT NULL,
+  `request_note` text NOT NULL,
+  `status_request` enum('open','close') NOT NULL DEFAULT 'open',
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`request_id`),
+  KEY `fk_req_unit_type_idx` (`project_unit_type_id`),
+  KEY `fk_req_mkt_user_idx` (`mkt_user_id`),
+  KEY `fk_req_cust_idx` (`customer_id`),
+  CONSTRAINT `fk_req_cust_idx` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_req_mkt_user_idx` FOREIGN KEY (`mkt_user_id`) REFERENCES `marketing_user` (`mkt_user_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_req_unit_type_idx` FOREIGN KEY (`project_unit_type_id`) REFERENCES `project_unit_type` (`project_unit_type_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `project_request` */
+
 /*Table structure for table `project_unit` */
 
 DROP TABLE IF EXISTS `project_unit`;
@@ -190,11 +240,11 @@ CREATE TABLE `project_unit` (
   PRIMARY KEY (`project_unit_id`),
   KEY `fk_project_unit_project_idx` (`project_id`),
   CONSTRAINT `fk_project_unit_project_idx` FOREIGN KEY (`project_id`) REFERENCES `project_list` (`project_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_unit` */
 
-insert  into `project_unit`(`project_unit_id`,`project_unit_name`,`project_unit_number`,`project_unit_status`,`project_id`,`created_at`,`updated_at`) values (1,'Blok A',1,'available',4,'2019-09-03 19:53:52','2019-09-03 19:53:52'),(2,'Blok A',2,'available',4,'2019-09-03 19:53:52','2019-09-03 19:53:52'),(3,'Blok A',3,'available',4,'2019-09-03 19:53:52','2019-09-03 19:53:52'),(4,'Blok A',4,'available',4,'2019-09-03 19:53:52','2019-09-03 19:53:52'),(5,'Blok A',5,'available',4,'2019-09-03 19:53:52','2019-09-03 19:53:52'),(6,'Blok A',1,'available',6,'2019-09-03 22:51:30','2019-09-03 22:51:30'),(7,'Blok A',2,'available',6,'2019-09-03 22:51:30','2019-09-03 22:51:30');
+insert  into `project_unit`(`project_unit_id`,`project_unit_name`,`project_unit_number`,`project_unit_status`,`project_id`,`created_at`,`updated_at`) values (1,'Blok A',1,'available',4,'2019-09-03 19:53:52','2019-09-03 19:53:52'),(2,'Blok A',2,'available',4,'2019-09-03 19:53:52','2019-09-03 19:53:52'),(3,'Blok A',3,'available',4,'2019-09-03 19:53:52','2019-09-03 19:53:52'),(4,'Blok A',4,'available',4,'2019-09-03 19:53:52','2019-09-03 19:53:52'),(5,'Blok A',5,'available',4,'2019-09-03 19:53:52','2019-09-03 19:53:52'),(6,'Blok A',1,'available',6,'2019-09-03 22:51:30','2019-09-03 22:51:30'),(7,'Blok A',2,'available',6,'2019-09-03 22:51:30','2019-09-03 22:51:30'),(18,'Blok A',1,'available',3,'2019-09-08 20:46:42','2019-09-08 20:47:26'),(19,'Blok ABC',1,'available',8,'2019-09-09 20:27:41','2019-09-09 20:27:41'),(20,'Blok ABC',3,'available',8,'2019-09-09 20:30:36','2019-09-09 20:33:40'),(21,'Blok ABC',2,'available',8,'2019-09-09 20:30:46','2019-09-09 20:30:46');
 
 /*Table structure for table `project_unit_installment` */
 
@@ -211,11 +261,11 @@ CREATE TABLE `project_unit_installment` (
   PRIMARY KEY (`installment_id`),
   KEY `fk_installment_unit_type_id` (`project_unit_type_id`),
   CONSTRAINT `fk_installment_unit_type_id` FOREIGN KEY (`project_unit_type_id`) REFERENCES `project_unit_type` (`project_unit_type_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_unit_installment` */
 
-insert  into `project_unit_installment`(`installment_id`,`installment_dp`,`installment_price`,`installment_tenor`,`project_unit_type_id`,`created_at`,`updated_at`) values (5,175000000,5000000,132,8,'2019-09-04 21:27:58','2019-09-04 21:46:01'),(6,300000000,2500000,156,9,'2019-09-04 21:47:27','2019-09-04 21:48:08');
+insert  into `project_unit_installment`(`installment_id`,`installment_dp`,`installment_price`,`installment_tenor`,`project_unit_type_id`,`created_at`,`updated_at`) values (5,175000000,3500000,192,8,'2019-09-04 21:27:58','2019-09-11 18:33:52'),(6,300000000,2500000,156,9,'2019-09-04 21:47:27','2019-09-04 21:48:08'),(7,5000000,2200000,24,10,'2019-09-08 20:49:30','2019-09-08 20:57:09'),(8,5000000,2000000,60,11,'2019-09-08 20:51:41','2019-09-08 20:53:40'),(9,8000000,3000000,36,11,'2019-09-08 20:54:00','2019-09-08 20:54:00'),(10,6500000,2500000,48,11,'2019-09-08 20:54:34','2019-09-08 20:55:49'),(11,7500000,3700000,12,10,'2019-09-08 20:56:40','2019-09-08 20:56:56'),(12,225000000,9250000,72,8,'2019-09-11 18:31:39','2019-09-11 18:32:18'),(13,200000000,5000000,144,8,'2019-09-11 18:32:46','2019-09-11 18:33:07'),(14,500000000,5500000,72,8,'2019-09-11 18:34:19','2019-09-11 18:34:27'),(15,350000000,6000000,108,20,'2019-09-11 18:35:22','2019-09-11 18:35:36'),(16,750000000,6600000,36,20,'2019-09-11 18:36:05','2019-09-11 18:42:50');
 
 /*Table structure for table `project_unit_type` */
 
@@ -235,11 +285,35 @@ CREATE TABLE `project_unit_type` (
   PRIMARY KEY (`project_unit_type_id`),
   KEY `fk_unit_type_project_unit_id` (`project_unit_id`),
   CONSTRAINT `fk_unit_type_project_unit_id` FOREIGN KEY (`project_unit_id`) REFERENCES `project_unit` (`project_unit_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_unit_type` */
 
-insert  into `project_unit_type`(`project_unit_type_id`,`unit_floor`,`unit_lb`,`unit_lt`,`unit_kt`,`unit_km`,`unit_price`,`project_unit_id`,`created_at`,`updated_at`) values (8,2,50,100,3,2,800000000,6,'2019-09-04 21:26:38','2019-09-04 21:26:38'),(9,1,30,60,3,1,680000000,6,'2019-09-04 21:46:43','2019-09-04 21:46:43');
+insert  into `project_unit_type`(`project_unit_type_id`,`unit_floor`,`unit_lb`,`unit_lt`,`unit_kt`,`unit_km`,`unit_price`,`project_unit_id`,`created_at`,`updated_at`) values (8,2,50,100,3,2,800000000,6,'2019-09-04 21:26:38','2019-09-04 21:26:38'),(9,1,30,60,3,1,680000000,6,'2019-09-04 21:46:43','2019-09-04 21:46:43'),(10,1,50,100,2,2,50000000,18,'2019-09-08 20:48:08','2019-09-08 20:48:26'),(11,1,60,80,3,1,100000000,18,'2019-09-08 20:51:03','2019-09-08 20:52:45'),(12,2,40,60,3,2,800000000,19,'2019-09-09 20:28:13','2019-09-09 20:28:13'),(13,2,60,100,4,2,1000000000,19,'2019-09-09 20:29:23','2019-09-09 20:29:23'),(14,3,100,100,5,3,2000000000,21,'2019-09-09 20:31:19','2019-09-09 20:31:19'),(15,1,50,80,4,2,750000000,21,'2019-09-09 20:31:59','2019-09-09 20:31:59'),(16,1,30,50,3,1,480000000,21,'2019-09-09 20:32:24','2019-09-09 20:32:24'),(17,1,40,60,3,2,650000000,20,'2019-09-09 20:34:14','2019-09-09 20:34:14'),(18,2,60,80,3,2,870000000,20,'2019-09-09 20:34:42','2019-09-09 20:34:42'),(19,3,100,100,5,3,1500000000,20,'2019-09-09 20:35:09','2019-09-09 20:35:09'),(20,2,30,50,3,2,986000000,6,'2019-09-11 18:31:04','2019-09-11 18:31:04'),(21,1,40,60,3,1,650000000,7,'2019-09-11 18:43:20','2019-09-11 18:43:20'),(22,1,40,60,2,1,450000000,7,'2019-09-11 18:43:58','2019-09-11 18:43:58'),(23,2,40,60,4,2,860000000,7,'2019-09-11 18:44:16','2019-09-11 18:44:16'),(24,1,30,80,3,1,650000000,1,'2019-09-11 18:45:06','2019-09-11 18:45:06'),(25,3,60,100,5,3,1500000000,1,'2019-09-11 18:45:25','2019-09-11 18:45:25'),(26,2,50,100,4,2,980000000,1,'2019-09-11 18:45:47','2019-09-11 18:45:47'),(27,2,40,60,4,2,785600000,2,'2019-09-11 18:46:16','2019-09-11 18:46:16'),(28,2,60,100,4,2,880000000,3,'2019-09-11 18:46:46','2019-09-11 18:46:46'),(29,2,50,70,4,1,680000000,3,'2019-09-11 18:47:10','2019-09-11 18:47:10'),(30,2,75,90,4,2,900000000,3,'2019-09-11 18:47:38','2019-09-11 18:47:38'),(31,2,40,60,4,2,750000000,4,'2019-09-11 18:48:10','2019-09-11 18:48:10'),(32,1,40,50,2,1,350000000,5,'2019-09-11 18:48:31','2019-09-11 18:48:31'),(33,1,40,50,3,1,460000000,5,'2019-09-11 18:48:59','2019-09-11 18:48:59');
+
+/*Table structure for table `survey_schedule` */
+
+DROP TABLE IF EXISTS `survey_schedule`;
+
+CREATE TABLE `survey_schedule` (
+  `survey_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `survey_date` datetime NOT NULL,
+  `mkt_user_id` int(10) unsigned NOT NULL,
+  `customer_id` int(10) unsigned NOT NULL,
+  `request_id` int(10) unsigned NOT NULL,
+  `status_survey` enum('open','close') NOT NULL DEFAULT 'open',
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`survey_id`),
+  KEY `fk_survey_req_idx` (`request_id`),
+  KEY `fk_survey_mkt_user_idx` (`mkt_user_id`),
+  KEY `fk_survey_cust_idx` (`customer_id`),
+  CONSTRAINT `fk_survey_cust_idx` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`),
+  CONSTRAINT `fk_survey_mkt_user_idx` FOREIGN KEY (`mkt_user_id`) REFERENCES `marketing_user` (`mkt_user_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_survey_req_idx` FOREIGN KEY (`request_id`) REFERENCES `project_request` (`request_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `survey_schedule` */
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

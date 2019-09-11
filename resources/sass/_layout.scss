@@ -156,8 +156,8 @@ html, body {
 }
 
 // homepage list project
-.hpmg-listproject {
-  .hpmg-listproject-heading {
+.hmpg-listproject {
+  .hmpg-listproject-heading {
     @include fontsetting( $font-primary, 28px, 600, normal, normal, 0.4px );
     color: #666666;
     text-align: center;
@@ -169,6 +169,33 @@ html, body {
     text-transform: capitalize;
     border-radius: 4px;
     box-shadow: 0 4px 8px 2px rgba(0,0,0,0.1);
+  }
+  .hmpg-slider-project { min-height: 300px; }
+  .hmpg-avail-project {
+    border: 1px solid #f2f2f2;
+    box-shadow: none;
+    .hmpg-card-noimage {
+      color: #333333;
+      height: 250px;
+    }
+    .hmpg-card-withimage { height: 250px; }
+    .hmpg-card-overlay {
+      @include fontsetting( $font-secondary, 20px, 400, normal, normal, 0.4px );
+      color: #ffffff;
+    }
+    .hmpg-card-title {
+      @include fontsetting( $font-primary, 20px, 600, normal, normal, 0.4px );
+      color: $color3;
+      text-decoration: none;
+    }
+    .hmpg-card-meta {
+      @include fontsetting( $font-primary, 11px, 400, normal, normal, 0.4px );
+      color: #777777;
+    }
+    .hmpg-card-content {
+      @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+      color: #555555;
+    }
   }
 }
 
@@ -291,6 +318,69 @@ html, body {
             }
           }
         }
+      }
+    }
+  }
+}
+
+.sidebar-dev-info {
+  border: 1px solid #e9e9e9;
+  .sidebar-dev-logo {}
+  .sidebar-dev-profile {
+    text-align: center;
+    .dev-profile-name {
+      color: #333333;
+      @include fontsetting( $font-primary, 18px, 600, normal, normal, 0.4px );
+      text-decoration: none;
+      &:hover { color: $color3; }
+    }
+    .dev-profile-region {
+      color: #888888;
+      @include fontsetting( $font-primary, 11px, 400, normal, normal, 0.4px );
+    }
+  }
+  .sidebar-viewproject {
+    background: #ffffff;
+    border: 1px solid $color3;
+    color: $color3;
+    border-radius: 4px;
+    text-transform: capitalize;
+    @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+    &:hover {
+      background: $color3;
+      color: #ffffff;
+    }
+  }
+}
+.container-projectinfo {
+  border: 1px solid #e9e9e9;
+  .container-projectheading {
+    border-bottom: 1px solid #e9e9e9;
+    @include fontsetting( $font-primary, 22px, 600, normal, normal, 0.4px );
+    color: #333333;
+  }
+  .container-projectbody {
+    .content-projectdetail {
+      .content-projectheading {
+        @include fontsetting( $font-primary, 16px, 600, normal, normal, 0.4px );
+        color: #555555;
+      }
+      .content-projectlead {
+        @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+        color: #777777;
+      }
+      .content-projectform {
+        @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+        color: #555555;
+        border-radius: 4px;
+        &:hover, &:focus { border: 1px solid $color3; }
+      }
+      .content-viewbutton {
+        background: $color3;
+        color: #ffffff;
+        border-radius: 4px;
+        @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+        text-transform: capitalize;
       }
     }
   }

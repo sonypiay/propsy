@@ -590,7 +590,7 @@ body {
   font-weight: 600 !important;
 }
 
-.hpmg-listproject .hpmg-listproject-heading {
+.hmpg-listproject .hmpg-listproject-heading {
   font-size: 28px;
   font-style: normal;
   font-stretch: normal;
@@ -601,7 +601,7 @@ body {
   text-align: center;
 }
 
-.hpmg-listproject .browse_project_btn {
+.hmpg-listproject .browse_project_btn {
   background: #1fc8c9;
   color: #ffffff;
   font-size: 16px;
@@ -613,6 +613,65 @@ body {
   text-transform: capitalize;
   border-radius: 4px;
   box-shadow: 0 4px 8px 2px rgba(0, 0, 0, 0.1);
+}
+
+.hmpg-listproject .hmpg-slider-project {
+  min-height: 300px;
+}
+
+.hmpg-listproject .hmpg-avail-project {
+  border: 1px solid #f2f2f2;
+  box-shadow: none;
+}
+
+.hmpg-listproject .hmpg-avail-project .hmpg-card-noimage {
+  color: #333333;
+  height: 250px;
+}
+
+.hmpg-listproject .hmpg-avail-project .hmpg-card-withimage {
+  height: 250px;
+}
+
+.hmpg-listproject .hmpg-avail-project .hmpg-card-overlay {
+  font-size: 20px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Nunito", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #ffffff;
+}
+
+.hmpg-listproject .hmpg-avail-project .hmpg-card-title {
+  font-size: 20px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #1fc8c9;
+  text-decoration: none;
+}
+
+.hmpg-listproject .hmpg-avail-project .hmpg-card-meta {
+  font-size: 11px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #777777;
+}
+
+.hmpg-listproject .hmpg-avail-project .hmpg-card-content {
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #555555;
 }
 
 .footer {
@@ -803,6 +862,122 @@ body {
 .dashboard-container .dashboard-content .dash-grid-box .grid-box-footer .grid-dropdown-nav ul li a:hover {
   color: #ffffff;
   background: #1fc8c9;
+}
+
+.sidebar-dev-info {
+  border: 1px solid #e9e9e9;
+}
+
+.sidebar-dev-info .sidebar-dev-profile {
+  text-align: center;
+}
+
+.sidebar-dev-info .sidebar-dev-profile .dev-profile-name {
+  color: #333333;
+  font-size: 18px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-decoration: none;
+}
+
+.sidebar-dev-info .sidebar-dev-profile .dev-profile-name:hover {
+  color: #1fc8c9;
+}
+
+.sidebar-dev-info .sidebar-dev-profile .dev-profile-region {
+  color: #888888;
+  font-size: 11px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+}
+
+.sidebar-dev-info .sidebar-viewproject {
+  background: #ffffff;
+  border: 1px solid #1fc8c9;
+  color: #1fc8c9;
+  border-radius: 4px;
+  text-transform: capitalize;
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+}
+
+.sidebar-dev-info .sidebar-viewproject:hover {
+  background: #1fc8c9;
+  color: #ffffff;
+}
+
+.container-projectinfo {
+  border: 1px solid #e9e9e9;
+}
+
+.container-projectinfo .container-projectheading {
+  border-bottom: 1px solid #e9e9e9;
+  font-size: 22px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #333333;
+}
+
+.container-projectinfo .container-projectbody .content-projectdetail .content-projectheading {
+  font-size: 16px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #555555;
+}
+
+.container-projectinfo .container-projectbody .content-projectdetail .content-projectlead {
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #777777;
+}
+
+.container-projectinfo .container-projectbody .content-projectdetail .content-projectform {
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #555555;
+  border-radius: 4px;
+}
+
+.container-projectinfo .container-projectbody .content-projectdetail .content-projectform:hover,
+.container-projectinfo .container-projectbody .content-projectdetail .content-projectform:focus {
+  border: 1px solid #1fc8c9;
+}
+
+.container-projectinfo .container-projectbody .content-projectdetail .content-viewbutton {
+  background: #1fc8c9;
+  color: #ffffff;
+  border-radius: 4px;
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  text-transform: capitalize;
 }
 
 /* Layout */

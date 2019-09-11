@@ -1,4 +1,4 @@
-<header class="uk-box-shadow-small main-header" uk-sticky="top: 100; animation: uk-animation-slide-top; bottom: #sticky-on-scroll-up">
+<header class="uk-box-shadow-small main-header">
   <div class="uk-container">
     <nav class="uk-navbar main-navbar" uk-navbar>
       <div class="uk-navbar-left">

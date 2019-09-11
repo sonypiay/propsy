@@ -31,6 +31,7 @@ Vue.component('customer-profile-page', require('./components/Frontend/Customer/P
 
 // main page
 Vue.component('homepage-available-project', require('./components/Frontend/HomepageProject.vue').default);
+Vue.component('page-view-project', require('./components/Frontend/ViewProject.vue').default);
 
 const app = new Vue({
     el: '#app',
@@ -40,6 +41,7 @@ const app = new Vue({
         return numeral(str).format(format);
       },
       formatDate(str, format, locale) {
+        if( locale === undefined ) locale = 'id';
         var res = moment(str).locale(locale).format(format);
         return res;
       },

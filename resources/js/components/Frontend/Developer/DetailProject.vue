@@ -5,8 +5,8 @@
         {{ projects.project_name }}
       </div>
       <div class="uk-margin dashboard-content-subheading">
-        {{ getarea.provinsi.area_name }},
-        {{ getarea.kota.area_name }}<br>
+        {{ projects.province_name }},
+        {{ projects.city_name }}<br>
         {{ projects.project_address }}
       </div>
 
@@ -284,7 +284,7 @@
                     </div>
                   </td>
                   <td>{{ unit.project_unit_name }} No. {{ unit.project_unit_number }}</td>
-                  <td>0</td>
+                  <td>{{ unit.jumlah_tipe }}</td>
                   <td>
                     <a @click="onPopupUnitType({
                         unit_id: unit.project_unit_id,
@@ -293,7 +293,7 @@
                       })" class="uk-button uk-button-primary uk-button-small dash-btn">Lihat Harga</a>
                   </td>
                   <td>
-                    {{ $root.formatDate( unit.updated_at, 'DD MMM, YYYY HH:mm', 'id' ) }}
+                    {{ $root.formatDate( unit.updated_at, 'DD MMM, YYYY HH:mm' ) }}
                   </td>
                 </tr>
               </tbody>
@@ -318,7 +318,7 @@
 
 <script>
 export default {
-  props: ['session_user', 'projects', 'getarea'],
+  props: ['session_user', 'projects'],
   data() {
     return {
       errors: {

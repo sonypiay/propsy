@@ -177,20 +177,44 @@ class ProjectListController extends Controller
     return response()->json( $res, $res['status'] );
   }
 
-  public function detail_project( Request $request, DeveloperUser $developeruser, ProjectList $project_list, AreaDB $area, $project_id )
+  public function detail_project( Request $request, DeveloperUser $developeruser, ProjectList $project_list, $project_id )
   {
     if( session()->has('isDeveloper') )
     {
-      $getproject = $project_list->where('project_id', $project_id)->first();
-      $getkota = $area->where('area_id', $getproject->project_city)->first();
-      $getprovinsi = $area->where('area_id', $getproject->project_region)->first();
-      $getarea = [ 'kota' => $getkota, 'provinsi' => $getprovinsi ];
+      $getproject = $project_list->select(
+        'project_list.project_id',
+        'project_list.project_name',
+        'project_list.project_slug',
+        'project_list.project_thumbnail',
+        'project_list.project_description',
+        'project_list.project_city',
+        'project_list.project_address',
+        'project_list.project_link_map',
+        'project_list.project_map_embed',
+        'project_list.project_status',
+        'project_list.dev_user_id',
+        'project_list.created_at',
+        'project_list.updated_at',
+        'city.city_id',
+        'city.city_name',
+        'city.city_slug',
+        'province.province_id',
+        'province.province_name',
+        'province.province_slug'
+      )
+      ->leftJoin('city', 'project_list.project_city', '=', 'city.city_id')
+      ->leftJoin('province', 'city.province_id', '=', 'province.province_id')
+      ->where([
+        ['project_list.project_id', $project_id],
+        ['project_list.dev_user_id', session()->get('dev_user_id')]
+      ])
+      ->first();
+      if( ! $getproject ) abort(404);
 
       $data = [
         'request' => $request,
         'session_user' => $developeruser->getinfo(),
-        'projects' => $getproject,
-        'getarea' => $getarea
+        'projects' => $getproject
       ];
       return response()->view('frontend.pages.developer.detail_project', $data);
     }

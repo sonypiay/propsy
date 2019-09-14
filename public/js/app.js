@@ -3195,7 +3195,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['session_user', 'projects', 'getarea'],
+  props: ['session_user', 'projects'],
   data: function data() {
     return {
       errors: {
@@ -63530,9 +63530,9 @@ var render = function() {
       _c("div", { staticClass: "uk-margin dashboard-content-subheading" }, [
         _vm._v(
           "\n      " +
-            _vm._s(_vm.getarea.provinsi.area_name) +
+            _vm._s(_vm.projects.province_name) +
             ",\n      " +
-            _vm._s(_vm.getarea.kota.area_name)
+            _vm._s(_vm.projects.city_name)
         ),
         _c("br"),
         _vm._v("\n      " + _vm._s(_vm.projects.project_address) + "\n    ")
@@ -65269,7 +65269,7 @@ var render = function() {
                                 )
                               ]),
                               _vm._v(" "),
-                              _c("td", [_vm._v("0")]),
+                              _c("td", [_vm._v(_vm._s(unit.jumlah_tipe))]),
                               _vm._v(" "),
                               _c("td", [
                                 _c(
@@ -65297,8 +65297,7 @@ var render = function() {
                                     _vm._s(
                                       _vm.$root.formatDate(
                                         unit.updated_at,
-                                        "DD MMM, YYYY HH:mm",
-                                        "id"
+                                        "DD MMM, YYYY HH:mm"
                                       )
                                     ) +
                                     "\n                "

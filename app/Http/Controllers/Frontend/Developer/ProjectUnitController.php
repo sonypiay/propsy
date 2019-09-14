@@ -16,7 +16,17 @@ class ProjectUnitController extends Controller
   public function get_unit_project( Request $request, ProjectUnit $project_unit, $project_id )
   {
     $keywords = $request->keywords;
-    $unit = new $project_unit;
+    $unit = $project_unit->select(
+      'project_unit.project_unit_id',
+      'project_unit.project_unit_name',
+      'project_unit.project_unit_number',
+      'project_unit.project_unit_status',
+      'project_unit.project_id',
+      'project_unit.created_at',
+      'project_unit.updated_at',
+      DB::raw('count(project_unit_type.project_unit_id) as jumlah_tipe')
+    )
+    ->leftJoin('project_unit_type', 'project_unit.project_unit_id', '=', 'project_unit_type.project_unit_id');
     if( empty( $keywords ) )
     {
       $query = $unit->where('project_id', $project_id);
@@ -28,7 +38,8 @@ class ProjectUnitController extends Controller
         ['project_unit_name', 'like', '%' . $keywords . '%']
       ]);
     }
-    $result = $query->orderBy('created_at', 'desc')
+    $result = $query->groupBy('project_unit_type.project_unit_id')
+    ->orderBy('project_unit.created_at', 'desc')
     ->paginate( 5 );
 
     return response()->json( $result, 200 );

@@ -3194,6 +3194,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user', 'projects'],
   data: function data() {
@@ -3235,8 +3246,7 @@ __webpack_require__.r(__webpack_exports__);
         },
         project_unit: {
           unit_id: null,
-          unit_name: null,
-          unit_number: null
+          unit_name: null
         }
       },
       installment: {
@@ -3248,10 +3258,12 @@ __webpack_require__.r(__webpack_exports__);
       },
       forms: {
         keywords: '',
+        jumlahUnit: false,
         unit: {
           unit_id: null,
           unit_name: '',
-          unit_number: 1,
+          unit_start_range: '',
+          unit_end_range: '',
           submit: 'Tambah',
           isEdit: false
         },
@@ -3364,16 +3376,16 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     onPopupUnit: function onPopupUnit(data) {
+      this.forms.jumlahUnit = false;
+
       if (data === undefined) {
         this.forms.unit.unit_id = null;
         this.forms.unit.unit_name = '';
-        this.forms.unit.unit_number = 1;
         this.forms.unit.isEdit = false;
         this.forms.unit.submit = 'Tambah';
       } else {
         this.forms.unit.unit_id = data.project_unit_id;
         this.forms.unit.unit_name = data.project_unit_name;
-        this.forms.unit.unit_number = data.project_unit_number;
         this.forms.unit.isEdit = true;
         this.forms.unit.submit = 'Ubah';
       }
@@ -3454,9 +3466,11 @@ __webpack_require__.r(__webpack_exports__);
         this.errors.iserror = true;
       }
 
-      if (this.forms.unit.unit_number < 1 || this.forms.unit.unit_number === '') {
-        this.errors.name.unit_number = 'Silakan masukkan minimal 1 unit';
-        this.errors.iserror = true;
+      if (this.forms.jumlahUnit === true) {
+        if (this.forms.unit.unit_start_range < 1 || this.forms.unit.unit_start_range > this.forms.unit.unit_end_range) {
+          this.errors.name.unit_range = 'Rentang unit tidak valid.';
+          this.errors.iserror = true;
+        }
       }
 
       if (this.errors.iserror === true) return false;
@@ -3469,14 +3483,15 @@ __webpack_require__.r(__webpack_exports__);
         method = 'post';
       }
 
+      var param_form = {};
+      param_form.unit_name = this.forms.unit.unit_name;
+      param_form.startRange = this.forms.unit.unit_start_range;
+      param_form.endRange = this.forms.unit.unit_end_range;
       this.forms.unit.submit = '<span uk-spinner></span>';
       axios({
         method: 'post',
         url: url,
-        params: {
-          unit_name: this.forms.unit.unit_name,
-          unit_number: this.forms.unit.unit_number
-        }
+        params: param_form
       }).then(function (res) {
         var result = res.data;
         swal({
@@ -63664,7 +63679,10 @@ var render = function() {
                       }
                     ],
                     staticClass: "uk-input modal-input",
-                    attrs: { type: "text", placeholder: "Contoh: Blok A" },
+                    attrs: {
+                      type: "text",
+                      placeholder: "Contoh: Blok A1, Blok D7, Kavling 10"
+                    },
                     domProps: { value: _vm.forms.unit.unit_name },
                     on: {
                       input: function($event) {
@@ -63698,55 +63716,185 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "uk-margin" }, [
-                _c("label", { staticClass: "uk-form-label modal-label" }, [
-                  _vm._v("Nomor Blok / Prefix")
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "uk-form-controls" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.forms.unit.unit_number,
-                        expression: "forms.unit.unit_number"
-                      }
-                    ],
-                    staticClass: "uk-input modal-input",
-                    attrs: { type: "number" },
-                    domProps: { value: _vm.forms.unit.unit_number },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(
-                          _vm.forms.unit,
-                          "unit_number",
-                          $event.target.value
-                        )
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.errors.name.unit_number,
-                        expression: "errors.name.unit_number"
-                      }
-                    ],
-                    staticClass: "uk-text-danger uk-text-small"
-                  },
-                  [_vm._v(_vm._s(_vm.errors.name.unit_number))]
-                )
-              ]),
+              _vm.forms.unit.isEdit === false
+                ? _c("div", { staticClass: "uk-margin" }, [
+                    _c("label", { staticClass: "uk-form-label modal-label" }, [
+                      _vm._v("Jumlah Unit")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "uk-form-controls" }, [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.forms.jumlahUnit,
+                              expression: "forms.jumlahUnit"
+                            }
+                          ],
+                          staticClass: "uk-select modal-input",
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.forms,
+                                  "jumlahUnit",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                _vm.forms.unit.unit_start_range = ""
+                                _vm.forms.unit.unit_end_range = ""
+                              }
+                            ]
+                          }
+                        },
+                        [
+                          _c("option", { domProps: { value: false } }, [
+                            _vm._v("Satu")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { domProps: { value: true } }, [
+                            _vm._v("Banyak")
+                          ])
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.forms.jumlahUnit === true,
+                              expression: "forms.jumlahUnit === true"
+                            }
+                          ]
+                        },
+                        [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "uk-grid-small uk-margin-top",
+                              attrs: { "uk-grid": "" }
+                            },
+                            [
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s"
+                                },
+                                [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.forms.unit.unit_start_range,
+                                        expression:
+                                          "forms.unit.unit_start_range"
+                                      }
+                                    ],
+                                    staticClass: "uk-input modal-input",
+                                    attrs: {
+                                      type: "number",
+                                      placeholder: "Dari..."
+                                    },
+                                    domProps: {
+                                      value: _vm.forms.unit.unit_start_range
+                                    },
+                                    on: {
+                                      input: function($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.$set(
+                                          _vm.forms.unit,
+                                          "unit_start_range",
+                                          $event.target.value
+                                        )
+                                      }
+                                    }
+                                  })
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s"
+                                },
+                                [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.forms.unit.unit_end_range,
+                                        expression: "forms.unit.unit_end_range"
+                                      }
+                                    ],
+                                    staticClass: "uk-input modal-input",
+                                    attrs: {
+                                      type: "number",
+                                      placeholder: "Sampai..."
+                                    },
+                                    domProps: {
+                                      value: _vm.forms.unit.unit_end_range
+                                    },
+                                    on: {
+                                      input: function($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.$set(
+                                          _vm.forms.unit,
+                                          "unit_end_range",
+                                          $event.target.value
+                                        )
+                                      }
+                                    }
+                                  })
+                                ]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.errors.name.unit_range,
+                                  expression: "errors.name.unit_range"
+                                }
+                              ],
+                              staticClass: "uk-text-danger uk-text-small"
+                            },
+                            [_vm._v(_vm._s(_vm.errors.name.unit_range))]
+                          )
+                        ]
+                      )
+                    ])
+                  ])
+                : _vm._e(),
               _vm._v(" "),
               _c("div", { staticClass: "uk-margin" }, [
                 _c("button", {
@@ -63779,11 +63927,7 @@ var render = function() {
                 _c("div", { staticClass: "uk-margin uk-card-title" }, [
                   _vm._v(
                     "Tipe Unit & Harga - " +
-                      _vm._s(
-                        _vm.project_unit_tipe.project_unit.unit_name +
-                          " No. " +
-                          _vm.project_unit_tipe.project_unit.unit_number
-                      )
+                      _vm._s(_vm.project_unit_tipe.project_unit.unit_name)
                   )
                 ]),
                 _vm._v(" "),
@@ -64909,12 +65053,7 @@ var render = function() {
                                                               _vm
                                                                 .project_unit_tipe
                                                                 .project_unit
-                                                                .unit_name,
-                                                            unit_number:
-                                                              _vm
-                                                                .project_unit_tipe
-                                                                .project_unit
-                                                                .unit_number
+                                                                .unit_name
                                                           },
                                                           unit_tipe
                                                         )
@@ -65262,11 +65401,7 @@ var render = function() {
                               ]),
                               _vm._v(" "),
                               _c("td", [
-                                _vm._v(
-                                  _vm._s(unit.project_unit_name) +
-                                    " No. " +
-                                    _vm._s(unit.project_unit_number)
-                                )
+                                _vm._v(_vm._s(unit.project_unit_name))
                               ]),
                               _vm._v(" "),
                               _c("td", [_vm._v(_vm._s(unit.jumlah_tipe))]),
@@ -65281,8 +65416,7 @@ var render = function() {
                                       click: function($event) {
                                         return _vm.onPopupUnitType({
                                           unit_id: unit.project_unit_id,
-                                          unit_name: unit.project_unit_name,
-                                          unit_number: unit.project_unit_number
+                                          unit_name: unit.project_unit_name
                                         })
                                       }
                                     }

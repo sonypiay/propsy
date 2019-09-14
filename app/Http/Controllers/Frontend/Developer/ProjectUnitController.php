@@ -19,7 +19,6 @@ class ProjectUnitController extends Controller
     $unit = $project_unit->select(
       'project_unit.project_unit_id',
       'project_unit.project_unit_name',
-      'project_unit.project_unit_number',
       'project_unit.project_unit_status',
       'project_unit.project_id',
       'project_unit.created_at',
@@ -38,8 +37,8 @@ class ProjectUnitController extends Controller
         ['project_unit_name', 'like', '%' . $keywords . '%']
       ]);
     }
-    $result = $query->groupBy('project_unit_type.project_unit_id')
-    ->orderBy('project_unit.created_at', 'desc')
+    $result = $query->groupBy('project_unit.project_unit_id')
+    ->orderBy('project_unit.project_unit_id', 'desc')
     ->paginate( 5 );
 
     return response()->json( $result, 200 );
@@ -48,13 +47,36 @@ class ProjectUnitController extends Controller
   public function project_add_unit( Request $request, ProjectUnit $project_unit, $project_id )
   {
     $unit_name = $request->unit_name;
-    $unit_number = $request->unit_number;
+    $startRange = $request->startRange;
+    $endRange = $request->endRange;
+    $date = date('Y-m-d H:i:s');
     $unit = new $project_unit;
+    $data = [];
 
-    $unit->project_unit_name = $unit_name;
-    $unit->project_unit_number = $unit_number;
-    $unit->project_id = $project_id;
-    $unit->save();
+    if( ! empty( $startRange ) AND ! empty( $endRange ) )
+    {
+      for( $i = $startRange; $i <= $endRange; $i++ )
+      {
+        $unit_slug = str_slug( $unit_name . $i );
+        array_push( $data, [
+          'project_unit_name' => $unit_name . $i,
+          'project_unit_slug' => $unit_slug,
+          'project_unit_status' => 'available',
+          'project_id' => $project_id,
+          'created_at' => $date,
+          'updated_at' => $date
+        ]);
+      }
+      $unit->insert($data);
+    }
+    else
+    {
+      $unit_slug = str_slug( $unit_name );
+      $unit->project_unit_name = $unit_name;
+      $unit->project_unit_slug = $unit_slug;
+      $unit->project_id = $project_id;
+      $unit->save();
+    }
 
     $res = ['status' => 200, 'statusText' => 'success'];
     return response()->json( $res, $res['status'] );
@@ -63,11 +85,11 @@ class ProjectUnitController extends Controller
   public function project_save_unit( Request $request, ProjectUnit $project_unit, $unit_id )
   {
     $unit_name = $request->unit_name;
-    $unit_number = $request->unit_number;
+    $unit_slug = str_slug( $unit_name );
     $unit = $project_unit->where('project_unit_id', $unit_id)->first();
 
     $unit->project_unit_name = $unit_name;
-    $unit->project_unit_number = $unit_number;
+    $unit->project_unit_slug = $unit_slug;
     $unit->save();
 
     $res = ['status' => 200, 'statusText' => 'success'];

@@ -44,16 +44,29 @@
             <div class="uk-margin">
               <label class="uk-form-label modal-label">Blok / Prefix</label>
               <div class="uk-form-controls">
-                <input type="text" class="uk-input modal-input" v-model="forms.unit.unit_name" placeholder="Contoh: Blok A">
+                <input type="text" class="uk-input modal-input" v-model="forms.unit.unit_name" placeholder="Contoh: Blok A1, Blok D7, Kavling 10">
               </div>
               <div v-show="errors.name.unit_name" class="uk-text-danger uk-text-small">{{ errors.name.unit_name }}</div>
             </div>
-            <div class="uk-margin">
-              <label class="uk-form-label modal-label">Nomor Blok / Prefix</label>
+            <div v-if="forms.unit.isEdit === false" class="uk-margin">
+              <label class="uk-form-label modal-label">Jumlah Unit</label>
               <div class="uk-form-controls">
-                <input type="number" class="uk-input modal-input" v-model="forms.unit.unit_number">
+                <select class="uk-select modal-input" v-model="forms.jumlahUnit" @change="forms.unit.unit_start_range = ''; forms.unit.unit_end_range = ''">
+                  <option :value="false">Satu</option>
+                  <option :value="true">Banyak</option>
+                </select>
+                <div v-show="forms.jumlahUnit === true">
+                  <div class="uk-grid-small uk-margin-top" uk-grid>
+                    <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
+                      <input type="number" class="uk-input modal-input" placeholder="Dari..." v-model="forms.unit.unit_start_range">
+                    </div>
+                    <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
+                      <input type="number" class="uk-input modal-input" placeholder="Sampai..." v-model="forms.unit.unit_end_range">
+                    </div>
+                  </div>
+                  <div v-show="errors.name.unit_range" class="uk-text-danger uk-text-small">{{ errors.name.unit_range }}</div>
+                </div>
               </div>
-              <div v-show="errors.name.unit_number" class="uk-text-danger uk-text-small">{{ errors.name.unit_number }}</div>
             </div>
             <div class="uk-margin">
               <button class="uk-button uk-button-primary modal-form-add" v-html="forms.unit.submit"></button>
@@ -68,7 +81,7 @@
         <div class="uk-modal-dialog uk-modal-body uk-height-viewport">
           <a class="uk-modal-close-large uk-modal-close" uk-close></a>
           <div class="uk-card uk-card-body">
-            <div class="uk-margin uk-card-title">Tipe Unit &amp; Harga - {{ project_unit_tipe.project_unit.unit_name + ' No. ' + project_unit_tipe.project_unit.unit_number }}</div>
+            <div class="uk-margin uk-card-title">Tipe Unit &amp; Harga - {{ project_unit_tipe.project_unit.unit_name }}</div>
             <div class="uk-margin">
               <div v-if="project_unit_tipe.isLoading === true" class="uk-text-center">
                 <span uk-spinner></span>
@@ -207,8 +220,7 @@
                         <td class="uk-width-small">
                           <a @click="onToggleAddUnit({
                             unit_id: project_unit_tipe.project_unit.unit_id,
-                            unit_name: project_unit_tipe.project_unit.unit_name,
-                            unit_number: project_unit_tipe.project_unit.unit_number
+                            unit_name: project_unit_tipe.project_unit.unit_name
                             }, unit_tipe)" class="uk-button uk-button-primary uk-button-small modal-submit"><i class="icon ion-ios-create"></i></a>
                           <a @click="onDeleteUnitType( unit_tipe.project_unit_type_id )" class="uk-button uk-button-primary uk-button-small modal-submit"><i class="icon ion-ios-trash"></i></a>
                         </td>
@@ -283,13 +295,12 @@
                       </div>
                     </div>
                   </td>
-                  <td>{{ unit.project_unit_name }} No. {{ unit.project_unit_number }}</td>
+                  <td>{{ unit.project_unit_name }}</td>
                   <td>{{ unit.jumlah_tipe }}</td>
                   <td>
                     <a @click="onPopupUnitType({
                         unit_id: unit.project_unit_id,
-                        unit_name: unit.project_unit_name,
-                        unit_number: unit.project_unit_number
+                        unit_name: unit.project_unit_name
                       })" class="uk-button uk-button-primary uk-button-small dash-btn">Lihat Harga</a>
                   </td>
                   <td>
@@ -358,8 +369,7 @@ export default {
         },
         project_unit: {
           unit_id: null,
-          unit_name: null,
-          unit_number: null
+          unit_name: null
         }
       },
       installment: {
@@ -371,10 +381,12 @@ export default {
       },
       forms: {
         keywords: '',
+        jumlahUnit: false,
         unit: {
           unit_id: null,
           unit_name: '',
-          unit_number: 1,
+          unit_start_range: '',
+          unit_end_range: '',
           submit: 'Tambah',
           isEdit: false
         },
@@ -486,11 +498,11 @@ export default {
     },
     onPopupUnit( data )
     {
+      this.forms.jumlahUnit = false;
       if( data === undefined )
       {
         this.forms.unit.unit_id = null;
         this.forms.unit.unit_name = '';
-        this.forms.unit.unit_number = 1;
         this.forms.unit.isEdit = false;
         this.forms.unit.submit = 'Tambah';
       }
@@ -498,7 +510,6 @@ export default {
       {
         this.forms.unit.unit_id = data.project_unit_id;
         this.forms.unit.unit_name = data.project_unit_name;
-        this.forms.unit.unit_number = data.project_unit_number;
         this.forms.unit.isEdit = true;
         this.forms.unit.submit = 'Ubah';
       }
@@ -587,10 +598,13 @@ export default {
         this.errors.name.unit_name = 'Nama unit harap diisi';
         this.errors.iserror = true;
       }
-      if( this.forms.unit.unit_number < 1 || this.forms.unit.unit_number === '' )
+      if( this.forms.jumlahUnit === true )
       {
-        this.errors.name.unit_number = 'Silakan masukkan minimal 1 unit';
-        this.errors.iserror = true;
+        if( this.forms.unit.unit_start_range < 1 || this.forms.unit.unit_start_range > this.forms.unit.unit_end_range )
+        {
+          this.errors.name.unit_range = 'Rentang unit tidak valid.';
+          this.errors.iserror = true;
+        }
       }
       if( this.errors.iserror === true ) return false;
 
@@ -604,14 +618,17 @@ export default {
         url = this.$root.url + '/developer/project/add_unit/' + this.projects.project_id;
         method = 'post';
       }
+
+      var param_form = {};
+      param_form.unit_name = this.forms.unit.unit_name;
+      param_form.startRange = this.forms.unit.unit_start_range;
+      param_form.endRange = this.forms.unit.unit_end_range;
+
       this.forms.unit.submit = '<span uk-spinner></span>';
       axios({
         method: 'post',
         url: url,
-        params: {
-          unit_name: this.forms.unit.unit_name,
-          unit_number: this.forms.unit.unit_number
-        }
+        params: param_form
       }).then( res => {
         let result = res.data;
         swal({

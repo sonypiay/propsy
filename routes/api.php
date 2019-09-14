@@ -21,12 +21,6 @@ Route::group(['prefix' => 'region'], function() {
   Route::get('/provinsi/all', 'RestApi\RegionCityApi@provinsi_all');
   Route::get('/provinsi/where/{id}', 'RestApi\RegionCityApi@provinsi_single');
 
-  Route::get('/kabupaten/all/{provinsi}', 'RestApi\RegionCityApi@kabupaten_all');
-  Route::get('/kabupaten/where/{provinsi}/{id}', 'RestApi\RegionCityApi@kabupaten_single');
-
-  Route::get('/kecamatan/all/{kabupaten}', 'RestApi\RegionCityApi@kecamatan_all');
-  Route::get('/kecamatan/where/{id}', 'RestApi\RegionCityApi@kecamatan_single');
-
-  /*Route::get('/kecamatan/all', 'RestApi\RegionCityApi@kelurahan_all');
-  Route::get('/kecamatan/where/{id}', 'RestApi\RegionCityApi@kecamatan_single');*/
+  Route::get('/kota/all/{provinsi}', 'RestApi\RegionCityApi@kota_all');
+  Route::get('/kota/where/{provinsi}/{id}', 'RestApi\RegionCityApi@kota_single');
 });

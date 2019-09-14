@@ -104,6 +104,11 @@ Route::group(['prefix' => 'developer'], function() {
     Route::put('/change_email', 'Frontend\Developer\DeveloperController@change_email');
     Route::post('/upload_logo', 'Frontend\Developer\DeveloperController@upload_logo');
   });
+
+  Route::group(['prefix' => 'marketing'], function() {
+    Route::get('/find_marketing', 'Frontend\Developer\ProjectMarketingController@index')->name('developer_find_marketing');
+    Route::get('/list_marketing', 'Frontend\Developer\ProjectMarketingController@listOfMarketing');
+  });
 });
 
 Route::group(['prefix' => 'project'], function() {

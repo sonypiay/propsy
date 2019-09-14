@@ -1761,7 +1761,7 @@ __webpack_require__.r(__webpack_exports__);
         fullname: this.session_user.customer_name,
         phone_number: this.session_user.customer_phone_number,
         city: this.session_user.customer_city === null ? '' : this.session_user.customer_city,
-        region: this.session_user.customer_region === null ? '' : this.session_user.customer_region,
+        region: this.session_user.province_id === null ? '' : this.session_user.province_id,
         address: this.session_user.customer_address,
         username: this.session_user.customer_username,
         submit: 'Simpan'
@@ -1798,10 +1798,10 @@ __webpack_require__.r(__webpack_exports__);
       if (this.forms.region !== '') region = this.forms.region;
       axios({
         method: 'get',
-        url: this.$root.url + '/api/region/kabupaten/all/' + region
+        url: this.$root.url + '/api/region/kota/all/' + region
       }).then(function (res) {
         var results = res.data;
-        _this2.getcity = results.results.data.kabupaten;
+        _this2.getcity = results.results.data;
       })["catch"](function (err) {
         console.log(err.response.statusText);
       });
@@ -2571,7 +2571,7 @@ __webpack_require__.r(__webpack_exports__);
         phone_office: this.session_user.dev_phone_office,
         mobile_phone: this.session_user.dev_mobile_phone,
         city: this.session_user.dev_city === null ? '' : this.session_user.dev_city,
-        region: this.session_user.dev_region === null ? '' : this.session_user.dev_region,
+        region: this.session_user.province_id === null ? '' : this.session_user.province_id,
         biography: this.session_user.dev_biography,
         username: this.session_user.dev_username,
         address: this.session_user.dev_address,
@@ -2609,10 +2609,10 @@ __webpack_require__.r(__webpack_exports__);
       if (this.forms.region !== '') region = this.forms.region;
       axios({
         method: 'get',
-        url: this.$root.url + '/api/region/kabupaten/all/' + region
+        url: this.$root.url + '/api/region/kota/all/' + region
       }).then(function (res) {
         var results = res.data;
-        _this2.getcity = results.results.data.kabupaten;
+        _this2.getcity = results.results.data;
       })["catch"](function (err) {
         console.log(err.response.statusText);
       });
@@ -3814,6 +3814,131 @@ __webpack_require__.r(__webpack_exports__);
         _this.forms.submit = 'Simpan';
       });
     }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/FindMarketing.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Frontend/Developer/FindMarketing.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['session_user', 'getarea'],
+  data: function data() {
+    return {
+      forms: {
+        keywords: '',
+        limit: 10,
+        column: 'mkt_fullname',
+        sorting: 'asc',
+        city: 'all'
+      },
+      marketingList: {
+        currentOffset: 0,
+        total: 0,
+        results: [],
+        isUpdating: true
+      }
+    };
+  },
+  methods: {
+    getMarketingList: function getMarketingList(offset) {
+      var _this = this;
+
+      if (offset !== undefined) {
+        if (this.marketingList.isUpdating === true) this.marketingList.currentOffset = this.marketingList.currentOffset + offset;
+      }
+
+      var param = 'offset=' + this.marketingList.currentOffset + '&keywords=' + this.forms.keywords + '&city=' + this.forms.city + '&column=' + this.forms.column + '&sorting=' + this.forms.sorting;
+      var url = this.$root.url + '/developer/marketing/list_marketing?' + param;
+      axios.get(url).then(function (res) {
+        var result = res.data;
+
+        if (_this.marketingList.total === 0) {
+          _this.marketingList.results = result.results.data;
+        } else {
+          var data = result.results;
+
+          if (data.total === 0) {
+            _this.marketingList.isUpdating = false;
+          } else {
+            data.data.forEach(function (d) {
+              _this.marketingList.results.push(d);
+            });
+          }
+        }
+
+        _this.marketingList.total = _this.marketingList.results.length;
+      })["catch"](function (err) {
+        console.log(err.response.statusText);
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.getMarketingList();
   }
 });
 
@@ -5139,7 +5264,7 @@ __webpack_require__.r(__webpack_exports__);
         phone_number: this.session_user.mkt_phone_number,
         mobile_phone: this.session_user.mkt_mobile_phone,
         city: this.session_user.mkt_city === null ? '' : this.session_user.mkt_city,
-        region: this.session_user.mkt_region === null ? '' : this.session_user.mkt_region,
+        region: this.session_user.province_id === null ? '' : this.session_user.province_id,
         biography: this.session_user.mkt_biography,
         address: this.session_user.mkt_address,
         username: this.session_user.mkt_username,
@@ -5177,10 +5302,10 @@ __webpack_require__.r(__webpack_exports__);
       if (this.forms.region !== '') region = this.forms.region;
       axios({
         method: 'get',
-        url: this.$root.url + '/api/region/kabupaten/all/' + region
+        url: this.$root.url + '/api/region/kota/all/' + region
       }).then(function (res) {
         var results = res.data;
-        _this2.getcity = results.results.data.kabupaten;
+        _this2.getcity = results.results.data;
       })["catch"](function (err) {
         console.log(err.response.statusText);
       });
@@ -6011,8 +6136,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
 //
 //
 //
@@ -61226,7 +61349,7 @@ var render = function() {
                       )
                     },
                     function($event) {
-                      return _vm.getRegionData()
+                      return _vm.getCityData()
                     }
                   ]
                 }
@@ -61235,9 +61358,11 @@ var render = function() {
                 _c("option", { attrs: { value: "" } }, [_vm._v("-- Pilih --")]),
                 _vm._v(" "),
                 _vm._l(_vm.getregion, function(reg) {
-                  return _c("option", { domProps: { value: reg.area_id } }, [
-                    _vm._v(_vm._s(reg.area_name))
-                  ])
+                  return _c(
+                    "option",
+                    { domProps: { value: reg.province_id } },
+                    [_vm._v(_vm._s(reg.province_name))]
+                  )
                 })
               ],
               2
@@ -61285,8 +61410,8 @@ var render = function() {
                 _c("option", { attrs: { value: "" } }, [_vm._v("-- Pilih --")]),
                 _vm._v(" "),
                 _vm._l(_vm.getcity, function(city) {
-                  return _c("option", { domProps: { value: city.area_id } }, [
-                    _vm._v(_vm._s(city.area_name))
+                  return _c("option", { domProps: { value: city.city_id } }, [
+                    _vm._v(_vm._s(city.city_name))
                   ])
                 })
               ],
@@ -61775,7 +61900,7 @@ var render = function() {
         [
           _c("div", { staticClass: "uk-card uk-card-body signin-box" }, [
             _c("div", { staticClass: "uk-card-title signin-box-title" }, [
-              _vm._v("Masuk Sebagai Marketing")
+              _vm._v("Masuk Sebagai Konsumen")
             ]),
             _vm._v(" "),
             _c(
@@ -62812,7 +62937,7 @@ var render = function() {
                       )
                     },
                     function($event) {
-                      return _vm.getRegionData()
+                      return _vm.getCityData()
                     }
                   ]
                 }
@@ -62821,9 +62946,11 @@ var render = function() {
                 _c("option", { attrs: { value: "" } }, [_vm._v("-- Pilih --")]),
                 _vm._v(" "),
                 _vm._l(_vm.getregion, function(reg) {
-                  return _c("option", { domProps: { value: reg.area_id } }, [
-                    _vm._v(_vm._s(reg.area_name))
-                  ])
+                  return _c(
+                    "option",
+                    { domProps: { value: reg.province_id } },
+                    [_vm._v(_vm._s(reg.province_name))]
+                  )
                 })
               ],
               2
@@ -62871,8 +62998,8 @@ var render = function() {
                 _c("option", { attrs: { value: "" } }, [_vm._v("-- Pilih --")]),
                 _vm._v(" "),
                 _vm._l(_vm.getcity, function(city) {
-                  return _c("option", { domProps: { value: city.area_id } }, [
-                    _vm._v(_vm._s(city.area_name))
+                  return _c("option", { domProps: { value: city.city_id } }, [
+                    _vm._v(_vm._s(city.city_name))
                   ])
                 })
               ],
@@ -65459,6 +65586,277 @@ var staticRenderFns = [
       },
       [_c("span", [_vm._v("Alamat Email")])]
     )
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/FindMarketing.vue?vue&type=template&id=1811d096&scoped=true&":
+/*!***********************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Frontend/Developer/FindMarketing.vue?vue&type=template&id=1811d096&scoped=true& ***!
+  \***********************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "uk-card dashboard-content" }, [
+      _c(
+        "div",
+        { staticClass: "uk-card-title uk-margin dashboard-content-heading" },
+        [_vm._v("Cari Marketing")]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "uk-margin uk-grid-small uk-child-width-auto",
+          attrs: { "uk-grid": "" }
+        },
+        [
+          _c("div", [
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.forms.column,
+                    expression: "forms.column"
+                  }
+                ],
+                staticClass: "uk-select dash-form-input",
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.forms,
+                      "column",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { value: "mkt_fullname" } }, [
+                  _vm._v("Nama Lengkap")
+                ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "mkt_email" } }, [
+                  _vm._v("Email")
+                ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "mkt_mobile_phone" } }, [
+                  _vm._v("No. Handphone")
+                ])
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", [
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.forms.city,
+                    expression: "forms.city"
+                  }
+                ],
+                staticClass: "uk-select dash-form-input",
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.forms,
+                      "city",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { value: "all" } }, [
+                  _vm._v("Semua Kota")
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.getarea, function(city) {
+                  return _c("option", { domProps: { value: city.area_id } }, [
+                    _vm._v(_vm._s(city.area_name))
+                  ])
+                })
+              ],
+              2
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", [
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.forms.sorting,
+                    expression: "forms.sorting"
+                  }
+                ],
+                staticClass: "uk-select dash-form-input",
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.forms,
+                      "sorting",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { value: "asc" } }, [_vm._v("A - Z")]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "desc" } }, [_vm._v("Z - A")])
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", [
+            _c("div", { staticClass: "uk-inline" }, [
+              _c("span", {
+                staticClass: "uk-form-icon",
+                attrs: { "uk-icon": "search" }
+              }),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.forms.keywords,
+                    expression: "forms.keywords"
+                  }
+                ],
+                staticClass: "uk-input dash-form-input",
+                attrs: {
+                  type: "search",
+                  placeholder: "Masukkan kata kunci..."
+                },
+                domProps: { value: _vm.forms.keywords },
+                on: {
+                  keyup: function($event) {
+                    if (
+                      !$event.type.indexOf("key") &&
+                      _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                    ) {
+                      return null
+                    }
+                  },
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.forms, "keywords", $event.target.value)
+                  }
+                }
+              })
+            ])
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "uk-margin uk-overflow-auto" }, [
+        _c(
+          "table",
+          {
+            staticClass:
+              "uk-table uk-table-responsive uk-table-divider uk-table-middle uk-table-small"
+          },
+          [
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.marketingList.results, function(mkt) {
+                return _c("tr", [
+                  _c("td"),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(mkt.mkt_fullname))]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(
+                      _vm._s(mkt.mkt_mobile_phone) +
+                        " / " +
+                        _vm._s(mkt.mkt_phone_number)
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(mkt.mkt_email))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(mkt.area_name))])
+                ])
+              }),
+              0
+            )
+          ]
+        )
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Aksi")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Nama")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Telepon / Handphone")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Email")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Kota")])
+      ])
+    ])
   }
 ]
 render._withStripped = true
@@ -68150,7 +68548,7 @@ var render = function() {
                       )
                     },
                     function($event) {
-                      return _vm.getRegionData()
+                      return _vm.getCityData()
                     }
                   ]
                 }
@@ -68159,9 +68557,11 @@ var render = function() {
                 _c("option", { attrs: { value: "" } }, [_vm._v("-- Pilih --")]),
                 _vm._v(" "),
                 _vm._l(_vm.getregion, function(reg) {
-                  return _c("option", { domProps: { value: reg.area_id } }, [
-                    _vm._v(_vm._s(reg.area_name))
-                  ])
+                  return _c(
+                    "option",
+                    { domProps: { value: reg.province_id } },
+                    [_vm._v(_vm._s(reg.province_name))]
+                  )
                 })
               ],
               2
@@ -68209,8 +68609,8 @@ var render = function() {
                 _c("option", { attrs: { value: "" } }, [_vm._v("-- Pilih --")]),
                 _vm._v(" "),
                 _vm._l(_vm.getcity, function(city) {
-                  return _c("option", { domProps: { value: city.area_id } }, [
-                    _vm._v(_vm._s(city.area_name))
+                  return _c("option", { domProps: { value: city.city_id } }, [
+                    _vm._v(_vm._s(city.city_name))
                   ])
                 })
               ],
@@ -69813,77 +70213,7 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "uk-margin-large-top uk-margin-large-bottom" }, [
       _c("div", { staticClass: "uk-container" }, [
-        _c("div", { staticClass: "uk-grid-small", attrs: { "uk-grid": "" } }, [
-          _c(
-            "div",
-            {
-              staticClass:
-                "uk-width-1-4@xl uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s"
-            },
-            [
-              _c(
-                "div",
-                {
-                  staticClass: "uk-card uk-card-body sidebar-dev-info",
-                  attrs: { "uk-sticky": "media: 640" }
-                },
-                [
-                  _c("div", { staticClass: "uk-margin sidebar-dev-logo" }, [
-                    _vm.getproject.dev_logo === null
-                      ? _c(
-                          "div",
-                          { staticClass: "uk-tile uk-tile-default dev-nologo" },
-                          [_vm._m(0)]
-                        )
-                      : _c(
-                          "div",
-                          { staticClass: "uk-text-center dev-withlogo" },
-                          [
-                            _c("img", {
-                              attrs: {
-                                src:
-                                  _vm.$root.url +
-                                  "/images/devlogo/" +
-                                  _vm.getproject.dev_logo,
-                                alt: _vm.getproject.dev_name
-                              }
-                            })
-                          ]
-                        )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "uk-margin sidebar-dev-profile" }, [
-                    _c(
-                      "a",
-                      { staticClass: "dev-profile-name", attrs: { href: "#" } },
-                      [_vm._v(_vm._s(_vm.getproject.dev_name))]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "dev-profile-region" }, [
-                      _vm._v(
-                        _vm._s(
-                          _vm.devregion.provinsi.area_name +
-                            ", " +
-                            _vm.devregion.kota.area_name
-                        )
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    {
-                      staticClass:
-                        "uk-margin uk-width-1-1 uk-button uk-button-primary sidebar-viewproject",
-                      attrs: { href: "#" }
-                    },
-                    [_vm._v("Lihat Profil")]
-                  )
-                ]
-              )
-            ]
-          ),
-          _vm._v(" "),
+        _c("div", { staticClass: "uk-grid-small ", attrs: { "uk-grid": "" } }, [
           _c("div", { staticClass: "uk-width-expand" }, [
             _c("div", { staticClass: "uk-card container-projectinfo" }, [
               _c(
@@ -70000,7 +70330,7 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
-                  _vm._m(1),
+                  _vm._m(0),
                   _vm._v(" "),
                   _c(
                     "div",
@@ -70140,7 +70470,7 @@ var render = function() {
                             "uk-table uk-table-divider uk-table-hover uk-table-striped uk-table-small uk-table-middle"
                         },
                         [
-                          _vm._m(2),
+                          _vm._m(1),
                           _vm._v(" "),
                           _c(
                             "tbody",
@@ -70216,21 +70546,67 @@ var render = function() {
                 ]
               )
             ])
-          ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass:
+                "uk-width-1-4@xl uk-width-1-4@l uk-width-1-4@m uk-width-1-2@s"
+            },
+            [
+              _c(
+                "div",
+                { staticClass: "uk-card uk-card-body sidebar-dev-info" },
+                [
+                  _vm.getproject.dev_logo === null
+                    ? _c("div", { staticClass: "dev-withnologo" }, [
+                        _c("span", {
+                          attrs: { "uk-icon": "icon: users; ratio: 4" }
+                        })
+                      ])
+                    : _c("div", { staticClass: "dev-withlogo" }, [
+                        _c("img", {
+                          staticClass: "uk-align-center",
+                          attrs: {
+                            src:
+                              _vm.$root.url +
+                              "/images/devlogo/" +
+                              _vm.getproject.dev_logo,
+                            alt: _vm.getproject.dev_name
+                          }
+                        })
+                      ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-margin sidebar-dev-profile" }, [
+                    _c(
+                      "a",
+                      { staticClass: "dev-profile-name", attrs: { href: "#" } },
+                      [_vm._v(_vm._s(_vm.getproject.dev_name))]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "dev-profile-region" }, [
+                      _vm._v(
+                        _vm._s(
+                          _vm.devregion.provinsi.area_name +
+                            ", " +
+                            _vm.devregion.kota.area_name
+                        )
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(2)
+                ]
+              )
+            ]
+          )
         ])
       ])
     ])
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "uk-position-center" }, [
-      _c("span", { attrs: { "uk-icon": "icon: users; ratio: 4" } })
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -70272,6 +70648,22 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Harga")])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "uk-margin uk-text-center" }, [
+      _c(
+        "a",
+        {
+          staticClass:
+            "uk-width-1-1 uk-button uk-button-primary sidebar-viewproject",
+          attrs: { href: "#" }
+        },
+        [_vm._v("Lihat Pengembang")]
+      )
     ])
   }
 ]
@@ -82443,6 +82835,7 @@ Vue.component('developer-dashboard-page', __webpack_require__(/*! ./components/F
 Vue.component('developer-profile-page', __webpack_require__(/*! ./components/Frontend/Developer/Profile.vue */ "./resources/js/components/Frontend/Developer/Profile.vue")["default"]);
 Vue.component('developer-manage-project', __webpack_require__(/*! ./components/Frontend/Developer/Projects.vue */ "./resources/js/components/Frontend/Developer/Projects.vue")["default"]);
 Vue.component('developer-project-gallery', __webpack_require__(/*! ./components/Frontend/Developer/ProjectGallery.vue */ "./resources/js/components/Frontend/Developer/ProjectGallery.vue")["default"]);
+Vue.component('developer-find-marketing', __webpack_require__(/*! ./components/Frontend/Developer/FindMarketing.vue */ "./resources/js/components/Frontend/Developer/FindMarketing.vue")["default"]);
 Vue.component('developer-detail-project', __webpack_require__(/*! ./components/Frontend/Developer/DetailProject.vue */ "./resources/js/components/Frontend/Developer/DetailProject.vue")["default"]);
 Vue.component('developer-register-page', __webpack_require__(/*! ./components/Frontend/Developer/Daftar.vue */ "./resources/js/components/Frontend/Developer/Daftar.vue")["default"]);
 Vue.component('developer-login-page', __webpack_require__(/*! ./components/Frontend/Developer/Masuk.vue */ "./resources/js/components/Frontend/Developer/Masuk.vue")["default"]); // customer
@@ -83419,6 +83812,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EmailAccount_vue_vue_type_template_id_736412d8___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EmailAccount_vue_vue_type_template_id_736412d8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Frontend/Developer/FindMarketing.vue":
+/*!**********************************************************************!*\
+  !*** ./resources/js/components/Frontend/Developer/FindMarketing.vue ***!
+  \**********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _FindMarketing_vue_vue_type_template_id_1811d096_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FindMarketing.vue?vue&type=template&id=1811d096&scoped=true& */ "./resources/js/components/Frontend/Developer/FindMarketing.vue?vue&type=template&id=1811d096&scoped=true&");
+/* harmony import */ var _FindMarketing_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FindMarketing.vue?vue&type=script&lang=js& */ "./resources/js/components/Frontend/Developer/FindMarketing.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _FindMarketing_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _FindMarketing_vue_vue_type_template_id_1811d096_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _FindMarketing_vue_vue_type_template_id_1811d096_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "1811d096",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Frontend/Developer/FindMarketing.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Frontend/Developer/FindMarketing.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************!*\
+  !*** ./resources/js/components/Frontend/Developer/FindMarketing.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FindMarketing_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./FindMarketing.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/FindMarketing.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FindMarketing_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Frontend/Developer/FindMarketing.vue?vue&type=template&id=1811d096&scoped=true&":
+/*!*****************************************************************************************************************!*\
+  !*** ./resources/js/components/Frontend/Developer/FindMarketing.vue?vue&type=template&id=1811d096&scoped=true& ***!
+  \*****************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FindMarketing_vue_vue_type_template_id_1811d096_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./FindMarketing.vue?vue&type=template&id=1811d096&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/FindMarketing.vue?vue&type=template&id=1811d096&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FindMarketing_vue_vue_type_template_id_1811d096_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FindMarketing_vue_vue_type_template_id_1811d096_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

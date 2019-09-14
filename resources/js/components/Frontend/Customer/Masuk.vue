@@ -3,7 +3,7 @@
     <div class="uk-container">
       <div class="uk-width-1-3@xl uk-width-1-3@l uk-width-2-3@m uk-width-1-2@s uk-align-center uk-margin-large-top uk-margin-large-bottom">
         <div class="uk-card uk-card-body signin-box">
-          <div class="uk-card-title signin-box-title">Masuk Sebagai Marketing</div>
+          <div class="uk-card-title signin-box-title">Masuk Sebagai Konsumen</div>
           <div v-show="errors.errorMessage" class="uk-alert-danger" uk-alert>{{ errors.errorMessage }}</div>
           <form class="uk-form-stacked uk-margin signin-form" @submit.prevent="onLoginUser">
             <div class="uk-margin">

@@ -118,7 +118,6 @@ class MarketingController extends Controller
     $phone_number = $request->phone_number;
     $mobile_phone = $request->mobile_phone;
     $city = $request->city;
-    $region = $request->region;
     $biography = $request->biography;
     $username = $request->username;
     $address = $request->address;
@@ -128,7 +127,6 @@ class MarketingController extends Controller
     $getinfo->mkt_phone_number = $phone_number;
     $getinfo->mkt_mobile_phone = $mobile_phone;
     $getinfo->mkt_city = $city;
-    $getinfo->mkt_region = $region;
     $getinfo->mkt_biography = $biography;
     $getinfo->mkt_address = $address;
 

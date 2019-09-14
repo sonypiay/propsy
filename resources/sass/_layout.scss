@@ -330,13 +330,17 @@ html, body {
     text-align: center;
     .dev-profile-name {
       color: #333333;
-      @include fontsetting( $font-primary, 18px, 600, normal, normal, 0.4px );
+      @include fontsetting( $font-primary, 1.3rem, 600, normal, normal, 0.4px );
       text-decoration: none;
       &:hover { color: $color3; }
     }
     .dev-profile-region {
       color: #888888;
-      @include fontsetting( $font-primary, 11px, 400, normal, normal, 0.4px );
+      @include fontsetting( $font-primary, .7rem, 400, normal, normal, 0.4px );
+    }
+    .dev-profile-biography {
+      color: #888888;
+      @include fontsetting( $font-primary, .7rem, 400, normal, normal, 0.4px );
     }
   }
   .sidebar-viewproject {

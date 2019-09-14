@@ -4,137 +4,82 @@ namespace App\Http\Controllers\RestApi;
 
 use Illuminate\Http\Request;
 use App\Database\AreaDB;
+use App\Database\ProvinceDB;
+use App\Database\CityDB;
 use App\Http\Controllers\Controller;
 use DB;
 
 class RegionCityApi extends Controller
 {
-  public function provinsi_all( AreaDB $area )
+  public function provinsi_all( ProvinceDB $province )
   {
-    $getarea = $area->select(
-      'area.area_id',
-      'area.area_name',
-      'area_level.area_level_name'
-    )
-    ->join('area_level', 'area.area_level_id', '=', 'area_level.area_level_id')
-    ->whereNull('area.parent_id');
+    $getprovinsi = $province->orderBy('province_name', 'asc')
+    ->get();
 
     return response()->json([
       'results' => [
-        'data' => $getarea->get(),
-        'row' => $getarea->count()
+        'data' => $getprovinsi,
+        'row' => $getprovinsi->count()
       ]
     ]);
   }
 
-  public function provinsi_single( AreaDB $area, $id )
+  public function provinsi_single( ProvinceDB $province, $id )
   {
-    $getarea = $area->select(
-      'area.area_id',
-      'area.area_name',
-      'area_level.area_level_name'
-    )
-    ->join('area_level', 'area.area_level_id', '=', 'area_level.area_level_id')
-    ->where('area.area_id', $id)
-    ->whereNull('area.parent_id');
+    $getprovinsi = $province->where('province_id', $id)
+    ->orderBy('province_name', 'asc')
+    ->get();
 
     return response()->json([
       'results' => [
-        'data' => $getarea->get()
+        'data' => $getprovinsi->get()
       ]
     ]);
   }
 
-  public function kabupaten_all( AreaDB $area, $provinsi )
+  public function kota_all( CityDB $city, $provinsi )
   {
-    $getarea = $area->select(
-      'area.area_id',
-      'area.area_name',
-      'area_level.area_level_name'
+    $getcity = $city->select(
+      'city.city_id',
+      'city.city_name',
+      'city.city_slug',
+      'province.province_name',
+      'province.province_slug'
     )
-    ->join('area_level', 'area.area_level_id', '=', 'area_level.area_level_id')
-    ->where('area.parent_id', $provinsi);
-    $getprovinsi = $area->where('area_id', $provinsi)->first();
+    ->join('province', 'city.province_id', '=', 'province.province_id')
+    ->where('city.province_id', $provinsi)
+    ->orderBy('city.city_name', 'asc')
+    ->get();
 
     return response()->json([
       'results' => [
-        'data' => [
-          'provinsi' => $getprovinsi,
-          'kabupaten' => $getarea->get()
-        ],
-        'row' => $getarea->count()
+        'data' => $getcity,
+        'total' => $getcity->count()
       ]
     ]);
   }
 
-  public function kabupaten_single( AreaDB $area, $provinsi, $id )
+  public function kota_single( CityDB $city, $provinsi, $id )
   {
-    $getarea = $area->select(
-      'area.area_id',
-      'area.area_name',
-      'area_level.area_level_name'
+    $getcity = $city->select(
+      'city.city_id',
+      'city.city_name',
+      'city.city_slug',
+      'province.province_name',
+      'province.province_slug'
     )
-    ->join('area_level', 'area.area_level_id', '=', 'area_level.area_level_id')
+    ->join('province', 'city.province_id', '=', 'province.province_id')
     ->where([
-      ['area.area_id', $id],
-      ['area.parent_id', $provinsi]
-    ]);
-    $getprovinsi = $area->where('area_id', $provinsi)->first();
+      ['city.province_id', $provinsi],
+      ['city.city_id', $id]
+    ])
+    ->orderBy('city.city_name', 'asc')
+    ->get();
 
     return response()->json([
       'results' => [
-        'data' => [
-          'provinsi' => $getprovinsi,
-          'kabupaten' => $getarea->get()
-        ],
-        'row' => $getarea->count()
-      ]
-    ]);
-  }
-
-  public function kecamatan_all( AreaDB $area, $kabupaten )
-  {
-    $getarea = $area->select(
-      'area.area_id',
-      'area.area_name',
-      'area_level.area_level_name'
-    )
-    ->join('area_level', 'area.area_level_id', '=', 'area_level.area_level_id')
-    ->where('area.parent_id', $kabupaten);
-    $getkecamatan = $area->where('area_id', $kabupaten)->first();
-
-    return response()->json([
-      'results' => [
-        'data' => [
-          'kabupaten' => $getkecamatan,
-          'kecamatan' => $getarea->get()
-        ],
-        'row' => $getarea->count()
-      ]
-    ]);
-  }
-
-  public function kecamatan_single( AreaDB $area, $kabupaten, $id )
-  {
-    $getarea = $area->select(
-      'area.area_id',
-      'area.area_name',
-      'area_level.area_level_name'
-    )
-    ->join('area_level', 'area.area_level_id', '=', 'area_level.area_level_id')
-    ->where([
-      ['area.parent_id', $kabupaten],
-      ['area.area_id', $id]
-    ]);
-    $getkecamatan = $area->where('area_id', $kabupaten)->first();
-
-    return response()->json([
-      'results' => [
-        'data' => [
-          'kabupaten' => $getkecamatan,
-          'kecamatan' => $getarea->get()
-        ],
-        'row' => $getarea->count()
+        'data' => $getcity,
+        'total' => $getcity->count()
       ]
     ]);
   }

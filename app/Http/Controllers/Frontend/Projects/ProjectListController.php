@@ -74,7 +74,8 @@ class ProjectListController extends Controller
       'developer_user.dev_slug',
       'developer_user.dev_logo',
       'developer_user.dev_region',
-      'developer_user.dev_city'
+      'developer_user.dev_city',
+      'developer_user.dev_biography'
     )
     ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
     ->where('project_slug', $slug)

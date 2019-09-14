@@ -118,7 +118,6 @@ class CustomerController extends Controller
     $fullname = $request->fullname;
     $phone_number = $request->phone_number;
     $city = $request->city;
-    $region = $request->region;
     $username = $request->username;
     $address = $request->address;
     $getinfo = $customer->getinfo();
@@ -126,7 +125,6 @@ class CustomerController extends Controller
     $getinfo->customer_name = $fullname;
     $getinfo->customer_phone_number = $phone_number;
     $getinfo->customer_city = $city;
-    $getinfo->customer_region = $region;
     $getinfo->customer_address = $address;
 
     if( $getinfo->customer_username == $username )

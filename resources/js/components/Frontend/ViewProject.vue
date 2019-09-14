@@ -19,26 +19,7 @@
 
     <div class="uk-margin-large-top uk-margin-large-bottom">
       <div class="uk-container">
-        <div class="uk-grid-small" uk-grid>
-          <div class="uk-width-1-4@xl uk-width-1-4@l uk-width-1-3@m uk-width-1-2@s">
-            <div class="uk-card uk-card-body sidebar-dev-info" uk-sticky="media: 640">
-              <div class="uk-margin sidebar-dev-logo">
-                <div v-if="getproject.dev_logo === null" class="uk-tile uk-tile-default dev-nologo">
-                  <div class="uk-position-center">
-                    <span uk-icon="icon: users; ratio: 4"></span>
-                  </div>
-                </div>
-                <div v-else class="uk-text-center dev-withlogo">
-                  <img :src="$root.url + '/images/devlogo/' + getproject.dev_logo" :alt="getproject.dev_name">
-                </div>
-              </div>
-              <div class="uk-margin sidebar-dev-profile">
-                <a class="dev-profile-name" href="#">{{ getproject.dev_name }}</a>
-                <div class="dev-profile-region">{{ devregion.provinsi.area_name + ', ' + devregion.kota.area_name }}</div>
-              </div>
-              <a class="uk-margin uk-width-1-1 uk-button uk-button-primary sidebar-viewproject" href="#">Lihat Profil</a>
-            </div>
-          </div>
+        <div class="uk-grid-small " uk-grid>
           <div class="uk-width-expand">
             <div class="uk-card container-projectinfo">
               <div class="uk-card-title uk-padding-small container-projectheading">
@@ -120,6 +101,23 @@
                   </table>
                   <button class="uk-margin-top uk-button uk-button-primary content-viewbutton" @click="getProjectUnit(5)">Lihat Lebih Banyak</button>
                 </div>
+              </div>
+            </div>
+          </div>
+          <div class="uk-width-1-4@xl uk-width-1-4@l uk-width-1-4@m uk-width-1-2@s">
+            <div class="uk-card uk-card-body sidebar-dev-info">
+              <div v-if="getproject.dev_logo === null" class="dev-withnologo">
+                <span uk-icon="icon: users; ratio: 4"></span>
+              </div>
+              <div v-else class="dev-withlogo">
+                <img class="uk-align-center" :src="$root.url + '/images/devlogo/' + getproject.dev_logo" :alt="getproject.dev_name">
+              </div>
+              <div class="uk-margin sidebar-dev-profile">
+                <a class="dev-profile-name" href="#">{{ getproject.dev_name }}</a>
+                <div class="dev-profile-region">{{ devregion.provinsi.area_name + ', ' + devregion.kota.area_name }}</div>
+              </div>
+              <div class="uk-margin uk-text-center">
+                <a class="uk-width-1-1 uk-button uk-button-primary sidebar-viewproject" href="#">Lihat Pengembang</a>
               </div>
             </div>
           </div>

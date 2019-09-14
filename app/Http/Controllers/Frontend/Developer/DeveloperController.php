@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Database\DeveloperUser;
 use App\Database\AreaDB;
+use App\Database\ProvinceDB;
+use App\Database\CityDB;
 use App\Http\Controllers\Controller;
 
 class DeveloperController extends Controller
@@ -83,22 +85,22 @@ class DeveloperController extends Controller
     $phone_office = $request->phone_office;
     $mobile_phone = $request->mobile_phone;
     $city = $request->city;
-    $region = $request->region;
     $biography = $request->biography;
     $address = $request->address;
     $username = $request->username;
     $getinfo = $developeruser->getinfo();
+
+    $getinfo->dev_name = $name;
+    $getinfo->dev_ownername = $ownername;
+    $getinfo->dev_phone_office = $phone_office;
+    $getinfo->dev_mobile_phone = $mobile_phone;
+    $getinfo->dev_city = $city;
+    $getinfo->dev_biography = $biography;
+    $getinfo->dev_address = $address;
+    $getinfo->dev_ownership = $ownership;
+
     if( $getinfo->dev_username === $username )
     {
-      $getinfo->dev_name = $name;
-      $getinfo->dev_ownername = $ownername;
-      $getinfo->dev_phone_office = $phone_office;
-      $getinfo->dev_mobile_phone = $mobile_phone;
-      $getinfo->dev_city = $city;
-      $getinfo->dev_region = $region;
-      $getinfo->dev_biography = $biography;
-      $getinfo->dev_address = $address;
-      $getinfo->dev_ownership = $ownership;
       $getinfo->save();
 
       $res = [ 'status' => 200, 'statusText' => 'success' ];
@@ -112,15 +114,6 @@ class DeveloperController extends Controller
       }
       else
       {
-        $getinfo->dev_name = $name;
-        $getinfo->dev_ownername = $ownername;
-        $getinfo->dev_phone_office = $phone_office;
-        $getinfo->dev_mobile_phone = $mobile_phone;
-        $getinfo->dev_city = $city;
-        $getinfo->dev_region = $region;
-        $getinfo->dev_biography = $biography;
-        $getinfo->dev_address = $address;
-        $getinfo->dev_ownership = $ownership;
         $getinfo->dev_username = $username;
         $getinfo->save();
         $res = [ 'status' => 200, 'statusText' => 'success' ];

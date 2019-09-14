@@ -10,7 +10,6 @@
 <meta name="description" property="description" content="Aplikasi Manajemen Properti Syariah" />
 <meta name="keywords" property="keywords" content="properti, syariah, tugas akhir" />
 <link rel="canonical" href="{{ url('/') }}">
-<link rel="amphtml" href="{{ url('/') }}" />
 <link rel="dns-prefetch" href="https://fonts.googleapis.com">
 <link rel="stylesheet" type="text/css" href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@voerro/vue-tagsinput@2.0.0/dist/style.css" media="screen" />

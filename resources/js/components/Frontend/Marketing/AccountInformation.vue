@@ -32,9 +32,9 @@
       <div class="uk-width-1-2">
         <label class="uk-form-label content-form-label">Provinsi</label>
         <div class="uk-form-controls">
-          <select class="uk-select content-form-input" v-model="forms.region" @change="getRegionData()">
+          <select class="uk-select content-form-input" v-model="forms.region" @change="getCityData()">
             <option value="">-- Pilih --</option>
-            <option v-for="reg in getregion" :value="reg.area_id">{{ reg.area_name }}</option>
+            <option v-for="reg in getregion" :value="reg.province_id">{{ reg.province_name }}</option>
           </select>
         </div>
       </div>
@@ -43,7 +43,7 @@
         <div class="uk-form-controls">
           <select class="uk-select content-form-input" v-model="forms.city">
             <option value="">-- Pilih --</option>
-            <option v-for="city in getcity" :value="city.area_id">{{ city.area_name }}</option>
+            <option v-for="city in getcity" :value="city.city_id">{{ city.city_name }}</option>
           </select>
         </div>
       </div>
@@ -76,7 +76,7 @@ export default {
         phone_number: this.session_user.mkt_phone_number,
         mobile_phone: this.session_user.mkt_mobile_phone,
         city: this.session_user.mkt_city === null ? '' : this.session_user.mkt_city,
-        region: this.session_user.mkt_region === null ? '' : this.session_user.mkt_region,
+        region: this.session_user.province_id === null ? '' : this.session_user.province_id,
         biography: this.session_user.mkt_biography,
         address: this.session_user.mkt_address,
         username: this.session_user.mkt_username,
@@ -111,10 +111,10 @@ export default {
       if( this.forms.region !== '' ) region = this.forms.region;
       axios({
         method: 'get',
-        url: this.$root.url + '/api/region/kabupaten/all/' + region
+        url: this.$root.url + '/api/region/kota/all/' + region
       }).then( res => {
         let results = res.data;
-        this.getcity = results.results.data.kabupaten;
+        this.getcity = results.results.data;
       }).catch( err => {
         console.log( err.response.statusText );
       });

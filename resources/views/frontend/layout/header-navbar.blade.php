@@ -53,7 +53,7 @@
           </li>
           @else
           <li>
-            <a href="{{ route('customer_login_page') }}">Masuk</a>
+            <a href="#">Masuk</a>
             <div class="uk-navbar-dropdown dropdown-main-navbar">
               <ul class="uk-nav uk-navbar-dropdown-nav">
                 <li><a href="{{ route('developer_login_page') }}">Sebagai Pengembang</a></li>

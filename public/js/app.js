@@ -4770,34 +4770,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user'],
   data: function data() {
@@ -4809,18 +4781,14 @@ __webpack_require__.r(__webpack_exports__);
         project_address: '',
         project_city: '',
         project_region: '',
-        project_gmaps: '',
+        project_link_map: '',
+        project_map_embed: '',
         project_status: 'available',
         project_id: null,
+        embedExample: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7932.829401399234!2d106.813944876194!3d-6.208906304351636!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f4029ddcb01d%3A0x8c45c69b461fb15e!2sCitywalk%20Sudirman!5e0!3m2!1sid!2sid!4v1568451570539!5m2!1sid!2sid" width="800" height="600" frameborder="0" style="border:0;" allowfullscreen=""></iframe>',
         submit: 'Tambah',
         keywords: '',
-        getstatus: 'all',
-        unit: {
-          project_id: null,
-          unit_name: '',
-          unit_number: 1,
-          submit: 'Tambah'
-        }
+        getstatus: 'all'
       },
       files: null,
       getregion: {},
@@ -4853,7 +4821,8 @@ __webpack_require__.r(__webpack_exports__);
         this.forms.project_address = '';
         this.forms.project_city = '';
         this.forms.project_region = '';
-        this.forms.project_gmaps = '';
+        this.forms.project_link_map = '';
+        this.forms.project_map_embed = '';
         this.forms.project_status = 'available';
         this.forms.project_id = null;
         this.forms.isEdit = false;
@@ -4863,8 +4832,9 @@ __webpack_require__.r(__webpack_exports__);
         this.forms.project_description = data.project_description;
         this.forms.project_address = data.project_address;
         this.forms.project_city = data.project_city;
-        this.forms.project_region = data.project_region;
-        this.forms.project_gmaps = data.project_gmaps;
+        this.forms.project_region = data.province_id;
+        this.forms.project_link_map = data.project_link_map;
+        this.forms.project_map_embed = data.project_map_embed;
         this.forms.project_status = data.project_status;
         this.forms.project_id = data.project_id;
         this.forms.isEdit = true;
@@ -4873,10 +4843,6 @@ __webpack_require__.r(__webpack_exports__);
 
       this.getRegionData();
       UIkit.modal('#modal-proyek').show();
-    },
-    onPopUpModalUnit: function onPopUpModalUnit(id) {
-      this.forms.unit.project_id = id;
-      UIkit.modal('#modal-add-unit').show();
     },
     getRegionData: function getRegionData() {
       var _this = this;
@@ -4900,10 +4866,10 @@ __webpack_require__.r(__webpack_exports__);
       if (this.forms.project_region !== '') region = this.forms.project_region;
       axios({
         method: 'get',
-        url: this.$root.url + '/api/region/kabupaten/all/' + region
+        url: this.$root.url + '/api/region/kota/all/' + region
       }).then(function (res) {
         var results = res.data;
-        _this2.getcity = results.results.data.kabupaten;
+        _this2.getcity = results.results.data;
       })["catch"](function (err) {
         console.log(err.response.statusText);
       });
@@ -4959,12 +4925,12 @@ __webpack_require__.r(__webpack_exports__);
         url: url,
         params: {
           project_name: this.forms.project_name,
-          project_region: this.forms.project_region,
           project_city: this.forms.project_city,
           project_address: this.forms.project_address,
           project_description: this.forms.project_description,
           project_status: this.forms.project_status,
-          project_gmaps: this.forms.project_gmaps
+          project_link_map: this.forms.project_link_map,
+          project_map_embed: this.forms.project_map_embed
         }
       }).then(function (res) {
         var result = res.data;
@@ -5039,43 +5005,6 @@ __webpack_require__.r(__webpack_exports__);
             }, 2000);
           });
         }
-      });
-    },
-    onAddUnit: function onAddUnit() {
-      var _this6 = this;
-
-      this.errors.name = {};
-      this.errors.errorMessage = '';
-      this.errors.iserror = false;
-      if (this.forms.unit.project_id === null) return false;
-
-      if (this.forms.unit.unit_name === '') {
-        this.errors.name.unit_name = 'Nama unit harap diisi';
-        this.errors.iserror = true;
-      }
-
-      if (this.forms.unit.unit_number < 1 || this.forms.unit.unit_number === '') {
-        this.errors.name.unit_number = 'Silakan masukkan minimal 1 unit';
-        this.errors.iserror = true;
-      }
-
-      if (this.errors.iserror === true) return false;
-      axios({
-        method: 'post',
-        url: this.$root.url + '/developer/project/add_unit/' + this.forms.unit.project_id,
-        params: this.forms.unit
-      }).then(function (res) {
-        var result = res.data;
-        swal({
-          title: 'Sukses',
-          text: 'Unit baru berhasil ditambah',
-          icon: 'success'
-        });
-        setTimeout(function () {
-          document.location = _this6.$root.url + '/developer/project/detail/' + _this6.forms.unit.project_id;
-        }, 2000);
-      })["catch"](function (err) {
-        _this6.errors.errorMessage = err.response.statusText;
       });
     }
   },
@@ -67084,7 +67013,7 @@ var render = function() {
                                 )
                               },
                               function($event) {
-                                return _vm.getRegionData()
+                                return _vm.getCityData()
                               }
                             ]
                           }
@@ -67097,8 +67026,8 @@ var render = function() {
                           _vm._l(_vm.getregion, function(reg) {
                             return _c(
                               "option",
-                              { domProps: { value: reg.area_id } },
-                              [_vm._v(_vm._s(reg.area_name))]
+                              { domProps: { value: reg.province_id } },
+                              [_vm._v(_vm._s(reg.province_name))]
                             )
                           })
                         ],
@@ -67169,8 +67098,8 @@ var render = function() {
                           _vm._l(_vm.getcity, function(city) {
                             return _c(
                               "option",
-                              { domProps: { value: city.area_id } },
-                              [_vm._v(_vm._s(city.area_name))]
+                              { domProps: { value: city.city_id } },
+                              [_vm._v(_vm._s(city.city_name))]
                             )
                           })
                         ],
@@ -67246,7 +67175,7 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "uk-margin" }, [
                     _c("label", { staticClass: "uk-form-label modal-label" }, [
-                      _vm._v("Link Google Maps")
+                      _vm._v("Link Maps")
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "uk-form-controls" }, [
@@ -67255,13 +67184,13 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.forms.project_gmaps,
-                            expression: "forms.project_gmaps"
+                            value: _vm.forms.project_link_map,
+                            expression: "forms.project_link_map"
                           }
                         ],
                         staticClass: "uk-input modal-input",
                         attrs: { type: "text" },
-                        domProps: { value: _vm.forms.project_gmaps },
+                        domProps: { value: _vm.forms.project_link_map },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
@@ -67269,13 +67198,60 @@ var render = function() {
                             }
                             _vm.$set(
                               _vm.forms,
-                              "project_gmaps",
+                              "project_link_map",
                               $event.target.value
                             )
                           }
                         }
                       })
                     ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-margin" }, [
+                    _c("label", { staticClass: "uk-form-label modal-label" }, [
+                      _vm._v("Map Embed")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "uk-form-controls" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.forms.project_map_embed,
+                            expression: "forms.project_map_embed"
+                          }
+                        ],
+                        staticClass: "uk-input modal-input",
+                        attrs: { type: "text" },
+                        domProps: { value: _vm.forms.project_map_embed },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.forms,
+                              "project_map_embed",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "uk-text-small",
+                        attrs: {
+                          target: "_blank",
+                          href:
+                            "https://support.google.com/maps/answer/144361?co=GENIE.Platform%3DDesktop&hl=en"
+                        }
+                      },
+                      [_vm._v("Buka Bantuan Google")]
+                    )
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "uk-margin" }, [
@@ -67407,136 +67383,6 @@ var render = function() {
                 },
                 [_vm._v("Batal")]
               )
-            ])
-          ]
-        )
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { attrs: { id: "modal-add-unit", "uk-modal": "" } }, [
-      _c("div", { staticClass: "uk-modal-dialog uk-modal-body modal-form" }, [
-        _c("a", {
-          staticClass: "uk-modal-close-default uk-modal-close",
-          attrs: { "uk-close": "" }
-        }),
-        _vm._v(" "),
-        _c("h3", { staticClass: "modal-form-heading" }, [
-          _vm._v("Tambah Unit Baru")
-        ]),
-        _vm._v(" "),
-        _c(
-          "form",
-          {
-            staticClass: "uk-form-stacked",
-            on: {
-              submit: function($event) {
-                $event.preventDefault()
-                return _vm.onAddUnit($event)
-              }
-            }
-          },
-          [
-            _c("div", { staticClass: "uk-margin" }, [
-              _c("label", { staticClass: "uk-form-label modal-label" }, [
-                _vm._v("Blok / Prefix")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "uk-form-controls" }, [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.forms.unit.unit_name,
-                      expression: "forms.unit.unit_name"
-                    }
-                  ],
-                  staticClass: "uk-input modal-input",
-                  attrs: { type: "text", placeholder: "Contoh: Blok A" },
-                  domProps: { value: _vm.forms.unit.unit_name },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.forms.unit, "unit_name", $event.target.value)
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.errors.name.unit_name,
-                      expression: "errors.name.unit_name"
-                    }
-                  ],
-                  staticClass: "uk-text-danger uk-text-small"
-                },
-                [_vm._v(_vm._s(_vm.errors.name.unit_name))]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "uk-margin" }, [
-              _c("label", { staticClass: "uk-form-label modal-label" }, [
-                _vm._v("Nomor Blok / Prefix")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "uk-form-controls" }, [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.forms.unit.unit_number,
-                      expression: "forms.unit.unit_number"
-                    }
-                  ],
-                  staticClass: "uk-input modal-input",
-                  attrs: { type: "number" },
-                  domProps: { value: _vm.forms.unit.unit_number },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(
-                        _vm.forms.unit,
-                        "unit_number",
-                        $event.target.value
-                      )
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.errors.name.unit_number,
-                      expression: "errors.name.unit_number"
-                    }
-                  ],
-                  staticClass: "uk-text-danger uk-text-small"
-                },
-                [_vm._v(_vm._s(_vm.errors.name.unit_number))]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "uk-margin" }, [
-              _c("button", {
-                staticClass: "uk-button uk-button-primary modal-form-add",
-                domProps: { innerHTML: _vm._s(_vm.forms.unit.submit) }
-              })
             ])
           ]
         )
@@ -67769,70 +67615,79 @@ var render = function() {
                                       _vm._m(0, true)
                                     ]
                                   )
-                                : _c("div", { staticClass: "uk-inline" }, [
-                                    _c("img", {
-                                      attrs: {
-                                        src:
-                                          _vm.$root.url +
-                                          "/images/project/gallery/" +
-                                          project.project_thumbnail,
-                                        alt: ""
-                                      }
-                                    }),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "uk-overlay uk-position-top"
-                                      },
-                                      [
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass: "uk-position-top-right"
-                                          },
-                                          [
-                                            _c(
-                                              "div",
-                                              { staticClass: "grid-badge" },
-                                              [
-                                                _c(
-                                                  "label",
-                                                  { staticClass: "uk-label" },
-                                                  [
-                                                    project.project_status ===
-                                                    "available"
-                                                      ? _c("span", [
-                                                          _vm._v("Available")
-                                                        ])
-                                                      : project.project_status ===
-                                                        "prelaunch"
-                                                      ? _c("span", [
-                                                          _vm._v("Pre-Launch")
-                                                        ])
-                                                      : project.project_status ===
-                                                        "hold"
-                                                      ? _c("span", [
-                                                          _vm._v("Hold")
-                                                        ])
-                                                      : project.project_status ===
-                                                        "booked"
-                                                      ? _c("span", [
-                                                          _vm._v("Booked")
-                                                        ])
-                                                      : _c("span", [
-                                                          _vm._v("Sold")
-                                                        ])
-                                                  ]
-                                                )
-                                              ]
-                                            )
-                                          ]
-                                        )
-                                      ]
-                                    )
-                                  ])
+                                : _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "uk-cover-container grid-image"
+                                    },
+                                    [
+                                      _c("img", {
+                                        attrs: {
+                                          src:
+                                            _vm.$root.url +
+                                            "/images/project/gallery/" +
+                                            project.project_thumbnail,
+                                          alt: "",
+                                          "uk-cover": ""
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass:
+                                            "uk-overlay uk-position-cover"
+                                        },
+                                        [
+                                          _c(
+                                            "div",
+                                            {
+                                              staticClass:
+                                                "uk-position-top-right"
+                                            },
+                                            [
+                                              _c(
+                                                "div",
+                                                { staticClass: "grid-badge" },
+                                                [
+                                                  _c(
+                                                    "label",
+                                                    { staticClass: "uk-label" },
+                                                    [
+                                                      project.project_status ===
+                                                      "available"
+                                                        ? _c("span", [
+                                                            _vm._v("Available")
+                                                          ])
+                                                        : project.project_status ===
+                                                          "prelaunch"
+                                                        ? _c("span", [
+                                                            _vm._v("Pre-Launch")
+                                                          ])
+                                                        : project.project_status ===
+                                                          "hold"
+                                                        ? _c("span", [
+                                                            _vm._v("Hold")
+                                                          ])
+                                                        : project.project_status ===
+                                                          "booked"
+                                                        ? _c("span", [
+                                                            _vm._v("Booked")
+                                                          ])
+                                                        : _c("span", [
+                                                            _vm._v("Sold")
+                                                          ])
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  )
                             ]),
                             _vm._v(" "),
                             _c(
@@ -67998,31 +67853,6 @@ var render = function() {
                                                       }
                                                     }),
                                                     _vm._v(" Galeri")
-                                                  ]
-                                                )
-                                              ]),
-                                              _vm._v(" "),
-                                              _c("li", [
-                                                _c(
-                                                  "a",
-                                                  {
-                                                    on: {
-                                                      click: function($event) {
-                                                        return _vm.onPopUpModalUnit(
-                                                          project.project_id
-                                                        )
-                                                      }
-                                                    }
-                                                  },
-                                                  [
-                                                    _c("span", {
-                                                      staticClass:
-                                                        "uk-margin-small-right",
-                                                      attrs: {
-                                                        "uk-icon": "plus"
-                                                      }
-                                                    }),
-                                                    _vm._v(" Tambah Unit")
                                                   ]
                                                 )
                                               ])

@@ -22,9 +22,9 @@
               <div class="uk-margin">
                 <label class="uk-form-label modal-label">*Provinsi</label>
                 <div class="uk-form-controls">
-                  <select class="uk-select modal-input" v-model="forms.project_region" @change="getRegionData()">
+                  <select class="uk-select modal-input" v-model="forms.project_region" @change="getCityData()">
                     <option value="">-- Pilih --</option>
-                    <option v-for="reg in getregion" :value="reg.area_id">{{ reg.area_name }}</option>
+                    <option v-for="reg in getregion" :value="reg.province_id">{{ reg.province_name }}</option>
                   </select>
                 </div>
                 <div v-show="errors.name.project_region" class="uk-text-small uk-text-danger">{{ errors.name.project_region }}</div>
@@ -34,7 +34,7 @@
                 <div class="uk-form-controls">
                   <select class="uk-select modal-input" v-model="forms.project_city">
                     <option value="">-- Pilih --</option>
-                    <option v-for="city in getcity" :value="city.area_id">{{ city.area_name }}</option>
+                    <option v-for="city in getcity" :value="city.city_id">{{ city.city_name }}</option>
                   </select>
                 </div>
                 <div v-show="errors.name.project_city" class="uk-text-small uk-text-danger">{{ errors.name.project_city }}</div>
@@ -47,10 +47,17 @@
                 <div v-show="errors.name.project_address" class="uk-text-small uk-text-danger">{{ errors.name.project_address }}</div>
               </div>
               <div class="uk-margin">
-                <label class="uk-form-label modal-label">Link Google Maps</label>
+                <label class="uk-form-label modal-label">Link Maps</label>
                 <div class="uk-form-controls">
-                  <input type="text" class="uk-input modal-input" v-model="forms.project_gmaps">
+                  <input type="text" class="uk-input modal-input" v-model="forms.project_link_map">
                 </div>
+              </div>
+              <div class="uk-margin">
+                <label class="uk-form-label modal-label">Map Embed</label>
+                <div class="uk-form-controls">
+                  <input type="text" class="uk-input modal-input" v-model="forms.project_map_embed">
+                </div>
+                <a class="uk-text-small" target="_blank" href="https://support.google.com/maps/answer/144361?co=GENIE.Platform%3DDesktop&hl=en">Buka Bantuan Google</a>
               </div>
               <div class="uk-margin">
                 <label class="uk-form-label modal-label">*Deskripsi Proyek</label>
@@ -81,40 +88,6 @@
       </div>
     </div>
     <!-- modal tambah proyek -->
-
-    <!-- modal tambah unit -->
-    <div id="modal-add-unit" uk-modal>
-      <div class="uk-modal-dialog uk-modal-body modal-form">
-        <a class="uk-modal-close-default uk-modal-close" uk-close></a>
-        <h3 class="modal-form-heading">Tambah Unit Baru</h3>
-        <form class="uk-form-stacked" @submit.prevent="onAddUnit">
-          <div class="uk-margin">
-            <label class="uk-form-label modal-label">Blok / Prefix</label>
-            <div class="uk-form-controls">
-              <input type="text" class="uk-input modal-input" v-model="forms.unit.unit_name" placeholder="Contoh: Blok A">
-            </div>
-            <div v-show="errors.name.unit_name" class="uk-text-danger uk-text-small">{{ errors.name.unit_name }}</div>
-          </div>
-          <div class="uk-margin">
-            <label class="uk-form-label modal-label">Nomor Blok / Prefix</label>
-            <div class="uk-form-controls">
-              <input type="number" class="uk-input modal-input" v-model="forms.unit.unit_number">
-            </div>
-            <div v-show="errors.name.unit_number" class="uk-text-danger uk-text-small">{{ errors.name.unit_number }}</div>
-          </div>
-          <!--<div class="uk-margin">
-            <label class="uk-form-label modal-label">Contoh Penamaan Blok</label>
-            <div class="uk-form-controls">
-              <textarea v-model="unitName" class="uk-textarea modal-input" disabled></textarea>
-            </div>
-          </div>-->
-          <div class="uk-margin">
-            <button class="uk-button uk-button-primary modal-form-add" v-html="forms.unit.submit"></button>
-          </div>
-        </form>
-      </div>
-    </div>
-    <!-- modal tambah unit -->
 
     <div class="uk-card dashboard-content">
       <div class="uk-card-title uk-margin dashboard-content-heading">Proyek</div>
@@ -166,9 +139,9 @@
                     <span uk-icon="icon: image; ratio: 3"></span>
                   </div>
                 </div>
-                <div v-else class="uk-inline">
-                  <img :src="$root.url + '/images/project/gallery/' + project.project_thumbnail" alt="">
-                  <div class="uk-overlay uk-position-top">
+                <div v-else class="uk-cover-container grid-image">
+                  <img :src="$root.url + '/images/project/gallery/' + project.project_thumbnail" alt="" uk-cover>
+                  <div class="uk-overlay uk-position-cover">
                     <div class="uk-position-top-right">
                       <div class="grid-badge">
                         <label class="uk-label">
@@ -204,7 +177,6 @@
                       <ul class="uk-nav uk-dropdown-nav">
                         <li><a :href="$root.url + '/developer/project/detail/' + project.project_id"><span class="uk-margin-small-right" uk-icon="forward"></span> Lihat Proyek</a></li>
                         <li><a :href="$root.url + '/developer/project/gallery/' + project.project_id"><span class="uk-margin-small-right" uk-icon="image"></span> Galeri</a></li>
-                        <li><a @click="onPopUpModalUnit( project.project_id )"><span class="uk-margin-small-right" uk-icon="plus"></span> Tambah Unit</a></li>
                       </ul>
                     </div>
                   </div>
@@ -230,18 +202,14 @@ export default {
         project_address: '',
         project_city: '',
         project_region: '',
-        project_gmaps: '',
+        project_link_map: '',
+        project_map_embed: '',
         project_status: 'available',
         project_id: null,
+        embedExample: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7932.829401399234!2d106.813944876194!3d-6.208906304351636!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f4029ddcb01d%3A0x8c45c69b461fb15e!2sCitywalk%20Sudirman!5e0!3m2!1sid!2sid!4v1568451570539!5m2!1sid!2sid" width="800" height="600" frameborder="0" style="border:0;" allowfullscreen=""></iframe>',
         submit: 'Tambah',
         keywords: '',
         getstatus: 'all',
-        unit: {
-          project_id: null,
-          unit_name: '',
-          unit_number: 1,
-          submit: 'Tambah'
-        }
       },
       files: null,
       getregion: {},
@@ -276,7 +244,8 @@ export default {
         this.forms.project_address = '';
         this.forms.project_city = '';
         this.forms.project_region = '';
-        this.forms.project_gmaps = '';
+        this.forms.project_link_map = '';
+        this.forms.project_map_embed = '';
         this.forms.project_status = 'available';
         this.forms.project_id = null;
         this.forms.isEdit = false;
@@ -288,8 +257,9 @@ export default {
         this.forms.project_description = data.project_description;
         this.forms.project_address = data.project_address;
         this.forms.project_city = data.project_city;
-        this.forms.project_region = data.project_region;
-        this.forms.project_gmaps = data.project_gmaps;
+        this.forms.project_region = data.province_id;
+        this.forms.project_link_map = data.project_link_map;
+        this.forms.project_map_embed = data.project_map_embed;
         this.forms.project_status = data.project_status;
         this.forms.project_id = data.project_id;
         this.forms.isEdit = true;
@@ -297,11 +267,6 @@ export default {
       }
       this.getRegionData();
       UIkit.modal('#modal-proyek').show();
-    },
-    onPopUpModalUnit( id )
-    {
-      this.forms.unit.project_id = id;
-      UIkit.modal('#modal-add-unit').show();
     },
     getRegionData()
     {
@@ -322,10 +287,10 @@ export default {
       if( this.forms.project_region !== '' ) region = this.forms.project_region;
       axios({
         method: 'get',
-        url: this.$root.url + '/api/region/kabupaten/all/' + region
+        url: this.$root.url + '/api/region/kota/all/' + region
       }).then( res => {
         let results = res.data;
-        this.getcity = results.results.data.kabupaten;
+        this.getcity = results.results.data;
       }).catch( err => {
         console.log( err.response.statusText );
       });
@@ -380,12 +345,12 @@ export default {
         url: url,
         params: {
           project_name: this.forms.project_name,
-          project_region: this.forms.project_region,
           project_city: this.forms.project_city,
           project_address: this.forms.project_address,
           project_description: this.forms.project_description,
           project_status: this.forms.project_status,
-          project_gmaps: this.forms.project_gmaps
+          project_link_map: this.forms.project_link_map,
+          project_map_embed: this.forms.project_map_embed
         }
       }).then( res => {
         let result = res.data;
@@ -456,43 +421,6 @@ export default {
             }, 2000);
           });
         }
-      });
-    },
-    onAddUnit()
-    {
-      this.errors.name = {};
-      this.errors.errorMessage = '';
-      this.errors.iserror = false;
-      if( this.forms.unit.project_id === null ) return false;
-
-      if( this.forms.unit.unit_name === '' )
-      {
-        this.errors.name.unit_name = 'Nama unit harap diisi';
-        this.errors.iserror = true;
-      }
-      if( this.forms.unit.unit_number < 1 || this.forms.unit.unit_number === '' )
-      {
-        this.errors.name.unit_number = 'Silakan masukkan minimal 1 unit';
-        this.errors.iserror = true;
-      }
-      if( this.errors.iserror === true ) return false;
-
-      axios({
-        method: 'post',
-        url: this.$root.url + '/developer/project/add_unit/' + this.forms.unit.project_id,
-        params: this.forms.unit
-      }).then( res => {
-        let result = res.data;
-        swal({
-          title: 'Sukses',
-          text: 'Unit baru berhasil ditambah',
-          icon: 'success'
-        });
-        setTimeout(() => {
-          document.location = this.$root.url + '/developer/project/detail/' + this.forms.unit.project_id;
-        }, 2000);
-      }).catch( err => {
-        this.errors.errorMessage = err.response.statusText;
       });
     }
   },

@@ -9,6 +9,8 @@ use App\Database\DeveloperUser;
 use App\Database\ProjectList;
 use App\Database\ProjectGallery;
 use App\Database\AreaDB;
+use App\Database\ProvinceDB;
+use App\Database\CityDB;
 use App\Http\Controllers\Controller;
 
 class ProjectListController extends Controller
@@ -34,20 +36,20 @@ class ProjectListController extends Controller
   {
     $project_name = $request->project_name;
     $project_slug = str_slug( $project_name );
-    $project_region = $request->project_region;
     $project_city = $request->project_city;
     $project_address = $request->project_address;
-    $project_gmaps = $request->project_gmaps;
+    $project_link_map = $request->project_link_map;
+    $project_map_embed = $request->project_map_embed;
     $project_description = $request->project_description;
     $project_status = $request->project_status;
 
     $insert = new $project_list;
     $insert->project_name = $project_name;
     $insert->project_slug = $project_slug;
-    $insert->project_region = $project_region;
     $insert->project_city = $project_city;
     $insert->project_address = $project_address;
-    $insert->project_gmaps = $project_gmaps;
+    $insert->project_link_map = $project_link_map;
+    $insert->project_map_embed = $project_map_embed;
     $insert->project_description = $project_description;
     $insert->project_status = $project_status;
     $insert->dev_user_id = session()->get('dev_user_id');
@@ -61,20 +63,20 @@ class ProjectListController extends Controller
   {
     $project_name = $request->project_name;
     $project_slug = str_slug( $project_name );
-    $project_region = $request->project_region;
     $project_city = $request->project_city;
     $project_address = $request->project_address;
-    $project_gmaps = $request->project_gmaps;
+    $project_link_map = $request->project_link_map;
+    $project_map_embed = $request->project_map_embed;
     $project_description = $request->project_description;
     $project_status = $request->project_status;
 
     $update = $project_list->where('project_id', $project_id)->first();
     $update->project_name = $project_name;
     $update->project_slug = $project_slug;
-    $update->project_region = $project_region;
     $update->project_city = $project_city;
     $update->project_address = $project_address;
-    $update->project_gmaps = $project_gmaps;
+    $update->project_link_map = $project_link_map;
+    $update->project_map_embed = $project_map_embed;
     $update->project_description = $project_description;
     $update->project_status = $project_status;
     $update->save();
@@ -88,36 +90,58 @@ class ProjectListController extends Controller
     $keywords = $request->keywords;
     $status = $request->status;
     $devuser = $developeruser->getinfo();
-    $project = new $project_list;
+    $project = $project_list->select(
+      'project_list.project_id',
+      'project_list.project_name',
+      'project_list.project_slug',
+      'project_list.project_thumbnail',
+      'project_list.project_description',
+      'project_list.project_city',
+      'project_list.project_address',
+      'project_list.project_link_map',
+      'project_list.project_map_embed',
+      'project_list.project_status',
+      'project_list.dev_user_id',
+      'project_list.created_at',
+      'project_list.updated_at',
+      'city.city_id',
+      'city.city_name',
+      'city.city_slug',
+      'province.province_id',
+      'province.province_name',
+      'province.province_slug'
+    )
+    ->leftJoin('city', 'project_list.project_city', '=', 'city.city_id')
+    ->leftJoin('province', 'city.province_id', '=', 'province.province_id');
 
     if( empty( $keywords ) )
     {
-      $query = $project->where('dev_user_id', $devuser->dev_user_id)
-      ->orderBy('created_at', 'desc');
+      $query = $project->where('project_list.dev_user_id', $devuser->dev_user_id)
+      ->orderBy('project_list.created_at', 'desc');
       if( $status !== 'all' )
       {
         $query = $project->where([
-          ['project_status', $status],
-          ['dev_user_id', $devuser->dev_user_id]
+          ['project_list.project_status', $status],
+          ['project_list.dev_user_id', $devuser->dev_user_id]
         ])
-        ->orderBy('created_at', 'desc');
+        ->orderBy('project_list.created_at', 'desc');
       }
     }
     else
     {
       $query = $project->where([
-        ['project_name', 'like', '%' . $keywords . '%'],
-        ['dev_user_id', $devuser->dev_user_id]
+        ['project_list.project_name', 'like', '%' . $keywords . '%'],
+        ['project_list.dev_user_id', $devuser->dev_user_id]
       ])
-      ->orderBy('created_at', 'desc');
+      ->orderBy('project_list.created_at', 'desc');
       if( $status !== 'all' )
       {
         $query = $project->where([
-          ['project_status', $status],
-          ['project_name', 'like', '%' . $keywords . '%'],
-          ['dev_user_id', $devuser->dev_user_id]
+          ['project_list.project_status', $status],
+          ['project_list.project_name', 'like', '%' . $keywords . '%'],
+          ['.project_list.dev_user_id', $devuser->dev_user_id]
         ])
-        ->orderBy('created_at', 'desc');
+        ->orderBy('project_list.created_at', 'desc');
       }
     }
     $fetchdata = $query->paginate( 6 );

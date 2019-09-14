@@ -272,7 +272,9 @@ html, body {
     }
     .dash-grid-box {
       .grid-image {
-        background: $color3; color: #ffffff;
+        background: $color3;
+        color: #ffffff;
+        height: 200px;
       }
       .grid-badge {
         padding: 10px;

@@ -791,6 +791,7 @@ body {
 .dashboard-container .dashboard-content .dash-grid-box .grid-image {
   background: #1fc8c9;
   color: #ffffff;
+  height: 200px;
 }
 
 .dashboard-container .dashboard-content .dash-grid-box .grid-badge {

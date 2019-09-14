@@ -80,6 +80,7 @@ class DeveloperController extends Controller
   public function change_account_information( Request $request, DeveloperUser $developeruser )
   {
     $name = $request->name;
+    $slug_name = str_slug( $name );
     $ownername = $request->ownername;
     $ownership = $request->ownership;
     $phone_office = $request->phone_office;
@@ -91,6 +92,7 @@ class DeveloperController extends Controller
     $getinfo = $developeruser->getinfo();
 
     $getinfo->dev_name = $name;
+    $getinfo->dev_slug = $slug_name;
     $getinfo->dev_ownername = $ownername;
     $getinfo->dev_phone_office = $phone_office;
     $getinfo->dev_mobile_phone = $mobile_phone;

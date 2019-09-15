@@ -12,6 +12,7 @@ use App\Database\Customer;
 use App\Database\MarketingUser;
 use App\Database\DeveloperUser;
 use App\Database\AreaDB;
+use App\Database\CityDB;
 use App\Http\Controllers\Controller;
 
 class ProjectListController extends Controller
@@ -65,67 +66,47 @@ class ProjectListController extends Controller
       'project_list.project_description',
       'project_list.project_status',
       'project_list.project_address',
-      'project_list.project_gmaps',
-      'project_list.project_region',
+      'project_list.project_link_map',
+      'project_list.project_map_embed',
       'project_list.project_city',
       'project_list.created_at',
       'project_list.updated_at',
       'developer_user.dev_name',
       'developer_user.dev_slug',
       'developer_user.dev_logo',
-      'developer_user.dev_region',
       'developer_user.dev_city',
       'developer_user.dev_biography'
     )
     ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
-    ->where('project_slug', $slug)
+    ->where('project_list.project_slug', $slug)
     ->first();
 
     if( ! $getproject ) abort(404);
 
-    $project_region = $area->where('area_id', $getproject->project_region)->first();
-    $project_city = $area->where('area_id', $getproject->project_city)->first();
-    $dev_region = $area->where('area_id', $getproject->dev_region)->first();
-    $dev_city = $area->where('area_id', $getproject->dev_city)->first();
+    $city = new CityDB;
+    $project_city = $city->join( 'province', 'city.province_id', '=', 'province.province_id' )
+    ->where('city.city_id', $getproject->project_city)->first();
+
+    $dev_city = $city->join( 'province', 'city.province_id', '=', 'province.province_id' )
+    ->where('city.city_id', $getproject->dev_city)->first();
 
     $getgallery = $project_gallery->where('project_id', $getproject->project_id)
     ->orderBy('created_at', 'desc')
     ->get();
 
-    $getunitname = $project_unit->select('project_unit_name as unit_name')
-    ->where('project_id', $getproject->project_id)
-    ->distinct()
-    ->get();
-    $getunitnumber = $project_unit->select('project_unit_number as unit_number')
-    ->where('project_id', $getproject->project_id)
-    ->distinct()
-    ->get();
-
     $data['getproject'] = $getproject;
     $data['getgallery'] = $getgallery;
-    $data['projectregion'] = [
-      'kota' => $project_city,
-      'provinsi' => $project_region
-    ];
-    $data['devregion'] = [
-      'kota' => $dev_city,
-      'provinsi' => $dev_region
-    ];
-    $data['getunit'] = [
-      'unit_name' => $getunitname,
-      'unit_number' => $getunitnumber
-    ];
+    $data['project_city'] = $project_city;
+    $data['dev_city'] = $dev_city;
 
     return response()->view('frontend.pages.view_project', $data);
   }
 
-  public function view_project_unit( Request $request, ProjectUnitType $project_unit, $project_id )
+  public function list_project_unit( Request $request, ProjectUnitType $project_unit, $project_id )
   {
     $offset = $request->offset;
-    $unit_name = $request->unit_name;
-    $unit_number = $request->unit_number;
 
-    $unit = $project_unit->select(
+    $getunit = $project_unit->select(
       'project_unit_type.project_unit_type_id',
       'project_unit_type.unit_floor',
       'project_unit_type.unit_price',
@@ -135,24 +116,13 @@ class ProjectListController extends Controller
       'project_unit_type.unit_lb',
       'project_unit.project_unit_id',
       'project_unit.project_unit_name',
-      'project_unit.project_unit_number',
+      'project_unit.project_unit_slug',
       'project_unit.project_unit_status'
     )
-    ->join('project_unit', 'project_unit_type.project_unit_id', '=', 'project_unit.project_unit_id');
-    if( empty( $unit_name ) and empty( $unit_number ) )
-    {
-      $unit = $unit->where('project_unit.project_id', $project_id);
-    }
-    else
-    {
-      $unit = $unit->where([
-        ['project_unit.project_id', $project_id],
-        ['project_unit.project_unit_name', $unit_name],
-        ['project_unit.project_unit_number', $unit_number]
-      ]);
-    }
-    $getunit = $unit->orderBy('project_unit_type.created_at', 'desc')
-    ->limit( 5 )
+    ->join('project_unit', 'project_unit_type.project_unit_id', '=', 'project_unit.project_unit_id')
+    ->where('project_unit.project_id', $project_id)
+    ->orderBy('project_unit_type.created_at', 'desc')
+    ->limit( 10 )
     ->offset( $offset )
     ->get();
 

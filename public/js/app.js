@@ -6194,29 +6194,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['session_user', 'getproject', 'getgallery', 'getunit', 'projectregion', 'devregion'],
+  props: ['session_user', 'getproject', 'getgallery', 'getunit', 'projectcity', 'devcity'],
   data: function data() {
     return {
-      forms: {
-        unitname: '',
-        unitnumber: ''
-      },
+      forms: {},
       projectunit: {
         total: 0,
         results: [],
@@ -6242,10 +6224,9 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       this.projectunit.currentOffset = this.projectunit.nextOffset;
-      var params = 'unit_name=' + this.forms.unitname + '&unit_number=' + this.forms.unitnumber;
       axios({
         method: 'get',
-        url: this.$root.url + '/project/view/unit/' + this.getproject.project_id + '?offset=' + this.projectunit.currentOffset + '&' + params
+        url: this.$root.url + '/project/unit/' + this.getproject.project_id + '?offset=' + this.projectunit.currentOffset
       }).then(function (res) {
         var result = res.data;
 
@@ -6255,9 +6236,9 @@ __webpack_require__.r(__webpack_exports__);
           var data = result.results;
 
           if (data.total !== 0) {
-            for (var i = 0; i < data.total; i++) {
-              _this.projectunit.results.push(data.data[i]);
-            }
+            data.data.forEach(function (d) {
+              _this.projectunit.results.push(d);
+            });
           }
         }
 
@@ -70255,13 +70236,11 @@ var render = function() {
                           _c("br"),
                           _vm._v(" "),
                           _c("strong", [
-                            _vm._v(
-                              _vm._s(_vm.projectregion.provinsi.area_name) + ","
-                            )
+                            _vm._v(_vm._s(_vm.projectcity.city_name) + ",")
                           ]),
                           _vm._v(" "),
                           _c("strong", [
-                            _vm._v(_vm._s(_vm.projectregion.kota.area_name))
+                            _vm._v(_vm._s(_vm.projectcity.province_name))
                           ])
                         ]
                       )
@@ -70284,12 +70263,27 @@ var render = function() {
                         ]
                       ),
                       _vm._v(" "),
-                      _c("div", {
-                        staticClass: "uk-margin-small content-projectlead",
-                        domProps: {
-                          innerHTML: _vm._s(_vm.getproject.project_gmaps)
-                        }
-                      })
+                      _c(
+                        "div",
+                        { staticClass: "uk-margin-small content-projectlead" },
+                        [
+                          _c(
+                            "a",
+                            {
+                              attrs: { href: _vm.getproject.project_link_map }
+                            },
+                            [_vm._v("Lihat Google Map")]
+                          ),
+                          _vm._v(" "),
+                          _c("div", {
+                            domProps: {
+                              innerHTML: _vm._s(
+                                _vm.getproject.project_map_embed
+                              )
+                            }
+                          })
+                        ]
+                      )
                     ]
                   ),
                   _vm._v(" "),
@@ -70299,133 +70293,6 @@ var render = function() {
                     "div",
                     { staticClass: "uk-margin content-projectdetail" },
                     [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "uk-grid-small uk-child-width-auto",
-                          attrs: { "uk-grid": "" }
-                        },
-                        [
-                          _c("div", [
-                            _c(
-                              "select",
-                              {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.forms.unitname,
-                                    expression: "forms.unitname"
-                                  }
-                                ],
-                                staticClass: "uk-select content-projectform",
-                                on: {
-                                  change: function($event) {
-                                    var $$selectedVal = Array.prototype.filter
-                                      .call($event.target.options, function(o) {
-                                        return o.selected
-                                      })
-                                      .map(function(o) {
-                                        var val =
-                                          "_value" in o ? o._value : o.value
-                                        return val
-                                      })
-                                    _vm.$set(
-                                      _vm.forms,
-                                      "unitname",
-                                      $event.target.multiple
-                                        ? $$selectedVal
-                                        : $$selectedVal[0]
-                                    )
-                                  }
-                                }
-                              },
-                              [
-                                _c("option", { domProps: { value: "" } }, [
-                                  _vm._v("-- Blok / Prefix --")
-                                ]),
-                                _vm._v(" "),
-                                _vm._l(_vm.getunit.unit_name, function(unit) {
-                                  return _c(
-                                    "option",
-                                    { domProps: { value: unit.unit_name } },
-                                    [_vm._v(_vm._s(unit.unit_name))]
-                                  )
-                                })
-                              ],
-                              2
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("div", [
-                            _c(
-                              "select",
-                              {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.forms.unitnumber,
-                                    expression: "forms.unitnumber"
-                                  }
-                                ],
-                                staticClass: "uk-select content-projectform",
-                                on: {
-                                  change: function($event) {
-                                    var $$selectedVal = Array.prototype.filter
-                                      .call($event.target.options, function(o) {
-                                        return o.selected
-                                      })
-                                      .map(function(o) {
-                                        var val =
-                                          "_value" in o ? o._value : o.value
-                                        return val
-                                      })
-                                    _vm.$set(
-                                      _vm.forms,
-                                      "unitnumber",
-                                      $event.target.multiple
-                                        ? $$selectedVal
-                                        : $$selectedVal[0]
-                                    )
-                                  }
-                                }
-                              },
-                              [
-                                _c("option", { domProps: { value: "" } }, [
-                                  _vm._v("-- Nomor Unit --")
-                                ]),
-                                _vm._v(" "),
-                                _vm._l(_vm.getunit.unit_number, function(unit) {
-                                  return _c(
-                                    "option",
-                                    { domProps: { value: unit.unit_number } },
-                                    [_vm._v(_vm._s(unit.unit_number))]
-                                  )
-                                })
-                              ],
-                              2
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("div", [
-                            _c(
-                              "button",
-                              {
-                                staticClass:
-                                  "uk-button uk-button-primary content-viewbutton",
-                                on: {
-                                  click: function($event) {
-                                    return _vm.getProjectUnit()
-                                  }
-                                }
-                              },
-                              [_vm._v("Filter")]
-                            )
-                          ])
-                        ]
-                      ),
-                      _vm._v(" "),
                       _c(
                         "table",
                         {
@@ -70452,13 +70319,7 @@ var render = function() {
                                 ]),
                                 _vm._v(" "),
                                 _c("td", [
-                                  _vm._v(
-                                    _vm._s(
-                                      unit.project_unit_name +
-                                        " No. " +
-                                        unit.project_unit_number
-                                    )
-                                  )
+                                  _vm._v(_vm._s(unit.project_unit_name))
                                 ]),
                                 _vm._v(" "),
                                 _c("td", [
@@ -70551,9 +70412,9 @@ var render = function() {
                     _c("div", { staticClass: "dev-profile-region" }, [
                       _vm._v(
                         _vm._s(
-                          _vm.devregion.provinsi.area_name +
+                          _vm.devcity.province_name +
                             ", " +
-                            _vm.devregion.kota.area_name
+                            _vm.devcity.city_name
                         )
                       )
                     ])

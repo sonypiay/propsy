@@ -40,15 +40,17 @@
                   </div>
                   <div class="uk-margin-small content-projectlead">
                     {{ getproject.project_address }} <br>
-                    <strong>{{ projectregion.provinsi.area_name }},</strong>
-                    <strong>{{ projectregion.kota.area_name }}</strong>
+                    <strong>{{ projectcity.city_name }},</strong>
+                    <strong>{{ projectcity.province_name }}</strong>
                   </div>
                 </div>
                 <div class="uk-margin content-projectdetail">
                   <div class="uk-margin-small content-projectheading">
                     Google Maps
                   </div>
-                  <div class="uk-margin-small content-projectlead" v-html="getproject.project_gmaps">
+                  <div class="uk-margin-small content-projectlead">
+                    <a :href="getproject.project_link_map">Lihat Google Map</a>
+                    <div v-html="getproject.project_map_embed"></div>
                   </div>
                 </div>
                 <div class="uk-margin content-projectdetail">
@@ -60,23 +62,6 @@
                   </div>
                 </div>
                 <div class="uk-margin content-projectdetail">
-                  <div class="uk-grid-small uk-child-width-auto" uk-grid>
-                    <div>
-                      <select class="uk-select content-projectform" v-model="forms.unitname">
-                        <option :value="''">-- Blok / Prefix --</option>
-                        <option v-for="unit in getunit.unit_name" :value="unit.unit_name">{{ unit.unit_name }}</option>
-                      </select>
-                    </div>
-                    <div>
-                      <select class="uk-select content-projectform" v-model="forms.unitnumber">
-                        <option :value="''">-- Nomor Unit --</option>
-                        <option v-for="unit in getunit.unit_number" :value="unit.unit_number">{{ unit.unit_number }}</option>
-                      </select>
-                    </div>
-                    <div>
-                      <button class="uk-button uk-button-primary content-viewbutton" @click="getProjectUnit()">Filter</button>
-                    </div>
-                  </div>
                   <table class="uk-table uk-table-divider uk-table-hover uk-table-striped uk-table-small uk-table-middle">
                     <thead>
                       <tr>
@@ -92,7 +77,7 @@
                         <td>
                           <a class="uk-button uk-button-small uk-button-primary content-viewbutton" @click="">Lihat Cicilan</a>
                         </td>
-                        <td>{{ unit.project_unit_name + ' No. ' + unit.project_unit_number }}</td>
+                        <td>{{ unit.project_unit_name }}</td>
                         <td>{{ unit.unit_lt + ' / ' + unit.unit_lb }}</td>
                         <td>{{ unit.unit_km + ' / ' + unit.unit_kt }}</td>
                         <td>IDR {{ $root.formatNumeral( unit.unit_price, '0,0' ) }}</td>
@@ -114,7 +99,7 @@
               </div>
               <div class="uk-margin sidebar-dev-profile">
                 <a class="dev-profile-name" href="#">{{ getproject.dev_name }}</a>
-                <div class="dev-profile-region">{{ devregion.provinsi.area_name + ', ' + devregion.kota.area_name }}</div>
+                <div class="dev-profile-region">{{ devcity.province_name + ', ' + devcity.city_name }}</div>
               </div>
               <div class="uk-margin uk-text-center">
                 <a class="uk-width-1-1 uk-button uk-button-primary sidebar-viewproject" href="#">Lihat Pengembang</a>
@@ -134,14 +119,13 @@ export default {
     'getproject',
     'getgallery',
     'getunit',
-    'projectregion',
-    'devregion'
+    'projectcity',
+    'devcity'
   ],
   data() {
     return {
       forms: {
-        unitname: '',
-        unitnumber: ''
+
       },
       projectunit: {
         total: 0,
@@ -169,11 +153,10 @@ export default {
         this.projectunit.nextOffset = this.projectunit.nextOffset + offset;
       }
       this.projectunit.currentOffset = this.projectunit.nextOffset;
-      var params = 'unit_name=' + this.forms.unitname + '&unit_number=' + this.forms.unitnumber;
 
       axios({
         method: 'get',
-        url: this.$root.url + '/project/view/unit/' + this.getproject.project_id + '?offset=' + this.projectunit.currentOffset + '&' + params
+        url: this.$root.url + '/project/unit/' + this.getproject.project_id + '?offset=' + this.projectunit.currentOffset
       }).then( res => {
         let result = res.data;
         if( this.projectunit.results.length === 0 )
@@ -185,10 +168,7 @@ export default {
           let data = result.results;
           if( data.total !== 0 )
           {
-            for( let i = 0; i < data.total; i++ )
-            {
-              this.projectunit.results.push(data.data[i]);
-            }
+            data.data.forEach( d => { this.projectunit.results.push(d); });
           }
         }
         this.projectunit.results.total = this.projectunit.results.length;

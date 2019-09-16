@@ -6194,17 +6194,42 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user', 'getproject', 'getgallery', 'getunit', 'projectcity', 'devcity'],
   data: function data() {
     return {
-      forms: {},
+      forms: {
+        filterUnit: 'all'
+      },
       projectunit: {
         total: 0,
         results: [],
         isLoading: false,
         currentOffset: 0,
-        nextOffset: null
+        isUpdating: true,
+        pagination: {
+          current_page: 1,
+          last_page: 1,
+          next_page_url: null,
+          prev_page_url: null
+        }
       },
       installment: {
         total: 0,
@@ -6214,35 +6239,25 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    getProjectUnit: function getProjectUnit(offset, filter) {
+    getProjectUnit: function getProjectUnit(p) {
       var _this = this;
 
-      if (offset === undefined && this.projectunit.nextOffset === null) {
-        this.projectunit.nextOffset = 0;
-      } else {
-        this.projectunit.nextOffset = this.projectunit.nextOffset + offset;
-      }
-
-      this.projectunit.currentOffset = this.projectunit.nextOffset;
+      var param = 'filterUnit=' + this.forms.filterUnit;
+      var url = this.$root.url + '/project/unit/' + this.getproject.project_id + '?page=' + this.projectunit.pagination.current_page + '&' + param;
+      if (p !== undefined) url = p + '&' + param;
       axios({
         method: 'get',
-        url: this.$root.url + '/project/unit/' + this.getproject.project_id + '?offset=' + this.projectunit.currentOffset
+        url: url
       }).then(function (res) {
         var result = res.data;
-
-        if (_this.projectunit.results.length === 0) {
-          _this.projectunit.results = result.results.data;
-        } else {
-          var data = result.results;
-
-          if (data.total !== 0) {
-            data.data.forEach(function (d) {
-              _this.projectunit.results.push(d);
-            });
-          }
-        }
-
-        _this.projectunit.results.total = _this.projectunit.results.length;
+        _this.projectunit.results = result.results.data;
+        _this.projectunit.results.total = result.results.total;
+        _this.projectunit.pagination = {
+          current_page: result.results.current_page,
+          last_page: result.results.last_page,
+          next_page_url: result.results.next_page_url,
+          prev_page_url: result.results.prev_page_url
+        };
       })["catch"](function (err) {
         console.log(err.response.statusText);
       });
@@ -70294,6 +70309,59 @@ var render = function() {
                     { staticClass: "uk-margin content-projectdetail" },
                     [
                       _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.forms.filterUnit,
+                              expression: "forms.filterUnit"
+                            }
+                          ],
+                          staticClass: "uk-select content-projectform",
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.forms,
+                                  "filterUnit",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                return _vm.getProjectUnit()
+                              }
+                            ]
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "all" } }, [
+                            _vm._v("Semua Unit")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.getunit, function(unit) {
+                            return _c(
+                              "option",
+                              { domProps: { value: unit.project_unit_id } },
+                              [_vm._v(_vm._s(unit.project_unit_name))]
+                            )
+                          })
+                        ],
+                        2
+                      ),
+                      _vm._v(" "),
+                      _c(
                         "table",
                         {
                           staticClass:
@@ -70353,17 +70421,47 @@ var render = function() {
                       ),
                       _vm._v(" "),
                       _c(
-                        "button",
-                        {
-                          staticClass:
-                            "uk-margin-top uk-button uk-button-primary content-viewbutton",
-                          on: {
-                            click: function($event) {
-                              return _vm.getProjectUnit(5)
-                            }
-                          }
-                        },
-                        [_vm._v("Lihat Lebih Banyak")]
+                        "ul",
+                        { staticClass: "uk-pagination uk-flex-center" },
+                        [
+                          _vm.projectunit.pagination.prev_page_url !== null
+                            ? _c("li", [
+                                _c("a", {
+                                  attrs: { "uk-icon": "chevron-left" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.getProjectUnit(
+                                        _vm.projectunit.pagination.prev_page_url
+                                      )
+                                    }
+                                  }
+                                })
+                              ])
+                            : _c("li", { staticClass: "uk-disabled" }, [
+                                _c("a", {
+                                  attrs: { "uk-icon": "chevron-left" }
+                                })
+                              ]),
+                          _vm._v(" "),
+                          _vm.projectunit.pagination.next_page_url !== null
+                            ? _c("li", [
+                                _c("a", {
+                                  attrs: { "uk-icon": "chevron-right" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.getProjectUnit(
+                                        _vm.projectunit.pagination.next_page_url
+                                      )
+                                    }
+                                  }
+                                })
+                              ])
+                            : _c("li", { staticClass: "uk-disabled" }, [
+                                _c("a", {
+                                  attrs: { "uk-icon": "chevron-right" }
+                                })
+                              ])
+                        ]
                       )
                     ]
                   )

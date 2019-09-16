@@ -94,17 +94,22 @@ class ProjectListController extends Controller
     ->orderBy('created_at', 'desc')
     ->get();
 
+    $getunit = $project_unit->where('project_id', $getproject->project_id)
+    ->orderBy('project_unit_name', 'asc')
+    ->get();
+
     $data['getproject'] = $getproject;
     $data['getgallery'] = $getgallery;
     $data['project_city'] = $project_city;
     $data['dev_city'] = $dev_city;
+    $data['getunit'] = $getunit;
 
     return response()->view('frontend.pages.view_project', $data);
   }
 
   public function list_project_unit( Request $request, ProjectUnitType $project_unit, $project_id )
   {
-    $offset = $request->offset;
+    $filterUnit = $request->filterUnit;
 
     $getunit = $project_unit->select(
       'project_unit_type.project_unit_type_id',
@@ -119,18 +124,23 @@ class ProjectListController extends Controller
       'project_unit.project_unit_slug',
       'project_unit.project_unit_status'
     )
-    ->join('project_unit', 'project_unit_type.project_unit_id', '=', 'project_unit.project_unit_id')
-    ->where('project_unit.project_id', $project_id)
-    ->orderBy('project_unit_type.created_at', 'desc')
-    ->limit( 10 )
-    ->offset( $offset )
-    ->get();
+    ->join('project_unit', 'project_unit_type.project_unit_id', '=', 'project_unit.project_unit_id');
+    if( $filterUnit === 'all' )
+    {
+      $getunit = $getunit->where('project_unit.project_id', $project_id);
+    }
+    else
+    {
+      $getunit = $getunit->where([
+        ['project_unit.project_id', $project_id],
+        ['project_unit.project_unit_id', $filterUnit]
+      ]);
+    }
+    $result = $getunit->orderBy('project_unit_type.created_at', 'desc')
+    ->paginate( 10 );
 
     $res = [
-      'results' => [
-        'total' => $getunit->count(),
-        'data' => $getunit
-      ],
+      'results' => $result,
       'project_id' => $project_id
     ];
     return response()->json( $res, 200 );

@@ -62,6 +62,10 @@
                   </div>
                 </div>
                 <div class="uk-margin content-projectdetail">
+                  <select class="uk-select content-projectform" v-model="forms.filterUnit" @change="getProjectUnit()">
+                    <option value="all">Semua Unit</option>
+                    <option :value="unit.project_unit_id" v-for="unit in getunit">{{ unit.project_unit_name }}</option>
+                  </select>
                   <table class="uk-table uk-table-divider uk-table-hover uk-table-striped uk-table-small uk-table-middle">
                     <thead>
                       <tr>
@@ -84,7 +88,20 @@
                       </tr>
                     </tbody>
                   </table>
-                  <button class="uk-margin-top uk-button uk-button-primary content-viewbutton" @click="getProjectUnit(5)">Lihat Lebih Banyak</button>
+                  <ul class="uk-pagination uk-flex-center">
+                    <li v-if="projectunit.pagination.prev_page_url !== null">
+                      <a @click="getProjectUnit( projectunit.pagination.prev_page_url )" uk-icon="chevron-left"></a>
+                    </li>
+                    <li v-else class="uk-disabled">
+                      <a uk-icon="chevron-left"></a>
+                    </li>
+                    <li v-if="projectunit.pagination.next_page_url !== null">
+                      <a @click="getProjectUnit( projectunit.pagination.next_page_url )" uk-icon="chevron-right"></a>
+                    </li>
+                    <li v-else class="uk-disabled">
+                      <a uk-icon="chevron-right"></a>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -125,14 +142,20 @@ export default {
   data() {
     return {
       forms: {
-
+        filterUnit: 'all'
       },
       projectunit: {
         total: 0,
         results: [],
         isLoading: false,
         currentOffset: 0,
-        nextOffset: null
+        isUpdating: true,
+        pagination: {
+          current_page: 1,
+          last_page: 1,
+          next_page_url: null,
+          prev_page_url: null
+        }
       },
       installment: {
         total: 0,
@@ -142,36 +165,25 @@ export default {
     }
   },
   methods: {
-    getProjectUnit( offset, filter )
+    getProjectUnit( p )
     {
-      if( offset === undefined && this.projectunit.nextOffset === null )
-      {
-        this.projectunit.nextOffset = 0;
-      }
-      else
-      {
-        this.projectunit.nextOffset = this.projectunit.nextOffset + offset;
-      }
-      this.projectunit.currentOffset = this.projectunit.nextOffset;
+      var param = 'filterUnit=' + this.forms.filterUnit;
+      var url = this.$root.url + '/project/unit/' + this.getproject.project_id + '?page=' + this.projectunit.pagination.current_page + '&' + param;
+      if( p !== undefined ) url = p + '&' + param;
 
       axios({
         method: 'get',
-        url: this.$root.url + '/project/unit/' + this.getproject.project_id + '?offset=' + this.projectunit.currentOffset
+        url: url
       }).then( res => {
         let result = res.data;
-        if( this.projectunit.results.length === 0 )
-        {
-          this.projectunit.results = result.results.data;
-        }
-        else
-        {
-          let data = result.results;
-          if( data.total !== 0 )
-          {
-            data.data.forEach( d => { this.projectunit.results.push(d); });
-          }
-        }
-        this.projectunit.results.total = this.projectunit.results.length;
+        this.projectunit.results = result.results.data;
+        this.projectunit.results.total = result.results.total;
+        this.projectunit.pagination = {
+          current_page: result.results.current_page,
+          last_page: result.results.last_page,
+          next_page_url: result.results.next_page_url,
+          prev_page_url: result.results.prev_page_url
+        };
       }).catch( err => {
         console.log( err.response.statusText );
       });

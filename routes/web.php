@@ -108,6 +108,8 @@ Route::group(['prefix' => 'developer'], function() {
   Route::group(['prefix' => 'marketing'], function() {
     Route::get('/find_marketing', 'Frontend\Developer\ProjectMarketingController@index')->name('developer_find_marketing');
     Route::get('/list_marketing', 'Frontend\Developer\ProjectMarketingController@listOfMarketing');
+    Route::post('/recruit_marketing/{userid}', 'Frontend\Developer\ProjectMarketingController@recruit_marketing');
+    Route::get('/project_selected/{userid}', 'Frontend\Developer\ProjectMarketingController@projectSelected');
   });
 });
 

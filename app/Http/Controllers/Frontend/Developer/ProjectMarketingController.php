@@ -17,12 +17,17 @@ class ProjectMarketingController extends Controller
   {
     if( session()->has('isDeveloper') )
     {
-      $area = new AreaDB;
-      $getarea = $area->where('area_level_id', 2)->get();
+      $city = new CityDB;
+      $project_list = new ProjectList;
+      $getcity = $city->orderBy('city_name', 'asc')->get();
+      $getproject = $project_list->where('dev_user_id', session()->get('dev_user_id'))
+      ->get();
+
       $data = [
         'request' => $request,
         'session_user' => $developeruser->getinfo(),
-        'getarea' => $getarea
+        'getcity' => $getcity,
+        'getproject' => $getproject
       ];
       return response()->view('frontend.pages.developer.find_marketing', $data);
     }
@@ -38,23 +43,27 @@ class ProjectMarketingController extends Controller
     $sorting = $request->sorting;
     $limit = 10;
     $column = $request->column;
-    $offset = $request->offset;
     $city = $request->city;
 
     $marketing = $marketinguser->select(
-      'mkt_fullname',
-      'mkt_email',
-      'mkt_phone_number',
-      'mkt_mobile_phone',
-      'mkt_city',
-      'mkt_region',
-      'mkt_address',
-      'mkt_biography',
-      'mkt_profile_photo',
-      'area.area_id',
-      'area.area_name'
+      'marketing_user.mkt_user_id',
+      'marketing_user.mkt_fullname',
+      'marketing_user.mkt_email',
+      'marketing_user.mkt_phone_number',
+      'marketing_user.mkt_mobile_phone',
+      'marketing_user.mkt_city',
+      'marketing_user.mkt_address',
+      'marketing_user.mkt_biography',
+      'marketing_user.mkt_profile_photo',
+      'city.city_id',
+      'city.city_name',
+      'province.province_name'
     )
-    ->leftJoin('area', 'marketing_user.mkt_city', '=', 'area.area_id');
+    ->leftJoin('city', 'marketing_user.mkt_city', '=', 'city.city_id')
+    ->leftJoin('province', 'city.province_id', '=', 'province.province_id')
+    ->leftJoin('project_marketing', 'marketing_user.mkt_user_id', '=', 'project_marketing.mkt_user_id')
+    ->groupBy('marketing_user.mkt_user_id');
+
     if( empty( $keywords ) )
     {
       $getmarketing = $marketing->orderBy('marketing_user.mkt_fullname', $sorting);
@@ -78,14 +87,60 @@ class ProjectMarketingController extends Controller
         ->orderBy('marketing_user.mkt_fullname', $sorting);
       }
     }
-    $result = $getmarketing->limit( $limit )->offset( $offset )->get();
 
-    $res = [
+    $result = $getmarketing->paginate( $limit );
+    $res = [ 'results' => $result ];
+    return response()->json( $res, 200 );
+  }
+
+  public function projectSelected( ProjectMarketing $project_mkt, $userid )
+  {
+    $selectedproject = $project_mkt->select(
+      'project_list.project_id',
+      'project_list.project_name',
+      'project_marketing.mkt_user_id'
+    )
+    ->rightJoin('project_list', 'project_marketing.project_id', '=', 'project_list.project_id')
+    ->where('project_list.dev_user_id', session()->get('dev_user_id'))
+    ->orderBy('project_list.project_name', 'asc')
+    ->groupBy('project_list.project_id')
+    ->get();
+
+    $result = [
       'results' => [
-        'data' => $result,
-        'total' => $result->count()
+        'data' => $selectedproject,
+        'total' => $selectedproject->count()
       ]
     ];
-    return response()->json( $res, 200 );
+    return response()->json( $result, 200 );
+  }
+
+  public function recruit_marketing( Request $request, ProjectMarketing $project_mkt, $userid )
+  {
+    $selectedproject = $request->selectedproject;
+    $date = date('Y-m-d H:i:s');
+    $dev_user_id = session()->get('dev_user_id');
+    $data = [];
+
+    $delete = $project_mkt->where([
+      ['dev_user_id', $dev_user_id],
+      ['mkt_user_id', $userid]
+    ]);
+    if( $delete->count() > 0 ) $delete->delete();
+
+    foreach( $selectedproject as $project )
+    {
+      $data[] = [
+        'dev_user_id' => $dev_user_id,
+        'mkt_user_id' => $userid,
+        'project_id' => $project,
+        'created_at' => $date,
+        'updated_at' => $date
+      ];
+    }
+
+    $insert = $project_mkt->insert($data);
+    $res = [ 'status' => 200, 'statusText' => 'success' ];
+    return response()->json( $res, $res['status'] );
   }
 }

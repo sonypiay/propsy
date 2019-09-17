@@ -54,7 +54,7 @@
     <li class="uk-parent"><a href="#">Marketing <span class="uk-float-right" uk-icon="chevron-down"></span></a>
       <ul class="uk-nav-sub side-nav-sub">
         <li><a href="{{ route('developer_find_marketing') }}">Cari Marketing </a></li>
-        <li><a href="#">Kelola Marketing</a></li>
+        <li><a href="{{ route('developer_manage_marketing') }}">Kelola Marketing</a></li>
       </ul>
     </li>
     <li><a href="{{ $link_nav['laporan'] }}">Laporan</a></li>

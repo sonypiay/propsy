@@ -74,7 +74,7 @@
       </div>
     </div>
     <div class="uk-card dashboard-content">
-      <div class="uk-card-title uk-margin dashboard-content-heading">Cari Marketing</div>
+      <div class="uk-card-title uk-margin dashboard-content-heading">Kelola Marketing</div>
       <div class="uk-margin uk-grid-small uk-child-width-auto" uk-grid>
         <div>
           <select class="uk-select dash-form-input" v-model="forms.column" @change="getMarketingList()">
@@ -108,7 +108,6 @@
             <tr>
               <th>Aksi</th>
               <th>Nama</th>
-              <th>Telepon / Handphone</th>
               <th>Email</th>
               <th>Kota</th>
             </tr>
@@ -116,10 +115,10 @@
           <tbody>
             <tr v-for="mkt in marketingList.results">
               <td>
-                <a @click="detailMarketing(mkt)" uk-tooltip="Lihat Detail" href="#" class="uk-button uk-button-primary uk-button-small dash-btn"><i class="icon ion-ios-redo"></i></a>
+                <a @click="detailMarketing(mkt)" uk-tooltip="Lihat Detail" href="#" class="uk-button uk-button-primary uk-button-small dash-btn dash-btn-action"><i class="icon ion-ios-redo"></i></a>
+                <a @click="deleteMarketing(mkt.mkt_user_id)" class="uk-button uk-button-primary uk-button-small dash-btn dash-btn-action"><i class="icon ion-ios-trash"></i></a>
               </td>
               <td>{{ mkt.mkt_fullname }}</td>
-              <td>{{ mkt.mkt_mobile_phone }} / {{ mkt.mkt_phone_number }}</td>
               <td>{{ mkt.mkt_email }}</td>
               <td>{{ mkt.city_name }}</td>
             </tr>
@@ -183,7 +182,7 @@ export default {
       '&city=' + this.forms.city +
       '&column=' + this.forms.column +
       '&sorting=' + this.forms.sorting;
-      var url = this.$root.url + '/developer/marketing/list_marketing?page=' + this.marketingList.pagination.current_page + '&' + param;
+      var url = this.$root.url + '/developer/marketing/my_marketing?page=' + this.marketingList.pagination.current_page + '&' + param;
 
       axios.get( url ).then( res => {
         let result = res.data;
@@ -257,6 +256,43 @@ export default {
         }, 2000);
       }).catch( err => {
         console.log( err.response.statusText );
+      });
+    },
+    deleteMarketing( user_id )
+    {
+      swal({
+        title: 'Konfirmasi',
+        text: 'Apakah anda ingin menghapus marketing ini?',
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Batal',
+          confirm: { text: 'Hapus', value: true }
+        }
+      }).then( val => {
+        if( val === true )
+        {
+          axios({
+            method: 'delete',
+            url: this.$root.url + '/developer/marketing/recruit_marketing/' + user_id + '/delete',
+            params: {
+              selectedproject: []
+            }
+          }).then( res => {
+            swal({
+              title: 'Sukses',
+              text: action === 'add' ? 'Berhasil merekrut marketing' : 'Marketing telah dihapus dari proyek',
+              icon: 'success',
+              timer: 3000
+            });
+            setTimeout(() => {
+              this.getMarketingList();
+              UIkit.modal('#modal').hide();
+            }, 2000);
+          }).catch( err => {
+            console.log( err.response.statusText );
+          });
+        }
       });
     }
   },

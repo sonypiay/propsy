@@ -32,6 +32,23 @@ class ProjectListController extends Controller
     }
   }
 
+  public function add_project_page( Request $request, DeveloperUser $developeruser )
+  {
+    if( session()->has('isDeveloper') )
+    {
+      $data = [
+        'request' => $request,
+        'session_user' => $developeruser->getinfo()
+      ];
+
+      return response()->view('frontend.pages.developer.add_project', $data);
+    }
+    else
+    {
+      return redirect()->route('homepage');
+    }
+  }
+
   public function add_project( Request $request, DeveloperUser $developeruser, ProjectList $project_list )
   {
     $project_name = $request->project_name;

@@ -25,6 +25,7 @@ Vue.component('developer-manage-marketing', require('./components/Frontend/Devel
 Vue.component('developer-detail-project', require('./components/Frontend/Developer/DetailProject.vue').default);
 Vue.component('developer-register-page', require('./components/Frontend/Developer/Daftar.vue').default);
 Vue.component('developer-login-page', require('./components/Frontend/Developer/Masuk.vue').default);
+Vue.component('developer-add-project', require('./components/Frontend/Developer/AddProject.vue').default);
 
 // customer
 Vue.component('customer-register-page', require('./components/Frontend/Customer/Daftar.vue').default);

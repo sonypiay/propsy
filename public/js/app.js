@@ -2668,6 +2668,311 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/AddProject.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Frontend/Developer/AddProject.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['session_user'],
+  data: function data() {
+    var _forms;
+
+    return {
+      forms: (_forms = {
+        project_name: '',
+        project_description: '',
+        project_address: '',
+        project_region: '',
+        project_city: '',
+        project_link_map: '',
+        project_map_embed: '',
+        project_status: 'available',
+        project_site_plan: []
+      }, _defineProperty(_forms, "project_status", 'available'), _defineProperty(_forms, "project_type", 'residensial'), _defineProperty(_forms, "project_estimate_launch", new Date().getFullYear()), _defineProperty(_forms, "project_thumbnail", {
+        url: null,
+        data: null
+      }), _defineProperty(_forms, "submit", 'Tambah Proyek'), _forms),
+      errors: {
+        name: {},
+        errorMessage: '',
+        iserror: false
+      },
+      getregion: {},
+      getcity: {},
+      formRequired: '<span class="uk-text-danger">*</span>'
+    };
+  },
+  methods: {
+    getRegionData: function getRegionData() {
+      var _this = this;
+
+      axios({
+        method: 'get',
+        url: this.$root.url + '/api/region/provinsi/all'
+      }).then(function (res) {
+        var results = res.data;
+        _this.getregion = results.results.data;
+
+        _this.getCityData();
+      })["catch"](function (err) {
+        console.log(err.response.statusText);
+      });
+    },
+    getCityData: function getCityData() {
+      var _this2 = this;
+
+      var region = 0;
+      if (this.forms.project_region !== '') region = this.forms.project_region;
+      axios({
+        method: 'get',
+        url: this.$root.url + '/api/region/kota/all/' + region
+      }).then(function (res) {
+        var results = res.data;
+        _this2.getcity = results.results.data;
+      })["catch"](function (err) {
+        console.log(err.response.statusText);
+      });
+    },
+    selectedSitePlan: function selectedSitePlan(event) {
+      var targetFile = event.target.files;
+
+      if (targetFile.length !== 0) {
+        for (var i = 0; i < targetFile.length; i++) {
+          this.forms.project_site_plan.push({
+            objectURL: URL.createObjectURL(targetFile[i]),
+            data: targetFile[i]
+          });
+        }
+      }
+    },
+    selectedThumbnail: function selectedThumbnail(event) {
+      var targetFile = event.target.files;
+      this.forms.project_thumbnail.url = null;
+      this.forms.project_thumbnail.data = null;
+
+      if (targetFile.length !== 0) {
+        this.forms.project_thumbnail.url = URL.createObjectURL(targetFile[0]);
+        this.forms.project_thumbnail.data = targetFile[0];
+      }
+    },
+    deleteSitePlan: function deleteSitePlan(index) {
+      if (this.forms.project_site_plan.length !== 0) {
+        this.forms.project_site_plan.splice(index, 1);
+      }
+    },
+    deleteThumbnail: function deleteThumbnail() {
+      this.forms.project_thumbnail = {
+        url: null,
+        data: null
+      };
+    },
+    onAddProject: function onAddProject() {
+      this.errors.name = {};
+      this.errors.errorMessage = '';
+      this.errors.iserror = false;
+
+      if (this.forms.project_name === '') {
+        this.errors.name.project_name = 'Silakan masukkan nama proyek';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.project_region === '') {
+        this.errors.name.project_region = 'Silakan pilih provinsi';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.project_city === '') {
+        this.errors.name.project_city = 'Silakan pilih kota';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.project_address === '') {
+        this.errors.name.project_address = 'Silakan masukkan alamat proyek';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.project_description === '') {
+        this.errors.name.project_description = 'Silakan masukkan deskripsi proyek';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.project_site_plan.length === 0) {
+        this.errors.name.project_site_plan = 'Silakan masukkan site plan proyek';
+        this.errors.iserror = true;
+      }
+
+      if (this.errors.iserror === true) return false;
+    }
+  },
+  computed: {
+    years: function years() {
+      var now = new Date().getFullYear();
+      var nextYear = [];
+
+      for (var i = now; i < now + 25; i++) {
+        nextYear.push(i);
+      }
+
+      return nextYear;
+    }
+  },
+  mounted: function mounted() {
+    this.getRegionData();
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/Daftar.vue?vue&type=script&lang=js&":
 /*!************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Frontend/Developer/Daftar.vue?vue&type=script&lang=js& ***!
@@ -5152,127 +5457,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user'],
   data: function data() {
     return {
       forms: {
-        isEdit: false,
-        project_name: '',
-        project_description: '',
-        project_address: '',
-        project_city: '',
-        project_region: '',
-        project_link_map: '',
-        project_map_embed: '',
-        project_status: 'available',
-        project_id: null,
-        embedExample: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7932.829401399234!2d106.813944876194!3d-6.208906304351636!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f4029ddcb01d%3A0x8c45c69b461fb15e!2sCitywalk%20Sudirman!5e0!3m2!1sid!2sid!4v1568451570539!5m2!1sid!2sid" width="800" height="600" frameborder="0" style="border:0;" allowfullscreen=""></iframe>',
-        submit: 'Tambah',
         keywords: '',
         getstatus: 'all'
       },
-      files: null,
       getregion: {},
       getcity: {},
       project_list: {
@@ -5296,36 +5488,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    onPopUpModal: function onPopUpModal(data) {
-      if (data === undefined) {
-        this.forms.project_name = '';
-        this.forms.project_description = '';
-        this.forms.project_address = '';
-        this.forms.project_city = '';
-        this.forms.project_region = '';
-        this.forms.project_link_map = '';
-        this.forms.project_map_embed = '';
-        this.forms.project_status = 'available';
-        this.forms.project_id = null;
-        this.forms.isEdit = false;
-        this.forms.submit = 'Tambah';
-      } else {
-        this.forms.project_name = data.project_name;
-        this.forms.project_description = data.project_description;
-        this.forms.project_address = data.project_address;
-        this.forms.project_city = data.project_city;
-        this.forms.project_region = data.province_id;
-        this.forms.project_link_map = data.project_link_map;
-        this.forms.project_map_embed = data.project_map_embed;
-        this.forms.project_status = data.project_status;
-        this.forms.project_id = data.project_id;
-        this.forms.isEdit = true;
-        this.forms.submit = 'Simpan';
-      }
-
-      this.getRegionData();
-      UIkit.modal('#modal-proyek').show();
-    },
     getRegionData: function getRegionData() {
       var _this = this;
 
@@ -5356,82 +5518,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(err.response.statusText);
       });
     },
-    onAddOrSaveProject: function onAddOrSaveProject() {
-      var _this3 = this;
-
-      this.errors.name = {};
-      this.errors.errorMessage = '';
-      this.errors.iserror = false;
-      var url = '';
-      var method = 'post';
-
-      if (this.forms.project_name === '') {
-        this.errors.name.project_name = 'Silahkan isi nama proyek';
-        this.errors.iserror = true;
-      }
-
-      if (this.forms.project_region === '') {
-        this.errors.name.project_region = 'Silahkan pilih provinsi';
-        this.errors.iserror = true;
-      }
-
-      if (this.forms.project_city === '') {
-        this.errors.name.project_city = 'Silahkan pilih kota';
-        this.errors.iserror = true;
-      }
-
-      if (this.forms.project_address === '') {
-        this.errors.name.project_address = 'Silahkan isi alamat';
-        this.errors.iserror = true;
-      }
-
-      if (this.forms.project_description === '') {
-        this.errors.name.project_description = 'Silahkan isi deskripsi proyek';
-        this.errors.iserror = true;
-      }
-
-      if (this.errors.iserror === true) return false;
-
-      if (this.forms.project_id === null) {
-        url = this.$root.url + '/developer/project/add_project';
-
-        method: 'post';
-      } else {
-        url = this.$root.url + '/developer/project/save_project/' + this.forms.project_id;
-        method = 'put';
-      }
-
-      this.forms.submit = '<span uk-spinner></span>';
-      axios({
-        method: method,
-        url: url,
-        params: {
-          project_name: this.forms.project_name,
-          project_city: this.forms.project_city,
-          project_address: this.forms.project_address,
-          project_description: this.forms.project_description,
-          project_status: this.forms.project_status,
-          project_link_map: this.forms.project_link_map,
-          project_map_embed: this.forms.project_map_embed
-        }
-      }).then(function (res) {
-        var result = res.data;
-        swal({
-          title: 'Sukses',
-          text: _this3.forms.isEdit === false ? 'Proyek baru berhasil ditambah' : 'Proyek berhasil diubah',
-          icon: 'success'
-        });
-        setTimeout(function () {
-          _this3.getProjectList();
-
-          UIkit.modal('#modal-proyek').hide();
-        }, 2000);
-      })["catch"](function (err) {
-        console.log(err.response.statusText);
-      });
-    },
     getProjectList: function getProjectList(p) {
-      var _this4 = this;
+      var _this3 = this;
 
       this.project_list.isLoading = true;
       var paramurl = 'keywords=' + this.forms.keywords + '&status=' + this.forms.getstatus;
@@ -5442,22 +5530,22 @@ __webpack_require__.r(__webpack_exports__);
         url: url
       }).then(function (res) {
         var result = res.data;
-        _this4.project_list.results = result.results.data;
-        _this4.project_list.total = result.results.total;
-        _this4.project_list.pagination = {
+        _this3.project_list.results = result.results.data;
+        _this3.project_list.total = result.results.total;
+        _this3.project_list.pagination = {
           current_page: result.results.current_page,
           last_page: result.results.last_page,
           prev_page_url: result.results.prev_page_url,
           next_page_url: result.results.next_page_url,
           path: result.results.path
         };
-        _this4.project_list.isLoading = false;
+        _this3.project_list.isLoading = false;
       })["catch"](function (err) {
-        _this4.project_list.errorMessage = err.response.statusText;
+        _this3.project_list.errorMessage = err.response.statusText;
       });
     },
     onDeleteProject: function onDeleteProject(id) {
-      var _this5 = this;
+      var _this4 = this;
 
       swal({
         title: 'Konfirmasi',
@@ -5475,7 +5563,7 @@ __webpack_require__.r(__webpack_exports__);
         if (val) {
           axios({
             method: 'delete',
-            url: _this5.$root.url + '/developer/project/delete_project/' + id
+            url: _this4.$root.url + '/developer/project/delete_project/' + id
           }).then(function (res) {
             swal({
               title: 'Sukses',
@@ -5483,7 +5571,7 @@ __webpack_require__.r(__webpack_exports__);
               icon: 'success'
             });
             setTimeout(function () {
-              _this5.getProjectList();
+              _this4.getProjectList();
             }, 2000);
           });
         }
@@ -63504,6 +63592,808 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/AddProject.vue?vue&type=template&id=2eacd942&":
+/*!********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Frontend/Developer/AddProject.vue?vue&type=template&id=2eacd942& ***!
+  \********************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "uk-card dashboard-content" }, [
+      _c("ul", { staticClass: "uk-breadcrumb" }, [
+        _c("li", [
+          _c(
+            "a",
+            { attrs: { href: _vm.$root.url + "/developer/project/dashboard" } },
+            [_vm._v("Dashboard")]
+          )
+        ]),
+        _vm._v(" "),
+        _c("li", [
+          _c(
+            "a",
+            {
+              attrs: {
+                href: _vm.$root.url + "/developer/project/manage_project"
+              }
+            },
+            [_vm._v("Kelola Proyek")]
+          )
+        ]),
+        _vm._v(" "),
+        _vm._m(0)
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "uk-card-title uk-margin dashboard-content-heading" },
+        [_vm._v("Tambah Proyek Baru")]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.errors.errorMessage,
+              expression: "errors.errorMessage"
+            }
+          ],
+          staticClass: "uk-alert-danger",
+          attrs: { "uk-alert": "" }
+        },
+        [_vm._v(_vm._s(_vm.errors.errorMessage))]
+      ),
+      _vm._v(" "),
+      _c(
+        "form",
+        {
+          staticClass: "uk-form-stacked",
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.onAddProject($event)
+            }
+          }
+        },
+        [
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Nama Proyek "),
+              _c("span", { domProps: { innerHTML: _vm._s(_vm.formRequired) } })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.forms.project_name,
+                    expression: "forms.project_name"
+                  }
+                ],
+                staticClass: "uk-input dash-form-input",
+                attrs: { type: "text" },
+                domProps: { value: _vm.forms.project_name },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.forms, "project_name", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.errors.name.project_name,
+                    expression: "errors.name.project_name"
+                  }
+                ],
+                staticClass: "uk-text-small uk-text-danger"
+              },
+              [_vm._v(_vm._s(_vm.errors.name.project_name))]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Tipe Proyek")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.forms.project_type,
+                      expression: "forms.project_type"
+                    }
+                  ],
+                  staticClass: "uk-select dash-form-input",
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.forms,
+                        "project_type",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                [
+                  _c("option", { attrs: { value: "residensial" } }, [
+                    _vm._v("Residensial")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "apartemen" } }, [
+                    _vm._v("Apartemen")
+                  ])
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Provinsi "),
+              _c("span", { domProps: { innerHTML: _vm._s(_vm.formRequired) } })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.forms.project_region,
+                      expression: "forms.project_region"
+                    }
+                  ],
+                  staticClass: "uk-select dash-form-input",
+                  on: {
+                    change: [
+                      function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.forms,
+                          "project_region",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      },
+                      function($event) {
+                        return _vm.getCityData()
+                      }
+                    ]
+                  }
+                },
+                [
+                  _c("option", { attrs: { value: "" } }, [
+                    _vm._v("-- Pilih --")
+                  ]),
+                  _vm._v(" "),
+                  _vm._l(_vm.getregion, function(reg) {
+                    return _c(
+                      "option",
+                      { domProps: { value: reg.province_id } },
+                      [_vm._v(_vm._s(reg.province_name))]
+                    )
+                  })
+                ],
+                2
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.errors.name.project_region,
+                    expression: "errors.name.project_region"
+                  }
+                ],
+                staticClass: "uk-text-small uk-text-danger"
+              },
+              [_vm._v(_vm._s(_vm.errors.name.project_region))]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Kota "),
+              _c("span", { domProps: { innerHTML: _vm._s(_vm.formRequired) } })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.forms.project_city,
+                      expression: "forms.project_city"
+                    }
+                  ],
+                  staticClass: "uk-select dash-form-input",
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.forms,
+                        "project_city",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                [
+                  _c("option", { attrs: { value: "" } }, [
+                    _vm._v("-- Pilih --")
+                  ]),
+                  _vm._v(" "),
+                  _vm._l(_vm.getcity, function(city) {
+                    return _c("option", { domProps: { value: city.city_id } }, [
+                      _vm._v(_vm._s(city.city_name))
+                    ])
+                  })
+                ],
+                2
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.errors.name.project_city,
+                    expression: "errors.name.project_city"
+                  }
+                ],
+                staticClass: "uk-text-small uk-text-danger"
+              },
+              [_vm._v(_vm._s(_vm.errors.name.project_city))]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Alamat "),
+              _c("span", { domProps: { innerHTML: _vm._s(_vm.formRequired) } })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.forms.project_address,
+                    expression: "forms.project_address"
+                  }
+                ],
+                staticClass: "uk-textarea uk-height-small dash-form-input",
+                domProps: { value: _vm.forms.project_address },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.forms, "project_address", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.errors.name.project_address,
+                    expression: "errors.name.project_address"
+                  }
+                ],
+                staticClass: "uk-text-small uk-text-danger"
+              },
+              [_vm._v(_vm._s(_vm.errors.name.project_address))]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Deskripsi Proyek "),
+              _c("span", { domProps: { innerHTML: _vm._s(_vm.formRequired) } })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.forms.project_description,
+                    expression: "forms.project_description"
+                  }
+                ],
+                staticClass: "uk-textarea uk-height-small dash-form-input",
+                domProps: { value: _vm.forms.project_description },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(
+                      _vm.forms,
+                      "project_description",
+                      $event.target.value
+                    )
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.errors.name.project_description,
+                    expression: "errors.name.project_description"
+                  }
+                ],
+                staticClass: "uk-text-small uk-text-danger"
+              },
+              [_vm._v(_vm._s(_vm.errors.name.project_description))]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Link Maps")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.forms.project_link_map,
+                    expression: "forms.project_link_map"
+                  }
+                ],
+                staticClass: "uk-input dash-form-input",
+                attrs: { type: "text" },
+                domProps: { value: _vm.forms.project_link_map },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.forms, "project_link_map", $event.target.value)
+                  }
+                }
+              })
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Map Embed")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.forms.project_map_embed,
+                    expression: "forms.project_map_embed"
+                  }
+                ],
+                staticClass: "uk-input dash-form-input",
+                attrs: { type: "text" },
+                domProps: { value: _vm.forms.project_map_embed },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(
+                      _vm.forms,
+                      "project_map_embed",
+                      $event.target.value
+                    )
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "uk-text-small",
+                attrs: {
+                  target: "_blank",
+                  href:
+                    "https://support.google.com/maps/answer/144361?co=GENIE.Platform%3DDesktop&hl=en"
+                }
+              },
+              [_vm._v("Buka Bantuan Google")]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Site Plan")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c("div", { staticClass: "uk-placeholder uk-text-center" }, [
+                _c("div", { attrs: { "uk-form-custom": "" } }, [
+                  _c("span", { attrs: { "uk-icon": "icon: cloud-upload" } }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "uk-text-middle" }, [
+                    _vm._v("Attach binaries by dropping them here or")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    attrs: { type: "file", accept: "image/*", multiple: "" },
+                    on: { change: _vm.selectedSitePlan }
+                  }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "uk-link uk-text-middle" }, [
+                    _vm._v("selecting one")
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.errors.name.project_site_plan,
+                      expression: "errors.name.project_site_plan"
+                    }
+                  ],
+                  staticClass: "uk-text-small uk-margin uk-text-danger"
+                },
+                [_vm._v(_vm._s(_vm.errors.name.project_site_plan))]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.forms.project_site_plan.length !== 0,
+                      expression: "forms.project_site_plan.length !== 0"
+                    }
+                  ],
+                  staticClass: "uk-margin uk-grid-small uk-grid-match",
+                  attrs: { "uk-grid": "" }
+                },
+                _vm._l(_vm.forms.project_site_plan, function(site_plan, index) {
+                  return _c("div", { staticClass: "uk-width-1-5" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "uk-cover-container uk-height-small uk-width-1-1 uk-margin"
+                      },
+                      [
+                        _c("img", {
+                          staticClass: "uk-width-1-1",
+                          attrs: {
+                            src: site_plan.objectURL,
+                            alt: "",
+                            "uk-cover": ""
+                          }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("button", {
+                      staticClass:
+                        "uk-width-1-1 uk-button uk-button-primary uk-button-small dash-btn dash-btn-action",
+                      attrs: { "uk-icon": "close" },
+                      on: {
+                        click: function($event) {
+                          return _vm.deleteSitePlan(index)
+                        }
+                      }
+                    })
+                  ])
+                }),
+                0
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Thumbnail")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c("div", { staticClass: "uk-placeholder uk-text-center" }, [
+                _c("div", { attrs: { "uk-form-custom": "" } }, [
+                  _c("span", { attrs: { "uk-icon": "icon: cloud-upload" } }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "uk-text-middle" }, [
+                    _vm._v("Attach binaries by dropping them here or")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    attrs: { type: "file", accept: "image/*" },
+                    on: { change: _vm.selectedThumbnail }
+                  }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "uk-link uk-text-middle" }, [
+                    _vm._v("selecting one")
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.forms.project_thumbnail.url !== null,
+                      expression: "forms.project_thumbnail.url !== null"
+                    }
+                  ],
+                  staticClass:
+                    "uk-margin uk-width-1-2 uk-inline-clip uk-transition-toggle"
+                },
+                [
+                  _c("img", {
+                    staticClass: "uk-width-1-1",
+                    attrs: { src: _vm.forms.project_thumbnail.url, alt: "" }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle"
+                    },
+                    [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "uk-link",
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteThumbnail()
+                            }
+                          }
+                        },
+                        [
+                          _c("span", { attrs: { "uk-icon": "close" } }),
+                          _vm._v(" Hapus\n              ")
+                        ]
+                      )
+                    ]
+                  )
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Status Proyek")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.forms.project_status,
+                      expression: "forms.project_status"
+                    }
+                  ],
+                  staticClass: "uk-select dash-form-input",
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.forms,
+                        "project_status",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                [
+                  _c("option", { attrs: { value: "available" } }, [
+                    _vm._v("Tersedia")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "sold" } }, [
+                    _vm._v("Terjual")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "soon" } }, [_vm._v("Segera")])
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.forms.project_status === "soon",
+                  expression: "forms.project_status === 'soon'"
+                }
+              ],
+              staticClass: "uk-margin"
+            },
+            [
+              _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+                _vm._v("Estimasi Launching")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-form-controls" }, [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.forms.project_estimate_launch,
+                        expression: "forms.project_estimate_launch"
+                      }
+                    ],
+                    staticClass: "uk-select dash-form-input",
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.forms,
+                          "project_estimate_launch",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  _vm._l(_vm.years, function(year) {
+                    return _c("option", { domProps: { value: year } }, [
+                      _vm._v(_vm._s(year))
+                    ])
+                  }),
+                  0
+                )
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("button", {
+              staticClass: "uk-button uk-button-primary dash-btn",
+              domProps: { innerHTML: _vm._s(_vm.forms.submit) }
+            })
+          ])
+        ]
+      )
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [_c("span", [_vm._v("Tambah Proyek")])])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/Daftar.vue?vue&type=template&id=19121dba&scoped=true&":
 /*!****************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Frontend/Developer/Daftar.vue?vue&type=template&id=19121dba&scoped=true& ***!
@@ -68557,523 +69447,6 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { attrs: { id: "modal-proyek", "uk-modal": "" } }, [
-      _c("div", { staticClass: "uk-modal-dialog modal-form" }, [
-        _c(
-          "form",
-          {
-            staticClass: "uk-form-stacked",
-            on: {
-              submit: function($event) {
-                $event.preventDefault()
-                return _vm.onAddOrSaveProject($event)
-              }
-            }
-          },
-          [
-            _c("div", { staticClass: "uk-modal-header" }, [
-              _vm.forms.isEdit
-                ? _c("h3", { staticClass: "modal-form-heading" }, [
-                    _vm._v("Ubah Proyek")
-                  ])
-                : _c("h3", { staticClass: "modal-form-heading" }, [
-                    _vm._v("Tambah Proyek")
-                  ])
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "uk-modal-body",
-                attrs: { "uk-overflow-auto": "" }
-              },
-              [
-                _c(
-                  "div",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.errors.errorMessage,
-                        expression: "errors.errorMessage"
-                      }
-                    ],
-                    staticClass: "uk-alert-danger",
-                    attrs: { "uk-alert": "" }
-                  },
-                  [_vm._v(_vm._s(_vm.errors.errorMessage))]
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "uk-text-small uk-margin-bottom" }, [
-                  _vm._v("Lengkapi formulir dibawah ini (*)")
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "uk-form-stacked" }, [
-                  _c("div", { staticClass: "uk-margin" }, [
-                    _c("label", { staticClass: "uk-form-label modal-label" }, [
-                      _vm._v("*Nama Proyek")
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "uk-form-controls" }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.forms.project_name,
-                            expression: "forms.project_name"
-                          }
-                        ],
-                        staticClass: "uk-input modal-input",
-                        attrs: { type: "text" },
-                        domProps: { value: _vm.forms.project_name },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.forms,
-                              "project_name",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        directives: [
-                          {
-                            name: "show",
-                            rawName: "v-show",
-                            value: _vm.errors.name.project_name,
-                            expression: "errors.name.project_name"
-                          }
-                        ],
-                        staticClass: "uk-text-small uk-text-danger"
-                      },
-                      [_vm._v(_vm._s(_vm.errors.name.project_name))]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "uk-margin" }, [
-                    _c("label", { staticClass: "uk-form-label modal-label" }, [
-                      _vm._v("*Provinsi")
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "uk-form-controls" }, [
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.forms.project_region,
-                              expression: "forms.project_region"
-                            }
-                          ],
-                          staticClass: "uk-select modal-input",
-                          on: {
-                            change: [
-                              function($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function(o) {
-                                    return o.selected
-                                  })
-                                  .map(function(o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.$set(
-                                  _vm.forms,
-                                  "project_region",
-                                  $event.target.multiple
-                                    ? $$selectedVal
-                                    : $$selectedVal[0]
-                                )
-                              },
-                              function($event) {
-                                return _vm.getCityData()
-                              }
-                            ]
-                          }
-                        },
-                        [
-                          _c("option", { attrs: { value: "" } }, [
-                            _vm._v("-- Pilih --")
-                          ]),
-                          _vm._v(" "),
-                          _vm._l(_vm.getregion, function(reg) {
-                            return _c(
-                              "option",
-                              { domProps: { value: reg.province_id } },
-                              [_vm._v(_vm._s(reg.province_name))]
-                            )
-                          })
-                        ],
-                        2
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        directives: [
-                          {
-                            name: "show",
-                            rawName: "v-show",
-                            value: _vm.errors.name.project_region,
-                            expression: "errors.name.project_region"
-                          }
-                        ],
-                        staticClass: "uk-text-small uk-text-danger"
-                      },
-                      [_vm._v(_vm._s(_vm.errors.name.project_region))]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "uk-margin" }, [
-                    _c("label", { staticClass: "uk-form-label modal-label" }, [
-                      _vm._v("*Kota")
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "uk-form-controls" }, [
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.forms.project_city,
-                              expression: "forms.project_city"
-                            }
-                          ],
-                          staticClass: "uk-select modal-input",
-                          on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.$set(
-                                _vm.forms,
-                                "project_city",
-                                $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              )
-                            }
-                          }
-                        },
-                        [
-                          _c("option", { attrs: { value: "" } }, [
-                            _vm._v("-- Pilih --")
-                          ]),
-                          _vm._v(" "),
-                          _vm._l(_vm.getcity, function(city) {
-                            return _c(
-                              "option",
-                              { domProps: { value: city.city_id } },
-                              [_vm._v(_vm._s(city.city_name))]
-                            )
-                          })
-                        ],
-                        2
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        directives: [
-                          {
-                            name: "show",
-                            rawName: "v-show",
-                            value: _vm.errors.name.project_city,
-                            expression: "errors.name.project_city"
-                          }
-                        ],
-                        staticClass: "uk-text-small uk-text-danger"
-                      },
-                      [_vm._v(_vm._s(_vm.errors.name.project_city))]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "uk-margin" }, [
-                    _c("label", { staticClass: "uk-form-label modal-label" }, [
-                      _vm._v("*Alamat")
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "uk-form-controls" }, [
-                      _c("textarea", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.forms.project_address,
-                            expression: "forms.project_address"
-                          }
-                        ],
-                        staticClass: "uk-textarea uk-height-small modal-input",
-                        domProps: { value: _vm.forms.project_address },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.forms,
-                              "project_address",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        directives: [
-                          {
-                            name: "show",
-                            rawName: "v-show",
-                            value: _vm.errors.name.project_address,
-                            expression: "errors.name.project_address"
-                          }
-                        ],
-                        staticClass: "uk-text-small uk-text-danger"
-                      },
-                      [_vm._v(_vm._s(_vm.errors.name.project_address))]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "uk-margin" }, [
-                    _c("label", { staticClass: "uk-form-label modal-label" }, [
-                      _vm._v("Link Maps")
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "uk-form-controls" }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.forms.project_link_map,
-                            expression: "forms.project_link_map"
-                          }
-                        ],
-                        staticClass: "uk-input modal-input",
-                        attrs: { type: "text" },
-                        domProps: { value: _vm.forms.project_link_map },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.forms,
-                              "project_link_map",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "uk-margin" }, [
-                    _c("label", { staticClass: "uk-form-label modal-label" }, [
-                      _vm._v("Map Embed")
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "uk-form-controls" }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.forms.project_map_embed,
-                            expression: "forms.project_map_embed"
-                          }
-                        ],
-                        staticClass: "uk-input modal-input",
-                        attrs: { type: "text" },
-                        domProps: { value: _vm.forms.project_map_embed },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.forms,
-                              "project_map_embed",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        staticClass: "uk-text-small",
-                        attrs: {
-                          target: "_blank",
-                          href:
-                            "https://support.google.com/maps/answer/144361?co=GENIE.Platform%3DDesktop&hl=en"
-                        }
-                      },
-                      [_vm._v("Buka Bantuan Google")]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "uk-margin" }, [
-                    _c("label", { staticClass: "uk-form-label modal-label" }, [
-                      _vm._v("*Deskripsi Proyek")
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "uk-form-controls" }, [
-                      _c("textarea", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.forms.project_description,
-                            expression: "forms.project_description"
-                          }
-                        ],
-                        staticClass: "uk-textarea uk-height-small modal-input",
-                        domProps: { value: _vm.forms.project_description },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.forms,
-                              "project_description",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        directives: [
-                          {
-                            name: "show",
-                            rawName: "v-show",
-                            value: _vm.errors.name.project_description,
-                            expression: "errors.name.project_description"
-                          }
-                        ],
-                        staticClass: "uk-text-small uk-text-danger"
-                      },
-                      [_vm._v(_vm._s(_vm.errors.name.project_description))]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "uk-margin" }, [
-                    _c("label", { staticClass: "uk-form-label modal-label" }, [
-                      _vm._v("Status Proyek")
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "uk-form-controls" }, [
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.forms.project_status,
-                              expression: "forms.project_status"
-                            }
-                          ],
-                          staticClass: "uk-select modal-input",
-                          on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.$set(
-                                _vm.forms,
-                                "project_status",
-                                $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              )
-                            }
-                          }
-                        },
-                        [
-                          _c("option", { attrs: { value: "available" } }, [
-                            _vm._v("Available")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "prelaunch" } }, [
-                            _vm._v("Pre-Launch")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "hold" } }, [
-                            _vm._v("Hold")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "booked" } }, [
-                            _vm._v("Booked")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "sold" } }, [
-                            _vm._v("Sold")
-                          ])
-                        ]
-                      )
-                    ])
-                  ])
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "uk-modal-footer uk-text-right" }, [
-              _c("button", {
-                staticClass: "uk-button uk-button-primary modal-form-add",
-                domProps: { innerHTML: _vm._s(_vm.forms.submit) }
-              }),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  staticClass:
-                    "uk-button uk-button-primary modal-form-cancel uk-modal-close"
-                },
-                [_vm._v("Batal")]
-              )
-            ])
-          ]
-        )
-      ])
-    ]),
-    _vm._v(" "),
     _c("div", { staticClass: "uk-card dashboard-content" }, [
       _c(
         "div",
@@ -69093,13 +69466,11 @@ var render = function() {
               "a",
               {
                 staticClass: "uk-button uk-button-primary uk-margin dash-btn",
-                on: {
-                  click: function($event) {
-                    return _vm.onPopUpModal()
-                  }
+                attrs: {
+                  href: _vm.$root.url + "/developer/project/add_project"
                 }
               },
-              [_vm._v("Tambah Proyek")]
+              [_vm._v("Tambah Proyek Baru")]
             )
           ]),
           _vm._v(" "),
@@ -69145,20 +69516,10 @@ var render = function() {
                 _c("option", { attrs: { value: "all" } }, [_vm._v("Semua")]),
                 _vm._v(" "),
                 _c("option", { attrs: { value: "available" } }, [
-                  _vm._v("Available")
+                  _vm._v("Tersedia")
                 ]),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "prelaunch" } }, [
-                  _vm._v("Pre-Launch")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "hold" } }, [_vm._v("Hold")]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "booked" } }, [
-                  _vm._v("Booked")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "sold" } }, [_vm._v("Sold")])
+                _c("option", { attrs: { value: "sold" } }, [_vm._v("Terjual")])
               ]
             )
           ]),
@@ -69263,35 +69624,31 @@ var render = function() {
                                             "div",
                                             { staticClass: "grid-badge" },
                                             [
-                                              _c(
-                                                "label",
-                                                { staticClass: "uk-label" },
-                                                [
-                                                  project.project_status ===
-                                                  "available"
-                                                    ? _c("span", [
-                                                        _vm._v("Available")
-                                                      ])
-                                                    : project.project_status ===
-                                                      "prelaunch"
-                                                    ? _c("span", [
-                                                        _vm._v("Pre-Launch")
-                                                      ])
-                                                    : project.project_status ===
-                                                      "hold"
-                                                    ? _c("span", [
-                                                        _vm._v("Hold")
-                                                      ])
-                                                    : project.project_status ===
-                                                      "booked"
-                                                    ? _c("span", [
-                                                        _vm._v("Booked")
-                                                      ])
-                                                    : _c("span", [
-                                                        _vm._v("Sold")
-                                                      ])
-                                                ]
-                                              )
+                                              project.project_status ===
+                                              "available"
+                                                ? _c(
+                                                    "label",
+                                                    {
+                                                      staticClass:
+                                                        "uk-label uk-label-success"
+                                                    },
+                                                    [_vm._v("Tersedia")]
+                                                  )
+                                                : project.project_status ===
+                                                  "soon"
+                                                ? _c(
+                                                    "label",
+                                                    { staticClass: "uk-label" },
+                                                    [_vm._v("Segera")]
+                                                  )
+                                                : _c(
+                                                    "label",
+                                                    {
+                                                      staticClass:
+                                                        "uk-label uk-label-danger"
+                                                    },
+                                                    [_vm._v("Terjual")]
+                                                  )
                                             ]
                                           )
                                         ]
@@ -69336,35 +69693,34 @@ var render = function() {
                                                 "div",
                                                 { staticClass: "grid-badge" },
                                                 [
-                                                  _c(
-                                                    "label",
-                                                    { staticClass: "uk-label" },
-                                                    [
-                                                      project.project_status ===
-                                                      "available"
-                                                        ? _c("span", [
-                                                            _vm._v("Available")
-                                                          ])
-                                                        : project.project_status ===
-                                                          "prelaunch"
-                                                        ? _c("span", [
-                                                            _vm._v("Pre-Launch")
-                                                          ])
-                                                        : project.project_status ===
-                                                          "hold"
-                                                        ? _c("span", [
-                                                            _vm._v("Hold")
-                                                          ])
-                                                        : project.project_status ===
-                                                          "booked"
-                                                        ? _c("span", [
-                                                            _vm._v("Booked")
-                                                          ])
-                                                        : _c("span", [
-                                                            _vm._v("Sold")
-                                                          ])
-                                                    ]
-                                                  )
+                                                  project.project_status ===
+                                                  "available"
+                                                    ? _c(
+                                                        "label",
+                                                        {
+                                                          staticClass:
+                                                            "uk-label uk-label-success"
+                                                        },
+                                                        [_vm._v("Tersedia")]
+                                                      )
+                                                    : project.project_status ===
+                                                      "soon"
+                                                    ? _c(
+                                                        "label",
+                                                        {
+                                                          staticClass:
+                                                            "uk-label"
+                                                        },
+                                                        [_vm._v("Segera")]
+                                                      )
+                                                    : _c(
+                                                        "label",
+                                                        {
+                                                          staticClass:
+                                                            "uk-label uk-label-danger"
+                                                        },
+                                                        [_vm._v("Terjual")]
+                                                      )
                                                 ]
                                               )
                                             ]
@@ -69406,15 +69762,6 @@ var render = function() {
                                         "\n              "
                                     )
                                   ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "div",
-                                  {
-                                    staticClass:
-                                      "uk-text-truncate uk-margin-small grid-box-content"
-                                  },
-                                  [_vm._v(_vm._s(project.project_description))]
                                 )
                               ]
                             ),
@@ -69439,10 +69786,12 @@ var render = function() {
                                         {
                                           staticClass:
                                             "uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action",
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.onPopUpModal(project)
-                                            }
+                                          attrs: {
+                                            "uk-tooltip": "Edit Proyek",
+                                            href:
+                                              _vm.$root.url +
+                                              "/developer/project/edit_project/" +
+                                              project.project_id
                                           }
                                         },
                                         [
@@ -69459,6 +69808,9 @@ var render = function() {
                                         {
                                           staticClass:
                                             "uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action",
+                                          attrs: {
+                                            "uk-tooltip": "Hapus Proyek"
+                                          },
                                           on: {
                                             click: function($event) {
                                               return _vm.onDeleteProject(
@@ -69578,7 +69930,8 @@ var staticRenderFns = [
       "a",
       {
         staticClass:
-          "uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"
+          "uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action",
+        attrs: { "uk-tooltip": "Lainnya" }
       },
       [_c("i", { staticClass: "icon ion-ios-more" })]
     )
@@ -84317,7 +84670,8 @@ Vue.component('developer-find-marketing', __webpack_require__(/*! ./components/F
 Vue.component('developer-manage-marketing', __webpack_require__(/*! ./components/Frontend/Developer/ManageMarketing.vue */ "./resources/js/components/Frontend/Developer/ManageMarketing.vue")["default"]);
 Vue.component('developer-detail-project', __webpack_require__(/*! ./components/Frontend/Developer/DetailProject.vue */ "./resources/js/components/Frontend/Developer/DetailProject.vue")["default"]);
 Vue.component('developer-register-page', __webpack_require__(/*! ./components/Frontend/Developer/Daftar.vue */ "./resources/js/components/Frontend/Developer/Daftar.vue")["default"]);
-Vue.component('developer-login-page', __webpack_require__(/*! ./components/Frontend/Developer/Masuk.vue */ "./resources/js/components/Frontend/Developer/Masuk.vue")["default"]); // customer
+Vue.component('developer-login-page', __webpack_require__(/*! ./components/Frontend/Developer/Masuk.vue */ "./resources/js/components/Frontend/Developer/Masuk.vue")["default"]);
+Vue.component('developer-add-project', __webpack_require__(/*! ./components/Frontend/Developer/AddProject.vue */ "./resources/js/components/Frontend/Developer/AddProject.vue")["default"]); // customer
 
 Vue.component('customer-register-page', __webpack_require__(/*! ./components/Frontend/Customer/Daftar.vue */ "./resources/js/components/Frontend/Customer/Daftar.vue")["default"]);
 Vue.component('customer-login-page', __webpack_require__(/*! ./components/Frontend/Customer/Masuk.vue */ "./resources/js/components/Frontend/Customer/Masuk.vue")["default"]);
@@ -84997,6 +85351,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AccountInformation_vue_vue_type_template_id_4b7f3a66___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AccountInformation_vue_vue_type_template_id_4b7f3a66___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Frontend/Developer/AddProject.vue":
+/*!*******************************************************************!*\
+  !*** ./resources/js/components/Frontend/Developer/AddProject.vue ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _AddProject_vue_vue_type_template_id_2eacd942___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AddProject.vue?vue&type=template&id=2eacd942& */ "./resources/js/components/Frontend/Developer/AddProject.vue?vue&type=template&id=2eacd942&");
+/* harmony import */ var _AddProject_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AddProject.vue?vue&type=script&lang=js& */ "./resources/js/components/Frontend/Developer/AddProject.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _AddProject_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AddProject_vue_vue_type_template_id_2eacd942___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AddProject_vue_vue_type_template_id_2eacd942___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Frontend/Developer/AddProject.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Frontend/Developer/AddProject.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/Frontend/Developer/AddProject.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AddProject_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./AddProject.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/AddProject.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AddProject_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Frontend/Developer/AddProject.vue?vue&type=template&id=2eacd942&":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/components/Frontend/Developer/AddProject.vue?vue&type=template&id=2eacd942& ***!
+  \**************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddProject_vue_vue_type_template_id_2eacd942___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./AddProject.vue?vue&type=template&id=2eacd942& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/AddProject.vue?vue&type=template&id=2eacd942&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddProject_vue_vue_type_template_id_2eacd942___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddProject_vue_vue_type_template_id_2eacd942___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

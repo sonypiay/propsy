@@ -50,6 +50,24 @@ CREATE TABLE `area_level` (
 
 insert  into `area_level`(`area_level_id`,`area_level_name`) values (1,'Provinsi'),(2,'Kabupaten Kota'),(3,'Kecamatan'),(4,'Kelurahan/Desa');
 
+/*Table structure for table `city` */
+
+DROP TABLE IF EXISTS `city`;
+
+CREATE TABLE `city` (
+  `city_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `city_name` varchar(128) NOT NULL,
+  `city_slug` varchar(128) NOT NULL,
+  `province_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`city_id`),
+  KEY `fk_city_province_idx` (`province_id`),
+  CONSTRAINT `fk_city_province_idx` FOREIGN KEY (`province_id`) REFERENCES `province` (`province_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+
+/*Data for the table `city` */
+
+insert  into `city`(`city_id`,`city_name`,`city_slug`,`province_id`) values (1,'Jakarta Pusat','jakarta-pusat',3),(2,'Jakarta Barat','jakarta-barat',3),(3,'Jakarta Timur','jakarta-timur',3),(4,'Jakarta Utara','jakarta-utara',3),(5,'Jakarta Selatan','jakarta-selatan',3),(6,'Bogor','bogor',2),(7,'Bekasi','bekasi',2),(8,'Depok','depok',2),(9,'Bandung','bandung',2),(10,'Serang','serang',1),(11,'Tangerang','tangerang',1),(12,'Tangerang Selatan','tangerang-selatan',1);
+
 /*Table structure for table `customer` */
 
 DROP TABLE IF EXISTS `customer`;
@@ -70,11 +88,9 @@ CREATE TABLE `customer` (
   PRIMARY KEY (`customer_id`),
   UNIQUE KEY `customer_email` (`customer_email`),
   UNIQUE KEY `customer_username` (`customer_username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `customer` */
-
-insert  into `customer`(`customer_id`,`customer_name`,`customer_email`,`customer_address`,`customer_region`,`customer_city`,`customer_phone_number`,`customer_username`,`customer_password`,`customer_photo`,`created_at`,`updated_at`) values (1,'Sony Darmawan','sonypiay@mail.com','Jl. Intan Baiduri No. 28',6,189,'08561969052','sonypiay','a7cd37b2baf026c26c77fd7f2408296d','Ivx9owh1IdrmIvdK9ZhewBVq6sy9kHlyQ4PcPtMX.jpeg','2019-09-09 22:59:08','2019-09-09 23:21:54');
 
 /*Table structure for table `developer_user` */
 
@@ -87,7 +103,6 @@ CREATE TABLE `developer_user` (
   `dev_slug` text NOT NULL,
   `dev_address` text DEFAULT NULL,
   `dev_city` int(10) unsigned DEFAULT NULL,
-  `dev_region` int(10) unsigned DEFAULT NULL,
   `dev_username` varchar(64) NOT NULL,
   `dev_password` varchar(64) NOT NULL,
   `dev_email` varchar(128) NOT NULL,
@@ -101,11 +116,11 @@ CREATE TABLE `developer_user` (
   PRIMARY KEY (`dev_user_id`),
   UNIQUE KEY `dev_username` (`dev_username`),
   UNIQUE KEY `dev_email` (`dev_email`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `developer_user` */
 
-insert  into `developer_user`(`dev_user_id`,`dev_name`,`dev_ownername`,`dev_slug`,`dev_address`,`dev_city`,`dev_region`,`dev_username`,`dev_password`,`dev_email`,`dev_biography`,`dev_phone_office`,`dev_mobile_phone`,`dev_ownership`,`dev_logo`,`created_at`,`updated_at`) values (1,'Biznet Networks','Adi Saputra Kusma','biznet-networks','MidPlaza 2, 8th Floor  Jl. Jend. Sudirman 10-11 Jakarta 10220 - Indonesia',189,6,'biznetnetworks','a7cd37b2baf026c26c77fd7f2408296d','adi_kusma@biznetnetworks.com','Biznet merupakan perusahaan yang fokus di bidang telekomunikasi dan multimedia, yang memiliki komitmen untuk membangun infrastruktur modern dengan tujuan mengurangi kesenjangan digital Indonesia dengan negara berkembang lainnya. Biznet memiliki dan mengoperasikan jaringan Fiber Optic tercanggih dan data center terbesar di Indonesia.','+62-21-57998888','+62-855-1998888','perusahaan','cBbcjyEWsfd0CZ3BVltEY7hcCDGoXPkcYz48tC08.png','2019-08-29 16:27:53','2019-08-29 17:25:26'),(2,'PT Maju Kena Mundur Kena','Udin Sedunia','pt-maju-kena-mundur-kena',NULL,188,6,'sonypiay','d5f3b4c238382e41fbe4b404e882cc73','sonypiay@mail.com','Lorem ipsum dolor sit amet','021','0792886178','perusahaan',NULL,'2019-09-09 20:22:22','2019-09-09 20:22:58'),(3,'PT Maju Tak Gentar','Himawan Achmadi','pt-maju-tak-gentar',NULL,192,6,'himawan','25d55ad283aa400af464c76d713c07ad','himawan@maps.com',NULL,'021','0856','individu',NULL,'2019-09-09 21:25:05','2019-09-09 21:25:41'),(4,'PT Keuangan Sejati','Akhmad Syarifudin','pt-keuangan-sejati',NULL,502,3,'akhmad_syarifudin','dd9d21e22391090ddce7c6ed58c6412d','jl.pesutno14@gmail.com','Hai',NULL,NULL,'individu',NULL,'2019-09-09 21:26:37','2019-09-09 21:27:01');
+insert  into `developer_user`(`dev_user_id`,`dev_name`,`dev_ownername`,`dev_slug`,`dev_address`,`dev_city`,`dev_username`,`dev_password`,`dev_email`,`dev_biography`,`dev_phone_office`,`dev_mobile_phone`,`dev_ownership`,`dev_logo`,`created_at`,`updated_at`) values (1,'PT Agung Podomoro Land Tbk','PT Agung Podomoro Land Tbk','pt-agung-podomoro-land-tbk','APL Tower 43rd Floor, Podomoro City Jl. Let. Jend. S. Parman Kav. 28 Jakarta 11470 Indonesia',2,'agungpodomoro','25d55ad283aa400af464c76d713c07ad','podomoro@gmail.com','PT Agung Podomoro Land Tbk. (APLN) is a leading integrated diversified real estate owner, developer and manager in the retail, commercial, and residential real estate segments with diversified holdings. We have an integrated property development model, from land acquisition and/or sourcing, to design and development, to project management, sales, commercial leasing and marketing, to the operation and management of our superblock developments, shopping malls, offices, hotels, and residential apartments and houses. We are known as a pioneer of the superblock development. Our high quality landmark projects, to name a few are Podomoro City, Kuningan City, and Senayan City.\n\n \n\nAPLN was established on July 30, 2004 under the name PT Tiara Metropolitan Jaya. In 2010, our shareholders completed a corporate restructuring, pursuant to which six developments and their holding companies were transferred to our control. APLN, is the flagship listed entity (IDX:APLN) of Agung Podomoro Group (APG), is one of the fastest growing and largest real estate developers in Indonesia with interests in superblocks, retail properties, office, apartments and residential, and hotels. APG established its first development, a housing complex in Simprug area, South Jakarta, in 1969 and completed its construction in 1973. From 1973 to present, members of APG completed or begun construction of more than 70 property projects, with majority addressed to middle class segments of society, with projects ranging from low cost apartments to high end apartments in South Jakarta, landed residentials, high end and the neighborhood mall, shop houses, hotels, soho and office towers.','622129034567',NULL,'perusahaan','E5J7mlIoEsknBfY1YRifZgs9JBwm3FFEuIi5CBNc.png','2019-09-19 17:02:30','2019-09-19 17:05:58');
 
 /*Table structure for table `marketing_user` */
 
@@ -120,7 +135,6 @@ CREATE TABLE `marketing_user` (
   `mkt_phone_number` varchar(16) DEFAULT NULL,
   `mkt_mobile_phone` varchar(16) DEFAULT NULL,
   `mkt_city` int(10) unsigned DEFAULT NULL,
-  `mkt_region` int(10) unsigned DEFAULT NULL,
   `mkt_address` text DEFAULT NULL,
   `mkt_biography` text DEFAULT NULL,
   `mkt_profile_photo` varchar(255) DEFAULT NULL,
@@ -129,11 +143,9 @@ CREATE TABLE `marketing_user` (
   PRIMARY KEY (`mkt_user_id`),
   UNIQUE KEY `mkt_username` (`mkt_username`),
   UNIQUE KEY `mkt_email` (`mkt_email`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `marketing_user` */
-
-insert  into `marketing_user`(`mkt_user_id`,`mkt_fullname`,`mkt_email`,`mkt_username`,`mkt_password`,`mkt_phone_number`,`mkt_mobile_phone`,`mkt_city`,`mkt_region`,`mkt_address`,`mkt_biography`,`mkt_profile_photo`,`created_at`,`updated_at`) values (1,'Diwantara Anugerah Putra','diwantara@gmail.com','diwantara','d5f3b4c238382e41fbe4b404e882cc73','0212995588','08561969052',502,3,'Perumahan Japos','Youtuber gamer ganteng idaman. Kungkingkangkingking','87dTWKb1cT4gs1UUMuQACYWanaBNt8cxNxSJnHKw.jpeg','2019-08-27 21:45:27','2019-08-29 19:37:04'),(2,'Sony Darmawan','sonypiay@mail.com','sonypiay','d5f3b4c238382e41fbe4b404e882cc73','021',NULL,189,6,NULL,NULL,'dIrpUIzvO0mvsOOavXmwtwYhbSAnJxKphk2zndH9.jpeg','2019-08-28 16:24:34','2019-09-08 22:58:47'),(3,'Yoshika Kudo','kyabechi_@gmail.com','kyabechi_','25d55ad283aa400af464c76d713c07ad',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2019-09-09 22:09:28','2019-09-09 22:14:02');
 
 /*Table structure for table `project_gallery` */
 
@@ -143,17 +155,17 @@ CREATE TABLE `project_gallery` (
   `gallery_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `gallery_filename` varchar(128) NOT NULL,
   `gallery_description` text DEFAULT NULL,
-  `project_id` int(10) unsigned NOT NULL,
+  `project_unique_id` varchar(10) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`gallery_id`),
-  KEY `fk_gallery_project_idx` (`project_id`),
-  CONSTRAINT `fk_gallery_project_idx` FOREIGN KEY (`project_id`) REFERENCES `project_list` (`project_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+  KEY `fk_gallery_project_uidx` (`project_unique_id`),
+  CONSTRAINT `fk_gallery_project_uidx` FOREIGN KEY (`project_unique_id`) REFERENCES `project_list` (`project_unique_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_gallery` */
 
-insert  into `project_gallery`(`gallery_id`,`gallery_filename`,`gallery_description`,`project_id`,`created_at`,`updated_at`) values (1,'OxXSm8IJYohYuh0dY1K4I3KmxPjR4i5IaQT5Keze.jpeg',NULL,6,'2019-09-01 23:05:41','2019-09-01 23:05:41'),(2,'naNYXkJOEP3tpEvw8vdGx05W9buSommle9TOJHmT.jpeg',NULL,6,'2019-09-01 23:10:03','2019-09-01 23:10:03'),(7,'C7nV4KjDLQLhCaoawgafsxaKzOIRzY1Cmz0VqMFW.jpeg',NULL,6,'2019-09-01 23:14:10','2019-09-01 23:14:10'),(9,'LajcJ1iWzCmipjMZgrkCNY6dV53aGrG3cYIMjJTV.jpeg',NULL,6,'2019-09-01 23:15:21','2019-09-01 23:15:21'),(11,'gYjulvZYrCyg1ZlN4RWL3ixLqv67C8QU0DCUXjl1.jpeg',NULL,4,'2019-09-02 00:12:06','2019-09-02 00:12:06'),(12,'AMSI7Qbay12OgwA3nzwzwJcqkM4eSWBtLqOZ8NWV.jpeg',NULL,4,'2019-09-02 00:12:17','2019-09-02 00:12:17');
+insert  into `project_gallery`(`gallery_id`,`gallery_filename`,`gallery_description`,`project_unique_id`,`created_at`,`updated_at`) values (3,'uL6xp20R8Udqvvchmbx23ORwu4HgAQVUbKsDHsg6.jpeg',NULL,'PRY00001','2019-09-20 21:50:40','2019-09-20 21:50:40');
 
 /*Table structure for table `project_list` */
 
@@ -161,26 +173,31 @@ DROP TABLE IF EXISTS `project_list`;
 
 CREATE TABLE `project_list` (
   `project_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_unique_id` varchar(10) NOT NULL,
   `project_name` varchar(200) NOT NULL,
   `project_slug` text NOT NULL,
   `project_thumbnail` varchar(128) DEFAULT NULL,
   `project_description` text DEFAULT NULL,
   `project_address` text DEFAULT NULL,
   `project_city` int(10) unsigned NOT NULL,
-  `project_region` int(10) unsigned NOT NULL,
-  `project_gmaps` text DEFAULT NULL,
-  `project_status` enum('available','prelaunch','hold','booked','sold') NOT NULL DEFAULT 'available',
+  `project_link_map` tinytext DEFAULT NULL,
+  `project_map_embed` text DEFAULT NULL,
+  `project_site_plan` varchar(128) DEFAULT NULL,
+  `project_type` enum('apartemen','residensial') NOT NULL DEFAULT 'residensial',
+  `project_status` enum('available','sold','soon') NOT NULL DEFAULT 'available',
+  `project_estimated_launch` year(4) DEFAULT NULL,
   `dev_user_id` int(10) unsigned NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`project_id`),
+  UNIQUE KEY `project_unique_id` (`project_unique_id`),
   KEY `fk_project_dev_idx` (`dev_user_id`),
   CONSTRAINT `fk_project_dev_idx` FOREIGN KEY (`dev_user_id`) REFERENCES `developer_user` (`dev_user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_list` */
 
-insert  into `project_list`(`project_id`,`project_name`,`project_slug`,`project_thumbnail`,`project_description`,`project_address`,`project_city`,`project_region`,`project_gmaps`,`project_status`,`dev_user_id`,`created_at`,`updated_at`) values (3,'Pulau Reklamasi B','pulau-reklamasi-b',NULL,'Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.','Ecovention Building - Ecopark, Jalan Lodan Timur No 7 Ancol Taman Impian, Jakarta Utara',192,6,NULL,'booked',1,'2019-09-01 13:57:21','2019-09-03 20:52:10'),(4,'Pulau Reklamasi A','pulau-reklamasi-a','gYjulvZYrCyg1ZlN4RWL3ixLqv67C8QU0DCUXjl1.jpeg','Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.','Ecovention Building - Ecopark, Jalan Lodan Timur No 7 Ancol Taman Impian, Jakarta Utara',192,6,NULL,'available',1,'2019-09-01 13:59:55','2019-09-03 20:52:02'),(6,'Pulau Reklamasi D','pulau-reklamasi-d','naNYXkJOEP3tpEvw8vdGx05W9buSommle9TOJHmT.jpeg','Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.','Ecovention Building - Ecopark, Jalan Lodan Timur No 7 Ancol Taman Impian, Jakarta Utara',192,6,NULL,'sold',1,'2019-09-01 14:04:29','2019-09-03 20:51:34'),(8,'Proyek ABC','proyek-abc',NULL,'Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.','BSD',188,6,NULL,'available',2,'2019-09-09 20:27:22','2019-09-09 20:27:22');
+insert  into `project_list`(`project_id`,`project_unique_id`,`project_name`,`project_slug`,`project_thumbnail`,`project_description`,`project_address`,`project_city`,`project_link_map`,`project_map_embed`,`project_site_plan`,`project_type`,`project_status`,`project_estimated_launch`,`dev_user_id`,`created_at`,`updated_at`) values (1,'PRY00001','Podomoro Park','podomoro-park','uL6xp20R8Udqvvchmbx23ORwu4HgAQVUbKsDHsg6.jpeg','Agung Podomoro Land (APL) menghadirkan mahakarya terbarunya yaitu Podomoro Park Bandung, kawasan hunian yang terletak di tengah keindahan alam Bandung Selatan, seluas lebih dari 100 hektar. Konsep utama Podomoro Park terinsiprasi dari kawasan hunian berkelas dunia, yaitu Woodbrige di Irvine California serta desain masterplan dan landscape oleh Palmscape Singapore, sehingga Podomoro Park dapat dikategorikan sebagai world class home resort.\n\nPodomoro Park telah meraih penghargaan \"The Best Premium Home Resort in West Java\" dalam event Indonesia Property & Bank Award 2018. Ini membuktikan bahwa Podomoro Park memiliki konsep kawasan terbaik dengan menghadirkan kekuatan elemen alam, dan menjadikannya kawasan hunian resort terbaik di Jawa Barat. Maka tak heran bila antusias pasar sangat tinggi untuk memiliki hunian ini, hingga Podomoro Park menerima penghargaan “Most Favoured Premium Housing Estate” dalam event Housing Estate Award 2018.',NULL,9,NULL,NULL,NULL,'residensial','available',NULL,1,'2019-09-20 21:50:40','2019-09-20 21:50:40');
 
 /*Table structure for table `project_marketing` */
 
@@ -188,14 +205,15 @@ DROP TABLE IF EXISTS `project_marketing`;
 
 CREATE TABLE `project_marketing` (
   `project_marketing_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `project_id` int(10) unsigned NOT NULL,
+  `dev_user_id` int(10) unsigned NOT NULL,
   `mkt_user_id` int(10) unsigned NOT NULL,
+  `project_id` int(10) unsigned NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`project_marketing_id`),
-  KEY `fk_project_mkt_project_id` (`project_id`),
   KEY `fk_project_mkt_user_id` (`mkt_user_id`),
-  CONSTRAINT `fk_project_mkt_project_id` FOREIGN KEY (`project_id`) REFERENCES `project_list` (`project_id`) ON DELETE CASCADE,
+  KEY `fk_project_mkt_devuser_idx` (`dev_user_id`),
+  CONSTRAINT `fk_project_mkt_devuser_idx` FOREIGN KEY (`dev_user_id`) REFERENCES `developer_user` (`dev_user_id`) ON DELETE CASCADE,
   CONSTRAINT `fk_project_mkt_user_id` FOREIGN KEY (`mkt_user_id`) REFERENCES `marketing_user` (`mkt_user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -220,10 +238,29 @@ CREATE TABLE `project_request` (
   KEY `fk_req_cust_idx` (`customer_id`),
   CONSTRAINT `fk_req_cust_idx` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE,
   CONSTRAINT `fk_req_mkt_user_idx` FOREIGN KEY (`mkt_user_id`) REFERENCES `marketing_user` (`mkt_user_id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_req_unit_type_idx` FOREIGN KEY (`project_unit_type_id`) REFERENCES `project_unit_type` (`project_unit_type_id`) ON DELETE CASCADE
+  CONSTRAINT `fk_req_unit_type_idx` FOREIGN KEY (`project_unit_type_id`) REFERENCES `project_unit_type` (`unit_type_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_request` */
+
+/*Table structure for table `project_siteplan` */
+
+DROP TABLE IF EXISTS `project_siteplan`;
+
+CREATE TABLE `project_siteplan` (
+  `siteplan_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `siteplan_map` varchar(128) NOT NULL,
+  `project_unique_id` varchar(10) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`siteplan_id`),
+  KEY `fk_siteplan_project_uidx` (`project_unique_id`),
+  CONSTRAINT `fk_siteplan_project_uidx` FOREIGN KEY (`project_unique_id`) REFERENCES `project_list` (`project_unique_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+/*Data for the table `project_siteplan` */
+
+insert  into `project_siteplan`(`siteplan_id`,`siteplan_map`,`project_unique_id`,`created_at`,`updated_at`) values (1,'xUqsejTtXLLNKc9Bu4S8B5pDv8lPjk8R5Lg5yr9C.jpeg','PRY00001','2019-09-20 21:50:40','2019-09-20 21:50:40'),(2,'TCGqkPmnurIfSBIFx1tpaLVLpQKleEUEYSWOWAzT.jpeg','PRY00001','2019-09-20 21:50:40','2019-09-20 21:50:40'),(3,'Xr45uD0jEQA4s2z8C5nZgUhqioWhlj6TQE8hH3Lw.jpeg','PRY00001','2019-09-20 21:50:40','2019-09-20 21:50:40'),(4,'SOf76OhuiHUJ15vgSu1S6IegxG1wbut6JHJP03JU.jpeg','PRY00001','2019-09-20 21:50:40','2019-09-20 21:50:40'),(5,'azbJXgXWYMwdrtJl8wEjHfah9jhaGgFOgPg3snD7.jpeg','PRY00001','2019-09-20 21:50:40','2019-09-20 21:50:40'),(6,'SVO8eDtfh0XpFWon5HvJsN60HTW1vRFqcb3w1SEd.jpeg','PRY00001','2019-09-20 21:50:40','2019-09-20 21:50:40'),(7,'K8bGilj7FIBVvBQ3Vnw6n4vyAI6DAgHu4d3ucJbj.jpeg','PRY00001','2019-09-20 21:50:40','2019-09-20 21:50:40');
 
 /*Table structure for table `project_unit` */
 
@@ -232,19 +269,32 @@ DROP TABLE IF EXISTS `project_unit`;
 CREATE TABLE `project_unit` (
   `project_unit_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `project_unit_name` varchar(128) NOT NULL,
-  `project_unit_number` tinyint(3) unsigned NOT NULL,
+  `project_unit_slug` varchar(128) NOT NULL,
   `project_unit_status` enum('available','booked') NOT NULL DEFAULT 'available',
-  `project_id` int(10) unsigned NOT NULL,
+  `project_unique_id` varchar(10) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`project_unit_id`),
-  KEY `fk_project_unit_project_idx` (`project_id`),
-  CONSTRAINT `fk_project_unit_project_idx` FOREIGN KEY (`project_id`) REFERENCES `project_list` (`project_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+  KEY `fk_project_unit_project_uidx` (`project_unique_id`),
+  CONSTRAINT `fk_project_unit_project_uidx` FOREIGN KEY (`project_unique_id`) REFERENCES `project_list` (`project_unique_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_unit` */
 
-insert  into `project_unit`(`project_unit_id`,`project_unit_name`,`project_unit_number`,`project_unit_status`,`project_id`,`created_at`,`updated_at`) values (1,'Blok A',1,'available',4,'2019-09-03 19:53:52','2019-09-03 19:53:52'),(2,'Blok A',2,'available',4,'2019-09-03 19:53:52','2019-09-03 19:53:52'),(3,'Blok A',3,'available',4,'2019-09-03 19:53:52','2019-09-03 19:53:52'),(4,'Blok A',4,'available',4,'2019-09-03 19:53:52','2019-09-03 19:53:52'),(5,'Blok A',5,'available',4,'2019-09-03 19:53:52','2019-09-03 19:53:52'),(6,'Blok A',1,'available',6,'2019-09-03 22:51:30','2019-09-03 22:51:30'),(7,'Blok A',2,'available',6,'2019-09-03 22:51:30','2019-09-03 22:51:30'),(18,'Blok A',1,'available',3,'2019-09-08 20:46:42','2019-09-08 20:47:26'),(19,'Blok ABC',1,'available',8,'2019-09-09 20:27:41','2019-09-09 20:27:41'),(20,'Blok ABC',3,'available',8,'2019-09-09 20:30:36','2019-09-09 20:33:40'),(21,'Blok ABC',2,'available',8,'2019-09-09 20:30:46','2019-09-09 20:30:46');
+/*Table structure for table `project_unit_gallery` */
+
+DROP TABLE IF EXISTS `project_unit_gallery`;
+
+CREATE TABLE `project_unit_gallery` (
+  `unit_gallery_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `unit_gallery_filename` varchar(128) NOT NULL,
+  `unit_type_id` int(10) unsigned NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`unit_gallery_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `project_unit_gallery` */
 
 /*Table structure for table `project_unit_installment` */
 
@@ -260,36 +310,54 @@ CREATE TABLE `project_unit_installment` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`installment_id`),
   KEY `fk_installment_unit_type_id` (`project_unit_type_id`),
-  CONSTRAINT `fk_installment_unit_type_id` FOREIGN KEY (`project_unit_type_id`) REFERENCES `project_unit_type` (`project_unit_type_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+  CONSTRAINT `fk_installment_unit_type_id` FOREIGN KEY (`project_unit_type_id`) REFERENCES `project_unit_type` (`unit_type_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_unit_installment` */
-
-insert  into `project_unit_installment`(`installment_id`,`installment_dp`,`installment_price`,`installment_tenor`,`project_unit_type_id`,`created_at`,`updated_at`) values (5,175000000,5000000,132,8,'2019-09-04 21:27:58','2019-09-04 21:46:01'),(6,300000000,2500000,156,9,'2019-09-04 21:47:27','2019-09-04 21:48:08'),(7,5000000,2200000,24,10,'2019-09-08 20:49:30','2019-09-08 20:57:09'),(8,5000000,2000000,60,11,'2019-09-08 20:51:41','2019-09-08 20:53:40'),(9,8000000,3000000,36,11,'2019-09-08 20:54:00','2019-09-08 20:54:00'),(10,6500000,2500000,48,11,'2019-09-08 20:54:34','2019-09-08 20:55:49'),(11,7500000,3700000,12,10,'2019-09-08 20:56:40','2019-09-08 20:56:56');
 
 /*Table structure for table `project_unit_type` */
 
 DROP TABLE IF EXISTS `project_unit_type`;
 
 CREATE TABLE `project_unit_type` (
-  `project_unit_type_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `unit_type_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `unit_name` varchar(255) NOT NULL,
   `unit_floor` tinyint(3) unsigned NOT NULL,
   `unit_lb` tinyint(3) unsigned NOT NULL,
   `unit_lt` tinyint(3) unsigned NOT NULL,
   `unit_kt` tinyint(3) unsigned NOT NULL,
   `unit_km` tinyint(3) unsigned NOT NULL,
   `unit_price` bigint(20) unsigned NOT NULL,
-  `project_unit_id` int(10) unsigned NOT NULL,
+  `unit_description` longtext DEFAULT NULL,
+  `unit_status` enum('available','sold') NOT NULL DEFAULT 'available',
+  `unit_watt` int(10) unsigned DEFAULT NULL,
+  `unit_facility` text DEFAULT NULL,
+  `unit_site_plan` varchar(128) NOT NULL,
+  `unit_design_map` varchar(128) NOT NULL,
+  `project_unique_id` varchar(10) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`project_unit_type_id`),
-  KEY `fk_unit_type_project_unit_id` (`project_unit_id`),
-  CONSTRAINT `fk_unit_type_project_unit_id` FOREIGN KEY (`project_unit_id`) REFERENCES `project_unit` (`project_unit_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`unit_type_id`),
+  KEY `fk_unit_project_uidx` (`project_unique_id`),
+  CONSTRAINT `fk_unit_project_uidx` FOREIGN KEY (`project_unique_id`) REFERENCES `project_list` (`project_unique_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_unit_type` */
 
-insert  into `project_unit_type`(`project_unit_type_id`,`unit_floor`,`unit_lb`,`unit_lt`,`unit_kt`,`unit_km`,`unit_price`,`project_unit_id`,`created_at`,`updated_at`) values (8,2,50,100,3,2,800000000,6,'2019-09-04 21:26:38','2019-09-04 21:26:38'),(9,1,30,60,3,1,680000000,6,'2019-09-04 21:46:43','2019-09-04 21:46:43'),(10,1,50,100,2,2,50000000,18,'2019-09-08 20:48:08','2019-09-08 20:48:26'),(11,1,60,80,3,1,100000000,18,'2019-09-08 20:51:03','2019-09-08 20:52:45'),(12,2,40,60,3,2,800000000,19,'2019-09-09 20:28:13','2019-09-09 20:28:13'),(13,2,60,100,4,2,1000000000,19,'2019-09-09 20:29:23','2019-09-09 20:29:23'),(14,3,100,100,5,3,2000000000,21,'2019-09-09 20:31:19','2019-09-09 20:31:19'),(15,1,50,80,4,2,750000000,21,'2019-09-09 20:31:59','2019-09-09 20:31:59'),(16,1,30,50,3,1,480000000,21,'2019-09-09 20:32:24','2019-09-09 20:32:24'),(17,1,40,60,3,2,650000000,20,'2019-09-09 20:34:14','2019-09-09 20:34:14'),(18,2,60,80,3,2,870000000,20,'2019-09-09 20:34:42','2019-09-09 20:34:42'),(19,3,100,100,5,3,1500000000,20,'2019-09-09 20:35:09','2019-09-09 20:35:09');
+/*Table structure for table `province` */
+
+DROP TABLE IF EXISTS `province`;
+
+CREATE TABLE `province` (
+  `province_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `province_name` varchar(128) NOT NULL,
+  `province_slug` varchar(128) NOT NULL,
+  PRIMARY KEY (`province_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+/*Data for the table `province` */
+
+insert  into `province`(`province_id`,`province_name`,`province_slug`) values (1,'Banten','banten'),(2,'Jawa Barat','jawa-barat'),(3,'DKI Jakarta','dki-jakarta');
 
 /*Table structure for table `survey_schedule` */
 

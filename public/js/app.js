@@ -2907,6 +2907,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     deleteSitePlan: function deleteSitePlan(index) {
       if (this.forms.project_site_plan.length !== 0) {
+        $(".selectedSitePlan").val('');
         this.forms.project_site_plan.splice(index, 1);
       }
     },
@@ -2915,8 +2916,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         url: null,
         data: null
       };
+      $("#selectedThumbnail").val('');
     },
     onAddProject: function onAddProject() {
+      var _this3 = this;
+
       this.errors.name = {};
       this.errors.errorMessage = '';
       this.errors.iserror = false;
@@ -2952,6 +2956,39 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       if (this.errors.iserror === true) return false;
+      var fd = new FormData();
+      var project_thumbnail = this.forms.project_thumbnail.data !== null ? this.forms.project_thumbnail.data : '';
+      var project_estimate_launch = this.forms.project_status === 'soon' ? this.forms.project_estimate_launch : '';
+      fd.append('project_name', this.forms.project_name);
+      fd.append('project_city', this.forms.project_city);
+      fd.append('project_description', this.forms.project_description);
+      fd.append('project_link_map', this.forms.project_link_map);
+      fd.append('project_map_embed', this.forms.project_map_embed);
+      fd.append('project_status', this.forms.project_status);
+      fd.append('project_type', this.forms.project_type);
+      fd.append('project_address', this.forms.project_address);
+      fd.append('project_thumbnail', project_thumbnail);
+      fd.append('project_estimate_launch', project_estimate_launch);
+      this.forms.project_site_plan.map(function (p) {
+        fd.append('project_site_plan[]', p.data);
+      });
+      axios.post(this.$root.url + '/developer/project/add_project', fd).then(function (res) {
+        swal({
+          title: 'Sukses',
+          text: 'Proyek baru berhasil ditambah',
+          icon: 'success'
+        });
+        setTimeout(function () {
+          document.location = _this3.$root.url + '/developer/project/manage_project';
+        }, 2000);
+      })["catch"](function (err) {
+        swal({
+          title: 'Whoops',
+          text: 'Terjadi kesalahan',
+          icon: 'warning',
+          dangerMode: true
+        });
+      });
     }
   },
   computed: {
@@ -4055,6 +4092,348 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     this.getGalleries();
     this.getProjectUnit();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/EditProject.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Frontend/Developer/EditProject.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['session_user'],
+  data: function data() {
+    return {
+      forms: {
+        project_name: '',
+        project_description: '',
+        project_address: '',
+        project_region: '',
+        project_city: this.getproject.project_city,
+        project_link_map: this.getproject.project_link_map,
+        project_map_embed: this.getproject.project_map_embed,
+        project_status: this.getproject.project_type,
+        project_site_plan: [],
+        project_type: this.getproject.project_type,
+        project_estimate_launch: this.getproject.project_estimate_launch === null ? new Date().getFullYear() : this.getproject.project_estimate_launch,
+        project_thumbnail: {
+          url: null,
+          data: null
+        },
+        submit: 'Tambah Proyek'
+      },
+      errors: {
+        name: {},
+        errorMessage: '',
+        iserror: false
+      },
+      getregion: {},
+      getcity: {},
+      formRequired: '<span class="uk-text-danger">*</span>'
+    };
+  },
+  methods: {
+    getRegionData: function getRegionData() {
+      var _this = this;
+
+      axios({
+        method: 'get',
+        url: this.$root.url + '/api/region/provinsi/all'
+      }).then(function (res) {
+        var results = res.data;
+        _this.getregion = results.results.data;
+
+        _this.getCityData();
+      })["catch"](function (err) {
+        console.log(err.response.statusText);
+      });
+    },
+    getCityData: function getCityData() {
+      var _this2 = this;
+
+      var region = 0;
+      if (this.forms.project_region !== '') region = this.forms.project_region;
+      axios({
+        method: 'get',
+        url: this.$root.url + '/api/region/kota/all/' + region
+      }).then(function (res) {
+        var results = res.data;
+        _this2.getcity = results.results.data;
+      })["catch"](function (err) {
+        console.log(err.response.statusText);
+      });
+    },
+    selectedSitePlan: function selectedSitePlan(event) {
+      var targetFile = event.target.files;
+
+      if (targetFile.length !== 0) {
+        for (var i = 0; i < targetFile.length; i++) {
+          this.forms.project_site_plan.push({
+            objectURL: URL.createObjectURL(targetFile[i]),
+            data: targetFile[i]
+          });
+        }
+      }
+    },
+    selectedThumbnail: function selectedThumbnail(event) {
+      var targetFile = event.target.files;
+      this.forms.project_thumbnail.url = null;
+      this.forms.project_thumbnail.data = null;
+
+      if (targetFile.length !== 0) {
+        this.forms.project_thumbnail.url = URL.createObjectURL(targetFile[0]);
+        this.forms.project_thumbnail.data = targetFile[0];
+      }
+    },
+    deleteSitePlan: function deleteSitePlan(index) {
+      if (this.forms.project_site_plan.length !== 0) {
+        $(".selectedSitePlan").val('');
+        this.forms.project_site_plan.splice(index, 1);
+      }
+    },
+    deleteThumbnail: function deleteThumbnail() {
+      this.forms.project_thumbnail = {
+        url: null,
+        data: null
+      };
+      $("#selectedThumbnail").val('');
+    },
+    onAddProject: function onAddProject() {
+      var _this3 = this;
+
+      this.errors.name = {};
+      this.errors.errorMessage = '';
+      this.errors.iserror = false;
+
+      if (this.forms.project_name === '') {
+        this.errors.name.project_name = 'Silakan masukkan nama proyek';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.project_region === '') {
+        this.errors.name.project_region = 'Silakan pilih provinsi';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.project_city === '') {
+        this.errors.name.project_city = 'Silakan pilih kota';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.project_address === '') {
+        this.errors.name.project_address = 'Silakan masukkan alamat proyek';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.project_description === '') {
+        this.errors.name.project_description = 'Silakan masukkan deskripsi proyek';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.project_site_plan.length === 0) {
+        this.errors.name.project_site_plan = 'Silakan masukkan site plan proyek';
+        this.errors.iserror = true;
+      }
+
+      if (this.errors.iserror === true) return false;
+      var fd = new FormData();
+      var project_thumbnail = this.forms.project_thumbnail.data !== null ? this.forms.project_thumbnail.data : '';
+      var project_estimate_launch = this.forms.project_status === 'soon' ? this.forms.project_estimate_launch : '';
+      fd.append('project_name', this.forms.project_name);
+      fd.append('project_city', this.forms.project_city);
+      fd.append('project_description', this.forms.project_description);
+      fd.append('project_link_map', this.forms.project_link_map);
+      fd.append('project_map_embed', this.forms.project_map_embed);
+      fd.append('project_status', this.forms.project_status);
+      fd.append('project_type', this.forms.project_type);
+      fd.append('project_address', this.forms.project_address);
+      fd.append('project_thumbnail', project_thumbnail);
+      fd.append('project_estimate_launch', project_estimate_launch);
+      this.forms.project_site_plan.map(function (p) {
+        fd.append('project_site_plan[]', p.data);
+      });
+      axios.post(this.$root.url + '/developer/project/add_project', fd).then(function (res) {
+        swal({
+          title: 'Sukses',
+          text: 'Proyek baru berhasil ditambah',
+          icon: 'success'
+        });
+        setTimeout(function () {
+          document.location = _this3.$root.url + '/developer/project/manage_project';
+        }, 2000);
+      })["catch"](function (err) {
+        swal({
+          title: 'Whoops',
+          text: 'Terjadi kesalahan',
+          icon: 'warning',
+          dangerMode: true
+        });
+      });
+    }
+  },
+  computed: {
+    years: function years() {
+      var now = new Date().getFullYear();
+      var nextYear = [];
+
+      for (var i = now; i < now + 25; i++) {
+        nextYear.push(i);
+      }
+
+      return nextYear;
+    }
+  },
+  mounted: function mounted() {
+    this.getRegionData();
   }
 });
 
@@ -64103,6 +64482,7 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("input", {
+                    staticClass: "selectedSitePlan",
                     attrs: { type: "file", accept: "image/*", multiple: "" },
                     on: { change: _vm.selectedSitePlan }
                   }),
@@ -64163,7 +64543,7 @@ var render = function() {
                       ]
                     ),
                     _vm._v(" "),
-                    _c("button", {
+                    _c("a", {
                       staticClass:
                         "uk-width-1-1 uk-button uk-button-primary uk-button-small dash-btn dash-btn-action",
                       attrs: { "uk-icon": "close" },
@@ -64195,7 +64575,11 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("input", {
-                    attrs: { type: "file", accept: "image/*" },
+                    attrs: {
+                      type: "file",
+                      id: "selectedThumbnail",
+                      accept: "image/*"
+                    },
                     on: { change: _vm.selectedThumbnail }
                   }),
                   _vm._v(" "),
@@ -66893,6 +67277,813 @@ var staticRenderFns = [
         _c("th", [_vm._v("Terakhir diubah")])
       ])
     ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/EditProject.vue?vue&type=template&id=b5855dd0&":
+/*!*********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Frontend/Developer/EditProject.vue?vue&type=template&id=b5855dd0& ***!
+  \*********************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "uk-card dashboard-content" }, [
+      _c("ul", { staticClass: "uk-breadcrumb" }, [
+        _c("li", [
+          _c(
+            "a",
+            { attrs: { href: _vm.$root.url + "/developer/project/dashboard" } },
+            [_vm._v("Dashboard")]
+          )
+        ]),
+        _vm._v(" "),
+        _c("li", [
+          _c(
+            "a",
+            {
+              attrs: {
+                href: _vm.$root.url + "/developer/project/manage_project"
+              }
+            },
+            [_vm._v("Kelola Proyek")]
+          )
+        ]),
+        _vm._v(" "),
+        _vm._m(0)
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "uk-card-title uk-margin dashboard-content-heading" },
+        [_vm._v("Tambah Proyek Baru")]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.errors.errorMessage,
+              expression: "errors.errorMessage"
+            }
+          ],
+          staticClass: "uk-alert-danger",
+          attrs: { "uk-alert": "" }
+        },
+        [_vm._v(_vm._s(_vm.errors.errorMessage))]
+      ),
+      _vm._v(" "),
+      _c(
+        "form",
+        {
+          staticClass: "uk-form-stacked",
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.onAddProject($event)
+            }
+          }
+        },
+        [
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Nama Proyek "),
+              _c("span", { domProps: { innerHTML: _vm._s(_vm.formRequired) } })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.forms.project_name,
+                    expression: "forms.project_name"
+                  }
+                ],
+                staticClass: "uk-input dash-form-input",
+                attrs: { type: "text" },
+                domProps: { value: _vm.forms.project_name },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.forms, "project_name", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.errors.name.project_name,
+                    expression: "errors.name.project_name"
+                  }
+                ],
+                staticClass: "uk-text-small uk-text-danger"
+              },
+              [_vm._v(_vm._s(_vm.errors.name.project_name))]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Tipe Proyek")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.forms.project_type,
+                      expression: "forms.project_type"
+                    }
+                  ],
+                  staticClass: "uk-select dash-form-input",
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.forms,
+                        "project_type",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                [
+                  _c("option", { attrs: { value: "residensial" } }, [
+                    _vm._v("Residensial")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "apartemen" } }, [
+                    _vm._v("Apartemen")
+                  ])
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Provinsi "),
+              _c("span", { domProps: { innerHTML: _vm._s(_vm.formRequired) } })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.forms.project_region,
+                      expression: "forms.project_region"
+                    }
+                  ],
+                  staticClass: "uk-select dash-form-input",
+                  on: {
+                    change: [
+                      function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.forms,
+                          "project_region",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      },
+                      function($event) {
+                        return _vm.getCityData()
+                      }
+                    ]
+                  }
+                },
+                [
+                  _c("option", { attrs: { value: "" } }, [
+                    _vm._v("-- Pilih --")
+                  ]),
+                  _vm._v(" "),
+                  _vm._l(_vm.getregion, function(reg) {
+                    return _c(
+                      "option",
+                      { domProps: { value: reg.province_id } },
+                      [_vm._v(_vm._s(reg.province_name))]
+                    )
+                  })
+                ],
+                2
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.errors.name.project_region,
+                    expression: "errors.name.project_region"
+                  }
+                ],
+                staticClass: "uk-text-small uk-text-danger"
+              },
+              [_vm._v(_vm._s(_vm.errors.name.project_region))]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Kota "),
+              _c("span", { domProps: { innerHTML: _vm._s(_vm.formRequired) } })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.forms.project_city,
+                      expression: "forms.project_city"
+                    }
+                  ],
+                  staticClass: "uk-select dash-form-input",
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.forms,
+                        "project_city",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                [
+                  _c("option", { attrs: { value: "" } }, [
+                    _vm._v("-- Pilih --")
+                  ]),
+                  _vm._v(" "),
+                  _vm._l(_vm.getcity, function(city) {
+                    return _c("option", { domProps: { value: city.city_id } }, [
+                      _vm._v(_vm._s(city.city_name))
+                    ])
+                  })
+                ],
+                2
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.errors.name.project_city,
+                    expression: "errors.name.project_city"
+                  }
+                ],
+                staticClass: "uk-text-small uk-text-danger"
+              },
+              [_vm._v(_vm._s(_vm.errors.name.project_city))]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Alamat "),
+              _c("span", { domProps: { innerHTML: _vm._s(_vm.formRequired) } })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.forms.project_address,
+                    expression: "forms.project_address"
+                  }
+                ],
+                staticClass: "uk-textarea uk-height-small dash-form-input",
+                domProps: { value: _vm.forms.project_address },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.forms, "project_address", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.errors.name.project_address,
+                    expression: "errors.name.project_address"
+                  }
+                ],
+                staticClass: "uk-text-small uk-text-danger"
+              },
+              [_vm._v(_vm._s(_vm.errors.name.project_address))]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Deskripsi Proyek "),
+              _c("span", { domProps: { innerHTML: _vm._s(_vm.formRequired) } })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.forms.project_description,
+                    expression: "forms.project_description"
+                  }
+                ],
+                staticClass: "uk-textarea uk-height-small dash-form-input",
+                domProps: { value: _vm.forms.project_description },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(
+                      _vm.forms,
+                      "project_description",
+                      $event.target.value
+                    )
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.errors.name.project_description,
+                    expression: "errors.name.project_description"
+                  }
+                ],
+                staticClass: "uk-text-small uk-text-danger"
+              },
+              [_vm._v(_vm._s(_vm.errors.name.project_description))]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Link Maps")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.forms.project_link_map,
+                    expression: "forms.project_link_map"
+                  }
+                ],
+                staticClass: "uk-input dash-form-input",
+                attrs: { type: "text" },
+                domProps: { value: _vm.forms.project_link_map },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.forms, "project_link_map", $event.target.value)
+                  }
+                }
+              })
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Map Embed")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.forms.project_map_embed,
+                    expression: "forms.project_map_embed"
+                  }
+                ],
+                staticClass: "uk-input dash-form-input",
+                attrs: { type: "text" },
+                domProps: { value: _vm.forms.project_map_embed },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(
+                      _vm.forms,
+                      "project_map_embed",
+                      $event.target.value
+                    )
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "uk-text-small",
+                attrs: {
+                  target: "_blank",
+                  href:
+                    "https://support.google.com/maps/answer/144361?co=GENIE.Platform%3DDesktop&hl=en"
+                }
+              },
+              [_vm._v("Buka Bantuan Google")]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Site Plan")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c("div", { staticClass: "uk-placeholder uk-text-center" }, [
+                _c("div", { attrs: { "uk-form-custom": "" } }, [
+                  _c("span", { attrs: { "uk-icon": "icon: cloud-upload" } }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "uk-text-middle" }, [
+                    _vm._v("Attach binaries by dropping them here or")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    staticClass: "selectedSitePlan",
+                    attrs: { type: "file", accept: "image/*", multiple: "" },
+                    on: { change: _vm.selectedSitePlan }
+                  }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "uk-link uk-text-middle" }, [
+                    _vm._v("selecting one")
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.errors.name.project_site_plan,
+                      expression: "errors.name.project_site_plan"
+                    }
+                  ],
+                  staticClass: "uk-text-small uk-margin uk-text-danger"
+                },
+                [_vm._v(_vm._s(_vm.errors.name.project_site_plan))]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.forms.project_site_plan.length !== 0,
+                      expression: "forms.project_site_plan.length !== 0"
+                    }
+                  ],
+                  staticClass: "uk-margin uk-grid-small uk-grid-match",
+                  attrs: { "uk-grid": "" }
+                },
+                _vm._l(_vm.forms.project_site_plan, function(site_plan, index) {
+                  return _c("div", { staticClass: "uk-width-1-5" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "uk-cover-container uk-height-small uk-width-1-1 uk-margin"
+                      },
+                      [
+                        _c("img", {
+                          staticClass: "uk-width-1-1",
+                          attrs: {
+                            src: site_plan.objectURL,
+                            alt: "",
+                            "uk-cover": ""
+                          }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("a", {
+                      staticClass:
+                        "uk-width-1-1 uk-button uk-button-primary uk-button-small dash-btn dash-btn-action",
+                      attrs: { "uk-icon": "close" },
+                      on: {
+                        click: function($event) {
+                          return _vm.deleteSitePlan(index)
+                        }
+                      }
+                    })
+                  ])
+                }),
+                0
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Thumbnail")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c("div", { staticClass: "uk-placeholder uk-text-center" }, [
+                _c("div", { attrs: { "uk-form-custom": "" } }, [
+                  _c("span", { attrs: { "uk-icon": "icon: cloud-upload" } }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "uk-text-middle" }, [
+                    _vm._v("Attach binaries by dropping them here or")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    attrs: {
+                      type: "file",
+                      id: "selectedThumbnail",
+                      accept: "image/*"
+                    },
+                    on: { change: _vm.selectedThumbnail }
+                  }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "uk-link uk-text-middle" }, [
+                    _vm._v("selecting one")
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.forms.project_thumbnail.url !== null,
+                      expression: "forms.project_thumbnail.url !== null"
+                    }
+                  ],
+                  staticClass:
+                    "uk-margin uk-width-1-2 uk-inline-clip uk-transition-toggle"
+                },
+                [
+                  _c("img", {
+                    staticClass: "uk-width-1-1",
+                    attrs: { src: _vm.forms.project_thumbnail.url, alt: "" }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle"
+                    },
+                    [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "uk-link",
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteThumbnail()
+                            }
+                          }
+                        },
+                        [
+                          _c("span", { attrs: { "uk-icon": "close" } }),
+                          _vm._v(" Hapus\n              ")
+                        ]
+                      )
+                    ]
+                  )
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+              _vm._v("Status Proyek")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-form-controls" }, [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.forms.project_status,
+                      expression: "forms.project_status"
+                    }
+                  ],
+                  staticClass: "uk-select dash-form-input",
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.forms,
+                        "project_status",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                [
+                  _c("option", { attrs: { value: "available" } }, [
+                    _vm._v("Tersedia")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "sold" } }, [
+                    _vm._v("Terjual")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "soon" } }, [_vm._v("Segera")])
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.forms.project_status === "soon",
+                  expression: "forms.project_status === 'soon'"
+                }
+              ],
+              staticClass: "uk-margin"
+            },
+            [
+              _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+                _vm._v("Estimasi Launching")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-form-controls" }, [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.forms.project_estimate_launch,
+                        expression: "forms.project_estimate_launch"
+                      }
+                    ],
+                    staticClass: "uk-select dash-form-input",
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.forms,
+                          "project_estimate_launch",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  _vm._l(_vm.years, function(year) {
+                    return _c("option", { domProps: { value: year } }, [
+                      _vm._v(_vm._s(year))
+                    ])
+                  }),
+                  0
+                )
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "uk-margin" }, [
+            _c("button", {
+              staticClass: "uk-button uk-button-primary dash-btn",
+              domProps: { innerHTML: _vm._s(_vm.forms.submit) }
+            })
+          ])
+        ]
+      )
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [_c("span", [_vm._v("Tambah Proyek")])])
   }
 ]
 render._withStripped = true
@@ -84671,7 +85862,8 @@ Vue.component('developer-manage-marketing', __webpack_require__(/*! ./components
 Vue.component('developer-detail-project', __webpack_require__(/*! ./components/Frontend/Developer/DetailProject.vue */ "./resources/js/components/Frontend/Developer/DetailProject.vue")["default"]);
 Vue.component('developer-register-page', __webpack_require__(/*! ./components/Frontend/Developer/Daftar.vue */ "./resources/js/components/Frontend/Developer/Daftar.vue")["default"]);
 Vue.component('developer-login-page', __webpack_require__(/*! ./components/Frontend/Developer/Masuk.vue */ "./resources/js/components/Frontend/Developer/Masuk.vue")["default"]);
-Vue.component('developer-add-project', __webpack_require__(/*! ./components/Frontend/Developer/AddProject.vue */ "./resources/js/components/Frontend/Developer/AddProject.vue")["default"]); // customer
+Vue.component('developer-add-project', __webpack_require__(/*! ./components/Frontend/Developer/AddProject.vue */ "./resources/js/components/Frontend/Developer/AddProject.vue")["default"]);
+Vue.component('developer-edit-project', __webpack_require__(/*! ./components/Frontend/Developer/EditProject.vue */ "./resources/js/components/Frontend/Developer/EditProject.vue")["default"]); // customer
 
 Vue.component('customer-register-page', __webpack_require__(/*! ./components/Frontend/Customer/Daftar.vue */ "./resources/js/components/Frontend/Customer/Daftar.vue")["default"]);
 Vue.component('customer-login-page', __webpack_require__(/*! ./components/Frontend/Customer/Masuk.vue */ "./resources/js/components/Frontend/Customer/Masuk.vue")["default"]);
@@ -85645,6 +86837,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailProject_vue_vue_type_template_id_e257179e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DetailProject_vue_vue_type_template_id_e257179e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Frontend/Developer/EditProject.vue":
+/*!********************************************************************!*\
+  !*** ./resources/js/components/Frontend/Developer/EditProject.vue ***!
+  \********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _EditProject_vue_vue_type_template_id_b5855dd0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EditProject.vue?vue&type=template&id=b5855dd0& */ "./resources/js/components/Frontend/Developer/EditProject.vue?vue&type=template&id=b5855dd0&");
+/* harmony import */ var _EditProject_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EditProject.vue?vue&type=script&lang=js& */ "./resources/js/components/Frontend/Developer/EditProject.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _EditProject_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _EditProject_vue_vue_type_template_id_b5855dd0___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _EditProject_vue_vue_type_template_id_b5855dd0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Frontend/Developer/EditProject.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Frontend/Developer/EditProject.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/Frontend/Developer/EditProject.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditProject_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./EditProject.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/EditProject.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditProject_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Frontend/Developer/EditProject.vue?vue&type=template&id=b5855dd0&":
+/*!***************************************************************************************************!*\
+  !*** ./resources/js/components/Frontend/Developer/EditProject.vue?vue&type=template&id=b5855dd0& ***!
+  \***************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditProject_vue_vue_type_template_id_b5855dd0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./EditProject.vue?vue&type=template&id=b5855dd0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Developer/EditProject.vue?vue&type=template&id=b5855dd0&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditProject_vue_vue_type_template_id_b5855dd0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditProject_vue_vue_type_template_id_b5855dd0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

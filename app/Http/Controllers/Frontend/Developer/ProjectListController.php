@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Database\DeveloperUser;
 use App\Database\ProjectList;
 use App\Database\ProjectGallery;
+use App\Database\ProjectSitePlan;
 use App\Database\AreaDB;
 use App\Database\ProvinceDB;
 use App\Database\CityDB;
@@ -49,7 +50,7 @@ class ProjectListController extends Controller
     }
   }
 
-  public function add_project( Request $request, DeveloperUser $developeruser, ProjectList $project_list )
+  public function add_project( Request $request, DeveloperUser $developeruser, ProjectList $project_list, ProjectSitePlan $project_siteplan, ProjectGallery $project_gallery )
   {
     $project_name = $request->project_name;
     $project_slug = str_slug( $project_name );
@@ -59,21 +60,83 @@ class ProjectListController extends Controller
     $project_map_embed = $request->project_map_embed;
     $project_description = $request->project_description;
     $project_status = $request->project_status;
+    $project_type = $request->project_type;
+    $project_thumbnail = $request->project_thumbnail;
+    $project_site_plan = $request->project_site_plan;
+    $project_estimate_launch = $request->project_estimate_launch;
+    $data_site_plan = [];
+    $date = date('Y-m-d H:i:s');
+    $storage = Storage::disk('assets');
+    $thumbnail = ! empty( $project_thumbnail ) ? $project_thumbnail->hashName() : null;
+    $insert_project = new $project_list;
+    $insert_gallery = new $project_gallery;
+    $insert_siteplan = new $project_siteplan;
+    $unique_id = 'PRY' . str_pad( $insert_project->increment('project_id') + 1, 5, '0', STR_PAD_LEFT );
 
-    $insert = new $project_list;
-    $insert->project_name = $project_name;
-    $insert->project_slug = $project_slug;
-    $insert->project_city = $project_city;
-    $insert->project_address = $project_address;
-    $insert->project_link_map = $project_link_map;
-    $insert->project_map_embed = $project_map_embed;
-    $insert->project_description = $project_description;
-    $insert->project_status = $project_status;
-    $insert->dev_user_id = session()->get('dev_user_id');
-    $insert->save();
+    $insert_project->project_name = $project_name;
+    $insert_project->project_unique_id = $unique_id;
+    $insert_project->project_slug = $project_slug;
+    $insert_project->project_city = $project_city;
+    $insert_project->project_address = $project_address;
+    $insert_project->project_link_map = $project_link_map;
+    $insert_project->project_map_embed = $project_map_embed;
+    $insert_project->project_description = $project_description;
+    $insert_project->project_status = $project_status;
+    $insert_project->project_type = $project_type;
+    $insert_project->project_thumbnail = $thumbnail;
+    if( $project_status == 'soon' )
+    {
+      $insert_project->project_estimate_launch = $project_estimate_launch;
+    }
+    $insert_project->dev_user_id = session()->get('dev_user_id');
+    $insert_project->save();
+
+    if( ! empty( $project_thumbnail ) || $project_thumbnail !== null )
+    {
+
+      $insert_gallery->gallery_filename = $thumbnail;
+      $insert_gallery->project_unique_id = $unique_id;
+      $insert_gallery->save();
+      $storage->putFileAs( 'images/project/gallery', $project_thumbnail, $thumbnail );
+    }
+
+    foreach( $project_site_plan as $siteplan )
+    {
+      array_push( $data_site_plan, [
+        'siteplan_map' => $siteplan->hashName(),
+        'project_unique_id' => $unique_id,
+        'created_at' => $date,
+        'updated_at' => $date
+      ]);
+      $storage->putFileAs( 'images/project/siteplan', $siteplan, $siteplan->hashName() );
+    }
+    $insert_siteplan->insert( $data_site_plan );
+
     $res = [ 'status' => 200, 'statusText' => 'success' ];
-
     return response()->json( $res, $res['status'] );
+  }
+
+  public function edit_project_page( Request $request, ProjectList $project_list, $id )
+  {
+    if( session()->has('isDeveloper') )
+    {
+      $getproject = $project_list->where('project_id', $id)
+      ->orWhere('project_unique_id', $id)
+      ->first();
+      if( ! $getproject ) abort(404);
+
+      $data = [
+        'request' => $request,
+        'session_user' => $developeruser->getinfo(),
+        'getproject' => $getproject
+      ];
+
+      return response()->view('frontend.pages.developer.add_project', $data);
+    }
+    else
+    {
+      return redirect()->route('homepage');
+    }
   }
 
   public function save_project( Request $request, DeveloperUser $developeruser, ProjectList $project_list, $project_id )
@@ -86,6 +149,14 @@ class ProjectListController extends Controller
     $project_map_embed = $request->project_map_embed;
     $project_description = $request->project_description;
     $project_status = $request->project_status;
+    $project_type = $request->project_type;
+    $project_thumbnail = $request->project_thumbnail;
+    $project_site_plan = $request->project_site_plan;
+    $project_estimate_launch = $request->project_estimate_launch;
+    $data_site_plan = [];
+    $date = date('Y-m-d H:i:s');
+    $storage = Storage::disk('assets');
+    $thumbnail = ! empty( $project_thumbnail ) ? $project_thumbnail->hashName() : null;
 
     $update = $project_list->where('project_id', $project_id)->first();
     $update->project_name = $project_name;
@@ -109,6 +180,7 @@ class ProjectListController extends Controller
     $devuser = $developeruser->getinfo();
     $project = $project_list->select(
       'project_list.project_id',
+      'project_list.project_unique_id',
       'project_list.project_name',
       'project_list.project_slug',
       'project_list.project_thumbnail',

@@ -73,6 +73,7 @@ Route::group(['prefix' => 'developer'], function() {
     Route::get('/manage_project', 'Frontend\Developer\ProjectListController@dev_manage_project')->name('developer_manage_project');
     Route::get('/add_project', 'Frontend\Developer\ProjectListController@add_project_page')->name('developer_add_project_page');
     Route::post('/add_project', 'Frontend\Developer\ProjectListController@add_project');
+    Route::get('/edit_project/{id}', 'Frontend\Developer\ProjectListController@edit_project_page')->name('developer_edit_project_page');
     Route::put('/save_project/{project_id}', 'Frontend\Developer\ProjectListController@save_project');
     Route::get('/list_project', 'Frontend\Developer\ProjectListController@getProjectList');
     Route::delete('/delete_project/{project_id}', 'Frontend\Developer\ProjectListController@delete_project');

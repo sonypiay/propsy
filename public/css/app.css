@@ -771,6 +771,25 @@ body {
   color: #1fc8c9;
 }
 
+.dashboard-container .dashboard-content .dash-btn-cancel {
+  border: 1px solid #e02c2c;
+  color: #e02c2c;
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  text-transform: capitalize;
+  background: #ffffff;
+  border-radius: 4px;
+}
+
+.dashboard-container .dashboard-content .dash-btn-cancel:hover {
+  background: #e02c2c;
+  color: #ffffff;
+}
+
 .dashboard-container .dashboard-content .dash-form-input {
   border-radius: 4px;
   font-size: 12px;

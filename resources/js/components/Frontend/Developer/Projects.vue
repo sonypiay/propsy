@@ -66,17 +66,17 @@
               <div class="uk-position-relative uk-margin-bottom grid-box-footer">
                 <div class="uk-grid-collapse" uk-grid>
                   <div class="uk-width-1-3">
-                    <a uk-tooltip="Edit Proyek" :href="$root.url + '/developer/project/edit_project/' + project.project_id" class="uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"><i class="icon ion-ios-create"></i></a>
+                    <a uk-tooltip="Edit Proyek" :href="$root.url + '/developer/project/edit_project/' + project.project_id" class="uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"><i uk-icon="pencil"></i></a>
                   </div>
                   <div class="uk-width-1-3">
-                    <a uk-tooltip="Hapus Proyek" @click="onDeleteProject( project.project_id )" class="uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"><i class="icon ion-ios-trash"></i></a>
+                    <a uk-tooltip="Hapus Proyek" @click="onDeleteProject( project.project_id )" class="uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"><i uk-icon="trash"></i></a>
                   </div>
                   <div class="uk-width-1-3">
-                    <a uk-tooltip="Lainnya" class="uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"><i class="icon ion-ios-more"></i></a>
-                    <div class="grid-dropdown-nav" uk-dropdown="pos: top-right">
+                    <a uk-tooltip="Lainnya" class="uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"><i uk-icon="more-vertical"></i></a>
+                    <div class="grid-dropdown-nav" uk-dropdown="pos: top-right; mode: click">
                       <ul class="uk-nav uk-dropdown-nav">
-                        <li><a :href="$root.url + '/developer/project/detail/' + project.project_id"><span class="uk-margin-small-right" uk-icon="forward"></span> Lihat Proyek</a></li>
-                        <li><a :href="$root.url + '/developer/project/gallery/' + project.project_id"><span class="uk-margin-small-right" uk-icon="image"></span> Galeri</a></li>
+                        <li><a :href="$root.url + '/developer/project/detail/' + project.project_unique_id"><span class="uk-margin-small-right" uk-icon="forward"></span> Lihat Proyek</a></li>
+                        <li><a :href="$root.url + '/developer/project/gallery/' + project.project_unique_id"><span class="uk-margin-small-right" uk-icon="image"></span> Galeri</a></li>
                       </ul>
                     </div>
                   </div>

@@ -73,28 +73,6 @@
           <a class="uk-text-small" target="_blank" href="https://support.google.com/maps/answer/144361?co=GENIE.Platform%3DDesktop&hl=en">Buka Bantuan Google</a>
         </div>
         <div class="uk-margin">
-          <label class="uk-form-label dash-form-label">Site Plan</label>
-          <div class="uk-form-controls">
-            <div class="uk-placeholder uk-text-center">
-              <div uk-form-custom>
-                <span uk-icon="icon: cloud-upload"></span>
-                <span class="uk-text-middle">Attach binaries by dropping them here or</span>
-                <input type="file" class="selectedSitePlan" @change="selectedSitePlan" accept="image/*" multiple>
-                <span class="uk-link uk-text-middle">selecting one</span>
-              </div>
-            </div>
-            <div v-show="errors.name.project_site_plan" class="uk-text-small uk-margin uk-text-danger">{{ errors.name.project_site_plan }}</div>
-            <div v-show="forms.project_site_plan.length !== 0" class="uk-margin uk-grid-small uk-grid-match" uk-grid>
-              <div v-for="(site_plan, index) in forms.project_site_plan" class="uk-width-1-5">
-                <div class="uk-cover-container uk-height-small uk-width-1-1 uk-margin">
-                  <img class="uk-width-1-1" :src="site_plan.objectURL" alt="" uk-cover>
-                </div>
-                <a @click="deleteSitePlan( index )" class="uk-width-1-1 uk-button uk-button-primary uk-button-small dash-btn dash-btn-action" uk-icon="close"></a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="uk-margin">
           <label class="uk-form-label dash-form-label">Thumbnail</label>
           <div class="uk-form-controls">
             <div class="uk-placeholder uk-text-center">
@@ -155,7 +133,6 @@ export default {
         project_link_map: '',
         project_map_embed: '',
         project_status: 'available',
-        project_site_plan: [],
         project_status: 'available',
         project_type: 'residensial',
         project_estimate_launch: new Date().getFullYear(),
@@ -203,20 +180,6 @@ export default {
         console.log( err.response.statusText );
       });
     },
-    selectedSitePlan(event)
-    {
-      var targetFile = event.target.files;
-      if( targetFile.length !== 0 )
-      {
-        for( let i = 0; i < targetFile.length; i++ )
-        {
-          this.forms.project_site_plan.push({
-            objectURL: URL.createObjectURL( targetFile[i] ),
-            data: targetFile[i]
-          });
-        }
-      }
-    },
     selectedThumbnail( event )
     {
       var targetFile = event.target.files;
@@ -226,13 +189,6 @@ export default {
       {
         this.forms.project_thumbnail.url = URL.createObjectURL( targetFile[0] );
         this.forms.project_thumbnail.data = targetFile[0];
-      }
-    },
-    deleteSitePlan( index ) {
-      if( this.forms.project_site_plan.length !== 0 )
-      {
-        $(".selectedSitePlan").val('');
-        this.forms.project_site_plan.splice( index, 1 );
       }
     },
     deleteThumbnail()
@@ -274,14 +230,10 @@ export default {
         this.errors.name.project_description = 'Silakan masukkan deskripsi proyek';
         this.errors.iserror = true;
       }
-      if( this.forms.project_site_plan.length === 0 )
-      {
-        this.errors.name.project_site_plan = 'Silakan masukkan site plan proyek';
-        this.errors.iserror = true;
-      }
 
       if( this.errors.iserror === true ) return false;
 
+      this.forms.submit = '<span uk-spinner></span>';
       let fd = new FormData();
       let project_thumbnail = this.forms.project_thumbnail.data !== null ? this.forms.project_thumbnail.data : '';
       let project_estimate_launch = this.forms.project_status === 'soon' ? this.forms.project_estimate_launch : '';
@@ -296,9 +248,6 @@ export default {
       fd.append('project_address', this.forms.project_address);
       fd.append('project_thumbnail', project_thumbnail);
       fd.append('project_estimate_launch', project_estimate_launch);
-      this.forms.project_site_plan.map( p => {
-        fd.append('project_site_plan[]', p.data);
-      });
 
       axios.post( this.$root.url + '/developer/project/add_project', fd).then( res => {
         swal({
@@ -316,6 +265,7 @@ export default {
           icon: 'warning',
           dangerMode: true
         });
+        this.forms.submit = 'Tambah Proyek';
       });
     }
   },

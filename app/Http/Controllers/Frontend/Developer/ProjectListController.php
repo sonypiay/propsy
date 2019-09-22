@@ -50,7 +50,7 @@ class ProjectListController extends Controller
     }
   }
 
-  public function add_project( Request $request, DeveloperUser $developeruser, ProjectList $project_list, ProjectSitePlan $project_siteplan, ProjectGallery $project_gallery )
+  public function add_project( Request $request, DeveloperUser $developeruser, ProjectList $project_list, ProjectGallery $project_gallery )
   {
     $project_name = $request->project_name;
     $project_slug = str_slug( $project_name );
@@ -62,15 +62,12 @@ class ProjectListController extends Controller
     $project_status = $request->project_status;
     $project_type = $request->project_type;
     $project_thumbnail = $request->project_thumbnail;
-    $project_site_plan = $request->project_site_plan;
     $project_estimate_launch = $request->project_estimate_launch;
     $data_site_plan = [];
-    $date = date('Y-m-d H:i:s');
     $storage = Storage::disk('assets');
     $thumbnail = ! empty( $project_thumbnail ) ? $project_thumbnail->hashName() : null;
     $insert_project = new $project_list;
     $insert_gallery = new $project_gallery;
-    $insert_siteplan = new $project_siteplan;
     $unique_id = 'PRY' . str_pad( $insert_project->increment('project_id') + 1, 5, '0', STR_PAD_LEFT );
 
     $insert_project->project_name = $project_name;
@@ -100,28 +97,43 @@ class ProjectListController extends Controller
       $storage->putFileAs( 'images/project/gallery', $project_thumbnail, $thumbnail );
     }
 
-    foreach( $project_site_plan as $siteplan )
-    {
-      array_push( $data_site_plan, [
-        'siteplan_map' => $siteplan->hashName(),
-        'project_unique_id' => $unique_id,
-        'created_at' => $date,
-        'updated_at' => $date
-      ]);
-      $storage->putFileAs( 'images/project/siteplan', $siteplan, $siteplan->hashName() );
-    }
-    $insert_siteplan->insert( $data_site_plan );
-
     $res = [ 'status' => 200, 'statusText' => 'success' ];
     return response()->json( $res, $res['status'] );
   }
 
-  public function edit_project_page( Request $request, ProjectList $project_list, $id )
+  public function edit_project_page( Request $request, DeveloperUser $developeruser, ProjectList $project_list, ProjectSitePlan $project_siteplan, $id )
   {
     if( session()->has('isDeveloper') )
     {
-      $getproject = $project_list->where('project_id', $id)
-      ->orWhere('project_unique_id', $id)
+      $getproject = $project_list->select(
+        'project_list.project_id',
+        'project_list.project_unique_id',
+        'project_list.project_name',
+        'project_list.project_slug',
+        'project_list.project_thumbnail',
+        'project_list.project_description',
+        'project_list.project_city',
+        'project_list.project_address',
+        'project_list.project_link_map',
+        'project_list.project_map_embed',
+        'project_list.project_status',
+        'project_list.project_type',
+        'project_list.project_address',
+        'project_list.project_estimate_launch',
+        'project_list.dev_user_id',
+        'project_list.created_at',
+        'project_list.updated_at',
+        'city.city_id',
+        'city.city_name',
+        'city.city_slug',
+        'province.province_id',
+        'province.province_name',
+        'province.province_slug'
+      )
+      ->leftJoin('city', 'project_list.project_city', '=', 'city.city_id')
+      ->leftJoin('province', 'city.province_id', '=', 'province.province_id')
+      ->where('project_list.project_id', $id)
+      ->orWhere('project_list.project_unique_id', $id)
       ->first();
       if( ! $getproject ) abort(404);
 
@@ -131,7 +143,7 @@ class ProjectListController extends Controller
         'getproject' => $getproject
       ];
 
-      return response()->view('frontend.pages.developer.add_project', $data);
+      return response()->view('frontend.pages.developer.edit_project', $data);
     }
     else
     {
@@ -139,7 +151,7 @@ class ProjectListController extends Controller
     }
   }
 
-  public function save_project( Request $request, DeveloperUser $developeruser, ProjectList $project_list, $project_id )
+  public function save_project( Request $request, DeveloperUser $developeruser, ProjectList $project_list, ProjectGallery $project_gallery, $project_id )
   {
     $project_name = $request->project_name;
     $project_slug = str_slug( $project_name );
@@ -151,14 +163,32 @@ class ProjectListController extends Controller
     $project_status = $request->project_status;
     $project_type = $request->project_type;
     $project_thumbnail = $request->project_thumbnail;
-    $project_site_plan = $request->project_site_plan;
     $project_estimate_launch = $request->project_estimate_launch;
-    $data_site_plan = [];
-    $date = date('Y-m-d H:i:s');
     $storage = Storage::disk('assets');
-    $thumbnail = ! empty( $project_thumbnail ) ? $project_thumbnail->hashName() : null;
+    $thumbnail = ! empty( $project_thumbnail ) ? $project_thumbnail->hashName() : '';
+    $thumbnail_path = 'images/project/gallery';
 
     $update = $project_list->where('project_id', $project_id)->first();
+    if( ! empty( $project_thumbnail ) )
+    {
+      $update->project_thumbnail = $thumbnail;
+
+      $insert_gallery = new $project_gallery;
+      $insert_gallery->gallery_filename = $thumbnail;
+      $insert_gallery->project_unique_id = $update->project_unique_id;
+      $insert_gallery->save();
+      $storage->putFileAs( $thumbnail_path, $project_thumbnail, $thumbnail );
+    }
+
+    if( $project_status == 'soon' )
+    {
+      $update->project_estimate_launch = $project_estimate_launch;
+    }
+    else
+    {
+      $update->project_estimate_launch = null;
+    }
+
     $update->project_name = $project_name;
     $update->project_slug = $project_slug;
     $update->project_city = $project_city;
@@ -167,6 +197,7 @@ class ProjectListController extends Controller
     $update->project_map_embed = $project_map_embed;
     $update->project_description = $project_description;
     $update->project_status = $project_status;
+    $update->project_type = $project_type;
     $update->save();
     $res = [ 'status' => 200, 'statusText' => 'success' ];
 
@@ -190,6 +221,8 @@ class ProjectListController extends Controller
       'project_list.project_link_map',
       'project_list.project_map_embed',
       'project_list.project_status',
+      'project_list.project_type',
+      'project_list.project_estimate_launch',
       'project_list.dev_user_id',
       'project_list.created_at',
       'project_list.updated_at',
@@ -272,6 +305,7 @@ class ProjectListController extends Controller
     {
       $getproject = $project_list->select(
         'project_list.project_id',
+        'project_list.project_unique_id',
         'project_list.project_name',
         'project_list.project_slug',
         'project_list.project_thumbnail',
@@ -281,6 +315,8 @@ class ProjectListController extends Controller
         'project_list.project_link_map',
         'project_list.project_map_embed',
         'project_list.project_status',
+        'project_list.project_type',
+        'project_list.project_estimate_launch',
         'project_list.dev_user_id',
         'project_list.created_at',
         'project_list.updated_at',
@@ -294,7 +330,7 @@ class ProjectListController extends Controller
       ->leftJoin('city', 'project_list.project_city', '=', 'city.city_id')
       ->leftJoin('province', 'city.province_id', '=', 'province.province_id')
       ->where([
-        ['project_list.project_id', $project_id],
+        ['project_list.project_unique_id', $project_id],
         ['project_list.dev_user_id', session()->get('dev_user_id')]
       ])
       ->first();
@@ -303,7 +339,7 @@ class ProjectListController extends Controller
       $data = [
         'request' => $request,
         'session_user' => $developeruser->getinfo(),
-        'projects' => $getproject
+        'getproject' => $getproject
       ];
       return response()->view('frontend.pages.developer.detail_project', $data);
     }

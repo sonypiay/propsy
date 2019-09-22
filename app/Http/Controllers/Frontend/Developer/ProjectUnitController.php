@@ -12,25 +12,18 @@ use App\Http\Controllers\Controller;
 
 class ProjectUnitController extends Controller
 {
-  public function get_unit_project( Request $request, ProjectUnitType $project_unit, $project_id )
-  {
-    $keywords = $request->keywords;
-
-    return response()->json( $result, 200 );
-  }
-
-  public function get_unit_tipe_project( Request $request, ProjectUnitType $unit_type, $unit_id )
+  public function get_unit_tipe_project( Request $request, ProjectUnitType $unit_type, $project_id )
   {
     $keywords = $request->keywords;
     $unit = new $unit_type;
     if( empty( $keywords ) )
     {
-      $query = $unit->where('project_unit_id', $unit_id);
+      $query = $unit->where('project_unique_id', $project_id);
     }
     else
     {
       $query = $unit->where([
-        ['project_unit_id', $project_id],
+        ['project_unique_id', $project_id],
         ['project_unit_name', 'like', '%' . $keywords . '%']
       ]);
     }

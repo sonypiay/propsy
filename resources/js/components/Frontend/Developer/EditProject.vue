@@ -4,11 +4,11 @@
       <ul class="uk-breadcrumb">
         <li><a :href="$root.url + '/developer/project/dashboard'">Dashboard</a></li>
         <li><a :href="$root.url + '/developer/project/manage_project'">Kelola Proyek</a></li>
-        <li><span>Tambah Proyek</span></li>
+        <li><span>Edit Proyek</span></li>
       </ul>
-      <div class="uk-card-title uk-margin dashboard-content-heading">Tambah Proyek Baru</div>
+      <div class="uk-card-title uk-margin dashboard-content-heading">Edot Proyek</div>
       <div v-show="errors.errorMessage" class="uk-alert-danger" uk-alert>{{ errors.errorMessage }}</div>
-      <form class="uk-form-stacked" @submit.prevent="onAddProject">
+      <form class="uk-form-stacked" @submit.prevent="onEditProject">
         <div class="uk-margin">
           <label class="uk-form-label dash-form-label">Nama Proyek <span v-html="formRequired"></span> </label>
           <div class="uk-form-controls">
@@ -73,28 +73,6 @@
           <a class="uk-text-small" target="_blank" href="https://support.google.com/maps/answer/144361?co=GENIE.Platform%3DDesktop&hl=en">Buka Bantuan Google</a>
         </div>
         <div class="uk-margin">
-          <label class="uk-form-label dash-form-label">Site Plan</label>
-          <div class="uk-form-controls">
-            <div class="uk-placeholder uk-text-center">
-              <div uk-form-custom>
-                <span uk-icon="icon: cloud-upload"></span>
-                <span class="uk-text-middle">Attach binaries by dropping them here or</span>
-                <input type="file" class="selectedSitePlan" @change="selectedSitePlan" accept="image/*" multiple>
-                <span class="uk-link uk-text-middle">selecting one</span>
-              </div>
-            </div>
-            <div v-show="errors.name.project_site_plan" class="uk-text-small uk-margin uk-text-danger">{{ errors.name.project_site_plan }}</div>
-            <div v-show="forms.project_site_plan.length !== 0" class="uk-margin uk-grid-small uk-grid-match" uk-grid>
-              <div v-for="(site_plan, index) in forms.project_site_plan" class="uk-width-1-5">
-                <div class="uk-cover-container uk-height-small uk-width-1-1 uk-margin">
-                  <img class="uk-width-1-1" :src="site_plan.objectURL" alt="" uk-cover>
-                </div>
-                <a @click="deleteSitePlan( index )" class="uk-width-1-1 uk-button uk-button-primary uk-button-small dash-btn dash-btn-action" uk-icon="close"></a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="uk-margin">
           <label class="uk-form-label dash-form-label">Thumbnail</label>
           <div class="uk-form-controls">
             <div class="uk-placeholder uk-text-center">
@@ -106,8 +84,10 @@
               </div>
             </div>
             <div v-show="forms.project_thumbnail.url !== null" class="uk-margin uk-width-1-2 uk-inline-clip uk-transition-toggle">
-              <img class="uk-width-1-1" :src="forms.project_thumbnail.url" alt="">
-              <div class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
+              <img v-if="forms.project_thumbnail.data === null" class="uk-width-1-1" :src="$root.url + '/images/project/gallery/' + forms.project_thumbnail.url" alt="">
+              <img v-else class="uk-width-1-1" :src="forms.project_thumbnail.url" alt="">
+
+              <div v-show="forms.project_thumbnail.data !== null" class="uk-transition-fade uk-position-cover uk-overlay uk-overlay-primary uk-flex uk-flex-center uk-flex-middle">
                 <a @click="deleteThumbnail()" class="uk-link">
                   <span uk-icon="close"></span> Hapus
                 </a>
@@ -125,16 +105,17 @@
             </select>
           </div>
         </div>
-        <div v-show="forms.project_status === 'soon'" class="uk-margin">
+        <div class="uk-margin">
           <label class="uk-form-label dash-form-label">Estimasi Launching</label>
           <div class="uk-form-controls">
-            <select class="uk-select dash-form-input" v-model="forms.project_estimate_launch">
+            <select class="uk-select dash-form-input" v-model="forms.project_estimate_launch" :disabled="forms.project_status !== 'soon'">
               <option v-for="year in years" :value="year">{{ year }}</option>
             </select>
           </div>
         </div>
         <div class="uk-margin">
           <button class="uk-button uk-button-primary dash-btn" v-html="forms.submit"></button>
+          <a class="uk-button uk-button-primary dash-btn dash-btn-cancel" :href="$root.url + '/developer/project/manage_project'">Batal</a>
         </div>
       </form>
     </div>
@@ -143,26 +124,25 @@
 
 <script>
 export default {
-  props: ['session_user'],
+  props: ['session_user', 'getproject'],
   data() {
     return {
       forms: {
-        project_name: '',
-        project_description: '',
-        project_address: '',
-        project_region: '',
+        project_name: this.getproject.project_name,
+        project_description: this.getproject.project_description,
+        project_address: this.getproject.project_address,
+        project_region: this.getproject.province_id === null ? '' : this.getproject.province_id,
         project_city: this.getproject.project_city,
-        project_link_map: this.getproject.project_link_map,
-        project_map_embed: this.getproject.project_map_embed,
-        project_status: this.getproject.project_type,
-        project_site_plan: [],
+        project_link_map: this.getproject.project_link_map === null ? '' : this.getproject.project_link_map,
+        project_map_embed: this.getproject.project_map_embed === null ? '' : this.getproject.project_map_embed,
+        project_status: this.getproject.project_status,
         project_type: this.getproject.project_type,
         project_estimate_launch: this.getproject.project_estimate_launch === null ? new Date().getFullYear() : this.getproject.project_estimate_launch,
         project_thumbnail: {
-          url: null,
+          url: this.getproject.project_thumbnail === null ? '' : this.getproject.project_thumbnail,
           data: null
         },
-        submit: 'Tambah Proyek',
+        submit: 'Simpan Perubahan',
       },
       errors: {
         name: {},
@@ -202,20 +182,6 @@ export default {
         console.log( err.response.statusText );
       });
     },
-    selectedSitePlan(event)
-    {
-      var targetFile = event.target.files;
-      if( targetFile.length !== 0 )
-      {
-        for( let i = 0; i < targetFile.length; i++ )
-        {
-          this.forms.project_site_plan.push({
-            objectURL: URL.createObjectURL( targetFile[i] ),
-            data: targetFile[i]
-          });
-        }
-      }
-    },
     selectedThumbnail( event )
     {
       var targetFile = event.target.files;
@@ -227,22 +193,15 @@ export default {
         this.forms.project_thumbnail.data = targetFile[0];
       }
     },
-    deleteSitePlan( index ) {
-      if( this.forms.project_site_plan.length !== 0 )
-      {
-        $(".selectedSitePlan").val('');
-        this.forms.project_site_plan.splice( index, 1 );
-      }
-    },
     deleteThumbnail()
     {
       this.forms.project_thumbnail = {
-        url: null,
+        url: this.getproject.project_thumbnail,
         data: null
       };
       $("#selectedThumbnail").val('');
     },
-    onAddProject()
+    onEditProject()
     {
       this.errors.name = {};
       this.errors.errorMessage = '';
@@ -263,24 +222,20 @@ export default {
         this.errors.name.project_city = 'Silakan pilih kota';
         this.errors.iserror = true;
       }
-      if( this.forms.project_address === '' )
+      if( this.forms.project_address === '' || this.forms.project_address === null )
       {
         this.errors.name.project_address = 'Silakan masukkan alamat proyek';
         this.errors.iserror = true;
       }
-      if( this.forms.project_description === '' )
+      if( this.forms.project_description === '' || this.forms.project_description === null )
       {
         this.errors.name.project_description = 'Silakan masukkan deskripsi proyek';
-        this.errors.iserror = true;
-      }
-      if( this.forms.project_site_plan.length === 0 )
-      {
-        this.errors.name.project_site_plan = 'Silakan masukkan site plan proyek';
         this.errors.iserror = true;
       }
 
       if( this.errors.iserror === true ) return false;
 
+      this.forms.submit = '<span uk-spinner></span>';
       let fd = new FormData();
       let project_thumbnail = this.forms.project_thumbnail.data !== null ? this.forms.project_thumbnail.data : '';
       let project_estimate_launch = this.forms.project_status === 'soon' ? this.forms.project_estimate_launch : '';
@@ -295,14 +250,11 @@ export default {
       fd.append('project_address', this.forms.project_address);
       fd.append('project_thumbnail', project_thumbnail);
       fd.append('project_estimate_launch', project_estimate_launch);
-      this.forms.project_site_plan.map( p => {
-        fd.append('project_site_plan[]', p.data);
-      });
 
-      axios.post( this.$root.url + '/developer/project/add_project', fd).then( res => {
+      axios.post( this.$root.url + '/developer/project/save_project/' + this.getproject.project_id, fd).then( res => {
         swal({
           title: 'Sukses',
-          text: 'Proyek baru berhasil ditambah',
+          text: 'Perubahan berhasil disimpan',
           icon: 'success'
         });
         setTimeout(() => {
@@ -315,6 +267,7 @@ export default {
           icon: 'warning',
           dangerMode: true
         });
+        this.forms.submit = 'Simpan Perubahan';
       });
     }
   },

@@ -87,7 +87,7 @@ export default {
       this.galleries.isLoading = true;
       axios({
         method: 'get',
-        url: this.$root.url + '/developer/project/data_gallery/' + this.projects.project_id
+        url: this.$root.url + '/developer/project/data_gallery/' + this.projects.project_unique_id
       }).then( res => {
         let result = res.data;
         this.galleries.total = result.data.total;
@@ -112,7 +112,7 @@ export default {
     {
       if( this.files.data === null ) return false;
       this.files.uploadProgress = 0;
-      let url = this.$root.url + '/developer/project/upload_gallery/' + this.projects.project_id;
+      let url = this.$root.url + '/developer/project/upload_gallery/' + this.projects.project_unique_id;
 
       var formdata = new FormData();
       formdata.append('image', this.files.data);

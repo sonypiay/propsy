@@ -34,24 +34,84 @@
 
       <!-- Unit -->
       <!-- modal tambah unit -->
-      <div id="modal-tipe-unit" class="uk-modal-container" uk-modal>
-        <div class="uk-modal-dialog uk-modal-body modal-form">
+      <div id="modal-tipe-unit" class="uk-modal-full" uk-modal>
+        <div class="uk-modal-dialog modal-form">
           <a class="uk-modal-close-default uk-modal-close" uk-close></a>
-          <h3 class="modal-form-heading">
-            <span>Tambah Tipe Unit</span>
-          </h3>
-          <form class="uk-form-stacked" @submit.prevent="">
-            <div class="uk-margin">
-              <label class="uk-form-label modal-label">Blok / Prefix</label>
-              <div class="uk-form-controls">
-                <input type="text" class="uk-input modal-input" placeholder="Contoh: Blok A1, Blok D7, Kavling 10">
-              </div>
-              <div v-show="errors.name.unit_name" class="uk-text-danger uk-text-small">{{ errors.name.unit_name }}</div>
+          <div class="uk-modal-body uk-height-viewport">
+            <div class="uk-width-3-4@xl uk-width-3-4@l uk-width-2-3@m uk-width-1-2@s uk-align-center uk-margin-top">
+              <h3 class="modal-form-heading">
+                <span>Tambah Tipe Unit</span>
+              </h3>
+              <form class="uk-form-stacked uk-grid-small" @submit.prevent="onAddOrSaveUnitType" uk-grid>
+                <div class="uk-width-1-3">
+                  <label class="uk-form-label modal-label">Nama Tipe <span v-html="forms.formrequired"></span></label>
+                  <div class="uk-form-controls">
+                    <input type="text" class="uk-input modal-input" v-model="forms.unit_tipe.unit_name">
+                  </div>
+                  <div v-show="errors.name.unit_name" class="uk-text-danger uk-text-small">{{ errors.name.unit_name }}</div>
+                </div>
+                <div class="uk-width-1-3">
+                  <label class="uk-form-label modal-label">Jumlah Lantai <span v-html="forms.formrequired"></span></label>
+                  <div class="uk-form-controls">
+                    <input type="number" class="uk-input modal-input" v-model="forms.unit_tipe.unit_name">
+                  </div>
+                  <div v-show="errors.name.unit_name" class="uk-text-danger uk-text-small">{{ errors.name.unit_name }}</div>
+                </div>
+                <div class="uk-width-1-3">
+                  <label class="uk-form-label modal-label">Jumlah Kamar Tidur <span v-html="forms.formrequired"></span></label>
+                  <div class="uk-form-controls">
+                    <input type="number" class="uk-input modal-input" v-model="forms.unit_tipe.unit_kt">
+                  </div>
+                  <div v-show="errors.name.unit_kt" class="uk-text-danger uk-text-small">{{ errors.name.unit_kt }}</div>
+                </div>
+                <div class="uk-width-1-3">
+                  <label class="uk-form-label modal-label">Jumlah Kamar Mandi <span v-html="forms.formrequired"></span></label>
+                  <div class="uk-form-controls">
+                    <input type="number" class="uk-input modal-input" v-model="forms.unit_tipe.unit_km">
+                  </div>
+                  <div v-show="errors.name.unit_km" class="uk-text-danger uk-text-small">{{ errors.name.unit_km }}</div>
+                </div>
+                <div class="uk-width-1-3">
+                  <label class="uk-form-label modal-label">Harga <span v-html="forms.formrequired"></span></label>
+                  <div class="uk-form-controls">
+                    <input type="number" class="uk-input modal-input" v-model="forms.unit_tipe.unit_price">
+                  </div>
+                  <div v-show="errors.name.unit_price" class="uk-text-danger uk-text-small">{{ errors.name.unit_price }}</div>
+                </div>
+                <div class="uk-width-1-3">
+                  <label class="uk-form-label modal-label">Watt <span v-html="forms.formrequired"></span></label>
+                  <div class="uk-form-controls">
+                    <input type="number" class="uk-input modal-input" v-model="forms.unit_tipe.unit_price">
+                  </div>
+                  <div v-show="errors.name.unit_price" class="uk-text-danger uk-text-small">{{ errors.name.unit_price }}</div>
+                </div>
+                <div class="uk-width-1-1">
+                  <label class="uk-form-label modal-label">Fasilitas <span v-html="forms.formrequired"></span></label>
+                  <div class="uk-form-controls">
+                    <tags-input element-id="tags"
+                    v-model="forms.unit_tipe.unit_facility"
+                    :existing-tags="getfacility"
+                    :add-tags-on-comma="true"
+                    :only-existing-tags="true"
+                    :typeahead="true"
+                    placeholder="Masukkan kata kunci..."
+                     />
+                  </div>
+                  <div v-show="errors.name.unit_facility" class="uk-text-danger uk-text-small">{{ errors.name.unit_facility }}</div>
+                </div>
+                <div class="uk-width-1-1">
+                  <div class="uk-height-large">
+                    <quill-editor
+                      v-model="forms.unit_tipe.unit_description"
+                      :options="forms.editor" />
+                  </div>
+                </div>
+                <div class="uk-width-1-1">
+                  <button class="uk-button uk-button-primary modal-form-add" v-html="forms.unit_tipe.submit"></button>
+                </div>
+              </form>
             </div>
-            <div class="uk-margin">
-              <button class="uk-button uk-button-primary modal-form-add" v-html="forms.unit_tipe.submit"></button>
-            </div>
-          </form>
+          </div>
         </div>
       </div>
       <!-- modal tambah unit -->
@@ -117,8 +177,18 @@
 </template>
 
 <script>
+import VoerroTagsInput from '@voerro/vue-tagsinput';
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.snow.css';
+import 'quill/dist/quill.bubble.css';
+import { quillEditor } from 'vue-quill-editor';
+
 export default {
-  props: ['session_user', 'getproject'],
+  props: ['session_user', 'getproject', 'getfacility'],
+  components: {
+    'tags-input': VoerroTagsInput,
+    quillEditor
+  },
   data() {
     return {
       errors: {
@@ -146,7 +216,13 @@ export default {
       },
       forms: {
         keywords: '',
+        formrequired: '<span class="uk-text-small uk-text-danger">*</span>',
         unit_tipe: {
+          unit_name: '',
+          unit_description: 'This is a text',
+          unit_status: '',
+          unit_watt: '',
+          unit_facility: [],
           unit_floor: 1,
           unit_lb: 0,
           unit_lt: 0,
@@ -157,6 +233,26 @@ export default {
           submit: 'Tambah',
           isEdit: false,
           isToggle: false
+        },
+        editor: {
+          modules: {
+            toolbar: [
+              ['bold', 'italic', 'underline', 'strike'],
+              ['blockquote', 'code-block'],
+              [{ 'header': 1 }, { 'header': 2 }],
+              [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+              [{ 'script': 'sub' }, { 'script': 'super' }],
+              [{ 'indent': '-1' }, { 'indent': '+1' }],
+              [{ 'direction': 'rtl' }],
+              [{ 'size': ['small', false, 'large', 'huge'] }],
+              [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+              [{ 'font': [] }],
+              [{ 'color': [] }, { 'background': [] }],
+              [{ 'align': [] }],
+              ['clean'],
+              ['link', 'image', 'video']
+            ]
+          }
         }
       }
     }
@@ -248,6 +344,8 @@ export default {
       this.errors.name = {};
       this.errors.errorMessage = '';
       this.errors.iserror = false;
+
+      console.log( this.forms.unit_tipe.unit_description );
     },
     onDeleteUnitType( id )
     {
@@ -272,10 +370,18 @@ export default {
               text: 'Unit proyek berhasil dihapus',
               icon: 'success'
             });
-
           });
         }
       });
+    },
+    onEditorBlur(editor) {
+      console.log('editor blur!', editor)
+    },
+    onEditorFocus(editor) {
+      console.log('editor focus!', editor)
+    },
+    onEditorReady(editor) {
+      console.log('editor ready!', editor)
     }
   },
   mounted() {
@@ -283,3 +389,23 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .quill-editor,
+  .quill-code {
+    height: 350px;
+  }
+  .quill-code {
+    border: none;
+    height: auto;
+    > code {
+      width: 100%;
+      margin: 0;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 0;
+      height: 10rem;
+      overflow-y: auto;
+    }
+  }
+</style>

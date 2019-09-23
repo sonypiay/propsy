@@ -5,6 +5,7 @@
   <developer-detail-project
   :getproject="{{ json_encode( $getproject ) }}"
   :session_user="{{ json_encode( $session_user ) }}"
+  :getfacility="{{ json_encode( $getfacility ) }}"
   />
 </div>
 <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>

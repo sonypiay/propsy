@@ -24,12 +24,13 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "moment": "^2.24.0",
-        "numeral": "^2.0.6",
-        "sweetalert": "^2.1.2",
         "@tinymce/tinymce-vue": "^2.1.0",
         "@voerro/vue-tagsinput": "^2.0.0",
         "chartjs": "^0.3.24",
+        "moment": "^2.24.0",
+        "numeral": "^2.0.6",
+        "quill-image-drop-module": "^1.0.3",
+        "sweetalert": "^2.1.2",
         "v-calendar": "^0.9.7",
         "vue-quill-editor": "^3.0.6"
     }

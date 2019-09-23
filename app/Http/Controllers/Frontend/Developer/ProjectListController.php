@@ -9,6 +9,7 @@ use App\Database\DeveloperUser;
 use App\Database\ProjectList;
 use App\Database\ProjectGallery;
 use App\Database\ProjectSitePlan;
+use App\Database\UnitFacility;
 use App\Database\AreaDB;
 use App\Database\ProvinceDB;
 use App\Database\CityDB;
@@ -299,7 +300,7 @@ class ProjectListController extends Controller
     return response()->json( $res, $res['status'] );
   }
 
-  public function detail_project( Request $request, DeveloperUser $developeruser, ProjectList $project_list, $project_id )
+  public function detail_project( Request $request, DeveloperUser $developeruser, ProjectList $project_list, UnitFacility $unitfacility, $project_id )
   {
     if( session()->has('isDeveloper') )
     {
@@ -336,10 +337,22 @@ class ProjectListController extends Controller
       ->first();
       if( ! $getproject ) abort(404);
 
+      $getfacility = $unitfacility->orderBy('facility_name', 'asc')
+      ->get();
+      $data_facility = [];
+      foreach( $getfacility as $facility )
+      {
+        array_push($data_facility, [
+          'key' => null,
+          'value' => $facility->facility_name
+        ]);
+      }
+
       $data = [
         'request' => $request,
         'session_user' => $developeruser->getinfo(),
-        'getproject' => $getproject
+        'getproject' => $getproject,
+        'getfacility' => $data_facility
       ];
       return response()->view('frontend.pages.developer.detail_project', $data);
     }

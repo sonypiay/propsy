@@ -17,10 +17,12 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}" media="screen" />
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="{{ asset('vendor/tagit/src/js/textext.core.js') }}"></script>
+<!--<script type="text/javascript" src="{{ asset('vendor/tagit/src/js/textext.core.js') }}"></script>
 <script type="text/javascript" src="{{ asset('vendor/tagit/src/js/textext.plugin.ajax.js') }}"></script>
 <script type="text/javascript" src="{{ asset('vendor/tagit/src/js/textext.plugin.autocomplete.js') }}"></script>
-<script type="text/javascript" src="{{ asset('vendor/tagit/src/js/textext.plugin.tags.js') }}"></script>
+<script type="text/javascript" src="{{ asset('vendor/tagit/src/js/textext.plugin.tags.js') }}"></script>-->
 <script type="text/javascript" src="{{ asset('vendor/uikit/js/uikit.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('vendor/uikit/js/uikit-icons.min.js') }}"></script>
-<script type="text/javascript"> var labmode = { url: '{{ url("/") }}' }; </script>
+<script type="text/javascript">
+var labmode = { url: '{{ url("/") }}' };
+</script>

@@ -113,6 +113,7 @@
         </div>
         <div class="uk-margin">
           <button class="uk-button uk-button-primary dash-btn" v-html="forms.submit"></button>
+          <a :href="$root.url + '/developer/manage_project'" class="uk-button uk-button-primary dash-btn dash-btn-cancel">Batal</a>
         </div>
       </form>
     </div>

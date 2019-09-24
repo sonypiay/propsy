@@ -78,7 +78,7 @@
         <div class="uk-width-1-1">
           <label class="uk-form-label dash-form-label">Fasilitas <span v-html="forms.formrequired"></span></label>
           <div class="uk-form-controls">
-            <div class="uk-grid-small uk-child-width-auto" uk-grid>
+            <div class="uk-grid-small uk-child-width-1-6" uk-grid>
               <div v-for="fas in getfacility">
                 <label class="uk-text-small">
                   <input type="checkbox" class="uk-checkbox" v-model="forms.unit_facility" :value="fas.facility_name" />
@@ -100,6 +100,7 @@
         </div>
         <div class="uk-width-1-1">
           <button class="uk-button uk-button-primary dash-btn" v-html="forms.submit"></button>
+          <a :href="$root.url + '/developer/project/detail/' + getproject.project_unique_id" class="uk-button uk-button-primary dash-btn dash-btn-cancel">Batal</a>
         </div>
       </form>
     </div>

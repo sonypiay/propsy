@@ -39,7 +39,7 @@
       <div class="uk-margin">
         <div class="uk-grid-small uk-child-width-auto" uk-grid>
           <div>
-            <a class="uk-button uk-button-primary uk-button-small dash-btn">{{ project_unit_tipe.total }} Unit</a>
+            <a class="uk-button uk-button-primary uk-button-small dash-btn">{{ unit_tipe.total }} Unit</a>
           </div>
           <div>
             <a class="uk-button uk-button-primary uk-button-small dash-btn" :href="$root.url + '/developer/project/add_unit/' + getproject.project_unique_id">Tambah Unit</a>
@@ -47,14 +47,91 @@
           <div>
             <div class="uk-inline">
               <span class="uk-form-icon" uk-icon="icon: search; ratio: 0.7"></span>
-              <input type="search" class="uk-input uk-form-small dash-form-input" v-model="forms.keywords" @keyup.enter="">
+              <input type="search" class="uk-input uk-form-small dash-form-input" v-model="forms.keywords" @keyup.enter="getProjectUnitType();">
             </div>
           </div>
         </div>
-        <div v-if="project_unit_tipe.isLoading === true" class="uk-text-center">
+        <div v-if="unit_tipe.isLoading === true" class="uk-text-center uk-margin-top">
           <span uk-spinner></span>
         </div>
-        <div v-else></div>
+        <div v-else class="uk-margin-top">
+          <div v-if="unit_tipe.total === 0" class="uk-alert-warning" uk-alert>
+            <span v-if="unit_tipe.errorMessage">{{ unit_tipe.errorMessage }}</span>
+            <span v-else>Belum ada proyek.</span>
+          </div>
+          <div v-else class="uk-grid-small uk-grid-match" uk-grid>
+            <div v-for="unit in unit_tipe.results" class="uk-width-1-3@xl uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s">
+              <div class="uk-card uk-card-default dash-grid-box">
+                <div class="uk-card-media-top">
+                  <div v-if="unit.unit_thumbnail === null" class="uk-tile uk-tile-default grid-image">
+                    <div class="uk-position-top-right">
+                      <div class="grid-badge">
+                        <label v-if="unit.unit_status === 'available'" class="uk-label uk-label-success">Tersedia</label>
+                        <label v-else class="uk-label uk-label-danger">Terjual</label>
+                      </div>
+                    </div>
+                    <div class="uk-text-center">
+                      <span uk-icon="icon: image; ratio: 3"></span>
+                    </div>
+                  </div>
+                  <div v-else class="uk-cover-container grid-image">
+                    <img :src="$root.url + '/images/project/gallery/' + unit.unit_thumbnail" alt="" uk-cover>
+                    <div class="uk-overlay uk-position-cover">
+                      <div class="uk-position-top-right">
+                        <div class="grid-badge">
+                          <label v-if="unit.unit_status === 'available'" class="uk-label uk-label-success">Tersedia</label>
+                          <label v-else class="uk-label uk-label-danger">Terjual</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="uk-card-body uk-card-small">
+                  <div class="uk-margin-small uk-card-title grid-box-title">{{ unit.unit_name }}</div>
+                  <div class="uk-margin-small grid-box-lead">
+                    Terakhir diubah: {{ $root.formatDate( unit.updated_at, 'DD MMM YYYY', 'id' ) }}
+                  </div>
+                  <!--<div class="uk-text-truncate uk-margin-small grid-box-content">{{ project.project_description }}</div>-->
+                </div>
+                <div class="uk-position-relative uk-margin-bottom grid-box-footer">
+                  <div class="uk-grid-collapse" uk-grid>
+                    <div class="uk-width-1-3">
+                      <a uk-tooltip="Edit Unit" :href="$root.url + '/developer/project/edit_unit/' + unit.unit_type_id" class="uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"><i uk-icon="pencil"></i></a>
+                    </div>
+                    <div class="uk-width-1-3">
+                      <a uk-tooltip="Hapus Unit" @click="onDeleteUnitType( unit.unit_type_id )" class="uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"><i uk-icon="trash"></i></a>
+                    </div>
+                    <div class="uk-width-1-3">
+                      <a uk-tooltip="Lainnya" class="uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"><i uk-icon="more-vertical"></i></a>
+                      <div class="grid-dropdown-nav" uk-dropdown="pos: top-right; mode: click">
+                        <ul class="uk-nav uk-dropdown-nav">
+                          <li><a><span class="uk-margin-small-right" uk-icon="forward"></span> Lihat Detail</a></li>
+                          <li><a><span class="uk-margin-small-right" uk-icon="image"></span> Galeri</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ul class="uk-margin-top uk-pagination uk-flex-center">
+            <li v-if="unit_tipe.pagination.prev_page_url">
+              <a @click="getProjectUnitType( unit_tipe.pagination.prev_page_url )" uk-icon="chevron-left"></a>
+            </li>
+            <li v-else class="uk-disabled">
+              <span uk-icon="chevron-left"></span>
+            </li>
+
+            <li v-if="unit_tipe.pagination.next_page_url">
+              <a @click="getProjectUnitType( unit_tipe.pagination.next_page_url )" uk-icon="chevron-right"></a>
+            </li>
+            <li v-else class="uk-disabled">
+              <span uk-icon="chevron-right"></span>
+            </li>
+          </ul>
+        </div>
       </div>
       <!-- Unit -->
     </div>
@@ -76,7 +153,7 @@ export default {
         total: 0,
         results: []
       },
-      project_unit_tipe: {
+      unit_tipe: {
         isLoading: false,
         total: 0,
         results: [],
@@ -86,7 +163,7 @@ export default {
           last_page: 1,
           prev_page_url: null,
           next_page_url: null,
-          path: this.$root.url + '/developer/project/get_unit_tipe'
+          path: this.$root.url + '/developer/project/get_unit/' + this.getproject.project_unique_id
         }
       },
       forms: {
@@ -112,8 +189,8 @@ export default {
     },
     getProjectUnitType( p )
     {
-      this.project_unit_tipe.isLoading = true;
-      var url = this.$root.url + '/developer/project/get_unit_tipe/' + this.projects.project_unique_id + '?page=' + this.project_unit_tipe.pagination.current_page;
+      this.unit_tipe.isLoading = true;
+      var url = this.$root.url + '/developer/project/get_unit/' + this.getproject.project_unique_id + '?page=' + this.unit_tipe.pagination.current_page;
       if( p !== undefined ) url = p;
 
       axios({
@@ -121,18 +198,18 @@ export default {
         url: url
       }).then( res => {
         let result = res.data;
-        this.project_unit_tipe.total = result.total;
-        this.project_unit_tipe.results = result.data;
-        this.project_unit_tipe.pagination = {
+        this.unit_tipe.total = result.total;
+        this.unit_tipe.results = result.data;
+        this.unit_tipe.pagination = {
           current_page: result.current_page,
           last_page: result.last_page,
           prev_page_url: result.prev_page_url,
           next_page_url: result.next_page_url,
           path: result.path
         };
-        this.project_unit_tipe.isLoading = false;
+        this.unit_tipe.isLoading = false;
       }).catch( err => {
-        this.project_unit_tipe.errorMessage = err.response.statusText;
+        this.unit_tipe.errorMessage = err.response.statusText;
       });
     },
     onDeleteUnitType( id )
@@ -165,6 +242,7 @@ export default {
   },
   mounted() {
     this.getGalleries();
+    this.getProjectUnitType();
   }
 }
 </script>

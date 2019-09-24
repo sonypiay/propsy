@@ -29,7 +29,6 @@
         "chartjs": "^0.3.24",
         "moment": "^2.24.0",
         "numeral": "^2.0.6",
-        "quill-image-drop-module": "^1.0.3",
         "sweetalert": "^2.1.2",
         "v-calendar": "^0.9.7",
         "vue-quill-editor": "^3.0.6"

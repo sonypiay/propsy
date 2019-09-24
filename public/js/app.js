@@ -3110,7 +3110,7 @@ __webpack_require__.r(__webpack_exports__);
         unit_lt: '',
         unit_kt: '',
         unit_km: '',
-        unit_price: 0,
+        unit_price: '',
         submit: 'Tambah Unit',
         formrequired: '<span class="uk-text-small uk-text-danger">*</span>',
         editor: {
@@ -3217,9 +3217,10 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       if (this.errors.iserror === true) return false;
+      this.forms.submit = '<span uk-spinner></span>';
       axios({
         method: 'post',
-        url: this.$root.url + '/developer/project/add_unit_tipe/' + this.getproject.project_unique_id,
+        url: this.$root.url + '/developer/project/add_unit/' + this.getproject.project_unique_id,
         params: {
           unit_name: this.forms.unit_name,
           unit_description: this.forms.unit_description,
@@ -3241,12 +3242,11 @@ __webpack_require__.r(__webpack_exports__);
           icon: 'success'
         });
         setTimeout(function () {
-          _this.getProjectUnitType();
-
-          UIkit.modal('#modal-tipe-unit').hide();
+          document.location = _this.$root.url + '/developer/project/detail/' + _this.getproject.project_unique_id;
         }, 2000);
       })["catch"](function (err) {
         _this.errors.errorMessage = err.response.statusText;
+        _this.forms.submit = 'Tambah Unit';
       });
     }
   },
@@ -78134,7 +78134,7 @@ var render = function() {
       _c(
         "div",
         { staticClass: "uk-card-title uk-margin dashboard-content-heading" },
-        [_vm._v("Tambah Unit Baru")]
+        [_vm._v("Tambah Unit Baru - " + _vm._s(_vm.getproject.project_name))]
       ),
       _vm._v(" "),
       _c(
@@ -78643,9 +78643,12 @@ var render = function() {
                         staticClass: "uk-checkbox",
                         attrs: { type: "checkbox" },
                         domProps: {
-                          value: fas.value,
+                          value: fas.facility_name,
                           checked: Array.isArray(_vm.forms.unit_facility)
-                            ? _vm._i(_vm.forms.unit_facility, fas.value) > -1
+                            ? _vm._i(
+                                _vm.forms.unit_facility,
+                                fas.facility_name
+                              ) > -1
                             : _vm.forms.unit_facility
                         },
                         on: {
@@ -78654,7 +78657,7 @@ var render = function() {
                               $$el = $event.target,
                               $$c = $$el.checked ? true : false
                             if (Array.isArray($$a)) {
-                              var $$v = fas.value,
+                              var $$v = fas.facility_name,
                                 $$i = _vm._i($$a, $$v)
                               if ($$el.checked) {
                                 $$i < 0 &&
@@ -78678,9 +78681,7 @@ var render = function() {
                         }
                       }),
                       _vm._v(" "),
-                      _c("span", { staticClass: "uk-margin-small-left" }, [
-                        _vm._v(_vm._s(fas.value))
-                      ])
+                      _c("span", [_vm._v(" " + _vm._s(fas.facility_name))])
                     ])
                   ])
                 }),

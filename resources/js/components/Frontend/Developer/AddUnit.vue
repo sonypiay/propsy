@@ -7,7 +7,7 @@
         <li><a :href="$root.url + '/developer/project/detail/' + getproject.project_unique_id">{{ getproject.project_name }}</a></li>
         <li><span>Tambah Unit</span></li>
       </ul>
-      <div class="uk-card-title uk-margin dashboard-content-heading">Tambah Unit Baru</div>
+      <div class="uk-card-title uk-margin dashboard-content-heading">Tambah Unit Baru - {{ getproject.project_name }}</div>
       <div v-show="errors.errorMessage" class="uk-alert-danger" uk-alert>{{ errors.errorMessage }}</div>
       <form class="uk-form-stacked uk-grid-small" @submit.prevent="onAddUnit" uk-grid>
         <div class="uk-width-1-3">
@@ -81,8 +81,8 @@
             <div class="uk-grid-small uk-child-width-auto" uk-grid>
               <div v-for="fas in getfacility">
                 <label class="uk-text-small">
-                  <input type="checkbox" class="uk-checkbox" v-model="forms.unit_facility" :value="fas.value" />
-                  <span class="uk-margin-small-left">{{ fas.value }}</span>
+                  <input type="checkbox" class="uk-checkbox" v-model="forms.unit_facility" :value="fas.facility_name" />
+                  <span> {{ fas.facility_name }}</span>
                 </label>
               </div>
             </div>
@@ -130,7 +130,7 @@ export default {
         unit_lt: '',
         unit_kt: '',
         unit_km: '',
-        unit_price: 0,
+        unit_price: '',
         submit: 'Tambah Unit',
         formrequired: '<span class="uk-text-small uk-text-danger">*</span>',
         editor: {
@@ -222,10 +222,11 @@ export default {
       }
 
       if( this.errors.iserror === true ) return false;
+      this.forms.submit = '<span uk-spinner></span>';
 
       axios({
         method: 'post',
-        url: this.$root.url + '/developer/project/add_unit_tipe/' + this.getproject.project_unique_id,
+        url: this.$root.url + '/developer/project/add_unit/' + this.getproject.project_unique_id,
         params: {
           unit_name: this.forms.unit_name,
           unit_description: this.forms.unit_description,
@@ -247,11 +248,11 @@ export default {
           icon: 'success'
         });
         setTimeout(() => {
-          this.getProjectUnitType();
-          UIkit.modal('#modal-tipe-unit').hide();
+          document.location = this.$root.url + '/developer/project/detail/' + this.getproject.project_unique_id;
         }, 2000);
       }).catch( err => {
         this.errors.errorMessage = err.response.statusText;
+        this.forms.submit = 'Tambah Unit';
       });
     }
   },

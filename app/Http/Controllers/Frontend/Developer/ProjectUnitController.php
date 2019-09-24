@@ -67,7 +67,7 @@ class ProjectUnitController extends Controller
     }
   }
 
-  public function add_unit_tipe( Request $request, ProjectUnitType $unit_type, $project_id )
+  public function add_unit( Request $request, ProjectUnitType $unit_type, $project_id )
   {
     $unit_name = $request->unit_name;
     $unit_description = $request->unit_description;

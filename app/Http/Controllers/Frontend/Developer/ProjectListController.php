@@ -337,22 +337,10 @@ class ProjectListController extends Controller
       ->first();
       if( ! $getproject ) abort(404);
 
-      $getfacility = $unitfacility->orderBy('facility_name', 'asc')
-      ->get();
-      $data_facility = [];
-      foreach( $getfacility as $facility )
-      {
-        array_push($data_facility, [
-          'key' => null,
-          'value' => $facility->facility_name
-        ]);
-      }
-
       $data = [
         'request' => $request,
         'session_user' => $developeruser->getinfo(),
-        'getproject' => $getproject,
-        'getfacility' => $data_facility
+        'getproject' => $getproject
       ];
       return response()->view('frontend.pages.developer.detail_project', $data);
     }

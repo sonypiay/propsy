@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Frontend\Developer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use App\Database\DeveloperUser;
+use App\Database\ProjectList;
 use App\Database\ProjectUnitType;
 use App\Database\ProjectUnitInstallment;
 use App\Database\UnitFacility;
@@ -34,26 +36,67 @@ class ProjectUnitController extends Controller
     return response()->json( $result, 200 );
   }
 
-  public function project_add_unit_tipe( Request $request, ProjectUnitType $unit_type, $unit_id )
+  public function add_unit_page( Request $request, DeveloperUser $developeruser, UnitFacility $unitfacility, ProjectList $project_list, $project_id )
   {
+    if( session()->has('isDeveloper') )
+    {
+      $getproject = $project_list->select(
+        'project_unique_id',
+        'project_id',
+        'project_name'
+      )
+      ->where('project_unique_id', $project_id)->first();
+
+      if( ! $getproject ) abort(404);
+
+      $getfacility = $unitfacility->orderBy('facility_name', 'asc')->get();
+
+      $data = [
+        'request' => $request,
+        'session_user' => $developeruser->getinfo(),
+        'project_id' => $project_id,
+        'getfacility' => $getfacility,
+        'getproject' => $getproject
+      ];
+
+      return response()->view('frontend.pages.developer.add_unit', $data);
+    }
+    else
+    {
+      return redirect()->route('homepage');
+    }
+  }
+
+  public function add_unit_tipe( Request $request, ProjectUnitType $unit_type, $project_id )
+  {
+    $unit_name = $request->unit_name;
+    $unit_description = $request->unit_description;
     $unit_floor = $request->unit_floor;
     $unit_lb = $request->unit_lb;
     $unit_lt = $request->unit_lt;
     $unit_km = $request->unit_km;
     $unit_kt = $request->unit_kt;
     $unit_price = $request->unit_price;
+    $unit_status = $request->unit_status;
+    $unit_watt = $request->unit_watt;
+    $unit_facility = implode( ',', $request->unit_facility );
 
     $insert = new $unit_type;
+    $insert->unit_name = $unit_name;
+    $insert->unit_description = $unit_description;
     $insert->unit_floor = $unit_floor;
     $insert->unit_lb = $unit_lb;
     $insert->unit_lt = $unit_lt;
     $insert->unit_km = $unit_km;
     $insert->unit_kt = $unit_kt;
     $insert->unit_price = $unit_price;
-    $insert->project_unit_id = $unit_id;
+    $insert->unit_status = $unit_status;
+    $insert->unit_watt = $unit_watt;
+    $insert->unit_facility = $unit_facility;
+    $insert->project_unique_id = $project_id;
     $insert->save();
 
-    $res = ['status' => 200, 'statusText' => 'success'];
+    $res = ['status' => 200, 'statusText' => 'success' ];
     return response()->json( $res, $res['status'] );
   }
 

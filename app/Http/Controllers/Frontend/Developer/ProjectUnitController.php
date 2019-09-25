@@ -9,6 +9,7 @@ use App\Database\DeveloperUser;
 use App\Database\ProjectList;
 use App\Database\ProjectUnitType;
 use App\Database\ProjectUnitInstallment;
+use App\Database\ProjectUnitGallery;
 use App\Database\UnitFacility;
 
 use App\Http\Controllers\Controller;
@@ -180,6 +181,60 @@ class ProjectUnitController extends Controller
       $unit->delete();
     }
     $res = ['status' => 200, 'statusText' => 'success'];
+    return response()->json( $res, $res['status'] );
+  }
+
+  public function upload_gallery_unit( Request $request, ProjectUnitGallery $unit_gallery, $id )
+  {
+    $images = $request->images;
+    $gallery = new $unit_gallery;
+    $data_images = [];
+    $date = date('Y-m-d H:i:s');
+    $storage = Storage::disk('assets');
+    $imagepath = 'images/project/gallery';
+
+    foreach( $images as $img )
+    {
+      $filename = 'unit-' . $img->getClientOriginalName();
+      array_push( $data_images, [
+        'unit_gallery_filename' => $filename,
+        'unit_type_id' => $id,
+        'created_at' => $date,
+        'updated_at' => $date
+      ]);
+      $storage->putFileAs( $imagepath, $img, $filename );
+    }
+
+    $gallery->insert( $data_images );
+    return response()->json( $data_images );
+  }
+
+  public function get_gallery_unit( Request $request, ProjectUnitGallery $unit_gallery, $id )
+  {
+    $gallery = $unit_gallery->where('unit_type_id', $id)
+    ->orderBy('created_at', 'desc')->get();
+
+    $res = [
+      'results' => [
+        'data' => $gallery,
+        'total' => $gallery->count()
+      ]
+    ];
+
+    return response()->json( $res, 200 );
+  }
+
+  public function gallery_set_thumbnail( ProjectUnitGallery $unit_gallery, ProjectUnitType $unit_type, $id )
+  {
+    $gallery = $unit_gallery->where('unit_gallery_id', $id)
+    ->first();
+    $getunit = $unit_type->where('unit_type_id', $gallery->unit_type_id)
+    ->first();
+
+    $getunit->unit_thumbnail = $gallery->unit_gallery_filename;
+    $getunit->save();
+
+    $res = [ 'status' => 200, 'statusText' => 'success' ];
     return response()->json( $res, $res['status'] );
   }
 }

@@ -3605,6 +3605,62 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user', 'getproject'],
   data: function data() {
@@ -3632,8 +3688,20 @@ __webpack_require__.r(__webpack_exports__);
           path: this.$root.url + '/developer/project/get_unit/' + this.getproject.project_unique_id
         }
       },
+      gallery_unit: {
+        isLoading: false,
+        total: 0,
+        results: [],
+        errorMessage: '',
+        unit_tipe: {
+          unit_id: null,
+          unit_name: null
+        }
+      },
       forms: {
-        keywords: ''
+        keywords: '',
+        imageselected: [],
+        uploadProgress: 0
       }
     };
   },
@@ -3705,6 +3773,101 @@ __webpack_require__.r(__webpack_exports__);
               text: 'Unit proyek berhasil dihapus',
               icon: 'success'
             });
+          });
+        }
+      });
+    },
+    onViewGalleryUnit: function onViewGalleryUnit(data) {
+      this.gallery_unit.unit_tipe = {
+        unit_id: data.unit_type_id,
+        unit_name: data.unit_name
+      };
+      this.getGalleriesUnit(data.unit_type_id);
+      UIkit.modal('#modal-gallery-unit').show();
+    },
+    selectedGalleryUnit: function selectedGalleryUnit(event) {
+      var targetfile = event.target.files;
+      this.forms.imageselected = [];
+
+      if (targetfile.length !== 0) {
+        for (var i = 0; i < targetfile.length; i++) {
+          this.forms.imageselected.push(targetfile[i]);
+        }
+      }
+    },
+    onUploadGallery: function onUploadGallery() {
+      var _this4 = this;
+
+      this.forms.uploadProgress = 0;
+
+      if (this.forms.imageselected.length !== 0) {
+        var fd = new FormData();
+        this.forms.imageselected.forEach(function (file) {
+          fd.append('images[]', file);
+        });
+        var url = this.$root.url + '/developer/project/upload_gallery_unit/' + this.gallery_unit.unit_tipe.unit_id;
+        axios.post(url, fd, {
+          onUploadProgress: function (e) {
+            this.forms.uploadProgress = parseInt(Math.round(e.loaded * 100) / e.total);
+          }.bind(this)
+        }).then(function (res) {
+          $("#file-gallery-unit").val('');
+          setTimeout(function () {
+            _this4.getGalleriesUnit(_this4.gallery_unit.unit_tipe.unit_id);
+          }, 1000);
+        })["catch"](function (err) {
+          _this4.gallery_unit.errorMessage = err.response.statusText;
+        });
+      }
+    },
+    getGalleriesUnit: function getGalleriesUnit(id) {
+      var _this5 = this;
+
+      this.forms.uploadProgress = 0;
+      axios({
+        method: 'get',
+        url: this.$root.url + '/developer/project/gallery_unit/' + id
+      }).then(function (res) {
+        var result = res.data;
+        _this5.gallery_unit.results = result.results.data;
+        _this5.gallery_unit.total = result.results.total;
+      })["catch"](function (err) {
+        _this5.gallery_unit.errorMessage = err.response.statusText;
+      });
+    },
+    setAsThumbnail: function setAsThumbnail(id) {
+      var _this6 = this;
+
+      swal({
+        title: 'Konfirmasi',
+        text: 'Jadikan sebagai thumbnail?',
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Batal',
+          confirm: {
+            value: true,
+            text: 'Ya'
+          }
+        }
+      }).then(function (val) {
+        if (val) {
+          axios({
+            method: 'put',
+            url: _this6.$root.url + '/developer/project/gallery_set_thumbnail/' + id
+          }).then(function (res) {
+            swal({
+              title: 'Sukses',
+              text: 'Berhasil dijadikan thumbnail.',
+              icon: 'success'
+            });
+            setTimeout(function () {
+              UIkit.modal('#modal-gallery-unit').hide();
+
+              _this6.getProjectUnitType();
+            }, 2000);
+          })["catch"](function (err) {
+            _this6.gallery_unit.errorMessage = err.response.statusText;
           });
         }
       });
@@ -79757,6 +79920,241 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "uk-modal-full",
+          attrs: { id: "modal-gallery-unit", "uk-modal": "" }
+        },
+        [
+          _c(
+            "div",
+            { staticClass: "uk-modal-dialog uk-modal-body uk-height-viewport" },
+            [
+              _c("a", {
+                staticClass: "uk-modal-close-large uk-modal-close",
+                attrs: { "uk-close": "" }
+              }),
+              _vm._v(" "),
+              _c("h3", { staticClass: "uk-modal-title" }, [
+                _vm._v(
+                  "Galeri Unit - " +
+                    _vm._s(_vm.gallery_unit.unit_tipe.unit_name)
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-margin-top modal-form" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "uk-width-1-1 uk-placeholder uk-text-center",
+                    attrs: { "uk-form-custom": "" }
+                  },
+                  [
+                    _c("span", { attrs: { "uk-icon": "icon: cloud-upload" } }),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "uk-text-middle" }, [
+                      _vm._v("Attach binaries by dropping them here or")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      attrs: {
+                        id: "file-gallery-unit",
+                        type: "file",
+                        accept: "image/*",
+                        multiple: ""
+                      },
+                      on: { change: _vm.selectedGalleryUnit }
+                    }),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "uk-link uk-text-middle" }, [
+                      _vm._v("selecting one")
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.forms.imageselected.length !== 0,
+                        expression: "forms.imageselected.length !== 0"
+                      }
+                    ],
+                    staticClass: "uk-text-small"
+                  },
+                  [
+                    _vm._v(
+                      _vm._s(_vm.forms.imageselected.length) +
+                        " gambar akan diupload..."
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "uk-margin-small-top" }, [
+                  _c("progress", {
+                    staticClass: "uk-progress",
+                    attrs: { max: "100" },
+                    domProps: { value: _vm.forms.uploadProgress }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass:
+                        "uk-button uk-button-primary uk-margin modal-form-add",
+                      on: {
+                        click: function($event) {
+                          return _vm.onUploadGallery()
+                        }
+                      }
+                    },
+                    [_vm._v("Upload")]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.gallery_unit.errorMessage,
+                      expression: "gallery_unit.errorMessage"
+                    }
+                  ],
+                  staticClass: "uk-margin-top"
+                },
+                [
+                  _vm._v(
+                    "\n          " +
+                      _vm._s(_vm.gallery_unit.errorMessage) +
+                      "\n        "
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "uk-grid-small",
+                  attrs: {
+                    "uk-grid": "masonry: true",
+                    "uk-lightbox": "animation: slide"
+                  }
+                },
+                _vm._l(_vm.gallery_unit.results, function(gallery) {
+                  return _c(
+                    "div",
+                    {
+                      staticClass:
+                        "uk-width-1-3@xl uk-width-1-3@l uk-width-1-3@m uk-width-1-1@s"
+                    },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "uk-inline-clip uk-transition-toggle" },
+                        [
+                          _c("img", {
+                            staticClass:
+                              "uk-transition-scale-up uk-transition-opaque",
+                            attrs: {
+                              src:
+                                _vm.$root.url +
+                                "/images/project/gallery/" +
+                                gallery.unit_gallery_filename
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "uk-transition-fade uk-overlay uk-overlay-default uk-position-cover"
+                            },
+                            [
+                              _c("div", { staticClass: "uk-position-center" }, [
+                                _c(
+                                  "a",
+                                  {
+                                    staticClass: "uk-button uk-button-link",
+                                    attrs: {
+                                      href:
+                                        _vm.$root.url +
+                                        "/images/project/gallery/" +
+                                        gallery.unit_gallery_filename
+                                    }
+                                  },
+                                  [
+                                    _c("i", {
+                                      attrs: {
+                                        "uk-icon": "icon: forward; ratio: 1"
+                                      }
+                                    })
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "uk-button uk-button-link",
+                                    attrs: {
+                                      "uk-tooltip": "Jadikan sebagai thumbnail"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.setAsThumbnail(
+                                          gallery.unit_gallery_id
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("i", {
+                                      attrs: {
+                                        "uk-icon": "icon: image; ratio: 1"
+                                      }
+                                    })
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "uk-button uk-button-link",
+                                    attrs: { "uk-tooltip": "Hapus" },
+                                    on: { click: function($event) {} }
+                                  },
+                                  [
+                                    _c("i", {
+                                      attrs: {
+                                        "uk-icon": "icon: trash; ratio: 1"
+                                      }
+                                    })
+                                  ]
+                                )
+                              ])
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                }),
+                0
+              )
+            ]
+          )
+        ]
+      ),
+      _vm._v(" "),
       _c(
         "div",
         { staticClass: "uk-card-title uk-margin dashboard-content-heading" },
@@ -79944,7 +80342,7 @@ var render = function() {
                                           ]
                                         ),
                                         _vm._v(" "),
-                                        _vm._m(0, true)
+                                        _vm._m(1, true)
                                       ]
                                     )
                                   : _c(
@@ -80116,7 +80514,63 @@ var render = function() {
                                         ]
                                       ),
                                       _vm._v(" "),
-                                      _vm._m(1, true)
+                                      _c(
+                                        "div",
+                                        { staticClass: "uk-width-1-3" },
+                                        [
+                                          _vm._m(2, true),
+                                          _vm._v(" "),
+                                          _c(
+                                            "div",
+                                            {
+                                              staticClass: "grid-dropdown-nav",
+                                              attrs: {
+                                                "uk-dropdown":
+                                                  "pos: top-right; mode: click"
+                                              }
+                                            },
+                                            [
+                                              _c(
+                                                "ul",
+                                                {
+                                                  staticClass:
+                                                    "uk-nav uk-dropdown-nav"
+                                                },
+                                                [
+                                                  _vm._m(3, true),
+                                                  _vm._v(" "),
+                                                  _c("li", [
+                                                    _c(
+                                                      "a",
+                                                      {
+                                                        on: {
+                                                          click: function(
+                                                            $event
+                                                          ) {
+                                                            return _vm.onViewGalleryUnit(
+                                                              unit
+                                                            )
+                                                          }
+                                                        }
+                                                      },
+                                                      [
+                                                        _c("span", {
+                                                          staticClass:
+                                                            "uk-margin-small-right",
+                                                          attrs: {
+                                                            "uk-icon": "image"
+                                                          }
+                                                        }),
+                                                        _vm._v(" Galeri")
+                                                      ]
+                                                    )
+                                                  ])
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
                                     ]
                                   )
                                 ]
@@ -80178,6 +80632,30 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "uk-modal-full",
+        attrs: { id: "modal-detail-unit", "uk-modal": "" }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "uk-modal-dialog uk-modal-body uk-height-viewport" },
+          [
+            _c("a", {
+              staticClass: "uk-modal-close-large uk-modal-close",
+              attrs: { "uk-close": "" }
+            })
+          ]
+        )
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "uk-text-center" }, [
       _c("span", { attrs: { "uk-icon": "icon: image; ratio: 3" } })
     ])
@@ -80186,47 +80664,28 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "uk-width-1-3" }, [
-      _c(
-        "a",
-        {
-          staticClass:
-            "uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action",
-          attrs: { "uk-tooltip": "Lainnya" }
-        },
-        [_c("i", { attrs: { "uk-icon": "more-vertical" } })]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "grid-dropdown-nav",
-          attrs: { "uk-dropdown": "pos: top-right; mode: click" }
-        },
-        [
-          _c("ul", { staticClass: "uk-nav uk-dropdown-nav" }, [
-            _c("li", [
-              _c("a", [
-                _c("span", {
-                  staticClass: "uk-margin-small-right",
-                  attrs: { "uk-icon": "forward" }
-                }),
-                _vm._v(" Lihat Detail")
-              ])
-            ]),
-            _vm._v(" "),
-            _c("li", [
-              _c("a", [
-                _c("span", {
-                  staticClass: "uk-margin-small-right",
-                  attrs: { "uk-icon": "image" }
-                }),
-                _vm._v(" Galeri")
-              ])
-            ])
-          ])
-        ]
-      )
+    return _c(
+      "a",
+      {
+        staticClass:
+          "uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action",
+        attrs: { "uk-tooltip": "Lainnya" }
+      },
+      [_c("i", { attrs: { "uk-icon": "more-vertical" } })]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [
+      _c("a", [
+        _c("span", {
+          staticClass: "uk-margin-small-right",
+          attrs: { "uk-icon": "forward" }
+        }),
+        _vm._v(" Lihat Detail")
+      ])
     ])
   }
 ]

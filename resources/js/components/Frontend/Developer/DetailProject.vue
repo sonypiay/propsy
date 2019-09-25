@@ -11,6 +11,7 @@
         <div v-show="getproject.project_map_embed"></div>
       </div>
 
+      <!-- gallery -->
       <div id="modal-view-gallery" class="uk-modal-full" uk-modal>
         <div class="uk-modal-dialog uk-modal-body uk-height-viewport">
           <a class="uk-modal-close-large uk-modal-close" uk-close></a>
@@ -24,6 +25,61 @@
           </div>
         </div>
       </div>
+      <!-- gallery -->
+
+      <!-- detail unit -->
+      <div id="modal-detail-unit" class="uk-modal-full" uk-modal>
+        <div class="uk-modal-dialog uk-modal-body uk-height-viewport">
+          <a class="uk-modal-close-large uk-modal-close" uk-close></a>
+        </div>
+      </div>
+      <!-- detail unit -->
+
+      <!-- gallery unit -->
+      <div id="modal-gallery-unit" class="uk-modal-full" uk-modal>
+        <div class="uk-modal-dialog uk-modal-body uk-height-viewport">
+          <a class="uk-modal-close-large uk-modal-close" uk-close></a>
+          <h3 class="uk-modal-title">Galeri Unit - {{ gallery_unit.unit_tipe.unit_name }}</h3>
+          <div class="uk-margin-top modal-form">
+            <div class="uk-width-1-1 uk-placeholder uk-text-center" uk-form-custom>
+              <span uk-icon="icon: cloud-upload"></span>
+              <span class="uk-text-middle">Attach binaries by dropping them here or</span>
+              <input id="file-gallery-unit" type="file" @change="selectedGalleryUnit" accept="image/*" multiple>
+              <span class="uk-link uk-text-middle">selecting one</span>
+            </div>
+            <div v-show="forms.imageselected.length !== 0" class="uk-text-small">{{ forms.imageselected.length }} gambar akan diupload...</div>
+            <div class="uk-margin-small-top">
+              <progress class="uk-progress" :value="forms.uploadProgress" max="100"></progress>
+              <button class="uk-button uk-button-primary uk-margin modal-form-add" @click="onUploadGallery()">Upload</button>
+            </div>
+          </div>
+          <div v-show="gallery_unit.errorMessage" class="uk-margin-top">
+            {{ gallery_unit.errorMessage }}
+          </div>
+          <div class="uk-grid-small" uk-grid="masonry: true" uk-lightbox="animation: slide">
+            <div v-for="gallery in gallery_unit.results" class="uk-width-1-3@xl uk-width-1-3@l uk-width-1-3@m uk-width-1-1@s">
+              <div class="uk-inline-clip uk-transition-toggle">
+                <img class="uk-transition-scale-up uk-transition-opaque" :src="$root.url + '/images/project/gallery/' + gallery.unit_gallery_filename" />
+                <div class="uk-transition-fade uk-overlay uk-overlay-default uk-position-cover">
+                  <div class="uk-position-center">
+                    <a class="uk-button uk-button-link" :href="$root.url + '/images/project/gallery/' + gallery.unit_gallery_filename">
+                      <i uk-icon="icon: forward; ratio: 1"></i>
+                    </a>
+                    <button class="uk-button uk-button-link" uk-tooltip="Jadikan sebagai thumbnail" @click="setAsThumbnail( gallery.unit_gallery_id )">
+                      <i uk-icon="icon: image; ratio: 1"></i>
+                    </button>
+                    <button class="uk-button uk-button-link" uk-tooltip="Hapus" @click="">
+                      <i uk-icon="icon: trash; ratio: 1"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- gallery unit -->
+
       <div class="uk-card-title uk-margin dashboard-content-heading">
         Deskripsi Proyek
       </div>
@@ -106,7 +162,7 @@
                       <div class="grid-dropdown-nav" uk-dropdown="pos: top-right; mode: click">
                         <ul class="uk-nav uk-dropdown-nav">
                           <li><a><span class="uk-margin-small-right" uk-icon="forward"></span> Lihat Detail</a></li>
-                          <li><a><span class="uk-margin-small-right" uk-icon="image"></span> Galeri</a></li>
+                          <li><a @click="onViewGalleryUnit( unit )"><span class="uk-margin-small-right" uk-icon="image"></span> Galeri</a></li>
                         </ul>
                       </div>
                     </div>
@@ -166,8 +222,20 @@ export default {
           path: this.$root.url + '/developer/project/get_unit/' + this.getproject.project_unique_id
         }
       },
+      gallery_unit: {
+        isLoading: false,
+        total: 0,
+        results: [],
+        errorMessage: '',
+        unit_tipe: {
+          unit_id: null,
+          unit_name: null
+        }
+      },
       forms: {
         keywords: '',
+        imageselected: [],
+        uploadProgress: 0
       }
     }
   },
@@ -235,6 +303,102 @@ export default {
               text: 'Unit proyek berhasil dihapus',
               icon: 'success'
             });
+          });
+        }
+      });
+    },
+    onViewGalleryUnit( data )
+    {
+      this.gallery_unit.unit_tipe = {
+        unit_id: data.unit_type_id,
+        unit_name: data.unit_name
+      };
+      this.getGalleriesUnit( data.unit_type_id );
+      UIkit.modal('#modal-gallery-unit').show();
+    },
+    selectedGalleryUnit( event )
+    {
+      var targetfile = event.target.files;
+      this.forms.imageselected = [];
+
+      if( targetfile.length !== 0 )
+      {
+        for( let i = 0; i < targetfile.length; i++ )
+        {
+          this.forms.imageselected.push(targetfile[i]);
+        }
+      }
+    },
+    onUploadGallery()
+    {
+      this.forms.uploadProgress = 0;
+      if( this.forms.imageselected.length !== 0 )
+      {
+        let fd = new FormData();
+        this.forms.imageselected.forEach( file => {
+          fd.append('images[]', file);
+        });
+
+        let url = this.$root.url + '/developer/project/upload_gallery_unit/' + this.gallery_unit.unit_tipe.unit_id;
+        axios.post( url, fd, {
+          onUploadProgress: function( e )
+          {
+            this.forms.uploadProgress = parseInt( Math.round( e.loaded * 100 ) / e.total );
+          }.bind(this)
+        }).then( res => {
+          $("#file-gallery-unit").val('');
+          setTimeout(() => { this.getGalleriesUnit( this.gallery_unit.unit_tipe.unit_id ); }, 1000);
+        }).catch( err => {
+          this.gallery_unit.errorMessage = err.response.statusText;
+        });
+      }
+    },
+    getGalleriesUnit( id )
+    {
+      this.forms.uploadProgress = 0;
+      axios({
+        method: 'get',
+        url: this.$root.url + '/developer/project/gallery_unit/' + id
+      }).then( res => {
+        let result = res.data;
+        this.gallery_unit.results = result.results.data;
+        this.gallery_unit.total = result.results.total;
+      }).catch( err => {
+        this.gallery_unit.errorMessage = err.response.statusText;
+      });
+    },
+    setAsThumbnail( id )
+    {
+      swal({
+        title: 'Konfirmasi',
+        text: 'Jadikan sebagai thumbnail?',
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Batal',
+          confirm: {
+            value: true,
+            text: 'Ya'
+          }
+        }
+      }).then( val => {
+        if( val )
+        {
+          axios({
+            method: 'put',
+            url: this.$root.url + '/developer/project/gallery_set_thumbnail/' + id
+          }).then( res => {
+            swal({
+              title: 'Sukses',
+              text: 'Berhasil dijadikan thumbnail.',
+              icon: 'success'
+            });
+            setTimeout(() => {
+              UIkit.modal('#modal-gallery-unit').hide();
+              this.getProjectUnitType();
+            }, 2000);
+          }).catch( err => {
+            this.gallery_unit.errorMessage = err.response.statusText;
           });
         }
       });

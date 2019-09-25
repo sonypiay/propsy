@@ -1,16 +1,22 @@
 <template>
   <div>
+    <ul class="uk-breadcrumb">
+      <li><a :href="$root.url + '/developer/project/dashboard'">Dashboard</a></li>
+      <li><a :href="$root.url + '/developer/project/manage_project'">Kelola Proyek</a></li>
+      <li><span>{{ getproject.project_name }}</span></li>
+    </ul>
     <div class="uk-card dashboard-content">
       <div class="uk-card-title uk-margin dashboard-content-heading">
         {{ getproject.project_name }}
+        <a uk-tooltip="Edit Proyek" :href="$root.url + '/developer/project/edit_project/' + getproject.project_unique_id" class="uk-float-right uk-button uk-button-primary uk-button-small dash-btn dash-btn-action" uk-icon="pencil"></a>
       </div>
       <div class="uk-margin dashboard-content-subheading">
         {{ getproject.province_name }},
         {{ getproject.city_name }}<br>
         {{ getproject.project_address }}
-        <div v-show="getproject.project_map_embed"></div>
       </div>
-
+      <div v-show="getproject.project_thumbnail" class="uk-background-cover uk-height-large uk-panel" :style="{'background-image': 'url(' + $root.url + '/images/project/gallery/' + getproject.project_thumbnail + ')'}"></div>
+      <div v-show="getproject.project_map_embed"></div>
       <!-- gallery -->
       <div id="modal-view-gallery" class="uk-modal-full" uk-modal>
         <div class="uk-modal-dialog uk-modal-body uk-height-viewport">
@@ -39,7 +45,7 @@
       <div id="modal-gallery-unit" class="uk-modal-full" uk-modal>
         <div class="uk-modal-dialog uk-modal-body uk-height-viewport">
           <a class="uk-modal-close-large uk-modal-close" uk-close></a>
-          <h3 class="uk-modal-title">Galeri Unit - {{ gallery_unit.unit_tipe.unit_name }}</h3>
+          <h3 class="uk-modal-title">Galeri - {{ gallery_unit.unit_tipe.unit_name }}</h3>
           <div class="uk-margin-top modal-form">
             <div class="uk-width-1-1 uk-placeholder uk-text-center" uk-form-custom>
               <span uk-icon="icon: cloud-upload"></span>
@@ -68,7 +74,7 @@
                     <button class="uk-button uk-button-link" uk-tooltip="Jadikan sebagai thumbnail" @click="setAsThumbnail( gallery.unit_gallery_id )">
                       <i uk-icon="icon: image; ratio: 1"></i>
                     </button>
-                    <button class="uk-button uk-button-link" uk-tooltip="Hapus" @click="">
+                    <button class="uk-button uk-button-link" uk-tooltip="Hapus" @click="onDeleteGalleryUnit( gallery.unit_gallery_id )">
                       <i uk-icon="icon: trash; ratio: 1"></i>
                     </button>
                   </div>
@@ -145,7 +151,8 @@
                 <div class="uk-card-body uk-card-small">
                   <div class="uk-margin-small uk-card-title grid-box-title">{{ unit.unit_name }}</div>
                   <div class="uk-margin-small grid-box-lead">
-                    Terakhir diubah: {{ $root.formatDate( unit.updated_at, 'DD MMM YYYY', 'id' ) }}
+                    Terakhir diubah: {{ $root.formatDate( unit.updated_at, 'DD MMM YYYY', 'id' ) }} <br>
+                    Rp. {{ $root.formatNumeral( unit.unit_price, '0,0' ) }}
                   </div>
                   <!--<div class="uk-text-truncate uk-margin-small grid-box-content">{{ project.project_description }}</div>-->
                 </div>
@@ -303,6 +310,16 @@ export default {
               text: 'Unit proyek berhasil dihapus',
               icon: 'success'
             });
+            setTimeout(() => {
+              this.getProjectUnitType();
+            }, 1000);
+          }).catch( err => {
+            swal({
+              title: 'Whoops',
+              text: err.response.statusText,
+              icon: 'error',
+              dangerMode: true
+            });
           });
         }
       });
@@ -348,6 +365,7 @@ export default {
         }).then( res => {
           $("#file-gallery-unit").val('');
           setTimeout(() => { this.getGalleriesUnit( this.gallery_unit.unit_tipe.unit_id ); }, 1000);
+          this.forms.imageselected = [];
         }).catch( err => {
           this.gallery_unit.errorMessage = err.response.statusText;
         });
@@ -390,7 +408,7 @@ export default {
           }).then( res => {
             swal({
               title: 'Sukses',
-              text: 'Berhasil dijadikan thumbnail.',
+              text: 'Foto berhasil dijadikan thumbnail.',
               icon: 'success'
             });
             setTimeout(() => {
@@ -399,6 +417,44 @@ export default {
             }, 2000);
           }).catch( err => {
             this.gallery_unit.errorMessage = err.response.statusText;
+          });
+        }
+      });
+    },
+    onDeleteGalleryUnit( id )
+    {
+      swal({
+        title: 'Konfirmasi',
+        text: 'Apakah anda ingin menghapus galeri ini?',
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Batal',
+          confirm: { value: true, text: 'Ya' }
+        }
+      }).then( val => {
+        if( val )
+        {
+          axios({
+            method: 'delete',
+            url: this.$root.url + '/developer/project/delete_gallery_unit/' + id
+          }).then( res => {
+            swal({
+              title: 'Sukses',
+              text: 'Gambar berhasil dihapus',
+              icon: 'success'
+            });
+            setTimeout(() => {
+              this.getProjectUnitType();
+              this.getGalleriesUnit( this.gallery_unit.unit_tipe.unit_id );
+            }, 1000);
+          }).catch( err => {
+            swal({
+              title: 'Whoops',
+              text: err.response.statusText,
+              icon: 'error',
+              dangerMode: true
+            });
           });
         }
       });

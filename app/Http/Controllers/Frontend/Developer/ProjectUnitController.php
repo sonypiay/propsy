@@ -173,11 +173,27 @@ class ProjectUnitController extends Controller
     return response()->json( $res, $res['status'] );
   }
 
-  public function project_delete_unit_tipe( ProjectUnitType $unit_tipe, $id )
+  public function delete_unit_tipe( ProjectUnitType $unit_tipe, ProjectUnitGallery $unit_gallery, $id )
   {
-    $unit = $unit_tipe->where('project_unit_type_id', $id);
+    $unit = $unit_tipe->where('unit_type_id', $id);
+    $storage = Storage::disk('assets');
+    $imagepath = 'images/project/gallery';
     if( $unit->count() !== 0 )
     {
+      $result = $unit->first();
+      $gallery = $unit_gallery->where('unit_type_id', $result->unit_type_id);
+      if( $gallery->count() !== 0 )
+      {
+        foreach( $gallery->get() as $g )
+        {
+          if( $storage->exists( $imagepath . '/' . $g->unit_gallery_filename ) )
+          {
+            $storage->delete( $imagepath . '/' . $g->unit_gallery_filename );
+          }
+        }
+      }
+
+      $gallery->delete();
       $unit->delete();
     }
     $res = ['status' => 200, 'statusText' => 'success'];
@@ -234,6 +250,32 @@ class ProjectUnitController extends Controller
     $getunit->unit_thumbnail = $gallery->unit_gallery_filename;
     $getunit->save();
 
+    $res = [ 'status' => 200, 'statusText' => 'success' ];
+    return response()->json( $res, $res['status'] );
+  }
+
+  public function delete_gallery_unit( ProjectUnitGallery $unit_gallery, ProjectUnitType $unit_type, $id )
+  {
+    $storage = Storage::disk('assets');
+    $imagepath = 'images/project/gallery';
+
+    $gallery = $unit_gallery->where('unit_gallery_id', $id)
+    ->first();
+    $getunit = $unit_type->where('unit_type_id', $gallery->unit_type_id)
+    ->first();
+
+    if( $storage->exists( $imagepath . '/' . $gallery->unit_gallery_filename ) )
+    {
+      $storage->delete( $imagepath . '/' . $gallery->unit_gallery_filename );
+
+      if( $getunit->unit_thumbnail == $gallery->unit_gallery_filename )
+      {
+        $getunit->unit_thumbnail = null;
+        $getunit->save();
+      }
+
+      $gallery->delete();
+    }
     $res = [ 'status' => 200, 'statusText' => 'success' ];
     return response()->json( $res, $res['status'] );
   }

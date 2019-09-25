@@ -3661,6 +3661,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user', 'getproject'],
   data: function data() {
@@ -3773,6 +3780,16 @@ __webpack_require__.r(__webpack_exports__);
               text: 'Unit proyek berhasil dihapus',
               icon: 'success'
             });
+            setTimeout(function () {
+              _this3.getProjectUnitType();
+            }, 1000);
+          })["catch"](function (err) {
+            swal({
+              title: 'Whoops',
+              text: err.response.statusText,
+              icon: 'error',
+              dangerMode: true
+            });
           });
         }
       });
@@ -3815,6 +3832,7 @@ __webpack_require__.r(__webpack_exports__);
           setTimeout(function () {
             _this4.getGalleriesUnit(_this4.gallery_unit.unit_tipe.unit_id);
           }, 1000);
+          _this4.forms.imageselected = [];
         })["catch"](function (err) {
           _this4.gallery_unit.errorMessage = err.response.statusText;
         });
@@ -3858,7 +3876,7 @@ __webpack_require__.r(__webpack_exports__);
           }).then(function (res) {
             swal({
               title: 'Sukses',
-              text: 'Berhasil dijadikan thumbnail.',
+              text: 'Foto berhasil dijadikan thumbnail.',
               icon: 'success'
             });
             setTimeout(function () {
@@ -3868,6 +3886,48 @@ __webpack_require__.r(__webpack_exports__);
             }, 2000);
           })["catch"](function (err) {
             _this6.gallery_unit.errorMessage = err.response.statusText;
+          });
+        }
+      });
+    },
+    onDeleteGalleryUnit: function onDeleteGalleryUnit(id) {
+      var _this7 = this;
+
+      swal({
+        title: 'Konfirmasi',
+        text: 'Apakah anda ingin menghapus galeri ini?',
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Batal',
+          confirm: {
+            value: true,
+            text: 'Ya'
+          }
+        }
+      }).then(function (val) {
+        if (val) {
+          axios({
+            method: 'delete',
+            url: _this7.$root.url + '/developer/project/delete_gallery_unit/' + id
+          }).then(function (res) {
+            swal({
+              title: 'Sukses',
+              text: 'Gambar berhasil dihapus',
+              icon: 'success'
+            });
+            setTimeout(function () {
+              _this7.getProjectUnitType();
+
+              _this7.getGalleriesUnit(_this7.gallery_unit.unit_tipe.unit_id);
+            }, 1000);
+          })["catch"](function (err) {
+            swal({
+              title: 'Whoops',
+              text: err.response.statusText,
+              icon: 'error',
+              dangerMode: true
+            });
           });
         }
       });
@@ -79826,11 +79886,47 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c("ul", { staticClass: "uk-breadcrumb" }, [
+      _c("li", [
+        _c(
+          "a",
+          { attrs: { href: _vm.$root.url + "/developer/project/dashboard" } },
+          [_vm._v("Dashboard")]
+        )
+      ]),
+      _vm._v(" "),
+      _c("li", [
+        _c(
+          "a",
+          {
+            attrs: { href: _vm.$root.url + "/developer/project/manage_project" }
+          },
+          [_vm._v("Kelola Proyek")]
+        )
+      ]),
+      _vm._v(" "),
+      _c("li", [_c("span", [_vm._v(_vm._s(_vm.getproject.project_name))])])
+    ]),
+    _vm._v(" "),
     _c("div", { staticClass: "uk-card dashboard-content" }, [
       _c(
         "div",
         { staticClass: "uk-card-title uk-margin dashboard-content-heading" },
-        [_vm._v("\n      " + _vm._s(_vm.getproject.project_name) + "\n    ")]
+        [
+          _vm._v("\n      " + _vm._s(_vm.getproject.project_name) + "\n      "),
+          _c("a", {
+            staticClass:
+              "uk-float-right uk-button uk-button-primary uk-button-small dash-btn dash-btn-action",
+            attrs: {
+              "uk-tooltip": "Edit Proyek",
+              href:
+                _vm.$root.url +
+                "/developer/project/edit_project/" +
+                _vm.getproject.project_unique_id,
+              "uk-icon": "pencil"
+            }
+          })
+        ]
       ),
       _vm._v(" "),
       _c("div", { staticClass: "uk-margin dashboard-content-subheading" }, [
@@ -79841,20 +79937,39 @@ var render = function() {
             _vm._s(_vm.getproject.city_name)
         ),
         _c("br"),
-        _vm._v(
-          "\n      " + _vm._s(_vm.getproject.project_address) + "\n      "
-        ),
-        _c("div", {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.getproject.project_map_embed,
-              expression: "getproject.project_map_embed"
-            }
-          ]
-        })
+        _vm._v("\n      " + _vm._s(_vm.getproject.project_address) + "\n    ")
       ]),
+      _vm._v(" "),
+      _c("div", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.getproject.project_thumbnail,
+            expression: "getproject.project_thumbnail"
+          }
+        ],
+        staticClass: "uk-background-cover uk-height-large uk-panel",
+        style: {
+          "background-image":
+            "url(" +
+            _vm.$root.url +
+            "/images/project/gallery/" +
+            _vm.getproject.project_thumbnail +
+            ")"
+        }
+      }),
+      _vm._v(" "),
+      _c("div", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.getproject.project_map_embed,
+            expression: "getproject.project_map_embed"
+          }
+        ]
+      }),
       _vm._v(" "),
       _c(
         "div",
@@ -79940,8 +80055,7 @@ var render = function() {
               _vm._v(" "),
               _c("h3", { staticClass: "uk-modal-title" }, [
                 _vm._v(
-                  "Galeri Unit - " +
-                    _vm._s(_vm.gallery_unit.unit_tipe.unit_name)
+                  "Galeri - " + _vm._s(_vm.gallery_unit.unit_tipe.unit_name)
                 )
               ]),
               _vm._v(" "),
@@ -80130,7 +80244,13 @@ var render = function() {
                                   {
                                     staticClass: "uk-button uk-button-link",
                                     attrs: { "uk-tooltip": "Hapus" },
-                                    on: { click: function($event) {} }
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.onDeleteGalleryUnit(
+                                          gallery.unit_gallery_id
+                                        )
+                                      }
+                                    }
                                   },
                                   [
                                     _c("i", {
@@ -80438,6 +80558,17 @@ var render = function() {
                                               "id"
                                             )
                                           ) +
+                                          " "
+                                      ),
+                                      _c("br"),
+                                      _vm._v(
+                                        "\n                  Rp. " +
+                                          _vm._s(
+                                            _vm.$root.formatNumeral(
+                                              unit.unit_price,
+                                              "0,0"
+                                            )
+                                          ) +
                                           "\n                "
                                       )
                                     ]
@@ -80739,7 +80870,7 @@ var render = function() {
       _c(
         "div",
         { staticClass: "uk-card-title uk-margin dashboard-content-heading" },
-        [_vm._v("Edot Proyek")]
+        [_vm._v("Edit Proyek")]
       ),
       _vm._v(" "),
       _c(

@@ -6,7 +6,7 @@
         <li><a :href="$root.url + '/developer/project/manage_project'">Kelola Proyek</a></li>
         <li><span>Edit Proyek</span></li>
       </ul>
-      <div class="uk-card-title uk-margin dashboard-content-heading">Edot Proyek</div>
+      <div class="uk-card-title uk-margin dashboard-content-heading">Edit Proyek</div>
       <div v-show="errors.errorMessage" class="uk-alert-danger" uk-alert>{{ errors.errorMessage }}</div>
       <form class="uk-form-stacked" @submit.prevent="onEditProject">
         <div class="uk-margin">

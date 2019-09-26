@@ -23,7 +23,7 @@
     $link_nav = [
       'dashboard' => '#',
       'project' => route('developer_manage_project'),
-      'marketing' => '#',
+      'marketing' => route('developer_manage_marketing'),
       'pelanggan' => '#',
       'laporan' => '#'
     ]
@@ -49,14 +49,9 @@
     <li><a href="{{ $link_nav['laporan'] }}">Laporan</a></li>
     @else
     <li><a href="{{ $link_nav['dashboard'] }}">Dashboard</a></li>
-    <li><a href="{{ $link_nav['project'] }}">Proyek</a></li>
-    <li><a href="{{ $link_nav['pelanggan'] }}">Pelanggan</a></li>
-    <li class="uk-parent"><a href="#">Marketing <span class="uk-float-right" uk-icon="chevron-down"></span></a>
-      <ul class="uk-nav-sub side-nav-sub">
-        <li><a href="{{ route('developer_find_marketing') }}">Cari Marketing </a></li>
-        <li><a href="{{ route('developer_manage_marketing') }}">Kelola Marketing</a></li>
-      </ul>
-    </li>
+    <li><a href="{{ $link_nav['project'] }}">Kelola Proyek</a></li>
+    <li><a href="{{ $link_nav['pelanggan'] }}">Kelola Pelanggan</a></li>
+    <li><a href="{{ $link_nav['marketing'] }}">Kelola Marketing</a></li>
     <li><a href="{{ $link_nav['laporan'] }}">Laporan</a></li>
     @endif
   </ul>

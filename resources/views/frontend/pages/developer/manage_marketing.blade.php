@@ -1,5 +1,5 @@
 @extends('frontend.pages.developer.master')
-@section('tag_title', 'Kelola Marketing')
+@section('tag_title', 'Kelola Marketing Team')
 @section('main_content')
 <div id="app">
   <developer-manage-marketing

@@ -1,132 +1,116 @@
 <template>
   <div>
-    <div id="modal" class="uk-modal-container" v-show="marketing_detail !== null" uk-modal>
+    <div id="modal" v-show="marketing_detail !== null" uk-modal>
       <div class="uk-modal-body uk-modal-dialog">
         <a class="uk-modal-close uk-modal-close-default" uk-close></a>
         <h3 class="uk-h3">Detail Marketing</h3>
-        <div class="uk-grid-small" uk-grid>
-          <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
-            <div class="uk-margin">
-              <div class="uk-text-bold">Nama</div>
-              <div>{{ marketing_detail.mkt_fullname }}</div>
-            </div>
-          </div>
-          <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
-            <div class="uk-margin">
-              <div class="uk-text-bold">Foto</div>
-              <div v-if="marketing_detail.mkt_profile_photo">
-                <img class="uk-width-1-2" :src="$root.url + '/images/avatar/' + marketing_detail.mkt_profile_photo" alt="">
-              </div>
-              <div v-else>
-                Tidak ada foto
-              </div>
-            </div>
-          </div>
-          <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
-            <div class="uk-margin">
-              <div class="uk-text-bold">Telepon</div>
-              <div>{{ marketing_detail.mkt_phone_number }}</div>
-            </div>
-          </div>
-          <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
-            <div class="uk-margin">
-              <div class="uk-text-bold">No. Handphone</div>
-              <div>{{ marketing_detail.mkt_mobile_phone }}</div>
-            </div>
-          </div>
-          <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
-            <div class="uk-margin">
-              <div class="uk-text-bold">Email</div>
-              <div>{{ marketing_detail.mkt_email }}</div>
-            </div>
-          </div>
-          <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
-            <div class="uk-margin">
-              <div class="uk-text-bold">Kota</div>
-              <div>{{ marketing_detail.city_name }}, {{ marketing_detail.province_name }}</div>
-            </div>
-          </div>
-          <div class="uk-width-1-1">
-            <div class="uk-margin">
-              <div class="uk-text-bold">Tentang Marketing</div>
-              <div class="uk-text-justify">{{ marketing_detail.mkt_biography }}</div>
-            </div>
-          </div>
-        </div>
-        <div class="uk-margin modal-form">
-          <div v-show="errors.errorMessage" class="uk-alert-danger" uk-alert>
-            {{ errors.errorMessage }}
-          </div>
-          <div class="uk-margin-bottom uk-overflow-auto">
-            <div v-show="errors.name.selectproject" class="uk-text-small uk-text-danger">{{ errors.name.selectproject }}</div>
-            <div class="uk-grid-small uk-child-width-auto" uk-grid>
-              <div v-for="project in getproject">
-                <label><input type="checkbox" class="uk-checkbox" v-model="forms.selectproject" :value="project.project_id" /> {{ project.project_name }}</label>
-              </div>
-            </div>
-          </div>
-        </div>
+        <table class="uk-table uk-table-divider uk-table-striped uk-table-hover uk-table-small uk-table-middle">
+          <tbody>
+            <tr>
+              <th>Nama</th>
+              <td>{{ marketing_detail.mkt_fullname }}</td>
+            </tr>
+            <tr>
+              <th>Email</th>
+              <td>{{ marketing_detail.mkt_email }}</td>
+            </tr>
+            <tr>
+              <th>Telepon Kantor</th>
+              <td>{{ marketing_detail.mkt_phone_number }}</td>
+            </tr>
+            <tr>
+              <th>No. Handphone / Whatsapp</th>
+              <td>{{ marketing_detail.mkt_mobile_phone }}</td>
+            </tr>
+            <tr>
+              <th>Kota</th>
+              <td>{{ marketing_detail.city_name }}, {{ marketing_detail.province_name }}</td>
+            </tr>
+            <tr>
+              <th>Username</th>
+              <td>{{ marketing_detail.mkt_username }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <!-- modal add/delete marketing -->
     <div id="modal-add-marketing" uk-modal>
-      <div class="uk-modal-dialog uk-modal-body">
+      <div class="uk-modal-dialog">
         <a class="uk-modal-close uk-modal-close-default" uk-close></a>
-        <h3 class="uk-modal-title">
-          <span v-if="forms.isedit">Edit Marketing</span>
-          <span v-else>Tambah Marketing</span>
-        </h3>
+        <div class="uk-modal-header">
+          <h4 class="uk-modal-title">
+            <span v-if="forms.isedit">Edit Marketing</span>
+            <span v-else>Tambah Marketing</span>
+          </h4>
+        </div>
         <form class="uk-form-stacked modal-form" @submit.prevent="forms.marketing.isedit === false ? onAddMarketing() : onSaveMarketing()">
-          <div class="uk-margin">
-            <label class="uk-form-label modal-label">Nama Marketing</label>
-            <div class="uk-form-controls">
-              <input type="text" class="uk-input modal-input" v-model="forms.marketing.fullname" required>
+          <div class="uk-modal-body uk-margin-bottom" uk-overflow-auto>
+            <div v-show="errors.errorMessage" class="uk-alert-danger" uk-alert>{{ errors.errorMessage }}</div>
+            <div class="uk-margin">
+              <label class="uk-form-label modal-label">Nama Marketing</label>
+              <div class="uk-form-controls">
+                <input type="text" class="uk-input modal-input" v-model="forms.marketing.fullname">
+              </div>
+              <div v-show="errors.name.mkt_fullname" class="uk-text-small uk-text-danger">{{ errors.name.mkt_fullname }}</div>
             </div>
-            <div v-show="errors.name.mkt_fullname" class="uk-text-small uk-text-danger">{{ errors.name.mkt_fullname }}</div>
-          </div>
-          <div class="uk-margin">
-            <label class="uk-form-label modal-label">Email</label>
-            <div class="uk-form-controls">
-              <input type="email" class="uk-input modal-input" v-model="forms.marketing.email" required>
+            <div class="uk-margin">
+              <label class="uk-form-label modal-label">Email</label>
+              <div class="uk-form-controls">
+                <input type="email" class="uk-input modal-input" v-model="forms.marketing.email">
+              </div>
+              <div v-show="errors.name.mkt_email" class="uk-text-small uk-text-danger">{{ errors.name.mkt_email }}</div>
             </div>
-            <div v-show="errors.name.mkt_email" class="uk-text-small uk-text-danger">{{ errors.name.mkt_email }}</div>
-          </div>
-          <div class="uk-margin">
-            <label class="uk-form-label modal-label">Telepon Kantor</label>
-            <div class="uk-form-controls">
-              <input type="text" class="uk-input modal-input" v-model="forms.marketing.phone_number" required>
+            <div class="uk-margin">
+              <label class="uk-form-label modal-label">Telepon Kantor</label>
+              <div class="uk-form-controls">
+                <input type="text" class="uk-input modal-input" v-model="forms.marketing.phone_number">
+              </div>
             </div>
-            <div v-show="errors.name.mkt_phone_number" class="uk-text-small uk-text-danger">{{ errors.name.mkt_phone_number }}</div>
-          </div>
-          <div class="uk-margin">
-            <label class="uk-form-label modal-label">No. Handphone / Whatsapp</label>
-            <div class="uk-form-controls">
-              <input type="text" class="uk-input modal-input" v-model="forms.marketing.mobile_phone" required>
+            <div class="uk-margin">
+              <label class="uk-form-label modal-label">No. Handphone / Whatsapp</label>
+              <div class="uk-form-controls">
+                <input type="text" class="uk-input modal-input" v-model="forms.marketing.mobile_phone">
+              </div>
+              <div v-show="errors.name.mkt_mobile_phone" class="uk-text-small uk-text-danger">{{ errors.name.mkt_mobile_phone }}</div>
             </div>
-            <div v-show="errors.name.mkt_mobile_phone" class="uk-text-small uk-text-danger">{{ errors.name.mkt_mobile_phone }}</div>
-          </div>
-          <div class="uk-margin">
-            <label class="uk-form-label modal-label">Provinsi</label>
-            <div class="uk-form-controls">
-              <select class="uk-select modal-input" v-model="forms.marketing.region" @change="getCityData()">
-                <option :value="0">-- Pilih Provinsi --</option>
-                <option v-for="region in forms.getregion" :value="region.province_id">{{ region.province_name }}</option>
-              </select>
+            <div class="uk-margin">
+              <label class="uk-form-label modal-label">Provinsi</label>
+              <div class="uk-form-controls">
+                <select class="uk-select modal-input" v-model="forms.marketing.region" @change="getCityData()">
+                  <option :value="0">-- Pilih Provinsi --</option>
+                  <option v-for="region in forms.getregion" :value="region.province_id">{{ region.province_name }}</option>
+                </select>
+              </div>
+              <div v-show="errors.name.mkt_region" class="uk-text-small uk-text-danger">{{ errors.name.mkt_region }}</div>
             </div>
-            <div v-show="errors.name.mkt_region" class="uk-text-small uk-text-danger">{{ errors.name.mkt_region }}</div>
-          </div>
-          <div class="uk-margin">
-            <label class="uk-form-label modal-label">Kota</label>
-            <div class="uk-form-controls">
-              <select class="uk-select modal-input" v-model="forms.marketing.city">
-                <option :value="0">-- Pilih Kota --</option>
-                <option v-for="city in forms.getcity" :value="city.city_id">{{ city.city_name }}</option>
-              </select>
+            <div class="uk-margin">
+              <label class="uk-form-label modal-label">Kota</label>
+              <div class="uk-form-controls">
+                <select class="uk-select modal-input" v-model="forms.marketing.city">
+                  <option :value="0">-- Pilih Kota --</option>
+                  <option v-for="city in forms.getcity" :value="city.city_id">{{ city.city_name }}</option>
+                </select>
+              </div>
+              <div v-show="errors.name.mkt_city" class="uk-text-small uk-text-danger">{{ errors.name.mkt_city }}</div>
             </div>
-            <div v-show="errors.name.mkt_city" class="uk-text-small uk-text-danger">{{ errors.name.mkt_city }}</div>
+            <div class="uk-margin">
+              <label class="uk-form-label modal-label">Username</label>
+              <div class="uk-form-controls">
+                <input type="text" class="uk-input modal-input" v-model="forms.marketing.username">
+              </div>
+              <div v-show="errors.name.mkt_username" class="uk-text-small uk-text-danger">{{ errors.name.mkt_username }}</div>
+            </div>
+            <div class="uk-margin">
+              <label class="uk-form-label modal-label">Password</label>
+              <div class="uk-form-controls">
+                <input type="password" class="uk-input modal-input" v-model="forms.marketing.password">
+              </div>
+              <div v-show="errors.name.mkt_password" class="uk-text-small uk-text-danger">{{ errors.name.mkt_password }}</div>
+            </div>
           </div>
-          <div class="uk-margin">
+          <div class="uk-modal-footer">
             <button type="submit" v-html="forms.marketing.submit" class="uk-button uk-button-primary modal-form-add"></button>
             <a class="uk-modal-close uk-button uk-button-primary modal-form-cancel">Batal</a>
           </div>
@@ -167,7 +151,7 @@
           <a @click="onPopupModalAdd()" class="uk-button uk-button-primary dash-btn">Tambah Marketing</a>
         </div>
       </div>
-      <div class="uk-margin uk-overflow-auto">
+      <div class="uk-margin">
         <table class="uk-table uk-table-responsive uk-table-divider uk-table-middle uk-table-small">
           <thead>
             <tr>
@@ -181,7 +165,16 @@
           <tbody>
             <tr v-for="mkt in marketingList.results">
               <td>
-                <a @click="detailMarketing(mkt)" uk-tooltip="Lihat Detail" href="#" class="uk-button uk-button-primary uk-button-small dash-btn"><i class="icon ion-ios-redo"></i></a>
+                <div class="uk-inline">
+                  <a class="uk-button uk-button-primary uk-button-small dash-btn dash-btn-action" uk-icon="icon: more-vertical; ratio: 0.7"></a>
+                  <div uk-dropdown="mode: click">
+                    <ul class="uk-nav uk-dropdown-nav">
+                      <li><a @click="detailMarketing(mkt)"><span uk-icon="forward"></span> Lihat Detail</a></li>
+                      <li><a @click="onPopupModalAdd(mkt)"><span uk-icon="pencil"></span> Ubah</a></li>
+                      <li><a @click="onDeleteMarketing(mkt.mkt_user_id)"><span uk-icon="trash"></span> Hapus</a></li>
+                    </ul>
+                  </div>
+                </div>
               </td>
               <td>{{ mkt.mkt_fullname }}</td>
               <td>{{ mkt.mkt_mobile_phone }} / {{ mkt.mkt_phone_number }}</td>
@@ -208,7 +201,7 @@
 
 <script>
 export default {
-  props: ['session_user', 'getcity', 'getproject'],
+  props: ['session_user', 'getcity'],
   data() {
     return {
       forms: {
@@ -225,6 +218,8 @@ export default {
           mobile_phone: '',
           city: 0,
           region: 0,
+          username: '',
+          password: '',
           submit: 'Tambah Marketing',
           isedit: false
         },
@@ -278,6 +273,7 @@ export default {
     },
     onPopupModalAdd( data )
     {
+      this.getRegionData();
       if( data === undefined )
       {
         this.forms.marketing.fullname = '';
@@ -286,6 +282,7 @@ export default {
         this.forms.marketing.mobile_phone = '';
         this.forms.marketing.region = 0;
         this.forms.marketing.city = 0;
+        this.forms.marketing.username = '';
         this.forms.marketing.isedit = false;
         this.forms.marketing.submit = 'Tambah';
       }
@@ -297,9 +294,13 @@ export default {
         this.forms.marketing.mobile_phone = data.mkt_mobile_phone;
         this.forms.marketing.region = data.province_id;
         this.forms.marketing.city = data.city_id;
+        this.forms.marketing.username = data.mkt_username;
+        this.forms.marketing.user_id = data.mkt_user_id;
         this.forms.marketing.isedit = true;
         this.forms.marketing.submit = 'Simpan Perubahan';
       }
+      this.forms.marketing.password = '';
+      console.log( this.forms.marketing );
 
       this.errors.name = {};
       this.errors.iserror = false;
@@ -348,16 +349,189 @@ export default {
     },
     onAddMarketing()
     {
-      console.log('add marketing...');
+      this.errors.name = {};
+      this.errors.errorMessage = '';
+      this.errors.iserror = false;
+
+      if( this.forms.marketing.fullname === '' )
+      {
+        this.errors.name.mkt_fullname = 'Nama marketing harap diisi';
+        this.errors.iserror = true;
+      }
+      if( this.forms.marketing.email === '' )
+      {
+        this.errors.name.mkt_email = 'Alamat email harap diisi';
+        this.errors.iserror = true;
+      }
+      if( this.forms.marketing.mobile_phone === '' )
+      {
+        this.errors.name.mkt_mobile_phone = 'No. Handphone harap diisi';
+        this.errors.iserror = true;
+      }
+      if( this.forms.marketing.region === '' )
+      {
+        this.errors.name.mkt_region = 'Silakan pilih provinsi';
+        this.errors.iserror = true;
+      }
+      if( this.forms.marketing.city === '' )
+      {
+        this.errors.name.mkt_city = 'Silakan pilih kota';
+        this.errors.iserror = true;
+      }
+      if( this.forms.marketing.username === '' )
+      {
+        this.errors.name.mkt_username = 'Username harap diisi';
+        this.errors.iserror = true;
+      }
+      if( this.forms.marketing.password === '' )
+      {
+        this.errors.name.mkt_password = 'Password harap diisi';
+        this.errors.iserror = true;
+      }
+      if( this.forms.marketing.password !== '' && this.forms.marketing.password.length < 8 )
+      {
+        this.errors.name.mkt_password = 'Password terlalu pendek';
+        return false;
+      }
+
+      if( this.errors.iserror === true ) return false;
+
+      let form_marketing = this.forms.marketing;
+      form_marketing.submit = '<span uk-spinner></span>';
+
+      axios({
+        method: 'post',
+        url: this.$root.url + '/developer/marketing/add_marketing',
+        params: {
+          mkt_fullname: form_marketing.fullname,
+          mkt_email: form_marketing.email,
+          mkt_phone_number: form_marketing.phone_number,
+          mkt_mobile_phone: form_marketing.mobile_phone,
+          mkt_city: form_marketing.city,
+          mkt_password: form_marketing.password,
+          mkt_username: form_marketing.username
+        }
+      }).then( res => {
+        swal({
+          title: 'Sukses',
+          text: 'Marketing berhasil ditambah',
+          icon: 'success'
+        });
+        setTimeout(() => {
+          this.getMarketingList();
+          UIkit.modal('#modal-add-marketing').hide();
+        }, 2000);
+      }).catch( err => {
+        if( err.response.status === 409 )
+        {
+          this.errors.errorMessage = err.response.data.statusText;
+        }
+        else
+        {
+          this.errors.errorMessage = err.response.data.statusText;
+        }
+        swal({
+          title: 'Whoops',
+          text: 'Terjadi kesalahan',
+          icon: 'error',
+          dangerMode: true
+        });
+        form_marketing.submit = 'Tambah';
+      });
     },
     onSaveMarketing()
     {
-      console.log('save marketing...');
+      this.errors.name = {};
+      this.errors.errorMessage = '';
+      this.errors.iserror = false;
+
+      if( this.forms.marketing.fullname === '' )
+      {
+        this.errors.name.mkt_fullname = 'Nama marketing harap diisi';
+        this.errors.iserror = true;
+      }
+      if( this.forms.marketing.email === '' )
+      {
+        this.errors.name.mkt_email = 'Alamat email harap diisi';
+        this.errors.iserror = true;
+      }
+      if( this.forms.marketing.mobile_phone === '' )
+      {
+        this.errors.name.mkt_mobile_phone = 'No. Handphone harap diisi';
+        this.errors.iserror = true;
+      }
+      if( this.forms.marketing.region === '' )
+      {
+        this.errors.name.mkt_region = 'Silakan pilih provinsi';
+        this.errors.iserror = true;
+      }
+      if( this.forms.marketing.city === '' )
+      {
+        this.errors.name.mkt_city = 'Silakan pilih kota';
+        this.errors.iserror = true;
+      }
+      if( this.forms.marketing.username === '' )
+      {
+        this.errors.name.mkt_username = 'Username harap diisi';
+        this.errors.iserror = true;
+      }
+      if( this.forms.marketing.password !== '' && this.forms.marketing.password.length < 8 )
+      {
+        this.errors.name.mkt_password = 'Password terlalu pendek';
+        return false;
+      }
+
+      if( this.errors.iserror === true ) return false;
+
+      let form_marketing = this.forms.marketing;
+      form_marketing.submit = '<span uk-spinner></span>';
+
+      axios({
+        method: 'put',
+        url: this.$root.url + '/developer/marketing/save_marketing/' + this.forms.marketing.user_id,
+        params: {
+          mkt_fullname: form_marketing.fullname,
+          mkt_email: form_marketing.email,
+          mkt_phone_number: form_marketing.phone_number,
+          mkt_mobile_phone: form_marketing.mobile_phone,
+          mkt_city: form_marketing.city,
+          mkt_password: form_marketing.password,
+          mkt_username: form_marketing.username
+        }
+      }).then( res => {
+        swal({
+          title: 'Sukses',
+          text: 'Perubahan berhasil disimpan',
+          icon: 'success'
+        });
+        setTimeout(() => {
+          this.getMarketingList();
+          UIkit.modal('#modal-add-marketing').hide();
+        }, 2000);
+      }).catch( err => {
+        if( err.response.status === 409 )
+        {
+          this.errors.errorMessage = err.response.data.statusText;
+        }
+        else
+        {
+          this.errors.errorMessage = err.response.data.statusText;
+        }
+        swal({
+          title: 'Whoops',
+          text: 'Terjadi kesalahan',
+          icon: 'error',
+          dangerMode: true
+        });
+        form_marketing.submit = 'Simpan Perubahan';
+      });
+    },
+    onDeleteMarketing( id )
+    {
     }
   },
   mounted() {
     this.getMarketingList();
-    this.getRegionData();
   }
 }
 </script>

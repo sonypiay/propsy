@@ -4767,13 +4767,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -4976,8 +4971,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['session_user', 'getcity', 'getproject'],
+  props: ['session_user', 'getcity'],
   data: function data() {
+    var _marketing;
+
     return {
       forms: {
         keywords: '',
@@ -4985,17 +4982,15 @@ __webpack_require__.r(__webpack_exports__);
         column: 'mkt_fullname',
         sorting: 'asc',
         city: 'all',
-        marketing: {
+        marketing: (_marketing = {
           fullname: '',
           email: '',
           username: '',
           phone_number: '',
           mobile_phone: '',
           city: 0,
-          region: 0,
-          submit: 'Tambah Marketing',
-          isedit: false
-        },
+          region: 0
+        }, _defineProperty(_marketing, "username", ''), _defineProperty(_marketing, "password", ''), _defineProperty(_marketing, "submit", 'Tambah Marketing'), _defineProperty(_marketing, "isedit", false), _marketing),
         getregion: [],
         getcity: []
       },
@@ -5048,6 +5043,8 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     onPopupModalAdd: function onPopupModalAdd(data) {
+      this.getRegionData();
+
       if (data === undefined) {
         this.forms.marketing.fullname = '';
         this.forms.marketing.email = '';
@@ -5055,6 +5052,7 @@ __webpack_require__.r(__webpack_exports__);
         this.forms.marketing.mobile_phone = '';
         this.forms.marketing.region = 0;
         this.forms.marketing.city = 0;
+        this.forms.marketing.username = '';
         this.forms.marketing.isedit = false;
         this.forms.marketing.submit = 'Tambah';
       } else {
@@ -5064,10 +5062,14 @@ __webpack_require__.r(__webpack_exports__);
         this.forms.marketing.mobile_phone = data.mkt_mobile_phone;
         this.forms.marketing.region = data.province_id;
         this.forms.marketing.city = data.city_id;
+        this.forms.marketing.username = data.mkt_username;
+        this.forms.marketing.user_id = data.mkt_user_id;
         this.forms.marketing.isedit = true;
         this.forms.marketing.submit = 'Simpan Perubahan';
       }
 
+      this.forms.marketing.password = '';
+      console.log(this.forms.marketing);
       this.errors.name = {};
       this.errors.iserror = false;
       this.errors.errorMessage = '';
@@ -5114,15 +5116,182 @@ __webpack_require__.r(__webpack_exports__);
       UIkit.modal('#modal').show();
     },
     onAddMarketing: function onAddMarketing() {
-      console.log('add marketing...');
+      var _this5 = this;
+
+      this.errors.name = {};
+      this.errors.errorMessage = '';
+      this.errors.iserror = false;
+
+      if (this.forms.marketing.fullname === '') {
+        this.errors.name.mkt_fullname = 'Nama marketing harap diisi';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.marketing.email === '') {
+        this.errors.name.mkt_email = 'Alamat email harap diisi';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.marketing.mobile_phone === '') {
+        this.errors.name.mkt_mobile_phone = 'No. Handphone harap diisi';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.marketing.region === '') {
+        this.errors.name.mkt_region = 'Silakan pilih provinsi';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.marketing.city === '') {
+        this.errors.name.mkt_city = 'Silakan pilih kota';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.marketing.username === '') {
+        this.errors.name.mkt_username = 'Username harap diisi';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.marketing.password === '') {
+        this.errors.name.mkt_password = 'Password harap diisi';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.marketing.password !== '' && this.forms.marketing.password.length < 8) {
+        this.errors.name.mkt_password = 'Password terlalu pendek';
+        return false;
+      }
+
+      if (this.errors.iserror === true) return false;
+      var form_marketing = this.forms.marketing;
+      form_marketing.submit = '<span uk-spinner></span>';
+      axios({
+        method: 'post',
+        url: this.$root.url + '/developer/marketing/add_marketing',
+        params: {
+          mkt_fullname: form_marketing.fullname,
+          mkt_email: form_marketing.email,
+          mkt_phone_number: form_marketing.phone_number,
+          mkt_mobile_phone: form_marketing.mobile_phone,
+          mkt_city: form_marketing.city,
+          mkt_password: form_marketing.password,
+          mkt_username: form_marketing.username
+        }
+      }).then(function (res) {
+        swal({
+          title: 'Sukses',
+          text: 'Marketing berhasil ditambah',
+          icon: 'success'
+        });
+        setTimeout(function () {
+          _this5.getMarketingList();
+
+          UIkit.modal('#modal-add-marketing').hide();
+        }, 2000);
+      })["catch"](function (err) {
+        if (err.response.status === 409) {
+          _this5.errors.errorMessage = err.response.data.statusText;
+        } else {
+          _this5.errors.errorMessage = err.response.data.statusText;
+        }
+
+        swal({
+          title: 'Whoops',
+          text: 'Terjadi kesalahan',
+          icon: 'error',
+          dangerMode: true
+        });
+        form_marketing.submit = 'Tambah';
+      });
     },
     onSaveMarketing: function onSaveMarketing() {
-      console.log('save marketing...');
-    }
+      var _this6 = this;
+
+      this.errors.name = {};
+      this.errors.errorMessage = '';
+      this.errors.iserror = false;
+
+      if (this.forms.marketing.fullname === '') {
+        this.errors.name.mkt_fullname = 'Nama marketing harap diisi';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.marketing.email === '') {
+        this.errors.name.mkt_email = 'Alamat email harap diisi';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.marketing.mobile_phone === '') {
+        this.errors.name.mkt_mobile_phone = 'No. Handphone harap diisi';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.marketing.region === '') {
+        this.errors.name.mkt_region = 'Silakan pilih provinsi';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.marketing.city === '') {
+        this.errors.name.mkt_city = 'Silakan pilih kota';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.marketing.username === '') {
+        this.errors.name.mkt_username = 'Username harap diisi';
+        this.errors.iserror = true;
+      }
+
+      if (this.forms.marketing.password !== '' && this.forms.marketing.password.length < 8) {
+        this.errors.name.mkt_password = 'Password terlalu pendek';
+        return false;
+      }
+
+      if (this.errors.iserror === true) return false;
+      var form_marketing = this.forms.marketing;
+      form_marketing.submit = '<span uk-spinner></span>';
+      axios({
+        method: 'put',
+        url: this.$root.url + '/developer/marketing/save_marketing/' + this.forms.marketing.user_id,
+        params: {
+          mkt_fullname: form_marketing.fullname,
+          mkt_email: form_marketing.email,
+          mkt_phone_number: form_marketing.phone_number,
+          mkt_mobile_phone: form_marketing.mobile_phone,
+          mkt_city: form_marketing.city,
+          mkt_password: form_marketing.password,
+          mkt_username: form_marketing.username
+        }
+      }).then(function (res) {
+        swal({
+          title: 'Sukses',
+          text: 'Perubahan berhasil disimpan',
+          icon: 'success'
+        });
+        setTimeout(function () {
+          _this6.getMarketingList();
+
+          UIkit.modal('#modal-add-marketing').hide();
+        }, 2000);
+      })["catch"](function (err) {
+        if (err.response.status === 409) {
+          _this6.errors.errorMessage = err.response.data.statusText;
+        } else {
+          _this6.errors.errorMessage = err.response.data.statusText;
+        }
+
+        swal({
+          title: 'Whoops',
+          text: 'Terjadi kesalahan',
+          icon: 'error',
+          dangerMode: true
+        });
+        form_marketing.submit = 'Simpan Perubahan';
+      });
+    },
+    onDeleteMarketing: function onDeleteMarketing(id) {}
   },
   mounted: function mounted() {
     this.getMarketingList();
-    this.getRegionData();
   }
 });
 
@@ -82534,7 +82703,6 @@ var render = function() {
             expression: "marketing_detail !== null"
           }
         ],
-        staticClass: "uk-modal-container",
         attrs: { id: "modal", "uk-modal": "" }
       },
       [
@@ -82547,274 +82715,78 @@ var render = function() {
           _c("h3", { staticClass: "uk-h3" }, [_vm._v("Detail Marketing")]),
           _vm._v(" "),
           _c(
-            "div",
-            { staticClass: "uk-grid-small", attrs: { "uk-grid": "" } },
+            "table",
+            {
+              staticClass:
+                "uk-table uk-table-divider uk-table-striped uk-table-hover uk-table-small uk-table-middle"
+            },
             [
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s"
-                },
-                [
-                  _c("div", { staticClass: "uk-margin" }, [
-                    _c("div", { staticClass: "uk-text-bold" }, [
-                      _vm._v("Nama")
-                    ]),
-                    _vm._v(" "),
-                    _c("div", [
-                      _vm._v(_vm._s(_vm.marketing_detail.mkt_fullname))
-                    ])
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s"
-                },
-                [
-                  _c("div", { staticClass: "uk-margin" }, [
-                    _c("div", { staticClass: "uk-text-bold" }, [
-                      _vm._v("Foto")
-                    ]),
-                    _vm._v(" "),
-                    _vm.marketing_detail.mkt_profile_photo
-                      ? _c("div", [
-                          _c("img", {
-                            staticClass: "uk-width-1-2",
-                            attrs: {
-                              src:
-                                _vm.$root.url +
-                                "/images/avatar/" +
-                                _vm.marketing_detail.mkt_profile_photo,
-                              alt: ""
-                            }
-                          })
-                        ])
-                      : _c("div", [
-                          _vm._v("\n              Tidak ada foto\n            ")
-                        ])
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s"
-                },
-                [
-                  _c("div", { staticClass: "uk-margin" }, [
-                    _c("div", { staticClass: "uk-text-bold" }, [
-                      _vm._v("Telepon")
-                    ]),
-                    _vm._v(" "),
-                    _c("div", [
-                      _vm._v(_vm._s(_vm.marketing_detail.mkt_phone_number))
-                    ])
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s"
-                },
-                [
-                  _c("div", { staticClass: "uk-margin" }, [
-                    _c("div", { staticClass: "uk-text-bold" }, [
-                      _vm._v("No. Handphone")
-                    ]),
-                    _vm._v(" "),
-                    _c("div", [
-                      _vm._v(_vm._s(_vm.marketing_detail.mkt_mobile_phone))
-                    ])
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s"
-                },
-                [
-                  _c("div", { staticClass: "uk-margin" }, [
-                    _c("div", { staticClass: "uk-text-bold" }, [
-                      _vm._v("Email")
-                    ]),
-                    _vm._v(" "),
-                    _c("div", [_vm._v(_vm._s(_vm.marketing_detail.mkt_email))])
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s"
-                },
-                [
-                  _c("div", { staticClass: "uk-margin" }, [
-                    _c("div", { staticClass: "uk-text-bold" }, [
-                      _vm._v("Kota")
-                    ]),
-                    _vm._v(" "),
-                    _c("div", [
-                      _vm._v(
-                        _vm._s(_vm.marketing_detail.city_name) +
-                          ", " +
-                          _vm._s(_vm.marketing_detail.province_name)
-                      )
-                    ])
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "uk-width-1-1" }, [
-                _c("div", { staticClass: "uk-margin" }, [
-                  _c("div", { staticClass: "uk-text-bold" }, [
-                    _vm._v("Tentang Marketing")
-                  ]),
+              _c("tbody", [
+                _c("tr", [
+                  _c("th", [_vm._v("Nama")]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "uk-text-justify" }, [
-                    _vm._v(_vm._s(_vm.marketing_detail.mkt_biography))
+                  _c("td", [_vm._v(_vm._s(_vm.marketing_detail.mkt_fullname))])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("th", [_vm._v("Email")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(_vm.marketing_detail.mkt_email))])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("th", [_vm._v("Telepon Kantor")]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(_vm.marketing_detail.mkt_phone_number))
                   ])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("th", [_vm._v("No. Handphone / Whatsapp")]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(_vm.marketing_detail.mkt_mobile_phone))
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("th", [_vm._v("Kota")]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(
+                      _vm._s(_vm.marketing_detail.city_name) +
+                        ", " +
+                        _vm._s(_vm.marketing_detail.province_name)
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("th", [_vm._v("Username")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(_vm.marketing_detail.mkt_username))])
                 ])
               ])
             ]
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "uk-margin modal-form" }, [
-            _c(
-              "div",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.errors.errorMessage,
-                    expression: "errors.errorMessage"
-                  }
-                ],
-                staticClass: "uk-alert-danger",
-                attrs: { "uk-alert": "" }
-              },
-              [
-                _vm._v(
-                  "\n          " +
-                    _vm._s(_vm.errors.errorMessage) +
-                    "\n        "
-                )
-              ]
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "uk-margin-bottom uk-overflow-auto" }, [
-              _c(
-                "div",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.errors.name.selectproject,
-                      expression: "errors.name.selectproject"
-                    }
-                  ],
-                  staticClass: "uk-text-small uk-text-danger"
-                },
-                [_vm._v(_vm._s(_vm.errors.name.selectproject))]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "uk-grid-small uk-child-width-auto",
-                  attrs: { "uk-grid": "" }
-                },
-                _vm._l(_vm.getproject, function(project) {
-                  return _c("div", [
-                    _c("label", [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.forms.selectproject,
-                            expression: "forms.selectproject"
-                          }
-                        ],
-                        staticClass: "uk-checkbox",
-                        attrs: { type: "checkbox" },
-                        domProps: {
-                          value: project.project_id,
-                          checked: Array.isArray(_vm.forms.selectproject)
-                            ? _vm._i(
-                                _vm.forms.selectproject,
-                                project.project_id
-                              ) > -1
-                            : _vm.forms.selectproject
-                        },
-                        on: {
-                          change: function($event) {
-                            var $$a = _vm.forms.selectproject,
-                              $$el = $event.target,
-                              $$c = $$el.checked ? true : false
-                            if (Array.isArray($$a)) {
-                              var $$v = project.project_id,
-                                $$i = _vm._i($$a, $$v)
-                              if ($$el.checked) {
-                                $$i < 0 &&
-                                  _vm.$set(
-                                    _vm.forms,
-                                    "selectproject",
-                                    $$a.concat([$$v])
-                                  )
-                              } else {
-                                $$i > -1 &&
-                                  _vm.$set(
-                                    _vm.forms,
-                                    "selectproject",
-                                    $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                                  )
-                              }
-                            } else {
-                              _vm.$set(_vm.forms, "selectproject", $$c)
-                            }
-                          }
-                        }
-                      }),
-                      _vm._v(" " + _vm._s(project.project_name))
-                    ])
-                  ])
-                }),
-                0
-              )
-            ])
-          ])
+          )
         ])
       ]
     ),
     _vm._v(" "),
     _c("div", { attrs: { id: "modal-add-marketing", "uk-modal": "" } }, [
-      _c("div", { staticClass: "uk-modal-dialog uk-modal-body" }, [
+      _c("div", { staticClass: "uk-modal-dialog" }, [
         _c("a", {
           staticClass: "uk-modal-close uk-modal-close-default",
           attrs: { "uk-close": "" }
         }),
         _vm._v(" "),
-        _c("h3", { staticClass: "uk-modal-title" }, [
-          _vm.forms.isedit
-            ? _c("span", [_vm._v("Edit Marketing")])
-            : _c("span", [_vm._v("Tambah Marketing")])
+        _c("div", { staticClass: "uk-modal-header" }, [
+          _c("h4", { staticClass: "uk-modal-title" }, [
+            _vm.forms.isedit
+              ? _c("span", [_vm._v("Edit Marketing")])
+              : _c("span", [_vm._v("Tambah Marketing")])
+          ])
         ]),
         _vm._v(" "),
         _c(
@@ -82831,356 +82803,466 @@ var render = function() {
             }
           },
           [
-            _c("div", { staticClass: "uk-margin" }, [
-              _c("label", { staticClass: "uk-form-label modal-label" }, [
-                _vm._v("Nama Marketing")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "uk-form-controls" }, [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.forms.marketing.fullname,
-                      expression: "forms.marketing.fullname"
-                    }
-                  ],
-                  staticClass: "uk-input modal-input",
-                  attrs: { type: "text", required: "" },
-                  domProps: { value: _vm.forms.marketing.fullname },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(
-                        _vm.forms.marketing,
-                        "fullname",
-                        $event.target.value
-                      )
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.errors.name.mkt_fullname,
-                      expression: "errors.name.mkt_fullname"
-                    }
-                  ],
-                  staticClass: "uk-text-small uk-text-danger"
-                },
-                [_vm._v(_vm._s(_vm.errors.name.mkt_fullname))]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "uk-margin" }, [
-              _c("label", { staticClass: "uk-form-label modal-label" }, [
-                _vm._v("Email")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "uk-form-controls" }, [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.forms.marketing.email,
-                      expression: "forms.marketing.email"
-                    }
-                  ],
-                  staticClass: "uk-input modal-input",
-                  attrs: { type: "email", required: "" },
-                  domProps: { value: _vm.forms.marketing.email },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(
-                        _vm.forms.marketing,
-                        "email",
-                        $event.target.value
-                      )
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.errors.name.mkt_email,
-                      expression: "errors.name.mkt_email"
-                    }
-                  ],
-                  staticClass: "uk-text-small uk-text-danger"
-                },
-                [_vm._v(_vm._s(_vm.errors.name.mkt_email))]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "uk-margin" }, [
-              _c("label", { staticClass: "uk-form-label modal-label" }, [
-                _vm._v("Telepon Kantor")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "uk-form-controls" }, [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.forms.marketing.phone_number,
-                      expression: "forms.marketing.phone_number"
-                    }
-                  ],
-                  staticClass: "uk-input modal-input",
-                  attrs: { type: "text", required: "" },
-                  domProps: { value: _vm.forms.marketing.phone_number },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(
-                        _vm.forms.marketing,
-                        "phone_number",
-                        $event.target.value
-                      )
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.errors.name.mkt_phone_number,
-                      expression: "errors.name.mkt_phone_number"
-                    }
-                  ],
-                  staticClass: "uk-text-small uk-text-danger"
-                },
-                [_vm._v(_vm._s(_vm.errors.name.mkt_phone_number))]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "uk-margin" }, [
-              _c("label", { staticClass: "uk-form-label modal-label" }, [
-                _vm._v("No. Handphone / Whatsapp")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "uk-form-controls" }, [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.forms.marketing.mobile_phone,
-                      expression: "forms.marketing.mobile_phone"
-                    }
-                  ],
-                  staticClass: "uk-input modal-input",
-                  attrs: { type: "text", required: "" },
-                  domProps: { value: _vm.forms.marketing.mobile_phone },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(
-                        _vm.forms.marketing,
-                        "mobile_phone",
-                        $event.target.value
-                      )
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.errors.name.mkt_mobile_phone,
-                      expression: "errors.name.mkt_mobile_phone"
-                    }
-                  ],
-                  staticClass: "uk-text-small uk-text-danger"
-                },
-                [_vm._v(_vm._s(_vm.errors.name.mkt_mobile_phone))]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "uk-margin" }, [
-              _c("label", { staticClass: "uk-form-label modal-label" }, [
-                _vm._v("Provinsi")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "uk-form-controls" }, [
+            _c(
+              "div",
+              {
+                staticClass: "uk-modal-body uk-margin-bottom",
+                attrs: { "uk-overflow-auto": "" }
+              },
+              [
                 _c(
-                  "select",
+                  "div",
                   {
                     directives: [
                       {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.forms.marketing.region,
-                        expression: "forms.marketing.region"
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.errors.errorMessage,
+                        expression: "errors.errorMessage"
                       }
                     ],
-                    staticClass: "uk-select modal-input",
-                    on: {
-                      change: [
-                        function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
+                    staticClass: "uk-alert-danger",
+                    attrs: { "uk-alert": "" }
+                  },
+                  [_vm._v(_vm._s(_vm.errors.errorMessage))]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "uk-margin" }, [
+                  _c("label", { staticClass: "uk-form-label modal-label" }, [
+                    _vm._v("Nama Marketing")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-form-controls" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.forms.marketing.fullname,
+                          expression: "forms.marketing.fullname"
+                        }
+                      ],
+                      staticClass: "uk-input modal-input",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.forms.marketing.fullname },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
                           _vm.$set(
                             _vm.forms.marketing,
-                            "region",
-                            $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
+                            "fullname",
+                            $event.target.value
                           )
-                        },
-                        function($event) {
-                          return _vm.getCityData()
                         }
-                      ]
-                    }
-                  },
-                  [
-                    _c("option", { domProps: { value: 0 } }, [
-                      _vm._v("-- Pilih Provinsi --")
-                    ]),
-                    _vm._v(" "),
-                    _vm._l(_vm.forms.getregion, function(region) {
-                      return _c(
-                        "option",
-                        { domProps: { value: region.province_id } },
-                        [_vm._v(_vm._s(region.province_name))]
-                      )
+                      }
                     })
-                  ],
-                  2
-                )
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  directives: [
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
                     {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.errors.name.mkt_region,
-                      expression: "errors.name.mkt_region"
-                    }
-                  ],
-                  staticClass: "uk-text-small uk-text-danger"
-                },
-                [_vm._v(_vm._s(_vm.errors.name.mkt_region))]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "uk-margin" }, [
-              _c("label", { staticClass: "uk-form-label modal-label" }, [
-                _vm._v("Kota")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "uk-form-controls" }, [
-                _c(
-                  "select",
-                  {
-                    directives: [
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.errors.name.mkt_fullname,
+                          expression: "errors.name.mkt_fullname"
+                        }
+                      ],
+                      staticClass: "uk-text-small uk-text-danger"
+                    },
+                    [_vm._v(_vm._s(_vm.errors.name.mkt_fullname))]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "uk-margin" }, [
+                  _c("label", { staticClass: "uk-form-label modal-label" }, [
+                    _vm._v("Email")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-form-controls" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.forms.marketing.email,
+                          expression: "forms.marketing.email"
+                        }
+                      ],
+                      staticClass: "uk-input modal-input",
+                      attrs: { type: "email" },
+                      domProps: { value: _vm.forms.marketing.email },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.forms.marketing,
+                            "email",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.errors.name.mkt_email,
+                          expression: "errors.name.mkt_email"
+                        }
+                      ],
+                      staticClass: "uk-text-small uk-text-danger"
+                    },
+                    [_vm._v(_vm._s(_vm.errors.name.mkt_email))]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "uk-margin" }, [
+                  _c("label", { staticClass: "uk-form-label modal-label" }, [
+                    _vm._v("Telepon Kantor")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-form-controls" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.forms.marketing.phone_number,
+                          expression: "forms.marketing.phone_number"
+                        }
+                      ],
+                      staticClass: "uk-input modal-input",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.forms.marketing.phone_number },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.forms.marketing,
+                            "phone_number",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "uk-margin" }, [
+                  _c("label", { staticClass: "uk-form-label modal-label" }, [
+                    _vm._v("No. Handphone / Whatsapp")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-form-controls" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.forms.marketing.mobile_phone,
+                          expression: "forms.marketing.mobile_phone"
+                        }
+                      ],
+                      staticClass: "uk-input modal-input",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.forms.marketing.mobile_phone },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.forms.marketing,
+                            "mobile_phone",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.errors.name.mkt_mobile_phone,
+                          expression: "errors.name.mkt_mobile_phone"
+                        }
+                      ],
+                      staticClass: "uk-text-small uk-text-danger"
+                    },
+                    [_vm._v(_vm._s(_vm.errors.name.mkt_mobile_phone))]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "uk-margin" }, [
+                  _c("label", { staticClass: "uk-form-label modal-label" }, [
+                    _vm._v("Provinsi")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-form-controls" }, [
+                    _c(
+                      "select",
                       {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.forms.marketing.city,
-                        expression: "forms.marketing.city"
-                      }
-                    ],
-                    staticClass: "uk-select modal-input",
-                    on: {
-                      change: function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.$set(
-                          _vm.forms.marketing,
-                          "city",
-                          $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        )
-                      }
-                    }
-                  },
-                  [
-                    _c("option", { domProps: { value: 0 } }, [
-                      _vm._v("-- Pilih Kota --")
-                    ]),
-                    _vm._v(" "),
-                    _vm._l(_vm.forms.getcity, function(city) {
-                      return _c(
-                        "option",
-                        { domProps: { value: city.city_id } },
-                        [_vm._v(_vm._s(city.city_name))]
-                      )
-                    })
-                  ],
-                  2
-                )
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  directives: [
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.forms.marketing.region,
+                            expression: "forms.marketing.region"
+                          }
+                        ],
+                        staticClass: "uk-select modal-input",
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.forms.marketing,
+                                "region",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            },
+                            function($event) {
+                              return _vm.getCityData()
+                            }
+                          ]
+                        }
+                      },
+                      [
+                        _c("option", { domProps: { value: 0 } }, [
+                          _vm._v("-- Pilih Provinsi --")
+                        ]),
+                        _vm._v(" "),
+                        _vm._l(_vm.forms.getregion, function(region) {
+                          return _c(
+                            "option",
+                            { domProps: { value: region.province_id } },
+                            [_vm._v(_vm._s(region.province_name))]
+                          )
+                        })
+                      ],
+                      2
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
                     {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.errors.name.mkt_city,
-                      expression: "errors.name.mkt_city"
-                    }
-                  ],
-                  staticClass: "uk-text-small uk-text-danger"
-                },
-                [_vm._v(_vm._s(_vm.errors.name.mkt_city))]
-              )
-            ]),
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.errors.name.mkt_region,
+                          expression: "errors.name.mkt_region"
+                        }
+                      ],
+                      staticClass: "uk-text-small uk-text-danger"
+                    },
+                    [_vm._v(_vm._s(_vm.errors.name.mkt_region))]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "uk-margin" }, [
+                  _c("label", { staticClass: "uk-form-label modal-label" }, [
+                    _vm._v("Kota")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-form-controls" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.forms.marketing.city,
+                            expression: "forms.marketing.city"
+                          }
+                        ],
+                        staticClass: "uk-select modal-input",
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.forms.marketing,
+                              "city",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _c("option", { domProps: { value: 0 } }, [
+                          _vm._v("-- Pilih Kota --")
+                        ]),
+                        _vm._v(" "),
+                        _vm._l(_vm.forms.getcity, function(city) {
+                          return _c(
+                            "option",
+                            { domProps: { value: city.city_id } },
+                            [_vm._v(_vm._s(city.city_name))]
+                          )
+                        })
+                      ],
+                      2
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.errors.name.mkt_city,
+                          expression: "errors.name.mkt_city"
+                        }
+                      ],
+                      staticClass: "uk-text-small uk-text-danger"
+                    },
+                    [_vm._v(_vm._s(_vm.errors.name.mkt_city))]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "uk-margin" }, [
+                  _c("label", { staticClass: "uk-form-label modal-label" }, [
+                    _vm._v("Username")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-form-controls" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.forms.marketing.username,
+                          expression: "forms.marketing.username"
+                        }
+                      ],
+                      staticClass: "uk-input modal-input",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.forms.marketing.username },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.forms.marketing,
+                            "username",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.errors.name.mkt_username,
+                          expression: "errors.name.mkt_username"
+                        }
+                      ],
+                      staticClass: "uk-text-small uk-text-danger"
+                    },
+                    [_vm._v(_vm._s(_vm.errors.name.mkt_username))]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "uk-margin" }, [
+                  _c("label", { staticClass: "uk-form-label modal-label" }, [
+                    _vm._v("Password")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-form-controls" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.forms.marketing.password,
+                          expression: "forms.marketing.password"
+                        }
+                      ],
+                      staticClass: "uk-input modal-input",
+                      attrs: { type: "password" },
+                      domProps: { value: _vm.forms.marketing.password },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.forms.marketing,
+                            "password",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.errors.name.mkt_password,
+                          expression: "errors.name.mkt_password"
+                        }
+                      ],
+                      staticClass: "uk-text-small uk-text-danger"
+                    },
+                    [_vm._v(_vm._s(_vm.errors.name.mkt_password))]
+                  )
+                ])
+              ]
+            ),
             _vm._v(" "),
-            _c("div", { staticClass: "uk-margin" }, [
+            _c("div", { staticClass: "uk-modal-footer" }, [
               _c("button", {
                 staticClass: "uk-button uk-button-primary modal-form-add",
                 attrs: { type: "submit" },
@@ -83428,7 +83510,7 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "uk-margin uk-overflow-auto" }, [
+      _c("div", { staticClass: "uk-margin" }, [
         _c(
           "table",
           {
@@ -83443,20 +83525,70 @@ var render = function() {
               _vm._l(_vm.marketingList.results, function(mkt) {
                 return _c("tr", [
                   _c("td", [
-                    _c(
-                      "a",
-                      {
+                    _c("div", { staticClass: "uk-inline" }, [
+                      _c("a", {
                         staticClass:
-                          "uk-button uk-button-primary uk-button-small dash-btn",
-                        attrs: { "uk-tooltip": "Lihat Detail", href: "#" },
-                        on: {
-                          click: function($event) {
-                            return _vm.detailMarketing(mkt)
-                          }
-                        }
-                      },
-                      [_c("i", { staticClass: "icon ion-ios-redo" })]
-                    )
+                          "uk-button uk-button-primary uk-button-small dash-btn dash-btn-action",
+                        attrs: { "uk-icon": "icon: more-vertical; ratio: 0.7" }
+                      }),
+                      _vm._v(" "),
+                      _c("div", { attrs: { "uk-dropdown": "mode: click" } }, [
+                        _c("ul", { staticClass: "uk-nav uk-dropdown-nav" }, [
+                          _c("li", [
+                            _c(
+                              "a",
+                              {
+                                on: {
+                                  click: function($event) {
+                                    return _vm.detailMarketing(mkt)
+                                  }
+                                }
+                              },
+                              [
+                                _c("span", { attrs: { "uk-icon": "forward" } }),
+                                _vm._v(" Lihat Detail")
+                              ]
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("li", [
+                            _c(
+                              "a",
+                              {
+                                on: {
+                                  click: function($event) {
+                                    return _vm.onPopupModalAdd(mkt)
+                                  }
+                                }
+                              },
+                              [
+                                _c("span", { attrs: { "uk-icon": "pencil" } }),
+                                _vm._v(" Ubah")
+                              ]
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("li", [
+                            _c(
+                              "a",
+                              {
+                                on: {
+                                  click: function($event) {
+                                    return _vm.onDeleteMarketing(
+                                      mkt.mkt_user_id
+                                    )
+                                  }
+                                }
+                              },
+                              [
+                                _c("span", { attrs: { "uk-icon": "trash" } }),
+                                _vm._v(" Hapus")
+                              ]
+                            )
+                          ])
+                        ])
+                      ])
+                    ])
                   ]),
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(mkt.mkt_fullname))]),

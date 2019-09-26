@@ -35,8 +35,53 @@
 
       <!-- detail unit -->
       <div id="modal-detail-unit" class="uk-modal-full" uk-modal>
-        <div class="uk-modal-dialog uk-modal-body uk-height-viewport">
+        <div class="uk-modal-dialog">
           <a class="uk-modal-close-large uk-modal-close" uk-close></a>
+          <div class="uk-grid-collapse uk-grid-match" uk-grid>
+            <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
+              <div class="uk-background-cover" v-if="unit_tipe.detail.unit_thumbnail === null" uk-height-viewport  :style="{'background-image': 'url(' + $root.url + '/images/banner/homepage2.jpg)'}">
+              </div>
+              <div v-else class="uk-background-cover" uk-height-viewport :style="{'background-image': 'url(' + $root.url + '/images/project/gallery/' + unit_tipe.detail.unit_thumbnail + ')'}"></div>
+            </div>
+            <div class="uk-width-expand">
+              <div class="uk-card uk-card-body uk-overflow-auto" style="height: 620px;">
+                <h1 class="uk-h1">Rp. {{ $root.formatNumeral( unit_tipe.detail.unit_price, '0,0' ) }}</h1>
+                <h3 class="uk-h3">{{ unit_tipe.detail.unit_name }}</h3>
+                <table class="uk-table uk-table-striped uk-table-hover uk-table-small uk-table-middle uk-table-responsive">
+                  <tbody>
+                    <tr>
+                      <td>Kamar Tidur</td>
+                      <td><strong>{{ unit_tipe.detail.unit_kt }}</strong></td>
+                      <td>Kamar Mandi</td>
+                      <td><strong>{{ unit_tipe.detail.unit_km }}</strong></td>
+                    </tr>
+                    <tr>
+                      <td>Jumlah Lantai</td>
+                      <td><strong>{{ unit_tipe.detail.unit_floor }}</strong></td>
+                      <td>Kapasitas Watt</td>
+                      <td><strong>{{ unit_tipe.detail.unit_watt }}</strong></td>
+                    </tr>
+                    <tr>
+                      <td>Luas Bangunan (m2)</td>
+                      <td><strong>{{ unit_tipe.detail.unit_lb }}</strong></td>
+                      <td>Luas Lahan (m2)</td>
+                      <td><strong>{{ unit_tipe.detail.unit_lt }}</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <hr>
+                <h3 class="uk-h3">Deskripsi</h3>
+                <div v-html="unit_tipe.detail.unit_description"></div>
+                <hr>
+                <h3 class="uk-h3">Fasilitas</h3>
+                <div class="uk-grid-small uk-child-width-1-3@s" uk-grid>
+                  <div v-for="fac in getFacility( unit_tipe.detail.unit_facility )" class="uk-text-small">
+                    <span uk-icon="icon: check; ratio: 0.6"></span> {{ fac }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <!-- detail unit -->
@@ -168,7 +213,7 @@
                       <a uk-tooltip="Lainnya" class="uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"><i uk-icon="more-vertical"></i></a>
                       <div class="grid-dropdown-nav" uk-dropdown="pos: top-right; mode: click">
                         <ul class="uk-nav uk-dropdown-nav">
-                          <li><a><span class="uk-margin-small-right" uk-icon="forward"></span> Lihat Detail</a></li>
+                          <li><a @click="onDetailUnit( unit )"><span class="uk-margin-small-right" uk-icon="forward"></span> Lihat Detail</a></li>
                           <li><a @click="onViewGalleryUnit( unit )"><span class="uk-margin-small-right" uk-icon="image"></span> Galeri</a></li>
                         </ul>
                       </div>
@@ -227,7 +272,8 @@ export default {
           prev_page_url: null,
           next_page_url: null,
           path: this.$root.url + '/developer/project/get_unit/' + this.getproject.project_unique_id
-        }
+        },
+        detail: {}
       },
       gallery_unit: {
         isLoading: false,
@@ -286,6 +332,11 @@ export default {
       }).catch( err => {
         this.unit_tipe.errorMessage = err.response.statusText;
       });
+    },
+    onDetailUnit( data )
+    {
+      this.unit_tipe.detail = data;
+      UIkit.modal('#modal-detail-unit').show();
     },
     onDeleteUnitType( id )
     {
@@ -458,6 +509,13 @@ export default {
           });
         }
       });
+    },
+    getFacility( facility )
+    {
+      if( facility !== undefined )
+      {
+        return facility.split(',');
+      }
     }
   },
   mounted() {

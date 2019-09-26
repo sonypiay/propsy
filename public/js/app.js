@@ -3668,6 +3668,51 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user', 'getproject'],
   data: function data() {
@@ -3693,7 +3738,8 @@ __webpack_require__.r(__webpack_exports__);
           prev_page_url: null,
           next_page_url: null,
           path: this.$root.url + '/developer/project/get_unit/' + this.getproject.project_unique_id
-        }
+        },
+        detail: {}
       },
       gallery_unit: {
         isLoading: false,
@@ -3753,6 +3799,10 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (err) {
         _this2.unit_tipe.errorMessage = err.response.statusText;
       });
+    },
+    onDetailUnit: function onDetailUnit(data) {
+      this.unit_tipe.detail = data;
+      UIkit.modal('#modal-detail-unit').show();
     },
     onDeleteUnitType: function onDeleteUnitType(id) {
       var _this3 = this;
@@ -3931,6 +3981,11 @@ __webpack_require__.r(__webpack_exports__);
           });
         }
       });
+    },
+    getFacility: function getFacility(facility) {
+      if (facility !== undefined) {
+        return facility.split(',');
+      }
     }
   },
   mounted: function mounted() {
@@ -80035,7 +80090,193 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _vm._m(0),
+      _c(
+        "div",
+        {
+          staticClass: "uk-modal-full",
+          attrs: { id: "modal-detail-unit", "uk-modal": "" }
+        },
+        [
+          _c("div", { staticClass: "uk-modal-dialog" }, [
+            _c("a", {
+              staticClass: "uk-modal-close-large uk-modal-close",
+              attrs: { "uk-close": "" }
+            }),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "uk-grid-collapse uk-grid-match",
+                attrs: { "uk-grid": "" }
+              },
+              [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s"
+                  },
+                  [
+                    _vm.unit_tipe.detail.unit_thumbnail === null
+                      ? _c("div", {
+                          staticClass: "uk-background-cover",
+                          style: {
+                            "background-image":
+                              "url(" +
+                              _vm.$root.url +
+                              "/images/banner/homepage2.jpg)"
+                          },
+                          attrs: { "uk-height-viewport": "" }
+                        })
+                      : _c("div", {
+                          staticClass: "uk-background-cover",
+                          style: {
+                            "background-image":
+                              "url(" +
+                              _vm.$root.url +
+                              "/images/project/gallery/" +
+                              _vm.unit_tipe.detail.unit_thumbnail +
+                              ")"
+                          },
+                          attrs: { "uk-height-viewport": "" }
+                        })
+                  ]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "uk-width-expand" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "uk-card uk-card-body uk-overflow-auto",
+                      staticStyle: { height: "620px" }
+                    },
+                    [
+                      _c("h1", { staticClass: "uk-h1" }, [
+                        _vm._v(
+                          "Rp. " +
+                            _vm._s(
+                              _vm.$root.formatNumeral(
+                                _vm.unit_tipe.detail.unit_price,
+                                "0,0"
+                              )
+                            )
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("h3", { staticClass: "uk-h3" }, [
+                        _vm._v(_vm._s(_vm.unit_tipe.detail.unit_name))
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "table",
+                        {
+                          staticClass:
+                            "uk-table uk-table-striped uk-table-hover uk-table-small uk-table-middle uk-table-responsive"
+                        },
+                        [
+                          _c("tbody", [
+                            _c("tr", [
+                              _c("td", [_vm._v("Kamar Tidur")]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _c("strong", [
+                                  _vm._v(_vm._s(_vm.unit_tipe.detail.unit_kt))
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v("Kamar Mandi")]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _c("strong", [
+                                  _vm._v(_vm._s(_vm.unit_tipe.detail.unit_km))
+                                ])
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("tr", [
+                              _c("td", [_vm._v("Jumlah Lantai")]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _c("strong", [
+                                  _vm._v(
+                                    _vm._s(_vm.unit_tipe.detail.unit_floor)
+                                  )
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v("Kapasitas Watt")]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _c("strong", [
+                                  _vm._v(_vm._s(_vm.unit_tipe.detail.unit_watt))
+                                ])
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("tr", [
+                              _c("td", [_vm._v("Luas Bangunan (m2)")]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _c("strong", [
+                                  _vm._v(_vm._s(_vm.unit_tipe.detail.unit_lb))
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v("Luas Lahan (m2)")]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _c("strong", [
+                                  _vm._v(_vm._s(_vm.unit_tipe.detail.unit_lt))
+                                ])
+                              ])
+                            ])
+                          ])
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("hr"),
+                      _vm._v(" "),
+                      _c("h3", { staticClass: "uk-h3" }, [_vm._v("Deskripsi")]),
+                      _vm._v(" "),
+                      _c("div", {
+                        domProps: {
+                          innerHTML: _vm._s(
+                            _vm.unit_tipe.detail.unit_description
+                          )
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("hr"),
+                      _vm._v(" "),
+                      _c("h3", { staticClass: "uk-h3" }, [_vm._v("Fasilitas")]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "uk-grid-small uk-child-width-1-3@s",
+                          attrs: { "uk-grid": "" }
+                        },
+                        _vm._l(
+                          _vm.getFacility(_vm.unit_tipe.detail.unit_facility),
+                          function(fac) {
+                            return _c("div", { staticClass: "uk-text-small" }, [
+                              _c("span", {
+                                attrs: { "uk-icon": "icon: check; ratio: 0.6" }
+                              }),
+                              _vm._v(" " + _vm._s(fac) + "\n                ")
+                            ])
+                          }
+                        ),
+                        0
+                      )
+                    ]
+                  )
+                ])
+              ]
+            )
+          ])
+        ]
+      ),
       _vm._v(" "),
       _c(
         "div",
@@ -80462,7 +80703,7 @@ var render = function() {
                                           ]
                                         ),
                                         _vm._v(" "),
-                                        _vm._m(1, true)
+                                        _vm._m(0, true)
                                       ]
                                     )
                                   : _c(
@@ -80649,7 +80890,7 @@ var render = function() {
                                         "div",
                                         { staticClass: "uk-width-1-3" },
                                         [
-                                          _vm._m(2, true),
+                                          _vm._m(1, true),
                                           _vm._v(" "),
                                           _c(
                                             "div",
@@ -80668,7 +80909,32 @@ var render = function() {
                                                     "uk-nav uk-dropdown-nav"
                                                 },
                                                 [
-                                                  _vm._m(3, true),
+                                                  _c("li", [
+                                                    _c(
+                                                      "a",
+                                                      {
+                                                        on: {
+                                                          click: function(
+                                                            $event
+                                                          ) {
+                                                            return _vm.onDetailUnit(
+                                                              unit
+                                                            )
+                                                          }
+                                                        }
+                                                      },
+                                                      [
+                                                        _c("span", {
+                                                          staticClass:
+                                                            "uk-margin-small-right",
+                                                          attrs: {
+                                                            "uk-icon": "forward"
+                                                          }
+                                                        }),
+                                                        _vm._v(" Lihat Detail")
+                                                      ]
+                                                    )
+                                                  ]),
                                                   _vm._v(" "),
                                                   _c("li", [
                                                     _c(
@@ -80763,30 +81029,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "uk-modal-full",
-        attrs: { id: "modal-detail-unit", "uk-modal": "" }
-      },
-      [
-        _c(
-          "div",
-          { staticClass: "uk-modal-dialog uk-modal-body uk-height-viewport" },
-          [
-            _c("a", {
-              staticClass: "uk-modal-close-large uk-modal-close",
-              attrs: { "uk-close": "" }
-            })
-          ]
-        )
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "uk-text-center" }, [
       _c("span", { attrs: { "uk-icon": "icon: image; ratio: 3" } })
     ])
@@ -80804,20 +81046,6 @@ var staticRenderFns = [
       },
       [_c("i", { attrs: { "uk-icon": "more-vertical" } })]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", [
-      _c("a", [
-        _c("span", {
-          staticClass: "uk-margin-small-right",
-          attrs: { "uk-icon": "forward" }
-        }),
-        _vm._v(" Lihat Detail")
-      ])
-    ])
   }
 ]
 render._withStripped = true

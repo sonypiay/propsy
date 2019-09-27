@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Frontend\Developer;
 use Illuminate\Http\Request;
 use App\Database\DeveloperUser;
 use App\Database\MarketingUser;
-use App\Database\ProjectList;
-use App\Database\ProjectMarketing;
 use App\Database\AreaDB;
 use App\Database\CityDB;
 use App\Http\Controllers\Controller;
@@ -18,18 +16,14 @@ class ProjectMarketingController extends Controller
     if( session()->has('isDeveloper') )
     {
       $city = new CityDB;
-      $project_list = new ProjectList;
       $getcity = $city->orderBy('city_name', 'asc')->get();
-      $getproject = $project_list->where('dev_user_id', session()->get('dev_user_id'))
-      ->get();
 
       $data = [
         'request' => $request,
         'session_user' => $developeruser->getinfo(),
-        'getcity' => $getcity,
-        'getproject' => $getproject
+        'getcity' => $getcity
       ];
-      return response()->view('frontend.pages.developer.find_marketing', $data);
+      return response()->view('frontend.pages.developer.manage_marketing', $data);
     }
     else
     {
@@ -52,163 +46,25 @@ class ProjectMarketingController extends Controller
       'marketing_user.mkt_phone_number',
       'marketing_user.mkt_mobile_phone',
       'marketing_user.mkt_city',
-      'marketing_user.mkt_address',
-      'marketing_user.mkt_biography',
-      'marketing_user.mkt_profile_photo',
+      'marketing_user.mkt_username',
+      'marketing_user.mkt_password',
       'city.city_id',
       'city.city_name',
+      'province.province_id',
       'province.province_name'
     )
-    ->leftJoin('city', 'marketing_user.mkt_city', '=', 'city.city_id')
-    ->leftJoin('province', 'city.province_id', '=', 'province.province_id');
+    ->join('city', 'marketing_user.mkt_city', '=', 'city.city_id')
+    ->join('province', 'city.province_id', '=', 'province.province_id');
 
     if( empty( $keywords ) )
     {
-      $getmarketing = $marketing->orderBy('marketing_user.mkt_fullname', $sorting);
-      if( $city !== 'all' )
-      {
-        $getmarketing = $marketing->where('marketing_user.mkt_city', $city)
-        ->orderBy('marketing_user.mkt_fullname', $sorting);
-      }
-    }
-    else
-    {
-      $getmarketing = $marketing->where('marketing_user.' . $column, 'like', '%' . $keywords. '%')
-      ->orderBy('marketing_user.mkt_fullname', $sorting);
-
-      if( $city !== 'all' )
-      {
-        $getmarketing = $marketing->where([
-          ['marketing_user.' . $column, 'like', '%' . $keywords. '%'],
-          ['marketing_user.mkt_city', $city]
-        ])
-        ->orderBy('marketing_user.mkt_fullname', $sorting);
-      }
-    }
-
-    $result = $getmarketing->paginate( $limit );
-    $res = [ 'results' => $result ];
-    return response()->json( $res, 200 );
-  }
-
-  public function projectSelected( ProjectMarketing $project_mkt, $userid )
-  {
-    $selectedproject = $project_mkt->select(
-      'project_list.project_id',
-      'project_list.project_name',
-      'project_marketing.dev_user_id',
-      'project_marketing.mkt_user_id'
-    )
-    ->join('project_list', 'project_marketing.project_id', '=', 'project_list.project_id')
-    ->where([
-      ['project_list.dev_user_id', session()->get('dev_user_id')],
-      ['project_marketing.mkt_user_id', $userid]
-    ])
-    ->orderBy('project_list.project_name', 'asc')
-    ->get();
-
-    $result = [
-      'results' => [
-        'data' => $selectedproject,
-        'total' => $selectedproject->count()
-      ]
-    ];
-    return response()->json( $result, 200 );
-  }
-
-  public function recruit_marketing( Request $request, ProjectMarketing $project_mkt, $userid, $action )
-  {
-    $selectedproject = $request->selectedproject;
-    $date = date('Y-m-d H:i:s');
-    $dev_user_id = session()->get('dev_user_id');
-    $data = [];
-
-    $delete = $project_mkt->where([
-      ['dev_user_id', $dev_user_id],
-      ['mkt_user_id', $userid]
-    ]);
-    if( $delete->count() > 0 ) $delete->delete();
-
-    if( $action === 'add' )
-    {
-      foreach( $selectedproject as $project )
-      {
-        $data[] = [
-          'dev_user_id' => $dev_user_id,
-          'mkt_user_id' => $userid,
-          'project_id' => $project,
-          'created_at' => $date,
-          'updated_at' => $date
-        ];
-      }
-
-      $insert = $project_mkt->insert($data);
-    }
-
-    $res = [ 'status' => 200, 'statusText' => 'success' ];
-    return response()->json( $res, $res['status'] );
-  }
-
-  public function manage_marketing( Request $request, DeveloperUser $developeruser )
-  {
-    if( session()->has('isDeveloper') )
-    {
-      $city = new CityDB;
-      $project_list = new ProjectList;
-      $getcity = $city->orderBy('city_name', 'asc')->get();
-      $getproject = $project_list->where('dev_user_id', session()->get('dev_user_id'))
-      ->get();
-
-      $data = [
-        'request' => $request,
-        'session_user' => $developeruser->getinfo(),
-        'getcity' => $getcity,
-        'getproject' => $getproject
-      ];
-      return response()->view('frontend.pages.developer.manage_marketing', $data);
-    }
-    else
-    {
-      return redirect()->route('homepage');
-    }
-  }
-
-  public function my_marketing( Request $request, ProjectMarketing $project_mkt )
-  {
-    $keywords = $request->keywords;
-    $sorting = $request->sorting;
-    $limit = 10;
-    $column = $request->column;
-    $city = $request->city;
-
-    $marketing = $project_mkt->select(
-      'marketing_user.mkt_user_id',
-      'marketing_user.mkt_fullname',
-      'marketing_user.mkt_email',
-      'marketing_user.mkt_phone_number',
-      'marketing_user.mkt_mobile_phone',
-      'marketing_user.mkt_city',
-      'marketing_user.mkt_address',
-      'marketing_user.mkt_biography',
-      'marketing_user.mkt_profile_photo',
-      'city.city_id',
-      'city.city_name',
-      'province.province_name'
-    )
-    ->join('marketing_user', 'project_marketing.mkt_user_id', '=', 'marketing_user.mkt_user_id')
-    ->leftJoin('city', 'marketing_user.mkt_city', '=', 'city.city_id')
-    ->leftJoin('province', 'city.province_id', '=', 'province.province_id')
-    ->groupBy('marketing_user.mkt_user_id');
-
-    if( empty( $keywords ) )
-    {
-      $getmarketing = $marketing->where('project_marketing.dev_user_id', session()->get('dev_user_id'))
+      $getmarketing = $marketing->where('dev_user_id', session()->get('dev_user_id'))
       ->orderBy('marketing_user.mkt_fullname', $sorting);
       if( $city !== 'all' )
       {
         $getmarketing = $marketing->where([
           ['marketing_user.mkt_city', $city],
-          ['project_marketing.dev_user_id', session()->get('dev_user_id')]
+          ['marketing_user.dev_user_id', session()->get('dev_user_id')]
         ])
         ->orderBy('marketing_user.mkt_fullname', $sorting);
       }
@@ -217,7 +73,7 @@ class ProjectMarketingController extends Controller
     {
       $getmarketing = $marketing->where([
         ['marketing_user.' . $column, 'like', '%' . $keywords. '%'],
-        ['project_marketing.dev_user_id', session()->get('dev_user_id')]
+        ['marketing_user.dev_user_id', session()->get('dev_user_id')]
       ])
       ->orderBy('marketing_user.mkt_fullname', $sorting);
 
@@ -226,7 +82,7 @@ class ProjectMarketingController extends Controller
         $getmarketing = $marketing->where([
           ['marketing_user.' . $column, 'like', '%' . $keywords. '%'],
           ['marketing_user.mkt_city', $city],
-          ['project_marketing.dev_user_id', session()->get('dev_user_id')]
+          ['marketing_user.dev_user_id', session()->get('dev_user_id')]
         ])
         ->orderBy('marketing_user.mkt_fullname', $sorting);
       }
@@ -235,5 +91,128 @@ class ProjectMarketingController extends Controller
     $result = $getmarketing->paginate( $limit );
     $res = [ 'results' => $result ];
     return response()->json( $res, 200 );
+  }
+
+  public function add_marketing( Request $request, MarketingUser $marketinguser )
+  {
+    $fullname = $request->mkt_fullname;
+    $email = $request->mkt_email;
+    $username = $request->mkt_username;
+    $password = $request->mkt_password;
+    $hash_password = md5( $password );
+    $city = $request->mkt_city;
+    $phone_number = $request->mkt_phone_number === '' ? null : $request->mkt_phone_number;
+    $mobile_phone = $request->mkt_mobile_phone;
+    $check_username = $marketinguser->where('mkt_username', $username);
+    $check_email = $marketinguser->where('mkt_email', $email);
+
+    if( $check_username->count() > 0 )
+    {
+      $res = [
+        'status' => 409,
+        'statusText' => $username . ' sudah digunakan'
+      ];
+    }
+    else if( $check_email->count() > 0 )
+    {
+      $res = [
+        'status' => 409,
+        'statusText' => $email . ' sudah digunakan'
+      ];
+    }
+    else
+    {
+      $insert = new $marketinguser;
+      $insert->mkt_fullname = $fullname;
+      $insert->mkt_email = $email;
+      $insert->mkt_username = $username;
+      $insert->mkt_password = $hash_password;
+      $insert->mkt_city = $city;
+      $insert->mkt_phone_number = $phone_number;
+      $insert->mkt_mobile_phone = $mobile_phone;
+      $insert->dev_user_id = session()->get('dev_user_id');
+      $insert->save();
+      $res = ['status' => 200, 'statusText' => 'success'];
+    }
+
+    return response()->json( $res, $res['status'] );
+  }
+
+  public function save_marketing( Request $request, MarketingUser $marketinguser, $userid )
+  {
+    $fullname = $request->mkt_fullname;
+    $email = $request->mkt_email;
+    $username = $request->mkt_username;
+    $password = $request->mkt_password;
+    $hash_password = md5( $password );
+    $city = $request->mkt_city;
+    $phone_number = $request->mkt_phone_number === '' ? null : $request->mkt_phone_number;
+    $mobile_phone = $request->mkt_mobile_phone;
+    $getmarketing = $marketinguser->where('mkt_user_id', $userid)->first();
+    $iserror = false;
+
+    $getmarketing->mkt_fullname = $fullname;
+    if( ! empty( $password ) ) $getmarketing->mkt_password = $hash_password;
+    $getmarketing->mkt_city = $city;
+    $getmarketing->mkt_phone_number = $phone_number;
+    $getmarketing->mkt_mobile_phone = $mobile_phone;
+
+    if( $getmarketing->mkt_email != $email )
+    {
+      $check_email = $marketinguser->where('mkt_email', $email);
+      if( $check_email->count() > 0 )
+      {
+        $iserror = true;
+        $res = [
+          'status' => 409,
+          'statusText' => $email . ' sudah digunakan'
+        ];
+      }
+      else
+      {
+        $iserror = false;
+        $getmarketing->mkt_email = $email;
+      }
+    }
+    else if( $getmarketing->mkt_username != $username )
+    {
+      $check_username = $marketinguser->where('mkt_username', $username);
+      if( $check_username->count() > 0 )
+      {
+        $iserror = true;
+        $res = [
+          'status' => 409,
+          'statusText' => $username . ' sudah digunakan'
+        ];
+      }
+      else
+      {
+        $iserror = false;
+        $getmarketing->mkt_username = $username;
+      }
+    }
+    else
+    {
+      $iserror = false;
+    }
+
+    if( $iserror === false )
+    {
+      $getmarketing->save();
+      $res = ['status' => 200, 'statusText' => 'success'];
+    }
+
+    return response()->json( $res, $res['status'] );
+  }
+
+  public function delete_marketing( MarketingUser $marketinguser, $userid )
+  {
+    $getmarketing = $marketinguser->where('mkt_user_id', $userid);
+    if( $getmarketing->count() === 1 )
+    {
+      $getmarketing->delete();
+    }
+    $res = ['status' => 200, 'statusText' => 'success'];
+    return response()->json( $res, $res['status'] );
   }
 }

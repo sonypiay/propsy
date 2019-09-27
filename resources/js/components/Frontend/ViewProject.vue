@@ -16,16 +16,48 @@
         </div>
       </div>
     </div>
-
-    <div class="uk-margin-large-top uk-margin-large-bottom">
-      <div class="uk-container">
-        <div class="uk-grid-small " uk-grid>
+    <div class="uk-cover-container uk-height-large">
+      <img v-if="getproject.project_thumbnail" :src="$root.url + '/images/project/gallery/' + getproject.project_thumbnail" uk-cover />
+      <img v-else :src="$root.url + '/images/banner/homepage2.jpg'" uk-cover />
+      <div class="uk-position-right uk-position-large">
+        <div class="uk-card uk-card-body uk-card-default card-projectinfo">
+          <div class="uk-clearfix">
+            <div class="uk-align-right card-projectinfo-statusproject">
+              <span v-if="getproject.project_status === 'available'" class="available">Tersedia</span>
+              <span v-else-if="getproject.project_status === 'sold'" class="sold">Terjual</span>
+              <span v-else class="commingsoon">Segera Launching</span>
+            </div>
+          </div>
+          <div class="card-projectinfo-name">{{ getproject.project_name }}</div>
+          <div class="card-projectinfo-devname">Oleh {{ getproject.dev_name }}</div>
+          <div class="uk-margin-top card-projectinfo-body">
+            <div class="uk-margin-top card-projectinfo-location">
+              <span uk-icon="icon: location; ratio: 1.1"></span>
+              {{ getproject.project_address }}
+            </div>
+            <div class="card-projectinfo-projecttype">
+              Jenis Proyek
+              <span v-if="getproject.project_type === 'residensial'">Residensial</span>
+              <span v-else>Apartemen</span>
+            </div>
+            <div v-if="getunit_price !== null" class="card-projectinfo-price">
+              Mulai dari
+              <span>Rp. {{ $root.formatNumeral( getunit_price.unit_price ) }}</span>
+            </div>
+            <div v-show="getproject.project_estimate_launch !== null" class="card-projectinfo-launch">
+              Segera Launching
+              <span>{{ getproject.project_estimate_launch }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="uk-margin-large-bottom">
+      <div class="uk-card uk-card-body">
+        <div class="uk-grid-medium" uk-grid>
           <div class="uk-width-expand">
-            <div class="uk-card container-projectinfo">
-              <div class="uk-card-title uk-padding-small container-projectheading">
-                {{ getproject.project_name }}
-              </div>
-              <div class="uk-card-body uk-card-small container-projectbody">
+            <div class="uk-card uk-card-default container-projectinfo">
+              <div class="uk-card-body container-projectbody">
                 <div class="uk-margin content-projectdetail">
                   <div class="uk-margin-small content-projectheading">
                     Deskripsi Proyek
@@ -42,52 +74,80 @@
                     {{ getproject.project_address }} <br>
                     <strong>{{ projectcity.city_name }},</strong>
                     <strong>{{ projectcity.province_name }}</strong>
+                    <div v-show="getproject.project_map_embed" v-html="getproject.project_map_embed"></div>
                   </div>
                 </div>
-                <div class="uk-margin content-projectdetail">
-                  <div class="uk-margin-small content-projectheading">
-                    Google Maps
-                  </div>
-                  <div class="uk-margin-small content-projectlead">
-                    <a :href="getproject.project_link_map">Lihat Google Map</a>
-                    <div v-html="getproject.project_map_embed"></div>
-                  </div>
-                </div>
-                <div class="uk-margin content-projectdetail">
+                <div v-show="getgallery !== null" class="uk-margin content-projectdetail">
                   <div class="uk-margin-small content-projectheading">
                     Galeri
                   </div>
                   <div class="uk-margin-small content-projectlead">
-                    <a uk-toggle="target: #galeri" class="uk-button uk-button-primary content-viewbutton">Lihat Galeri</a>
+                    <div class="uk-position-relative uk-visible-toggle uk-light" tabindex="-1" uk-slideshow="animation: push">
+                      <ul class="uk-slideshow-items">
+                        <li v-for="galeri in getgallery">
+                          <img :src="$root.url + '/images/project/gallery/' + galeri.gallery_filename" uk-cover>
+                        </li>
+                      </ul>
+                      <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slideshow-item="previous"></a>
+                      <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slideshow-item="next"></a>
+                    </div>
+                    <a uk-toggle="target: #galeri" class="uk-button uk-button-primary uk-margin-top content-viewbutton">Lihat Galeri</a>
                   </div>
                 </div>
                 <div class="uk-margin content-projectdetail">
-                  <select class="uk-select content-projectform" v-model="forms.filterUnit" @change="getProjectUnit()">
-                    <option value="all">Semua Unit</option>
-                    <option :value="unit.project_unit_id" v-for="unit in getunit">{{ unit.project_unit_name }}</option>
-                  </select>
-                  <table class="uk-table uk-table-divider uk-table-hover uk-table-striped uk-table-small uk-table-middle">
-                    <thead>
-                      <tr>
-                        <th>Cicilan</th>
-                        <th>Blok / Prefix</th>
-                        <th uk-tooltip="Luas Tanah / Luas Bangunan">LT / LB</th>
-                        <th uk-tooltip="Kamar Mandi / Kamar Tidur">KM / KT</th>
-                        <th>Harga</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="unit in projectunit.results">
-                        <td>
-                          <a class="uk-button uk-button-small uk-button-primary content-viewbutton" @click="">Lihat Cicilan</a>
-                        </td>
-                        <td>{{ unit.project_unit_name }}</td>
-                        <td>{{ unit.unit_lt + ' / ' + unit.unit_lb }}</td>
-                        <td>{{ unit.unit_km + ' / ' + unit.unit_kt }}</td>
-                        <td>IDR {{ $root.formatNumeral( unit.unit_price, '0,0' ) }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div class="uk-grid-small uk-grid-divider uk-margin-top" uk-grid>
+                    <div v-for="unit in projectunit.results" class="uk-width-1-1">
+                      <div uk-tooltip :title="unit.unit_name" class="uk-card card-unit-project uk-grid-collapse uk-grid-match uk-margin" uk-grid>
+                        <div class="uk-width-1-3@xl uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s">
+                          <div class="uk-card-media-left">
+                            <div v-if="unit.unit_thumbnail" class="uk-background-cover unit-thumbnail" :style="{'background-image': 'url(' + $root.url + '/images/project/gallery/' + unit.unit_thumbnail + ')'}">
+                            </div>
+                            <div v-else class="uk-background-cover unit-thumbnail" :style="{'background-image': 'url(' + $root.url + '/images/banner/homepage2.jpg)'}">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="uk-width-expand">
+                          <div class="uk-card-body uk-card-small card-unit-body">
+                            <a class="uk-card-title unit-name">{{ unit.unit_name }}</a>
+                            <div class="unit-location">
+                              <span uk-icon="icon: location; ratio: 0.8"></span>
+                              {{ getproject.project_address }},
+                              {{ projectcity.city_name }},
+                              {{ projectcity.province_name }}
+                            </div>
+                            <div class="unit-price">
+                              Rp. {{ unit.unit_price | currency }}
+                            </div>
+                          </div>
+                          <div class="uk-card-footer card-unit-footer uk-padding-small">
+                            <div class="uk-grid-small uk-child-width-auto" uk-grid>
+                              <div>
+                                <div class="unit-specification">
+                                  {{ unit.unit_lb }} m<sup>2</sup>
+                                  <span>Luas Bangunan</span>
+                                </div>
+                              </div>
+                              <div>
+                                <div class="unit-specification">
+                                  {{ unit.unit_km }}
+                                  <span>Kamar Mandi</span>
+                                </div>
+                              </div>
+                              <div>
+                                <div class="unit-specification">
+                                  {{ unit.unit_kt }}
+                                  <span>Kamar Tidur</span>
+                                </div>
+                              </div>
+                              <div>
+                                <a class="uk-button uk-button-small uk-button-primary unit-readmore" href="#">Lihat Lebih Lanjut</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <ul class="uk-pagination uk-flex-center">
                     <li v-if="projectunit.pagination.prev_page_url !== null">
                       <a @click="getProjectUnit( projectunit.pagination.prev_page_url )" uk-icon="chevron-left"></a>
@@ -106,8 +166,8 @@
               </div>
             </div>
           </div>
-          <div class="uk-width-1-4@xl uk-width-1-4@l uk-width-1-4@m uk-width-1-2@s">
-            <div class="uk-card uk-card-body sidebar-dev-info">
+          <div class="uk-width-1-3@xl uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s">
+            <div class="uk-card uk-card-body uk-card-default uk-margin sidebar-dev-info">
               <div v-if="getproject.dev_logo === null" class="dev-withnologo">
                 <span uk-icon="icon: users; ratio: 4"></span>
               </div>
@@ -122,6 +182,26 @@
                 <a class="uk-width-1-1 uk-button uk-button-primary sidebar-viewproject" href="#">Lihat Pengembang</a>
               </div>
             </div>
+
+            <div v-show="session_active !== 'developer'" class="uk-card uk-card-body uk-card-default uk-margin sidebar-dev-info">
+              <div class="uk-margin sidebar-dev-heading">Apakah anda tertarik?</div>
+              <div v-show="forms.booking.errorMessage" class="uk-alert-danger" uk-alert>{{ forms.booking.errorMessage }}</div>
+              <div v-if="session_active === 'customer'" class="uk-margin uk-grid-small" uk-grid>
+                <div class="uk-width-1-1">
+                  <select class="uk-select form-booking-unit" v-model="forms.booking.selectunit">
+                    <option value="">-- Pilih Unit --</option>
+                    <option v-for="unit in projectunit.results" :value="unit.unit_type_id">{{ unit.unit_name }}</option>
+                  </select>
+                </div>
+                <div class="uk-width-1-1">
+                  <textarea v-model="forms.booking.message" placeholder="Ketik pesan..." class="uk-textarea form-booking-unit uk-height-small"></textarea>
+                </div>
+                <div class="uk-width-1-1">
+                  <button @click="requestUnit()" class="uk-width-1-1 uk-button uk-button-primary btn-booking-unit">Ajukan Pemesanan</button>
+                </div>
+              </div>
+              <a v-else :href="$root.url + '/customer/masuk'" class="uk-width-1-1 uk-button uk-button-primary btn-login">Masuk / Daftar</a>
+            </div>
           </div>
         </div>
       </div>
@@ -135,32 +215,31 @@ export default {
     'session_user',
     'getproject',
     'getgallery',
-    'getunit',
+    'getunit_price',
     'projectcity',
-    'devcity'
+    'devcity',
+    'session_active'
   ],
   data() {
     return {
       forms: {
-        filterUnit: 'all'
+        filterUnit: 'available',
+        booking: {
+          selectunit: '',
+          message: 'Halo ' + this.getproject.dev_name + ', saya ingin mengajukan pemesenan unit yang tersedia.',
+          errorMessage: ''
+        }
       },
       projectunit: {
         total: 0,
         results: [],
         isLoading: false,
-        currentOffset: 0,
-        isUpdating: true,
         pagination: {
           current_page: 1,
           last_page: 1,
           next_page_url: null,
           prev_page_url: null
         }
-      },
-      installment: {
-        total: 0,
-        results: [],
-        isLoading: false
       }
     }
   },
@@ -168,7 +247,7 @@ export default {
     getProjectUnit( p )
     {
       var param = 'filterUnit=' + this.forms.filterUnit;
-      var url = this.$root.url + '/project/unit/' + this.getproject.project_id + '?page=' + this.projectunit.pagination.current_page + '&' + param;
+      var url = this.$root.url + '/project/unit/' + this.getproject.project_unique_id + '?page=' + this.projectunit.pagination.current_page + '&' + param;
       if( p !== undefined ) url = p + '&' + param;
 
       axios({
@@ -177,7 +256,7 @@ export default {
       }).then( res => {
         let result = res.data;
         this.projectunit.results = result.results.data;
-        this.projectunit.results.total = result.results.total;
+        this.projectunit.total = result.results.total;
         this.projectunit.pagination = {
           current_page: result.results.current_page,
           last_page: result.results.last_page,
@@ -188,9 +267,32 @@ export default {
         console.log( err.response.statusText );
       });
     },
-    getProjectUnitInstallment( unit_type )
+    requestUnit()
     {
+      this.forms.booking.errorMessage = '';
+      if( this.forms.booking.selectunit === '' || this.forms.booking.message === '' ) return false;
 
+      var param = {
+        message: this.forms.booking.message,
+        dev_user: this.getproject.dev_user_id
+      };
+
+      axios({
+        method: 'post',
+        url: this.$root.url + '/project/request_unit/' + this.forms.booking.selectunit,
+        params: param
+      }).then( res => {
+        let result = res.data;
+        swal({
+          title: 'Sukses',
+          text: 'Berhasil mengajukan pemesanan',
+          icon: 'success',
+          timer: 3000
+        });
+        setTimeout(() => { document.location = this.$root.url + '/customer/request_unit' }, 2000);
+      }).catch( err => {
+        this.forms.booking.errorMessage = 'Whoops, ' + err.response.statusText;
+      });
     }
   },
   mounted() {

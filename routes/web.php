@@ -38,6 +38,10 @@ Route::group(['prefix' => 'customer'], function() {
     Route::put('/change_account_information', 'Frontend\Customer\CustomerController@change_account_information');
     Route::post('/upload_photo_profile', 'Frontend\Customer\CustomerController@upload_photo_profile');
   });
+
+  Route::get('/request_unit', 'Frontend\Customer\CustomerController@request_unit_page')->name('customer_request_page');
+  Route::get('/get_request_list/{status_request}', 'Frontend\Customer\RequestUnitController@get_request_list');
+  Route::put('/cancel_request/{request_id}', 'Frontend\Customer\RequestUnitController@cancel_request');
 });
 
 // Marketing
@@ -89,7 +93,11 @@ Route::group(['prefix' => 'developer'], function() {
     Route::post('/add_unit/{project_id}', 'Frontend\Developer\ProjectUnitController@add_unit');
     Route::get('/edit_unit/{project_id}', 'Frontend\Developer\ProjectUnitController@edit_unit_page');
     Route::put('/save_unit/{id}', 'Frontend\Developer\ProjectUnitController@save_unit');
-    Route::delete('/delete_unit_tipe/{id}', 'Frontend\Developer\ProjectUnitController@project_delete_unit_tipe');
+    Route::delete('/delete_unit_tipe/{id}', 'Frontend\Developer\ProjectUnitController@delete_unit_tipe');
+    Route::post('/upload_gallery_unit/{id}', 'Frontend\Developer\ProjectUnitController@upload_gallery_unit');
+    Route::get('/gallery_unit/{id}', 'Frontend\Developer\ProjectUnitController@get_gallery_unit');
+    Route::put('/gallery_set_thumbnail/{id}', 'Frontend\Developer\ProjectUnitController@gallery_set_thumbnail');
+    Route::delete('/delete_gallery_unit/{id}', 'Frontend\Developer\ProjectUnitController@delete_gallery_unit');
   });
 
   Route::group(['prefix' => 'profile'], function() {
@@ -100,13 +108,11 @@ Route::group(['prefix' => 'developer'], function() {
   });
 
   Route::group(['prefix' => 'marketing'], function() {
-    Route::get('/find_marketing', 'Frontend\Developer\ProjectMarketingController@index')->name('developer_find_marketing');
-    Route::get('/manage_marketing', 'Frontend\Developer\ProjectMarketingController@manage_marketing')->name('developer_manage_marketing');
+    Route::get('/manage_marketing', 'Frontend\Developer\ProjectMarketingController@index')->name('developer_manage_marketing');
     Route::get('/list_marketing', 'Frontend\Developer\ProjectMarketingController@listOfMarketing');
-    Route::get('/my_marketing', 'Frontend\Developer\ProjectMarketingController@my_marketing');
-    Route::post('/recruit_marketing/{userid}/{action}', 'Frontend\Developer\ProjectMarketingController@recruit_marketing');
-    Route::delete('/recruit_marketing/{userid}/{action}', 'Frontend\Developer\ProjectMarketingController@recruit_marketing');
-    Route::get('/project_selected/{userid}', 'Frontend\Developer\ProjectMarketingController@projectSelected');
+    Route::post('/add_marketing', 'Frontend\Developer\ProjectMarketingController@add_marketing');
+    Route::put('/save_marketing/{userid}', 'Frontend\Developer\ProjectMarketingController@save_marketing');
+    Route::delete('/delete_marketing/{userid}', 'Frontend\Developer\ProjectMarketingController@delete_marketing');
   });
 });
 
@@ -114,4 +120,5 @@ Route::group(['prefix' => 'project'], function() {
   Route::get('/available', 'Frontend\Projects\ProjectListController@homepage_available_project');
   Route::get('/view/{slug}', 'Frontend\Projects\ProjectListController@view_project')->name('project_view_detail');
   Route::get('/unit/{project_id}', 'Frontend\Projects\ProjectListController@list_project_unit')->name('list_project_unit');
+  Route::post('/request_unit/{unit_id}', 'Frontend\Projects\ProjectListController@request_unit');
 });

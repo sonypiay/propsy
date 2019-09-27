@@ -20,7 +20,6 @@ Vue.component('developer-dashboard-page', require('./components/Frontend/Develop
 Vue.component('developer-profile-page', require('./components/Frontend/Developer/Profile.vue').default);
 Vue.component('developer-manage-project', require('./components/Frontend/Developer/Projects.vue').default);
 Vue.component('developer-project-gallery', require('./components/Frontend/Developer/ProjectGallery.vue').default);
-Vue.component('developer-find-marketing', require('./components/Frontend/Developer/FindMarketing.vue').default);
 Vue.component('developer-manage-marketing', require('./components/Frontend/Developer/ManageMarketing.vue').default);
 Vue.component('developer-detail-project', require('./components/Frontend/Developer/DetailProject.vue').default);
 Vue.component('developer-register-page', require('./components/Frontend/Developer/Daftar.vue').default);
@@ -34,10 +33,14 @@ Vue.component('developer-edit-unit', require('./components/Frontend/Developer/Ed
 Vue.component('customer-register-page', require('./components/Frontend/Customer/Daftar.vue').default);
 Vue.component('customer-login-page', require('./components/Frontend/Customer/Masuk.vue').default);
 Vue.component('customer-profile-page', require('./components/Frontend/Customer/Profile.vue').default);
+Vue.component('customer-list-request', require('./components/Frontend/Customer/ListRequestUnit.vue').default);
 
 // main page
 Vue.component('homepage-available-project', require('./components/Frontend/HomepageProject.vue').default);
 Vue.component('page-view-project', require('./components/Frontend/ViewProject.vue').default);
+
+import VueCurrencyFilter from 'vue-currency-filter';
+Vue.use(VueCurrencyFilter);
 
 const app = new Vue({
     el: '#app',

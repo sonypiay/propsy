@@ -88,11 +88,9 @@ CREATE TABLE `customer` (
   PRIMARY KEY (`customer_id`),
   UNIQUE KEY `customer_email` (`customer_email`),
   UNIQUE KEY `customer_username` (`customer_username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `customer` */
-
-insert  into `customer`(`customer_id`,`customer_name`,`customer_email`,`customer_address`,`customer_region`,`customer_city`,`customer_phone_number`,`customer_username`,`customer_password`,`customer_photo`,`created_at`,`updated_at`) values (1,'Sony Darmawan','sonypiay@mail.com','Jl. Intan Baiduri No. 28',6,1,'08561969052','sonypiay','d5f3b4c238382e41fbe4b404e882cc73','Ivx9owh1IdrmIvdK9ZhewBVq6sy9kHlyQ4PcPtMX.jpeg','2019-09-09 22:59:08','2019-09-14 15:39:34');
 
 /*Table structure for table `developer_user` */
 
@@ -118,11 +116,11 @@ CREATE TABLE `developer_user` (
   PRIMARY KEY (`dev_user_id`),
   UNIQUE KEY `dev_username` (`dev_username`),
   UNIQUE KEY `dev_email` (`dev_email`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `developer_user` */
 
-insert  into `developer_user`(`dev_user_id`,`dev_name`,`dev_ownername`,`dev_slug`,`dev_address`,`dev_city`,`dev_username`,`dev_password`,`dev_email`,`dev_biography`,`dev_phone_office`,`dev_mobile_phone`,`dev_ownership`,`dev_logo`,`created_at`,`updated_at`) values (1,'Jakarta Raya','Anies Bawean','jakarta-raya','MidPlaza 2, 8th Floor  Jl. Jend. Sudirman 10-11 Jakarta 10220 - Indonesia',1,'jakartaraya','a7cd37b2baf026c26c77fd7f2408296d','adi_kusma@biznetnetworks.com','Daerah Khusus Ibukota Jakarta adalah ibu kota negara dan kota terbesar di Indonesia. Jakarta merupakan satu-satunya kota di Indonesia yang memiliki status setingkat provinsi. Jakarta terletak di pesisir bagian barat laut Pulau Jawa','+62-21-57998888','+62-855-1998888','perusahaan','fouSwEOY3JVmKlguhNP1W9jSrLOnIbz2LBWHTqm8.png','2019-08-29 16:27:53','2019-09-14 15:44:32'),(2,'PT Maju Kena Mundur Kena','Udin Sedunia','pt-maju-kena-mundur-kena','Jl. Jendral Sudirman Kav 10 - 11 Gedung Midplaza 2 lantai 8, Karet Tengsin',1,'udinudin','d5f3b4c238382e41fbe4b404e882cc73','sonypiay@mail.com','Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.','021','0792886178','perusahaan',NULL,'2019-09-09 20:22:22','2019-09-14 15:26:45'),(3,'PT Maju Tak Gentar','Himawan Achmadi','pt-maju-tak-gentar',NULL,2,'himawan','25d55ad283aa400af464c76d713c07ad','himawan@maps.com',NULL,'021','0856','individu',NULL,'2019-09-09 21:25:05','2019-09-14 17:11:57'),(4,'PT Keuangan Sejati','Akhmad Syarifudin','pt-keuangan-sejati',NULL,502,'akhmad_syarifudin','dd9d21e22391090ddce7c6ed58c6412d','jl.pesutno14@gmail.com','Hai',NULL,NULL,'individu',NULL,'2019-09-09 21:26:37','2019-09-09 21:27:01');
+insert  into `developer_user`(`dev_user_id`,`dev_name`,`dev_ownername`,`dev_slug`,`dev_address`,`dev_city`,`dev_username`,`dev_password`,`dev_email`,`dev_biography`,`dev_phone_office`,`dev_mobile_phone`,`dev_ownership`,`dev_logo`,`created_at`,`updated_at`) values (1,'PT Agung Podomoro Land Tbk','PT Agung Podomoro Land Tbk','pt-agung-podomoro-land-tbk','APL Tower 43rd Floor, Podomoro City Jl. Let. Jend. S. Parman Kav. 28 Jakarta 11470 Indonesia',2,'agungpodomoro','25d55ad283aa400af464c76d713c07ad','podomoro@gmail.com','PT Agung Podomoro Land Tbk. (APLN) is a leading integrated diversified real estate owner, developer and manager in the retail, commercial, and residential real estate segments with diversified holdings. We have an integrated property development model, from land acquisition and/or sourcing, to design and development, to project management, sales, commercial leasing and marketing, to the operation and management of our superblock developments, shopping malls, offices, hotels, and residential apartments and houses. We are known as a pioneer of the superblock development. Our high quality landmark projects, to name a few are Podomoro City, Kuningan City, and Senayan City.\n\n \n\nAPLN was established on July 30, 2004 under the name PT Tiara Metropolitan Jaya. In 2010, our shareholders completed a corporate restructuring, pursuant to which six developments and their holding companies were transferred to our control. APLN, is the flagship listed entity (IDX:APLN) of Agung Podomoro Group (APG), is one of the fastest growing and largest real estate developers in Indonesia with interests in superblocks, retail properties, office, apartments and residential, and hotels. APG established its first development, a housing complex in Simprug area, South Jakarta, in 1969 and completed its construction in 1973. From 1973 to present, members of APG completed or begun construction of more than 70 property projects, with majority addressed to middle class segments of society, with projects ranging from low cost apartments to high end apartments in South Jakarta, landed residentials, high end and the neighborhood mall, shop houses, hotels, soho and office towers.','622129034567',NULL,'perusahaan','E5J7mlIoEsknBfY1YRifZgs9JBwm3FFEuIi5CBNc.png','2019-09-19 17:02:30','2019-09-19 17:05:58');
 
 /*Table structure for table `marketing_user` */
 
@@ -145,11 +143,9 @@ CREATE TABLE `marketing_user` (
   PRIMARY KEY (`mkt_user_id`),
   UNIQUE KEY `mkt_username` (`mkt_username`),
   UNIQUE KEY `mkt_email` (`mkt_email`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `marketing_user` */
-
-insert  into `marketing_user`(`mkt_user_id`,`mkt_fullname`,`mkt_email`,`mkt_username`,`mkt_password`,`mkt_phone_number`,`mkt_mobile_phone`,`mkt_city`,`mkt_address`,`mkt_biography`,`mkt_profile_photo`,`created_at`,`updated_at`) values (1,'Diwantara Anugerah Putra','diwantara@gmail.com','diwantara','d5f3b4c238382e41fbe4b404e882cc73','0212995588','08561969052',502,'Perumahan Japos','Youtuber gamer ganteng idaman. Kungkingkangkingking','87dTWKb1cT4gs1UUMuQACYWanaBNt8cxNxSJnHKw.jpeg','2019-08-27 21:45:27','2019-08-29 19:37:04'),(2,'Sony Darmawan','sonypiay@mail.com','sonypiay','d5f3b4c238382e41fbe4b404e882cc73','1500988','08561969052',1,'Jl. Mulu jadian kagak no. 8','Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.','dIrpUIzvO0mvsOOavXmwtwYhbSAnJxKphk2zndH9.jpeg','2019-08-28 16:24:34','2019-09-14 15:35:17'),(3,'Yoshika Kudo','kyabechi_@gmail.com','kyabechi_','25d55ad283aa400af464c76d713c07ad',NULL,NULL,NULL,NULL,NULL,NULL,'2019-09-09 22:09:28','2019-09-09 22:14:02');
 
 /*Table structure for table `project_gallery` */
 
@@ -159,17 +155,17 @@ CREATE TABLE `project_gallery` (
   `gallery_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `gallery_filename` varchar(128) NOT NULL,
   `gallery_description` text DEFAULT NULL,
-  `project_id` int(10) unsigned NOT NULL,
+  `project_unique_id` varchar(10) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`gallery_id`),
-  KEY `fk_gallery_project_idx` (`project_id`),
-  CONSTRAINT `fk_gallery_project_idx` FOREIGN KEY (`project_id`) REFERENCES `project_list` (`project_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+  KEY `fk_gallery_project_uidx` (`project_unique_id`),
+  CONSTRAINT `fk_gallery_project_uidx` FOREIGN KEY (`project_unique_id`) REFERENCES `project_list` (`project_unique_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_gallery` */
 
-insert  into `project_gallery`(`gallery_id`,`gallery_filename`,`gallery_description`,`project_id`,`created_at`,`updated_at`) values (1,'OxXSm8IJYohYuh0dY1K4I3KmxPjR4i5IaQT5Keze.jpeg',NULL,6,'2019-09-01 23:05:41','2019-09-01 23:05:41'),(2,'naNYXkJOEP3tpEvw8vdGx05W9buSommle9TOJHmT.jpeg',NULL,6,'2019-09-01 23:10:03','2019-09-01 23:10:03'),(7,'C7nV4KjDLQLhCaoawgafsxaKzOIRzY1Cmz0VqMFW.jpeg',NULL,6,'2019-09-01 23:14:10','2019-09-01 23:14:10'),(9,'LajcJ1iWzCmipjMZgrkCNY6dV53aGrG3cYIMjJTV.jpeg',NULL,6,'2019-09-01 23:15:21','2019-09-01 23:15:21'),(11,'gYjulvZYrCyg1ZlN4RWL3ixLqv67C8QU0DCUXjl1.jpeg',NULL,4,'2019-09-02 00:12:06','2019-09-02 00:12:06'),(12,'AMSI7Qbay12OgwA3nzwzwJcqkM4eSWBtLqOZ8NWV.jpeg',NULL,4,'2019-09-02 00:12:17','2019-09-02 00:12:17'),(23,'GvNKpdC6JhOvM5GTwxJ4ax7PDM8w8JDX7pjbb6Eo.jpeg',NULL,3,'2019-09-11 18:49:58','2019-09-11 18:49:58'),(24,'ckmp1V3SZJIfUPg5IEvGYYWbvQLsOR6OAAFiMWCF.jpeg',NULL,8,'2019-09-14 12:05:17','2019-09-14 12:05:17');
+insert  into `project_gallery`(`gallery_id`,`gallery_filename`,`gallery_description`,`project_unique_id`,`created_at`,`updated_at`) values (6,'oXBGYQuDxa9drfsBtVGw8jG1BcU5Z3TBroOWbiz1.jpeg',NULL,'PRY00001','2019-09-22 23:58:42','2019-09-22 23:58:42'),(8,'GI6LJNmTbc1HxHH16MMkhrHhf5UrIMu0DWJjAZFJ.jpeg',NULL,'PRY00001','2019-09-23 00:24:05','2019-09-23 00:24:05'),(9,'7hAp85CBQdIi3gjfRWUK7DCq0JxWGOu92qbDiBx5.jpeg',NULL,'PRY00001','2019-09-23 00:24:47','2019-09-23 00:24:47'),(10,'7EYltLPq8iJwzL2zBXRtOMw3kJ9wT98qvlXxGxcu.jpeg',NULL,'PRY00001','2019-09-23 00:24:58','2019-09-23 00:24:58'),(11,'dF0qeuw6r5cIdfZzl1aUYpfaheHz62QdGemi61Nu.jpeg',NULL,'PRY00001','2019-09-23 00:25:10','2019-09-23 00:25:10'),(13,'Gweoys7kDqtg8fO3p0tneiNEcgHDQSTqWvh9l66p.jpeg',NULL,'PRY00001','2019-09-23 00:25:40','2019-09-23 00:25:40'),(15,'VmIqsjAqwKJDx7lJ4NIbY5jUfEYofcKWHIpbUudS.jpeg',NULL,'PRY00002','2019-09-23 00:31:19','2019-09-23 00:31:19'),(16,'RkH8RKb9spsLVtqA1JiMaqQLovSpIajDkrANJnqp.jpeg',NULL,'PRY00002','2019-09-23 00:31:26','2019-09-23 00:31:26'),(17,'XglqAWirE7tJU37EetbxQyPbGmmeHid8Fw1Ly32f.jpeg',NULL,'PRY00002','2019-09-23 00:31:33','2019-09-23 00:31:33'),(18,'Dyp0Fv71GluOoaJQ12akxYviHVSpPBtjlZr45Dfo.jpeg',NULL,'PRY00002','2019-09-23 00:31:41','2019-09-23 00:31:41'),(19,'7t3eMacwpT3zaac1o2h0eh41lrLLqPIedubU62h3.jpeg',NULL,'PRY00002','2019-09-23 00:31:50','2019-09-23 00:31:50'),(20,'mxjkBGrC6PhPAbAQj9nr2S4JgweMrYZ6rTx9qheb.jpeg',NULL,'PRY00002','2019-09-23 00:31:57','2019-09-23 00:31:57'),(21,'q9RwHWjKgYnSr3b82x5a7AbFMFImLCieVJjxrtjZ.jpeg',NULL,'PRY00002','2019-09-23 00:32:30','2019-09-23 00:32:30'),(22,'JRxZR3JWmxourVcbA2rboDedMpiQ4pR0S7gIJKzn.jpeg',NULL,'PRY00002','2019-09-23 00:32:37','2019-09-23 00:32:37'),(23,'afKgJc1Aiyz3KJtMbhaIVMf5De5LvS5bBbWUlHk3.jpeg',NULL,'PRY00002','2019-09-23 00:32:45','2019-09-23 00:32:45'),(24,'T84G3fcFTTqxV4yij7kb8gooyPwYDdnUqvrmqmaH.jpeg',NULL,'PRY00002','2019-09-23 00:32:53','2019-09-23 00:32:53'),(25,'RF57Lo3Na2CUHdigoNDFcmn7Mq4rlWD3CztDWfLq.jpeg',NULL,'PRY00002','2019-09-23 00:33:00','2019-09-23 00:33:00');
 
 /*Table structure for table `project_list` */
 
@@ -177,6 +173,7 @@ DROP TABLE IF EXISTS `project_list`;
 
 CREATE TABLE `project_list` (
   `project_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `project_unique_id` varchar(10) NOT NULL,
   `project_name` varchar(200) NOT NULL,
   `project_slug` text NOT NULL,
   `project_thumbnail` varchar(128) DEFAULT NULL,
@@ -185,18 +182,22 @@ CREATE TABLE `project_list` (
   `project_city` int(10) unsigned NOT NULL,
   `project_link_map` tinytext DEFAULT NULL,
   `project_map_embed` text DEFAULT NULL,
-  `project_status` enum('available','prelaunch','hold','booked','sold') NOT NULL DEFAULT 'available',
+  `project_site_plan` varchar(128) DEFAULT NULL,
+  `project_type` enum('apartemen','residensial') NOT NULL DEFAULT 'residensial',
+  `project_status` enum('available','sold','soon') NOT NULL DEFAULT 'available',
+  `project_estimate_launch` year(4) DEFAULT NULL,
   `dev_user_id` int(10) unsigned NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`project_id`),
+  UNIQUE KEY `project_unique_id` (`project_unique_id`),
   KEY `fk_project_dev_idx` (`dev_user_id`),
   CONSTRAINT `fk_project_dev_idx` FOREIGN KEY (`dev_user_id`) REFERENCES `developer_user` (`dev_user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_list` */
 
-insert  into `project_list`(`project_id`,`project_name`,`project_slug`,`project_thumbnail`,`project_description`,`project_address`,`project_city`,`project_link_map`,`project_map_embed`,`project_status`,`dev_user_id`,`created_at`,`updated_at`) values (3,'Pulau Reklamasi B','pulau-reklamasi-b','GvNKpdC6JhOvM5GTwxJ4ax7PDM8w8JDX7pjbb6Eo.jpeg','Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.','Ecovention Building - Ecopark, Jalan Lodan Timur No 7 Ancol Taman Impian, Jakarta Utara',4,'https://goo.gl/maps/tekjBgpqsGA5x5Qp8','<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31735.864654597808!2d106.82668733561069!3d-6.132975078506302!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6a1e17cf58f74f%3A0x504262ac57884abe!2sAncol%2C%20Kec.%20Pademangan%2C%20Kota%20Jkt%20Utara%2C%20Daerah%20Khusus%20Ibukota%20Jakarta!5e0!3m2!1sid!2sid!4v1568453559814!5m2!1sid!2sid\" width=\"800\" height=\"600\" frameborder=\"0\" style=\"border:0;\" allowfullscreen=\"\"></iframe>','available',1,'2019-09-01 13:57:21','2019-09-14 16:41:29'),(4,'Pulau Reklamasi A','pulau-reklamasi-a','gYjulvZYrCyg1ZlN4RWL3ixLqv67C8QU0DCUXjl1.jpeg','Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.','Ecovention Building - Ecopark, Jalan Lodan Timur No 7 Ancol Taman Impian, Jakarta Utara',4,'https://goo.gl/maps/tekjBgpqsGA5x5Qp8','<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31735.864654597808!2d106.82668733561069!3d-6.132975078506302!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6a1e17cf58f74f%3A0x504262ac57884abe!2sAncol%2C%20Kec.%20Pademangan%2C%20Kota%20Jkt%20Utara%2C%20Daerah%20Khusus%20Ibukota%20Jakarta!5e0!3m2!1sid!2sid!4v1568453559814!5m2!1sid!2sid\" width=\"800\" height=\"600\" frameborder=\"0\" style=\"border:0;\" allowfullscreen=\"\"></iframe>','available',1,'2019-09-01 13:59:55','2019-09-14 16:33:46'),(6,'Pulau Reklamasi D','pulau-reklamasi-d','naNYXkJOEP3tpEvw8vdGx05W9buSommle9TOJHmT.jpeg','Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.\n\nSekar inggih surya kangge; gegriya purun mripat aken kajang. Dangu dhateng iket cepeng kekesahan madeg ilat benter, gelung sima, cemeng. Supe tangan, dhuwung ningali pupak manah kepireng mangga nanem wiar epek-epek sumerep yatra sekar nanem tirah.\n\nSegawon nyukani ulem-ulem cawis kalung kula sirah; gujeng nedha. Cariyos nanem surya kathok nginten lenggah, tetak unyeng-unyeng wicanten gulu.','Ecovention Building - Ecopark, Jalan Lodan Timur No 7 Ancol Taman Impian, Jakarta Utara',4,'https://goo.gl/maps/tekjBgpqsGA5x5Qp8','<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31735.864654597808!2d106.82668733561069!3d-6.132975078506302!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6a1e17cf58f74f%3A0x504262ac57884abe!2sAncol%2C%20Kec.%20Pademangan%2C%20Kota%20Jkt%20Utara%2C%20Daerah%20Khusus%20Ibukota%20Jakarta!5e0!3m2!1sid!2sid!4v1568453559814!5m2!1sid!2sid\" width=\"800\" height=\"600\" frameborder=\"0\" style=\"border:0;\" allowfullscreen=\"\"></iframe>','available',1,'2019-09-01 14:04:29','2019-09-14 16:33:06'),(8,'Proyek ABC','proyek-abc',NULL,'Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.','BSD',188,NULL,NULL,'available',2,'2019-09-09 20:27:22','2019-09-09 20:27:22'),(9,'Test Project','test-project',NULL,'Jawa Ipsum gelung kalung ayam manah jawah, luh bebed kancing. Sapu sima peksi susu piring tuwi enjing mucal dipun pendhet wos? Peksi cariyos, sakit suku epek-epek ngulemi pedhang, untu manah nyukani maesa. Bidal minggat supena ngulemi? Peksi dhateng, kangge; kinten nyepeng ayam toya peksi, \"sima wilujeng maos sirah kuping ngadeg dolan makarya.\" Jejeran wawarat embok saweg mantun ajrih benang ningali gujeng pedhang tumut swanten awon.\n\nSekar inggih surya kangge; gegriya purun mripat aken kajang. Dangu dhateng iket cepeng kekesahan madeg ilat benter, gelung sima, cemeng. Supe tangan, dhuwung ningali pupak manah kepireng mangga nanem wiar epek-epek sumerep yatra sekar nanem tirah.\n\nSegawon nyukani ulem-ulem cawis kalung kula sirah; gujeng nedha. Cariyos nanem surya kathok nginten lenggah, tetak unyeng-unyeng wicanten gulu.','Komplek Puri Indah',2,'https://goo.gl/maps/NpRSy6WebExU5pTF7','<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.5824119020754!2d106.74072051419323!3d-6.186597962336551!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f773c9569165%3A0x636ff5fa95956f6d!2sJl.%20Puri%20Indah%20Raya%2C%20Kembangan%20Sel.%2C%20Kec.%20Kembangan%2C%20Kota%20Jakarta%20Barat%2C%20Daerah%20Khusus%20Ibukota%20Jakarta%2011610!5e0!3m2!1sid!2sid!4v1568453370112!5m2!1sid!2sid\" width=\"800\" height=\"600\" frameborder=\"0\" style=\"border:0;\" allowfullscreen=\"\"></iframe>','available',1,'2019-09-14 16:30:58','2019-09-14 16:30:58');
+insert  into `project_list`(`project_id`,`project_unique_id`,`project_name`,`project_slug`,`project_thumbnail`,`project_description`,`project_address`,`project_city`,`project_link_map`,`project_map_embed`,`project_site_plan`,`project_type`,`project_status`,`project_estimate_launch`,`dev_user_id`,`created_at`,`updated_at`) values (2,'PRY00001','Podomoro Park','podomoro-park','oXBGYQuDxa9drfsBtVGw8jG1BcU5Z3TBroOWbiz1.jpeg','Agung Podomoro Land (APL) menghadirkan mahakarya terbarunya yaitu Podomoro Park Bandung, kawasan hunian yang terletak di tengah keindahan alam Bandung Selatan, seluas lebih dari 100 hektar. Konsep utama Podomoro Park terinsiprasi dari kawasan hunian berkelas dunia, yaitu Woodbrige di Irvine California serta desain masterplan dan landscape oleh Palmscape Singapore, sehingga Podomoro Park dapat dikategorikan sebagai world class home resort.\n\nPodomoro Park telah meraih penghargaan \"The Best Premium Home Resort in West Java\" dalam event Indonesia Property & Bank Award 2018. Ini membuktikan bahwa Podomoro Park memiliki konsep kawasan terbaik dengan menghadirkan kekuatan elemen alam, dan menjadikannya kawasan hunian resort terbaik di Jawa Barat. Maka tak heran bila antusias pasar sangat tinggi untuk memiliki hunian ini, hingga Podomoro Park menerima penghargaan “Most Favoured Premium Housing Estate” dalam event Housing Estate Award 2018.','Buahbatu, Bandung',9,NULL,NULL,NULL,'residensial','available',NULL,1,'2019-09-20 21:50:40','2019-09-23 00:26:15'),(3,'PRY00002','PODOMORO RIVER VIEW','podomoro-river-view','7t3eMacwpT3zaac1o2h0eh41lrLLqPIedubU62h3.jpeg','Podomoro River View merupakan cluster perumahan baru di kawasan new city Podomoro Golf View yang dikembangkan oleh developer ternama dan terpercaya, Agung Podomoro Land. Didesain dengan konsep gaya hidup masa kini yang modern dan fleksibel, menghadirkan hunian dengan desain yang simple dan minimalis yang memberikan nilai lebih untuk Anda yang menginginkan hunian di kawasan kota baru yang hidup dan terintegrasi.','Cimanggis, Depok',8,NULL,NULL,NULL,'residensial','soon',2021,1,'2019-09-23 00:03:53','2019-09-23 00:32:07');
 
 /*Table structure for table `project_marketing` */
 
@@ -206,7 +207,7 @@ CREATE TABLE `project_marketing` (
   `project_marketing_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `dev_user_id` int(10) unsigned NOT NULL,
   `mkt_user_id` int(10) unsigned NOT NULL,
-  `approval` enum('Y','R','W') NOT NULL DEFAULT 'W',
+  `project_id` int(10) unsigned NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`project_marketing_id`),
@@ -237,10 +238,29 @@ CREATE TABLE `project_request` (
   KEY `fk_req_cust_idx` (`customer_id`),
   CONSTRAINT `fk_req_cust_idx` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE,
   CONSTRAINT `fk_req_mkt_user_idx` FOREIGN KEY (`mkt_user_id`) REFERENCES `marketing_user` (`mkt_user_id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_req_unit_type_idx` FOREIGN KEY (`project_unit_type_id`) REFERENCES `project_unit_type` (`project_unit_type_id`) ON DELETE CASCADE
+  CONSTRAINT `fk_req_unit_type_idx` FOREIGN KEY (`project_unit_type_id`) REFERENCES `project_unit_type` (`unit_type_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_request` */
+
+/*Table structure for table `project_siteplan` */
+
+DROP TABLE IF EXISTS `project_siteplan`;
+
+CREATE TABLE `project_siteplan` (
+  `siteplan_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `siteplan_map` varchar(128) NOT NULL,
+  `project_unique_id` varchar(10) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`siteplan_id`),
+  KEY `fk_siteplan_project_uidx` (`project_unique_id`),
+  CONSTRAINT `fk_siteplan_project_uidx` FOREIGN KEY (`project_unique_id`) REFERENCES `project_list` (`project_unique_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+/*Data for the table `project_siteplan` */
+
+insert  into `project_siteplan`(`siteplan_id`,`siteplan_map`,`project_unique_id`,`created_at`,`updated_at`) values (1,'xUqsejTtXLLNKc9Bu4S8B5pDv8lPjk8R5Lg5yr9C.jpeg','PRY00001','2019-09-20 21:50:40','2019-09-20 21:50:40'),(2,'TCGqkPmnurIfSBIFx1tpaLVLpQKleEUEYSWOWAzT.jpeg','PRY00001','2019-09-20 21:50:40','2019-09-20 21:50:40'),(3,'Xr45uD0jEQA4s2z8C5nZgUhqioWhlj6TQE8hH3Lw.jpeg','PRY00001','2019-09-20 21:50:40','2019-09-20 21:50:40'),(4,'SOf76OhuiHUJ15vgSu1S6IegxG1wbut6JHJP03JU.jpeg','PRY00001','2019-09-20 21:50:40','2019-09-20 21:50:40'),(5,'azbJXgXWYMwdrtJl8wEjHfah9jhaGgFOgPg3snD7.jpeg','PRY00001','2019-09-20 21:50:40','2019-09-20 21:50:40'),(6,'SVO8eDtfh0XpFWon5HvJsN60HTW1vRFqcb3w1SEd.jpeg','PRY00001','2019-09-20 21:50:40','2019-09-20 21:50:40'),(7,'K8bGilj7FIBVvBQ3Vnw6n4vyAI6DAgHu4d3ucJbj.jpeg','PRY00001','2019-09-20 21:50:40','2019-09-20 21:50:40');
 
 /*Table structure for table `project_unit` */
 
@@ -251,17 +271,32 @@ CREATE TABLE `project_unit` (
   `project_unit_name` varchar(128) NOT NULL,
   `project_unit_slug` varchar(128) NOT NULL,
   `project_unit_status` enum('available','booked') NOT NULL DEFAULT 'available',
-  `project_id` int(10) unsigned NOT NULL,
+  `project_unique_id` varchar(10) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`project_unit_id`),
-  KEY `fk_project_unit_project_idx` (`project_id`),
-  CONSTRAINT `fk_project_unit_project_idx` FOREIGN KEY (`project_id`) REFERENCES `project_list` (`project_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+  KEY `fk_project_unit_project_uidx` (`project_unique_id`),
+  CONSTRAINT `fk_project_unit_project_uidx` FOREIGN KEY (`project_unique_id`) REFERENCES `project_list` (`project_unique_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_unit` */
 
-insert  into `project_unit`(`project_unit_id`,`project_unit_name`,`project_unit_slug`,`project_unit_status`,`project_id`,`created_at`,`updated_at`) values (1,'Blok A1','blok-a1','available',8,'2019-09-14 19:04:22','2019-09-14 19:04:22'),(2,'Blok A2','blok-a2','available',8,'2019-09-14 19:04:22','2019-09-14 19:04:22'),(3,'Blok A3','blok-a3','available',8,'2019-09-14 19:04:22','2019-09-14 19:04:22'),(4,'Blok A4','blok-a4','available',8,'2019-09-14 19:04:22','2019-09-14 19:04:22'),(5,'Blok A5','blok-a5','available',8,'2019-09-14 19:04:22','2019-09-14 19:04:22'),(6,'Blok A6','blok-a6','available',8,'2019-09-14 19:04:22','2019-09-14 19:04:22'),(7,'Blok A7','blok-a7','available',8,'2019-09-14 19:04:22','2019-09-14 19:04:22'),(8,'Blok A8','blok-a8','available',8,'2019-09-14 19:04:22','2019-09-14 19:04:22'),(9,'Blok A9','blok-a9','available',8,'2019-09-14 19:04:22','2019-09-14 19:04:22'),(10,'Blok A10','blok-a10','available',8,'2019-09-14 19:04:22','2019-09-14 19:35:15');
+/*Table structure for table `project_unit_gallery` */
+
+DROP TABLE IF EXISTS `project_unit_gallery`;
+
+CREATE TABLE `project_unit_gallery` (
+  `unit_gallery_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `unit_gallery_filename` varchar(128) NOT NULL,
+  `unit_type_id` int(10) unsigned NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`unit_gallery_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+
+/*Data for the table `project_unit_gallery` */
+
+insert  into `project_unit_gallery`(`unit_gallery_id`,`unit_gallery_filename`,`unit_type_id`,`created_at`,`updated_at`) values (1,'unit-1d67e734ab780e.jpg',3,'2019-09-25 16:18:02','2019-09-25 16:18:02'),(2,'unit-61f1538dd37557.jpg',3,'2019-09-25 16:18:02','2019-09-25 16:18:02'),(3,'unit-95d5264c076083.jpg',3,'2019-09-25 16:18:02','2019-09-25 16:18:02'),(4,'unit-208610fe35a61d.jpg',3,'2019-09-25 16:18:02','2019-09-25 16:18:02'),(5,'unit-b2bf6dfddee69c.jpg',3,'2019-09-25 16:18:02','2019-09-25 16:18:02'),(6,'unit-bb636da0be9be5.jpg',3,'2019-09-25 16:18:02','2019-09-25 16:18:02'),(7,'unit-c048d3937cfb44.jpg',3,'2019-09-25 16:18:02','2019-09-25 16:18:02'),(8,'unit-f56b12d2f24b3e.jpg',3,'2019-09-25 16:18:02','2019-09-25 16:18:02');
 
 /*Table structure for table `project_unit_installment` */
 
@@ -277,7 +312,7 @@ CREATE TABLE `project_unit_installment` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`installment_id`),
   KEY `fk_installment_unit_type_id` (`project_unit_type_id`),
-  CONSTRAINT `fk_installment_unit_type_id` FOREIGN KEY (`project_unit_type_id`) REFERENCES `project_unit_type` (`project_unit_type_id`) ON DELETE CASCADE
+  CONSTRAINT `fk_installment_unit_type_id` FOREIGN KEY (`project_unit_type_id`) REFERENCES `project_unit_type` (`unit_type_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_unit_installment` */
@@ -287,24 +322,31 @@ CREATE TABLE `project_unit_installment` (
 DROP TABLE IF EXISTS `project_unit_type`;
 
 CREATE TABLE `project_unit_type` (
-  `project_unit_type_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `unit_type_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `unit_name` varchar(255) NOT NULL,
+  `unit_slug` varchar(255) NOT NULL,
   `unit_floor` tinyint(3) unsigned NOT NULL,
   `unit_lb` tinyint(3) unsigned NOT NULL,
   `unit_lt` tinyint(3) unsigned NOT NULL,
   `unit_kt` tinyint(3) unsigned NOT NULL,
   `unit_km` tinyint(3) unsigned NOT NULL,
   `unit_price` bigint(20) unsigned NOT NULL,
-  `project_unit_id` int(10) unsigned NOT NULL,
+  `unit_description` longtext DEFAULT NULL,
+  `unit_status` enum('available','sold') NOT NULL DEFAULT 'available',
+  `unit_watt` int(10) unsigned DEFAULT NULL,
+  `unit_facility` text DEFAULT NULL,
+  `unit_thumbnail` varchar(255) DEFAULT NULL,
+  `project_unique_id` varchar(10) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`project_unit_type_id`),
-  KEY `fk_unit_type_project_unit_id` (`project_unit_id`),
-  CONSTRAINT `fk_unit_type_project_unit_id` FOREIGN KEY (`project_unit_id`) REFERENCES `project_unit` (`project_unit_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`unit_type_id`),
+  KEY `fk_unit_project_uidx` (`project_unique_id`),
+  CONSTRAINT `fk_unit_project_uidx` FOREIGN KEY (`project_unique_id`) REFERENCES `project_list` (`project_unique_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_unit_type` */
 
-insert  into `project_unit_type`(`project_unit_type_id`,`unit_floor`,`unit_lb`,`unit_lt`,`unit_kt`,`unit_km`,`unit_price`,`project_unit_id`,`created_at`,`updated_at`) values (1,2,50,60,3,2,770000000,3,'2019-09-14 19:07:09','2019-09-14 19:07:09'),(2,1,30,50,3,1,500000000,3,'2019-09-14 19:07:31','2019-09-14 19:07:31'),(3,1,40,60,3,1,680000000,3,'2019-09-14 19:09:20','2019-09-14 19:09:20'),(4,2,50,50,3,2,790000000,8,'2019-09-14 19:09:48','2019-09-14 19:09:48'),(5,2,50,50,4,1,890000000,8,'2019-09-14 19:10:20','2019-09-14 19:10:20'),(6,2,50,50,4,2,900000000,10,'2019-09-14 19:11:48','2019-09-14 19:11:48'),(7,2,50,50,4,2,900000000,10,'2019-09-14 19:12:06','2019-09-14 19:12:06'),(8,2,50,50,3,1,650000000,9,'2019-09-14 19:12:27','2019-09-14 19:12:27');
+insert  into `project_unit_type`(`unit_type_id`,`unit_name`,`unit_slug`,`unit_floor`,`unit_lb`,`unit_lt`,`unit_kt`,`unit_km`,`unit_price`,`unit_description`,`unit_status`,`unit_watt`,`unit_facility`,`unit_thumbnail`,`project_unique_id`,`created_at`,`updated_at`) values (1,'Podomoro Park Bandung Tipe 6','podomoro-park-bandung-tipe-6',2,94,90,2,3,1400000000,'<p class=\"ql-align-justify\"><strong style=\"color: rgb(68, 68, 68);\">PROMO KEMERDEKAAN PODOMORO PARK BANDUNG AGUSTUS 2019 : UNTUK 17 UNIT PERTAMA MENDAPATKAN DISC 17% HANYA SAMPAI TANGGAL 17 AGUSTUS</strong></p><p class=\"ql-align-justify\"><strong style=\"color: rgb(68, 68, 68);\">CLUSTER AMAGRIYA (DELUXE)</strong></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Sentuhan hijau di sekeliling kawasan cluster Amagriya menjadi keunggulan tersendiri yang memberikan keteduhan. Dilengkapi dengan ventilasi alamai yang menjaga sirkulasi udara tetap segar. Hadirnya fasilitas collective garden yangterletak di belakang hunian menambah kenyamanan serta menciptakan kualitas hidup yang lebih sehat.</span></p><p class=\"ql-align-justify\"><strong style=\"color: rgb(68, 68, 68);\">Spesifikasi Type 6 x 15 meter (Nalendra):</strong></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Luas tanah&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;90 m2</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Luas bangunan&nbsp;94 m2</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Jumlah lantai&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Kamar tidur&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Kamar mandi&nbsp;&nbsp;&nbsp;&nbsp;3</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Lahan parkir&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Watt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3500 VA</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Harga&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mulai dari 1,4 milyar</span></p><p class=\"ql-align-justify\"><strong style=\"color: rgb(68, 68, 68);\">Spesifikasi Type 6 x 17 meter (Kancana):</strong></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Luas tanah&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;102 m2</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Luas bangunan&nbsp;94 m2</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Jumlah lantai&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Kamar tidur&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Kamar mandi&nbsp;&nbsp;&nbsp;&nbsp;3</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Lahan parkir&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Watt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3500 VA</span></p><p><span style=\"color: rgb(68, 68, 68);\">Harga&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mulai dari 1,5 milyar</span></p><p><strong style=\"color: rgb(68, 68, 68);\">Fasilitas premium yang disediakan oleh Podomoro Park Bandung, yaitu :</strong></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Club House</em></p><p><span style=\"color: rgb(68, 68, 68);\">- Taman Bermain Anak</span></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Bike Lane</em></p><p><span style=\"color: rgb(68, 68, 68);\">- Kolam Renang</span></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Community Garden</em></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Gym</em></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Gazebo</em></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Jogging Track</em></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Viewing Deck</em></p>','available',3500,'Air Panas,Balkon,Taman,Taman Bermain Anak,Telepon,Keamanan 24 Jam,Kolam Renang,Pendingin Ruangan (AC)',NULL,'PRY00001','2019-09-24 22:13:41','2019-09-24 22:13:41'),(2,'Podomoro Park Bandung Tipe 7','podomoro-park-bandung-tipe-7',2,127,126,3,3,2000000000,'<p><strong style=\"color: rgb(68, 68, 68);\">PROMO KEMERDEKAAN PODOMORO PARK BANDUNG AGUSTUS 2019 : UNTUK 17 UNIT PERTAMA MENDAPATKAN DISC 17% HANYA SAMPAI TANGGAL 17 AGUSTUS</strong></p><p><strong style=\"color: rgb(68, 68, 68);\">CLUSTER AMAGRIYA (DELUXE)</strong></p><p><span style=\"color: rgb(68, 68, 68);\">Sentuhan hijau di sekeliling kawasan cluster Amagriya menjadi keunggulan tersendiri yang memberikan keteduhan. Dilengkapi dengan ventilasi alamai yang menjaga sirkulasi udara tetap segar. Hadirnya fasilitas collective garden yangterletak di belakang hunian menambah kenyamanan serta menciptakan kualitas hidup yang lebih sehat.</span></p><p class=\"ql-align-justify\"><strong style=\"color: rgb(68, 68, 68);\">Spesifikasi Type 7 x 18 meter (Sanjaya):</strong></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Luas tanah&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;126 m2</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Luas bangunan&nbsp;127 m2</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Jumlah lantai&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Kamar tidur&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 + 1</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Kamar mandi&nbsp;&nbsp;&nbsp;&nbsp;3 + 1</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Lahan parkir&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Watt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3500 VA</span></p><p><span style=\"color: rgb(68, 68, 68);\">Harga&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mulai dari 2 milyar</span></p><p><strong style=\"color: rgb(68, 68, 68);\">Fasilitas premium yang disediakan oleh Podomoro Park Bandung, yaitu :</strong></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Club House</em></p><p><span style=\"color: rgb(68, 68, 68);\">- Taman Bermain Anak</span></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Bike Lane</em></p><p><span style=\"color: rgb(68, 68, 68);\">- Kolam Renang</span></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Community Garden</em></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Gym</em></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Gazebo</em></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Jogging Track</em></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Viewing Deck</em></p>','available',3500,'Air Panas,Balkon,Gym,Taman Bermain Anak,Taman,Telepon,Keamanan 24 Jam,Pendingin Ruangan (AC)',NULL,'PRY00001','2019-09-24 22:16:24','2019-09-24 22:16:24'),(3,'Podomoro Park Bandung Tipe 8','podomoro-park-bandung-tipe-8',2,156,160,4,3,3100000000,'<p><strong style=\"color: rgb(68, 68, 68);\">PROMO KEMERDEKAAN PODOMORO PARK BANDUNG AGUSTUS 2019 : UNTUK 17 UNIT PERTAMA MENDAPATKAN DISC 17% HANYA SAMPAI TANGGAL 17 AGUSTUS</strong></p><p><strong style=\"color: rgb(68, 68, 68);\">CLUSTER ANAPURI (PREMIUM)</strong></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Suasana keasrian resort akan sangat terasa ketika memasuki&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">gate cluster</em><span style=\"color: rgb(68, 68, 68);\">&nbsp;yang megah dengan dihiasi hamparan taman dengan berbagai variasi bunga indah. Hunian mewah ini memiliki desain fasad yang&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">elegant</em><span style=\"color: rgb(68, 68, 68);\">,&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">carport</em><span style=\"color: rgb(68, 68, 68);\">&nbsp;yang luas,&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">living room</em><span style=\"color: rgb(68, 68, 68);\">&nbsp;yang nyaman dengan akses langsung menuju&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">backyard</em><span style=\"color: rgb(68, 68, 68);\">, hingga kehangatan suasana akan semakin tercipta dengan adanya&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">collective garden</em><span style=\"color: rgb(68, 68, 68);\">&nbsp;yang terdapat di sisi belakang rumah. Hunian ini memiliki akses yang sangat dekat menuju danau dan memiliki&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">view&nbsp;</em><span style=\"color: rgb(68, 68, 68);\">yang sangat indah karena barisan pegunungan Bandung Selatan tampak jelas dihadapan.</span></p><p class=\"ql-align-justify\"><strong style=\"color: rgb(68, 68, 68);\">Spesifikasi Type 8 x 20 meter (Darmaraja):</strong></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Luas tanah&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;160 m2</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Luas bangunan&nbsp;156 m2</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Jumlah lantai&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Kamar tidur&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 + 1</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Kamar mandi&nbsp;&nbsp;&nbsp;&nbsp;3 + 1</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Lahan parkir&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Watt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4400 VA</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Harga&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mulai dari 3,1 milyar</span></p><p class=\"ql-align-justify\"><strong style=\"color: rgb(68, 68, 68);\">Spesifikasi Type 8 x 22 meter (Wanayasa):</strong></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Luas tanah&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;176 m2</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Luas bangunan&nbsp;159 m2</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Jumlah lantai&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Kamar tidur&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 + 1</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Kamar mandi&nbsp;&nbsp;&nbsp;&nbsp;3 + 1</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Lahan parkir&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</span></p><p class=\"ql-align-justify\"><span style=\"color: rgb(68, 68, 68);\">Watt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4400 VA</span></p><p><span style=\"color: rgb(68, 68, 68);\">Harga&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-</span></p><p><strong style=\"color: rgb(68, 68, 68);\">Fasilitas premium yang disediakan oleh Podomoro Park Bandung, yaitu :</strong></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Club House</em></p><p><span style=\"color: rgb(68, 68, 68);\">- Taman Bermain Anak</span></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Bike Lane</em></p><p><span style=\"color: rgb(68, 68, 68);\">- Kolam Renang</span></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Community Garden</em></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Gym</em></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Gazebo</em></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Jogging Track</em></p><p><span style=\"color: rgb(68, 68, 68);\">-&nbsp;</span><em style=\"color: rgb(68, 68, 68);\">Viewing Deck</em></p>','available',4400,'Taman,Taman Bermain Anak,Pendingin Ruangan (AC),Telepon,Air Panas,Balkon,Kolam Renang,Keamanan 24 Jam','unit-bb636da0be9be5.jpg','PRY00001','2019-09-24 22:22:55','2019-09-25 17:01:32');
 
 /*Table structure for table `province` */
 
@@ -344,6 +386,22 @@ CREATE TABLE `survey_schedule` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `survey_schedule` */
+
+/*Table structure for table `unit_facility` */
+
+DROP TABLE IF EXISTS `unit_facility`;
+
+CREATE TABLE `unit_facility` (
+  `id_facility` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `facility_name` varchar(128) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id_facility`)
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+
+/*Data for the table `unit_facility` */
+
+insert  into `unit_facility`(`id_facility`,`facility_name`,`created_at`,`updated_at`) values (1,'Pendingin Ruangan (AC)','2019-09-23 20:12:15','2019-09-23 20:12:15'),(2,'Keamanan 24 Jam','2019-09-23 20:12:15','2019-09-23 20:12:15'),(3,'Air Panas','2019-09-23 20:12:15','2019-09-23 20:12:15'),(4,'Kolam Renang','2019-09-23 20:12:15','2019-09-23 20:12:15'),(5,'Telepon','2019-09-23 20:12:15','2019-09-23 20:12:15'),(6,'Balkon','2019-09-23 20:12:15','2019-09-23 20:12:15'),(7,'Taman','2019-09-23 20:12:15','2019-09-23 20:12:15'),(8,'Taman Bermain Anak','2019-09-23 20:12:15','2019-09-23 20:12:15'),(9,'Garasi','2019-09-23 20:12:15','2019-09-23 20:12:15'),(10,'Secure Parking','2019-09-23 20:12:15','2019-09-23 20:12:15'),(11,'Gym','2019-09-23 20:12:15','2019-09-23 20:12:15'),(12,'Halaman Terbuka','2019-09-23 20:12:15','2019-09-23 20:12:15');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

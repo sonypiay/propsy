@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Frontend\Projects;
 use Illuminate\Http\Request;
 use App\Database\ProjectList;
 use App\Database\ProjectGallery;
-use App\Database\ProjectUnit;
 use App\Database\ProjectUnitType;
-use App\Database\ProjectUnitInstallment;
+use App\Database\ProjectRequest;
+use App\Database\LogProjectRequest;
 use App\Database\Customer;
 use App\Database\MarketingUser;
 use App\Database\DeveloperUser;
@@ -42,20 +42,18 @@ class ProjectListController extends Controller
   {
     $data['request'] = $request;
     $data['session_user'] = null;
+    $data['session_active'] = null;
+
     if( session()->has('isCustomer') )
     {
       $customer = new Customer;
+      $data['session_active'] = 'customer';
       $data['session_user'] = $customer->getinfo();
-    }
-    else if( session()->has('isDeveloper') )
-    {
-      $developer = new DeveloperUser;
-      $data['session_user'] = $developer->getinfo();
     }
     else
     {
-      $marketing = new MarketingUser;
-      $data['session_user'] = $marketing->getinfo();
+      $developer = new DeveloperUser;
+      $data['session_user'] = $developer->getinfo();
     }
 
     $getproject  = $project_list->select(
@@ -75,6 +73,7 @@ class ProjectListController extends Controller
       'project_list.project_estimate_launch',
       'project_list.created_at',
       'project_list.updated_at',
+      'developer_user.dev_user_id',
       'developer_user.dev_name',
       'developer_user.dev_slug',
       'developer_user.dev_logo',
@@ -126,5 +125,37 @@ class ProjectListController extends Controller
       'project_id' => $project_id
     ];
     return response()->json( $res, 200 );
+  }
+
+  public function request_unit( Request $request, ProjectRequest $project_request, ProjectUnitType $unit_type, LogProjectRequest $log_request, $unit_id )
+  {
+    $message = $request->message;
+    $dev_user = $request->dev_user;
+    $customer_name = $request->customer_name;
+    $customer_id = session()->get('customer_id');
+    $insert_request = new $project_request;
+    $request_id = $insert_request->increment('request_id') + 1;
+    $date = date('Ymd');
+    $generate_request_id = 'REQ' . str_pad( $request_id, 5, '0', STR_PAD_LEFT ) . '-' . $date;
+    $getunit = $unit_type->select('unit_name')->where('unit_type_id', $unit_id)->first();
+    $data_log = [
+      'message' => $customer_name . ' mengajukan pemesanan unit ' . $getunit->unit_name,
+      'request_id' => $generate_request_id
+    ];
+
+    $insert_request->request_unique_id = $generate_request_id;
+    $insert_request->dev_user_id = $dev_user;
+    $insert_request->customer_id = $customer_id;
+    $insert_request->unit_type_id = $unit_id;
+    $insert_request->request_message = $message;
+    $insert_request->save();
+    $log_request->insert_log($data_log);
+
+    $res = [
+      'status' => 200,
+      'statusText' => 'success'
+    ];
+
+    return response()->json( $res, $res['status'] );
   }
 }

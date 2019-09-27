@@ -9,6 +9,7 @@
   :projectcity="{{ json_encode( $project_city ) }}"
   :devcity="{{ json_encode( $dev_city ) }}"
   :getunit_price="{{ json_encode( $getunit_price ) }}"
+  session_active="{{ $session_active }}"
    />
 </div>
 <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>

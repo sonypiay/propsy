@@ -45,7 +45,7 @@
             <a href="#">{{ $session_user->customer_name }}</a>
             <div class="uk-navbar-dropdown main-nav-dropdown">
               <ul class="uk-nav uk-dropdown-nav">
-                <li><a href="#">Permintaan</a></li>
+                <li><a href="{{ route('customer_request_page') }}">Pemesanan</a></li>
                 <li><a href="#">Survey</a></li>
                 <li><a href="{{ route('customer_profile_page') }}">Lihat Akun</a></li>
                 <li class="uk-nav-divider"></li>
@@ -62,7 +62,7 @@
             <div class="uk-navbar-dropdown dropdown-main-navbar">
               <ul class="uk-nav uk-navbar-dropdown-nav">
                 <li><a href="{{ route('developer_login_page') }}">Pengembang</a></li>
-                <li><a href="{{ route('customer_login_page') }}">Sebagai Konsumen</a></li>
+                <li><a href="{{ route('customer_login_page') }}">Konsumen</a></li>
               </ul>
             </div>
           </li>

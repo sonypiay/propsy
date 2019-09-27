@@ -38,6 +38,8 @@ Route::group(['prefix' => 'customer'], function() {
     Route::put('/change_account_information', 'Frontend\Customer\CustomerController@change_account_information');
     Route::post('/upload_photo_profile', 'Frontend\Customer\CustomerController@upload_photo_profile');
   });
+
+  Route::get('/customer/request_unit', 'Frontend\Customer\CustomerController@request_unit_page')->name('customer_request_page');
 });
 
 // Marketing
@@ -116,4 +118,5 @@ Route::group(['prefix' => 'project'], function() {
   Route::get('/available', 'Frontend\Projects\ProjectListController@homepage_available_project');
   Route::get('/view/{slug}', 'Frontend\Projects\ProjectListController@view_project')->name('project_view_detail');
   Route::get('/unit/{project_id}', 'Frontend\Projects\ProjectListController@list_project_unit')->name('list_project_unit');
+  Route::post('/request_unit/{unit_id}', 'Frontend\Projects\ProjectListController@request_unit');
 });

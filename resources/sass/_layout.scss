@@ -373,10 +373,30 @@ html, body {
       color: #ffffff;
     }
   }
+  .form-booking-unit {
+    border-radius: 4px;
+    @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+    color: #333333;
+    &:hover, &:focus {
+      color: #333333;
+      border: 1px solid $color3;
+    }
+  }
   .btn-booking-unit {
     border: 1px solid $color3;
     background: #ffffff;
     color: $color3;
+    border-radius: 4px;
+    text-transform: capitalize;
+    @include fontsetting( $font-primary, 16px, 600, normal, normal, 0.4px );
+    &:hover {
+      background: $color3;
+      color: #ffffff;
+    }
+  }
+  .btn-login {
+    background: $color3;
+    color: #ffffff;
     border-radius: 4px;
     text-transform: capitalize;
     @include fontsetting( $font-primary, 16px, 600, normal, normal, 0.4px );
@@ -504,6 +524,30 @@ html, body {
       text-transform: capitalize;
       &:hover, &:focus { background: $color3; color: #ffffff; }
     }
+  }
+}
+
+.card-requestlist {
+  .card-requestlist-heading {
+    @include fontsetting( $font-primary, 22px, 600, normal, normal, 0.4px );
+    color: #333333;
+  }
+  .card-requestlist-subtext {
+    @include fontsetting( $font-primary, 16px, 400, normal, normal, 0.4px );
+    color: #666666;
+  }
+  .btn-status-request {
+    background: #ffffff;
+    color: $color3;
+    @include fontsetting( $font-primary, 14px, 600, normal, normal, 0.4px );
+    border: 1px solid $color3;
+    border-radius: 20px;
+    text-transform: capitalize;
+    &:hover, &:focus { background: $color3; color: #ffffff; }
+  }
+  .btn-status-active {
+    background: $color3;
+    color: #ffffff;
   }
 }
 /* Layout */

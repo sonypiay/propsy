@@ -95,16 +95,6 @@
                   </div>
                 </div>
                 <div class="uk-margin content-projectdetail">
-                  <div uk-form-custom="target: > * > span:first-child">
-                    <select class="uk-select content-projectform" v-model="forms.filterUnit" @change="getProjectUnit()">
-                      <option value="available">Unit Tersedia</option>
-                      <option value="sold">Unit Terjual</option>
-                    </select>
-                    <button class="uk-button uk-button-default" type="button" tabindex="-1">
-                      <span></span>
-                      <span uk-icon="icon: chevron-down"></span>
-                    </button>
-                  </div>
                   <div class="uk-grid-small uk-grid-divider uk-margin-top" uk-grid>
                     <div v-for="unit in projectunit.results" class="uk-width-1-1">
                       <div uk-tooltip :title="unit.unit_name" class="uk-card card-unit-project uk-grid-collapse uk-grid-match uk-margin" uk-grid>
@@ -195,20 +185,22 @@
 
             <div class="uk-card uk-card-body uk-card-default uk-margin sidebar-dev-info">
               <div class="uk-margin sidebar-dev-heading">Apakah anda tertarik?</div>
-              <form class="uk-form-stacked uk-margin uk-grid-small" uk-grid>
-                <div class="uk-width-1-2">
-                  <input type="text" class="uk-input" placeholder="Nama Anda">
-                </div>
-                <div class="uk-width-1-2">
-                  <input type="text" class="uk-input" placeholder="No. Telepon">
+              <div v-show="forms.booking.errorMessage" class="uk-alert-danger" uk-alert>{{ forms.booking.errorMessage }}</div>
+              <div v-if="session_active === 'customer'" class="uk-margin uk-grid-small" uk-grid>
+                <div class="uk-width-1-1">
+                  <select class="uk-select form-booking-unit" v-model="forms.booking.selectunit">
+                    <option value="">-- Pilih Unit --</option>
+                    <option v-for="unit in projectunit.results" :value="unit.unit_type_id">{{ unit.unit_name }}</option>
+                  </select>
                 </div>
                 <div class="uk-width-1-1">
-                  <textarea placeholder="Ketik pesan..." class="uk-textarea uk-height-small"></textarea>
+                  <textarea v-model="forms.booking.message" placeholder="Ketik pesan..." class="uk-textarea form-booking-unit uk-height-small"></textarea>
                 </div>
                 <div class="uk-width-1-1">
-                  <button class="uk-width-1-1 uk-button uk-button-primary btn-booking-unit" href="#">Pesan Unit</button>
+                  <button @click="requestUnit()" class="uk-width-1-1 uk-button uk-button-primary btn-booking-unit">Ajukan Pemesanan</button>
                 </div>
-              </form>
+              </div>
+              <a v-else :href="$root.url + '/customer/masuk'" class="uk-width-1-1 uk-button uk-button-primary btn-login">Masuk / Daftar</a>
             </div>
           </div>
         </div>
@@ -225,12 +217,18 @@ export default {
     'getgallery',
     'getunit_price',
     'projectcity',
-    'devcity'
+    'devcity',
+    'session_active'
   ],
   data() {
     return {
       forms: {
-        filterUnit: 'available'
+        filterUnit: 'available',
+        booking: {
+          selectunit: '',
+          message: 'Halo ' + this.getproject.dev_name + ', saya ingin mengajukan pemesenan unit yang tersedia.',
+          errorMessage: ''
+        }
       },
       projectunit: {
         total: 0,
@@ -267,6 +265,34 @@ export default {
         };
       }).catch( err => {
         console.log( err.response.statusText );
+      });
+    },
+    requestUnit()
+    {
+      this.forms.booking.errorMessage = '';
+      if( this.forms.booking.selectunit === '' || this.forms.booking.message === '' ) return false;
+
+      var param = {
+        message: this.forms.booking.message,
+        dev_user: this.getproject.dev_user_id,
+        customer_name: this.session_user.customer_name
+      };
+
+      axios({
+        method: 'post',
+        url: this.$root.url + '/project/request_unit/' + this.forms.booking.selectunit,
+        params: param
+      }).then( res => {
+        let result = res.data;
+        swal({
+          title: 'Sukses',
+          text: 'Berhasil mengajukan pemesanan',
+          icon: 'success',
+          timer: 3000
+        });
+        setTimeout(() => { document.location = this.$root.url + '/customer/request_list' }, 2000);
+      }).catch( err => {
+        this.forms.booking.errorMessage = 'Whoops, ' + err.response.statusText;
       });
     }
   },

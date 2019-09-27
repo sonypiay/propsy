@@ -170,4 +170,21 @@ class CustomerController extends Controller
     $res = ['status' => 200, 'statusText' => 'upload success'];
     return response()->json( $res, $res['status'] );
   }
+
+  public function request_unit_page( Request $request, Customer $customer )
+  {
+    if( session()->has('isCustomer') )
+    {
+      $data = [
+        'request' => $request,
+        'session_user' => $customer->getinfo()
+      ];
+
+      return response()->view('frontend.pages.customer.request_list', $data);
+    }
+    else
+    {
+      return redirect()->route('homepage');
+    }
+  }
 }

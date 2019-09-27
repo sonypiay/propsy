@@ -966,6 +966,23 @@ body {
   color: #ffffff;
 }
 
+.sidebar-dev-info .form-booking-unit {
+  border-radius: 4px;
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #333333;
+}
+
+.sidebar-dev-info .form-booking-unit:hover,
+.sidebar-dev-info .form-booking-unit:focus {
+  color: #333333;
+  border: 1px solid #1fc8c9;
+}
+
 .sidebar-dev-info .btn-booking-unit {
   border: 1px solid #1fc8c9;
   background: #ffffff;
@@ -981,6 +998,24 @@ body {
 }
 
 .sidebar-dev-info .btn-booking-unit:hover {
+  background: #1fc8c9;
+  color: #ffffff;
+}
+
+.sidebar-dev-info .btn-login {
+  background: #1fc8c9;
+  color: #ffffff;
+  border-radius: 4px;
+  text-transform: capitalize;
+  font-size: 16px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+.sidebar-dev-info .btn-login:hover {
   background: #1fc8c9;
   color: #ffffff;
 }
@@ -1203,6 +1238,51 @@ body {
 
 .card-unit-project .card-unit-footer .unit-readmore:hover,
 .card-unit-project .card-unit-footer .unit-readmore:focus {
+  background: #1fc8c9;
+  color: #ffffff;
+}
+
+.card-requestlist .card-requestlist-heading {
+  font-size: 22px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #333333;
+}
+
+.card-requestlist .card-requestlist-subtext {
+  font-size: 16px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #666666;
+}
+
+.card-requestlist .btn-status-request {
+  background: #ffffff;
+  color: #1fc8c9;
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  border: 1px solid #1fc8c9;
+  border-radius: 20px;
+  text-transform: capitalize;
+}
+
+.card-requestlist .btn-status-request:hover,
+.card-requestlist .btn-status-request:focus {
+  background: #1fc8c9;
+  color: #ffffff;
+}
+
+.card-requestlist .btn-status-active {
   background: #1fc8c9;
   color: #ffffff;
 }

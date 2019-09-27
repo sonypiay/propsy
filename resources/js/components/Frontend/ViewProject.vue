@@ -290,7 +290,7 @@ export default {
           icon: 'success',
           timer: 3000
         });
-        setTimeout(() => { document.location = this.$root.url + '/customer/request_list' }, 2000);
+        setTimeout(() => { document.location = this.$root.url + '/customer/request_unit' }, 2000);
       }).catch( err => {
         this.forms.booking.errorMessage = 'Whoops, ' + err.response.statusText;
       });

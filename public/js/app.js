@@ -2121,18 +2121,127 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user'],
   data: function data() {
     return {
-      forms: {},
+      forms: {
+        status_request: 'open'
+      },
       errors: {
         errorMessage: ''
+      },
+      request_list: {
+        total: 0,
+        results: [],
+        pagination: {
+          current_page: 1,
+          last_page: 1,
+          prev_page_url: null,
+          next_page_url: null
+        }
       }
     };
   },
-  methods: {},
-  mounted: function mounted() {}
+  methods: {
+    getRequestList: function getRequestList(status_request, p) {
+      var _this = this;
+
+      this.errors.errorMessage = '';
+      if (status_request === undefined) status_request = 'open';
+      this.forms.status_request = status_request;
+      var url = this.$root.url + '/customer/get_request_list/' + this.forms.status_request;
+      if (p !== undefined) url = p;
+      axios({
+        method: 'get',
+        url: url
+      }).then(function (res) {
+        var result = res.data;
+        _this.request_list.results = result.results.data;
+        _this.request_list.total = result.results.total;
+        _this.request_list.pagination = {
+          current_page: result.results.current_page,
+          last_page: result.results.last_page,
+          prev_page_url: result.results.prev_page_url,
+          next_page_url: result.results.next_page_url
+        };
+        console.log(_this.request_list);
+      })["catch"](function (err) {
+        _this.errors.errorMessage = err.response.statusText;
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.getRequestList();
+  }
 });
 
 /***/ }),
@@ -7490,7 +7599,7 @@ __webpack_require__.r(__webpack_exports__);
           timer: 3000
         });
         setTimeout(function () {
-          document.location = _this2.$root.url + '/customer/request_list';
+          document.location = _this2.$root.url + '/customer/request_unit';
         }, 2000);
       })["catch"](function (err) {
         _this2.forms.booking.errorMessage = 'Whoops, ' + err.response.statusText;
@@ -76966,115 +77075,363 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", [
+    _c(
+      "div",
+      {
+        staticClass: "uk-margin-large-top uk-margin-large-bottom uk-container"
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "uk-card uk-card-body uk-card-default card-requestlist"
+          },
+          [
+            _vm._m(0),
+            _vm._v(" "),
+            _vm._m(1),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.errors.errorMessage,
+                    expression: "errors.errorMessage"
+                  }
+                ],
+                staticClass: "uk-alert-danger",
+                attrs: { "uk-alert": "" }
+              },
+              [_vm._v(_vm._s(_vm.errors.errorMessage))]
+            ),
+            _vm._v(" "),
+            _vm.request_list.total === 0
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "uk-alert-warning",
+                    attrs: { "uk-alert": "" }
+                  },
+                  [_vm._v("\n        Belum ada pengajuan pesanan.\n      ")]
+                )
+              : _c(
+                  "div",
+                  {
+                    staticClass: "uk-grid-small uk-grid-divider uk-margin-top",
+                    attrs: { "uk-grid": "" }
+                  },
+                  _vm._l(_vm.request_list.results, function(unit) {
+                    return _c("div", { staticClass: "uk-width-1-1" }, [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "uk-card card-unit-project uk-grid-collapse uk-grid-match uk-margin",
+                          attrs: {
+                            "uk-tooltip": "",
+                            title: unit.unit_name,
+                            "uk-grid": ""
+                          }
+                        },
+                        [
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "uk-width-1-3@xl uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s"
+                            },
+                            [
+                              _c("div", { staticClass: "uk-card-media-left" }, [
+                                unit.unit_thumbnail
+                                  ? _c("div", {
+                                      staticClass:
+                                        "uk-background-cover unit-thumbnail",
+                                      style: {
+                                        "background-image":
+                                          "url(" +
+                                          _vm.$root.url +
+                                          "/images/project/gallery/" +
+                                          unit.unit_thumbnail +
+                                          ")"
+                                      }
+                                    })
+                                  : _c("div", {
+                                      staticClass:
+                                        "uk-background-cover unit-thumbnail",
+                                      style: {
+                                        "background-image":
+                                          "url(" +
+                                          _vm.$root.url +
+                                          "/images/banner/homepage2.jpg)"
+                                      }
+                                    })
+                              ])
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "uk-width-expand" }, [
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "uk-card-body uk-card-small card-unit-body"
+                              },
+                              [
+                                _c(
+                                  "a",
+                                  { staticClass: "uk-card-title unit-name" },
+                                  [_vm._v(_vm._s(unit.unit_name))]
+                                ),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "unit-location" }, [
+                                  _c("span", {
+                                    attrs: {
+                                      "uk-icon": "icon: location; ratio: 0.8"
+                                    }
+                                  }),
+                                  _vm._v(
+                                    "\n                  " +
+                                      _vm._s(unit.project_address) +
+                                      ",\n                  " +
+                                      _vm._s(unit.city_name) +
+                                      ",\n                  " +
+                                      _vm._s(unit.province_name) +
+                                      "\n                "
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "unit-price" }, [
+                                  _vm._v(
+                                    "\n                  Rp. " +
+                                      _vm._s(
+                                        _vm._f("currency")(unit.unit_price)
+                                      ) +
+                                      "\n                "
+                                  )
+                                ])
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "uk-card-footer card-unit-footer uk-padding-small"
+                              },
+                              [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "uk-grid-small uk-child-width-auto",
+                                    attrs: { "uk-grid": "" }
+                                  },
+                                  [
+                                    _c("div", [
+                                      _c(
+                                        "div",
+                                        { staticClass: "unit-specification" },
+                                        [
+                                          _vm._v(
+                                            "\n                      " +
+                                              _vm._s(unit.unit_lb) +
+                                              " m"
+                                          ),
+                                          _c("sup", [_vm._v("2")]),
+                                          _vm._v(" "),
+                                          _c("span", [_vm._v("Luas Bangunan")])
+                                        ]
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("div", [
+                                      _c(
+                                        "div",
+                                        { staticClass: "unit-specification" },
+                                        [
+                                          _vm._v(
+                                            "\n                      " +
+                                              _vm._s(unit.unit_km) +
+                                              "\n                      "
+                                          ),
+                                          _c("span", [_vm._v("Kamar Mandi")])
+                                        ]
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("div", [
+                                      _c(
+                                        "div",
+                                        { staticClass: "unit-specification" },
+                                        [
+                                          _vm._v(
+                                            "\n                      " +
+                                              _vm._s(unit.unit_kt) +
+                                              "\n                      "
+                                          ),
+                                          _c("span", [_vm._v("Kamar Tidur")])
+                                        ]
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _vm._m(2, true)
+                                  ]
+                                )
+                              ]
+                            )
+                          ])
+                        ]
+                      )
+                    ])
+                  }),
+                  0
+                ),
+            _vm._v(" "),
+            _c("ul", { staticClass: "uk-pagination uk-flex-center" }, [
+              _vm.request_list.pagination.prev_page_url !== null
+                ? _c("li", [
+                    _c("a", {
+                      attrs: { "uk-icon": "chevron-left" },
+                      on: {
+                        click: function($event) {
+                          return _vm.getRequestList(
+                            _vm.request_list.pagination.prev_page_url
+                          )
+                        }
+                      }
+                    })
+                  ])
+                : _c("li", { staticClass: "uk-disabled" }, [
+                    _c("a", { attrs: { "uk-icon": "chevron-left" } })
+                  ]),
+              _vm._v(" "),
+              _vm.request_list.pagination.next_page_url !== null
+                ? _c("li", [
+                    _c("a", {
+                      attrs: { "uk-icon": "chevron-right" },
+                      on: {
+                        click: function($event) {
+                          return _vm.getRequestList(
+                            _vm.request_list.pagination.next_page_url
+                          )
+                        }
+                      }
+                    })
+                  ])
+                : _c("li", { staticClass: "uk-disabled" }, [
+                    _c("a", { attrs: { "uk-icon": "chevron-right" } })
+                  ])
+            ])
+          ]
+        )
+      ]
+    )
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [
+    return _c(
+      "div",
+      { staticClass: "uk-heading-line card-requestlist-heading" },
+      [_c("span", [_vm._v("Daftar Pengajuan Pemesanan")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "uk-margin-top" }, [
+      _c(
+        "div",
+        { staticClass: "uk-margin-small-bottom card-requestlist-subtext" },
+        [_vm._v("Status Pengajuan")]
+      ),
+      _vm._v(" "),
       _c(
         "div",
         {
-          staticClass: "uk-margin-large-top uk-margin-large-bottom uk-container"
+          staticClass: "uk-grid-small uk-child-width-auto",
+          attrs: { "uk-grid": "" }
         },
         [
-          _c(
-            "div",
-            {
-              staticClass:
-                "uk-card uk-card-body uk-card-default card-requestlist"
-            },
-            [
-              _c(
-                "div",
-                { staticClass: "uk-heading-line card-requestlist-heading" },
-                [_c("span", [_vm._v("Daftar Pengajuan Pemesanan")])]
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "uk-margin-top" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "uk-margin-small-bottom card-requestlist-subtext"
-                  },
-                  [_vm._v("Status Pengajuan")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass: "uk-grid-small uk-child-width-auto",
-                    attrs: { "uk-grid": "" }
-                  },
-                  [
-                    _c("div", [
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "uk-button uk-button-primary uk-button-small btn-status-request btn-status-active"
-                        },
-                        [_vm._v("Open")]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", [
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "uk-button uk-button-primary uk-button-small btn-status-request"
-                        },
-                        [_vm._v("Hold")]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", [
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "uk-button uk-button-primary uk-button-small btn-status-request"
-                        },
-                        [_vm._v("Cancel")]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", [
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "uk-button uk-button-primary uk-button-small btn-status-request"
-                        },
-                        [_vm._v("On Survey")]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", [
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "uk-button uk-button-primary uk-button-small btn-status-request"
-                        },
-                        [_vm._v("Close")]
-                      )
-                    ])
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", {
-                staticClass: "uk-grid-small uk-grid-divider",
-                attrs: { "uk-grid": "" }
-              })
-            ]
-          )
+          _c("div", [
+            _c(
+              "button",
+              {
+                staticClass:
+                  "uk-button uk-button-primary uk-button-small btn-status-request btn-status-active"
+              },
+              [_vm._v("Open")]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", [
+            _c(
+              "button",
+              {
+                staticClass:
+                  "uk-button uk-button-primary uk-button-small btn-status-request"
+              },
+              [_vm._v("Hold")]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", [
+            _c(
+              "button",
+              {
+                staticClass:
+                  "uk-button uk-button-primary uk-button-small btn-status-request"
+              },
+              [_vm._v("Cancel")]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", [
+            _c(
+              "button",
+              {
+                staticClass:
+                  "uk-button uk-button-primary uk-button-small btn-status-request"
+              },
+              [_vm._v("On Survey")]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", [
+            _c(
+              "button",
+              {
+                staticClass:
+                  "uk-button uk-button-primary uk-button-small btn-status-request"
+              },
+              [_vm._v("Close")]
+            )
+          ])
         ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c(
+        "a",
+        {
+          staticClass:
+            "uk-button uk-button-small uk-button-primary unit-readmore",
+          attrs: { href: "#" }
+        },
+        [_vm._v("Lihat Lebih Lanjut")]
       )
     ])
   }

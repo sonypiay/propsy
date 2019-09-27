@@ -67,10 +67,16 @@ class ProjectListController extends Controller
     $data_site_plan = [];
     $storage = Storage::disk('assets');
     $thumbnail = ! empty( $project_thumbnail ) ? $project_thumbnail->hashName() : null;
+    $getid = 1;
+    $get_last_id = $project_list->select('project_id')->orderBy('project_id', 'desc')->first();
+    if( $get_last_id !== null )
+    {
+      $getid = $get_last_id->project_id + 1;
+    }
+    $unique_id = 'PRY' . str_pad( $getid, 5, '0', STR_PAD_LEFT );
+
     $insert_project = new $project_list;
     $insert_gallery = new $project_gallery;
-    $unique_id = 'PRY' . str_pad( $insert_project->increment('project_id') + 1, 5, '0', STR_PAD_LEFT );
-
     $insert_project->project_name = $project_name;
     $insert_project->project_unique_id = $unique_id;
     $insert_project->project_slug = $project_slug;

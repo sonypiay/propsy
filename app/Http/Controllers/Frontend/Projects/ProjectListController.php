@@ -32,7 +32,6 @@ class ProjectListController extends Controller
       'developer_user.dev_slug'
     )
     ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
-    ->where('project_list.project_status', 'available')
     ->orderBy('project_list.created_at', 'desc')
     ->get();
     return response()->json([ 'results' => [ 'total' => $getproject->count(), 'data' => $getproject ] ], 200 );
@@ -50,9 +49,11 @@ class ProjectListController extends Controller
       $data['session_active'] = 'customer';
       $data['session_user'] = $customer->getinfo();
     }
-    else
+    
+    if( session()->has('isDeveloper') )
     {
       $developer = new DeveloperUser;
+      $data['session_active'] = 'developer';
       $data['session_user'] = $developer->getinfo();
     }
 
@@ -127,25 +128,30 @@ class ProjectListController extends Controller
     return response()->json( $res, 200 );
   }
 
-  public function request_unit( Request $request, ProjectRequest $project_request, ProjectUnitType $unit_type, LogProjectRequest $log_request, $unit_id )
+  public function request_unit( Request $request, ProjectRequest $project_request, ProjectUnitType $unit_type, LogProjectRequest $log_request, Customer $customer, $unit_id )
   {
     $message = $request->message;
     $dev_user = $request->dev_user;
-    $customer_name = $request->customer_name;
-    $customer_id = session()->get('customer_id');
-    $insert_request = new $project_request;
-    $request_id = $insert_request->increment('request_id') + 1;
     $date = date('Ymd');
+    $getcustomer = $customer->getinfo();
+    $get_last_id = $project_request->select('request_id')->orderBy('request_id', 'desc')->first();
+    $request_id = 1;
+    if( $get_last_id !== null )
+    {
+      $request_id = $get_last_id->request_id + 1;
+    }
+
     $generate_request_id = 'REQ' . str_pad( $request_id, 5, '0', STR_PAD_LEFT ) . '-' . $date;
     $getunit = $unit_type->select('unit_name')->where('unit_type_id', $unit_id)->first();
     $data_log = [
-      'message' => $customer_name . ' mengajukan pemesanan unit ' . $getunit->unit_name,
+      'message' => $getcustomer->customer_name . ' mengajukan pemesanan unit ' . $getunit->unit_name,
       'request_id' => $generate_request_id
     ];
 
+    $insert_request = new $project_request;
     $insert_request->request_unique_id = $generate_request_id;
     $insert_request->dev_user_id = $dev_user;
-    $insert_request->customer_id = $customer_id;
+    $insert_request->customer_id = $getcustomer->customer_id;
     $insert_request->unit_type_id = $unit_id;
     $insert_request->request_message = $message;
     $insert_request->save();

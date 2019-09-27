@@ -2189,6 +2189,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user'],
   data: function data() {
@@ -2200,6 +2210,7 @@ __webpack_require__.r(__webpack_exports__);
         errorMessage: ''
       },
       request_list: {
+        isLoading: false,
         total: 0,
         results: [],
         pagination: {
@@ -2220,11 +2231,13 @@ __webpack_require__.r(__webpack_exports__);
       this.forms.status_request = status_request;
       var url = this.$root.url + '/customer/get_request_list/' + this.forms.status_request;
       if (p !== undefined) url = p;
+      this.request_list.isLoading = true;
       axios({
         method: 'get',
         url: url
       }).then(function (res) {
         var result = res.data;
+        _this.request_list.isLoading = false;
         _this.request_list.results = result.results.data;
         _this.request_list.total = result.results.total;
         _this.request_list.pagination = {
@@ -2233,9 +2246,51 @@ __webpack_require__.r(__webpack_exports__);
           prev_page_url: result.results.prev_page_url,
           next_page_url: result.results.next_page_url
         };
-        console.log(_this.request_list);
       })["catch"](function (err) {
+        _this.request_list.isLoading = false;
         _this.errors.errorMessage = err.response.statusText;
+      });
+    },
+    onCancelRequest: function onCancelRequest(id) {
+      var _this2 = this;
+
+      swal({
+        title: 'Konfirmasi?',
+        text: 'Apakah anda ingin membatalkan pengajuan ini?',
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Tidak',
+          confirm: {
+            value: true,
+            text: 'Ya'
+          }
+        }
+      }).then(function (val) {
+        if (val) {
+          axios({
+            method: 'put',
+            url: _this2.$root.url + '/customer/cancel_request/' + id
+          }).then(function (res) {
+            swal({
+              title: 'Sukses',
+              text: 'Pengajuan berhasil dibatalkan',
+              icon: 'success',
+              timer: 3000
+            });
+            setTimeout(function () {
+              _this2.getRequestList();
+            }, 1000);
+          })["catch"](function (err) {
+            swal({
+              title: 'Whoops',
+              text: 'Terjadi kesalahan',
+              icon: 'error',
+              dangerMode: true,
+              timer: 3000
+            });
+          });
+        }
       });
     }
   },
@@ -7583,8 +7638,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.forms.booking.selectunit === '' || this.forms.booking.message === '') return false;
       var param = {
         message: this.forms.booking.message,
-        dev_user: this.getproject.dev_user_id,
-        customer_name: this.session_user.customer_name
+        dev_user: this.getproject.dev_user_id
       };
       axios({
         method: 'post',
@@ -77090,7 +77144,124 @@ var render = function() {
           [
             _vm._m(0),
             _vm._v(" "),
-            _vm._m(1),
+            _c("div", { staticClass: "uk-margin-top" }, [
+              _c(
+                "div",
+                {
+                  staticClass: "uk-margin-small-bottom card-requestlist-subtext"
+                },
+                [_vm._v("Status Pengajuan")]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "uk-grid-small uk-child-width-auto",
+                  attrs: { "uk-grid": "" }
+                },
+                [
+                  _c("div", [
+                    _c(
+                      "button",
+                      {
+                        staticClass:
+                          "uk-button uk-button-primary uk-button-small btn-status-request",
+                        class: {
+                          "btn-status-active":
+                            _vm.forms.status_request === "open"
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.getRequestList("open")
+                          }
+                        }
+                      },
+                      [_vm._v("Open")]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", [
+                    _c(
+                      "button",
+                      {
+                        staticClass:
+                          "uk-button uk-button-primary uk-button-small btn-status-request",
+                        class: {
+                          "btn-status-active":
+                            _vm.forms.status_request === "hold"
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.getRequestList("hold")
+                          }
+                        }
+                      },
+                      [_vm._v("Hold")]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", [
+                    _c(
+                      "button",
+                      {
+                        staticClass:
+                          "uk-button uk-button-primary uk-button-small btn-status-request",
+                        class: {
+                          "btn-status-active":
+                            _vm.forms.status_request === "cancel"
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.getRequestList("cancel")
+                          }
+                        }
+                      },
+                      [_vm._v("Cancel")]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", [
+                    _c(
+                      "button",
+                      {
+                        staticClass:
+                          "uk-button uk-button-primary uk-button-small btn-status-request",
+                        class: {
+                          "btn-status-active":
+                            _vm.forms.status_request === "survey"
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.getRequestList("survey")
+                          }
+                        }
+                      },
+                      [_vm._v("On Survey")]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", [
+                    _c(
+                      "button",
+                      {
+                        staticClass:
+                          "uk-button uk-button-primary uk-button-small btn-status-request",
+                        class: {
+                          "btn-status-active":
+                            _vm.forms.status_request === "close"
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.getRequestList("close")
+                          }
+                        }
+                      },
+                      [_vm._v("Close")]
+                    )
+                  ])
+                ]
+              )
+            ]),
             _vm._v(" "),
             _c(
               "div",
@@ -77109,187 +77280,246 @@ var render = function() {
               [_vm._v(_vm._s(_vm.errors.errorMessage))]
             ),
             _vm._v(" "),
-            _vm.request_list.total === 0
-              ? _c(
-                  "div",
-                  {
-                    staticClass: "uk-alert-warning",
-                    attrs: { "uk-alert": "" }
-                  },
-                  [_vm._v("\n        Belum ada pengajuan pesanan.\n      ")]
-                )
-              : _c(
-                  "div",
-                  {
-                    staticClass: "uk-grid-small uk-grid-divider uk-margin-top",
-                    attrs: { "uk-grid": "" }
-                  },
-                  _vm._l(_vm.request_list.results, function(unit) {
-                    return _c("div", { staticClass: "uk-width-1-1" }, [
-                      _c(
+            _vm.request_list.isLoading === true
+              ? _c("div", { staticClass: "uk-margin-top uk-text-center" }, [
+                  _c("span", { attrs: { "uk-spinner": "" } })
+                ])
+              : _c("div", [
+                  _vm.request_list.total === 0
+                    ? _c(
+                        "div",
+                        {
+                          staticClass: "uk-alert-warning",
+                          attrs: { "uk-alert": "" }
+                        },
+                        [
+                          _vm._v(
+                            "\n          Belum ada pengajuan pesanan.\n        "
+                          )
+                        ]
+                      )
+                    : _c(
                         "div",
                         {
                           staticClass:
-                            "uk-card card-unit-project uk-grid-collapse uk-grid-match uk-margin",
-                          attrs: {
-                            "uk-tooltip": "",
-                            title: unit.unit_name,
-                            "uk-grid": ""
-                          }
+                            "uk-grid-small uk-grid-divider uk-margin-top",
+                          attrs: { "uk-grid": "" }
                         },
-                        [
-                          _c(
-                            "div",
-                            {
-                              staticClass:
-                                "uk-width-1-3@xl uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s"
-                            },
-                            [
-                              _c("div", { staticClass: "uk-card-media-left" }, [
-                                unit.unit_thumbnail
-                                  ? _c("div", {
-                                      staticClass:
-                                        "uk-background-cover unit-thumbnail",
-                                      style: {
-                                        "background-image":
-                                          "url(" +
-                                          _vm.$root.url +
-                                          "/images/project/gallery/" +
-                                          unit.unit_thumbnail +
-                                          ")"
-                                      }
-                                    })
-                                  : _c("div", {
-                                      staticClass:
-                                        "uk-background-cover unit-thumbnail",
-                                      style: {
-                                        "background-image":
-                                          "url(" +
-                                          _vm.$root.url +
-                                          "/images/banner/homepage2.jpg)"
-                                      }
-                                    })
-                              ])
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "uk-width-expand" }, [
+                        _vm._l(_vm.request_list.results, function(unit) {
+                          return _c("div", { staticClass: "uk-width-1-1" }, [
                             _c(
                               "div",
                               {
                                 staticClass:
-                                  "uk-card-body uk-card-small card-unit-body"
-                              },
-                              [
-                                _c(
-                                  "a",
-                                  { staticClass: "uk-card-title unit-name" },
-                                  [_vm._v(_vm._s(unit.unit_name))]
-                                ),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "unit-location" }, [
-                                  _c("span", {
-                                    attrs: {
-                                      "uk-icon": "icon: location; ratio: 0.8"
-                                    }
-                                  }),
-                                  _vm._v(
-                                    "\n                  " +
-                                      _vm._s(unit.project_address) +
-                                      ",\n                  " +
-                                      _vm._s(unit.city_name) +
-                                      ",\n                  " +
-                                      _vm._s(unit.province_name) +
-                                      "\n                "
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "unit-price" }, [
-                                  _vm._v(
-                                    "\n                  Rp. " +
-                                      _vm._s(
-                                        _vm._f("currency")(unit.unit_price)
-                                      ) +
-                                      "\n                "
-                                  )
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              {
-                                staticClass:
-                                  "uk-card-footer card-unit-footer uk-padding-small"
+                                  "uk-card card-unit-project uk-grid-collapse uk-grid-match uk-margin",
+                                attrs: { "uk-grid": "" }
                               },
                               [
                                 _c(
                                   "div",
                                   {
                                     staticClass:
-                                      "uk-grid-small uk-child-width-auto",
-                                    attrs: { "uk-grid": "" }
+                                      "uk-width-1-3@xl uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s"
                                   },
                                   [
-                                    _c("div", [
-                                      _c(
-                                        "div",
-                                        { staticClass: "unit-specification" },
-                                        [
-                                          _vm._v(
-                                            "\n                      " +
-                                              _vm._s(unit.unit_lb) +
-                                              " m"
-                                          ),
-                                          _c("sup", [_vm._v("2")]),
-                                          _vm._v(" "),
-                                          _c("span", [_vm._v("Luas Bangunan")])
-                                        ]
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("div", [
-                                      _c(
-                                        "div",
-                                        { staticClass: "unit-specification" },
-                                        [
-                                          _vm._v(
-                                            "\n                      " +
-                                              _vm._s(unit.unit_km) +
-                                              "\n                      "
-                                          ),
-                                          _c("span", [_vm._v("Kamar Mandi")])
-                                        ]
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("div", [
-                                      _c(
-                                        "div",
-                                        { staticClass: "unit-specification" },
-                                        [
-                                          _vm._v(
-                                            "\n                      " +
-                                              _vm._s(unit.unit_kt) +
-                                              "\n                      "
-                                          ),
-                                          _c("span", [_vm._v("Kamar Tidur")])
-                                        ]
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _vm._m(2, true)
+                                    _c(
+                                      "div",
+                                      { staticClass: "uk-card-media-left" },
+                                      [
+                                        unit.unit_thumbnail
+                                          ? _c("div", {
+                                              staticClass:
+                                                "uk-background-cover unit-thumbnail",
+                                              style: {
+                                                "background-image":
+                                                  "url(" +
+                                                  _vm.$root.url +
+                                                  "/images/project/gallery/" +
+                                                  unit.unit_thumbnail +
+                                                  ")"
+                                              }
+                                            })
+                                          : _c("div", {
+                                              staticClass:
+                                                "uk-background-cover unit-thumbnail",
+                                              style: {
+                                                "background-image":
+                                                  "url(" +
+                                                  _vm.$root.url +
+                                                  "/images/banner/homepage2.jpg)"
+                                              }
+                                            })
+                                      ]
+                                    )
                                   ]
-                                )
+                                ),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "uk-width-expand" }, [
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "uk-card-body uk-card-small card-unit-body"
+                                    },
+                                    [
+                                      _c(
+                                        "a",
+                                        {
+                                          staticClass: "uk-card-title unit-name"
+                                        },
+                                        [_vm._v(_vm._s(unit.unit_name))]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        { staticClass: "unit-location" },
+                                        [
+                                          _c("span", {
+                                            attrs: {
+                                              "uk-icon":
+                                                "icon: location; ratio: 0.8"
+                                            }
+                                          }),
+                                          _vm._v(
+                                            "\n                    " +
+                                              _vm._s(unit.project_address) +
+                                              ",\n                    " +
+                                              _vm._s(unit.city_name) +
+                                              ",\n                    " +
+                                              _vm._s(unit.province_name) +
+                                              "\n                  "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("div", { staticClass: "unit-price" }, [
+                                        _vm._v(
+                                          "\n                    Rp. " +
+                                            _vm._s(
+                                              _vm._f("currency")(
+                                                unit.unit_price
+                                              )
+                                            ) +
+                                            "\n                  "
+                                        )
+                                      ])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "uk-card-footer card-unit-footer uk-padding-small"
+                                    },
+                                    [
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass:
+                                            "uk-grid-small uk-child-width-auto",
+                                          attrs: { "uk-grid": "" }
+                                        },
+                                        [
+                                          _c("div", [
+                                            _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "unit-specification"
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                        " +
+                                                    _vm._s(
+                                                      unit.request_unique_id
+                                                    ) +
+                                                    "\n                        "
+                                                ),
+                                                _c("span", [
+                                                  _vm._v("Request ID")
+                                                ])
+                                              ]
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("div", [
+                                            _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "unit-specification"
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                        " +
+                                                    _vm._s(
+                                                      _vm.$root.formatDate(
+                                                        unit.created_at,
+                                                        "DD MMMM YYYY"
+                                                      )
+                                                    ) +
+                                                    "\n                        "
+                                                ),
+                                                _c("span", [
+                                                  _vm._v("Tanggal Pengajuan")
+                                                ])
+                                              ]
+                                            )
+                                          ])
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "uk-width-1-1" }, [
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "uk-card-footer card-unit-footer uk-padding-remove uk-margin-small-top"
+                                    },
+                                    [
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass:
+                                            "uk-grid-small uk-child-width-auto",
+                                          attrs: { "uk-grid": "" }
+                                        },
+                                        [
+                                          _vm._m(1, true),
+                                          _vm._v(" "),
+                                          _c("div", [
+                                            _c(
+                                              "button",
+                                              {
+                                                staticClass:
+                                                  "uk-button uk-button-small btn-cancel-request",
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.onCancelRequest(
+                                                      unit.request_unique_id
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [_vm._v("Batalkan Pengajuan")]
+                                            )
+                                          ])
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ])
                               ]
                             )
                           ])
-                        ]
+                        }),
+                        0
                       )
-                    ])
-                  }),
-                  0
-                ),
+                ]),
             _vm._v(" "),
             _c("ul", { staticClass: "uk-pagination uk-flex-center" }, [
               _vm.request_list.pagination.prev_page_url !== null
@@ -77347,91 +77577,18 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "uk-margin-top" }, [
-      _c(
-        "div",
-        { staticClass: "uk-margin-small-bottom card-requestlist-subtext" },
-        [_vm._v("Status Pengajuan")]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "uk-grid-small uk-child-width-auto",
-          attrs: { "uk-grid": "" }
-        },
-        [
-          _c("div", [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "uk-button uk-button-primary uk-button-small btn-status-request btn-status-active"
-              },
-              [_vm._v("Open")]
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "uk-button uk-button-primary uk-button-small btn-status-request"
-              },
-              [_vm._v("Hold")]
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "uk-button uk-button-primary uk-button-small btn-status-request"
-              },
-              [_vm._v("Cancel")]
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "uk-button uk-button-primary uk-button-small btn-status-request"
-              },
-              [_vm._v("On Survey")]
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "uk-button uk-button-primary uk-button-small btn-status-request"
-              },
-              [_vm._v("Close")]
-            )
-          ])
-        ]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", [
       _c(
         "a",
         {
           staticClass:
-            "uk-button uk-button-small uk-button-primary unit-readmore",
-          attrs: { href: "#" }
+            "uk-button uk-button-small uk-button-primary unit-readmore"
         },
-        [_vm._v("Lihat Lebih Lanjut")]
+        [
+          _vm._v(
+            "\n                        Lihat Lebih Lanjut\n                      "
+          )
+        ]
       )
     ])
   }
@@ -88638,6 +88795,14 @@ var render = function() {
               _c(
                 "div",
                 {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.session_active !== "developer",
+                      expression: "session_active !== 'developer'"
+                    }
+                  ],
                   staticClass:
                     "uk-card uk-card-body uk-card-default uk-margin sidebar-dev-info"
                 },

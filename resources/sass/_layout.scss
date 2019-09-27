@@ -524,6 +524,18 @@ html, body {
       text-transform: capitalize;
       &:hover, &:focus { background: $color3; color: #ffffff; }
     }
+    .btn-cancel-request {
+      border: 1px solid #e02c2c;
+      color: #e02c2c;
+      @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+      text-transform: capitalize;
+      background: #ffffff;
+      border-radius: 4px;
+      &:hover {
+        background: #e02c2c;
+        color: #ffffff;
+      }
+    }
   }
 }
 

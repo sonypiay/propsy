@@ -41,6 +41,7 @@ Route::group(['prefix' => 'customer'], function() {
 
   Route::get('/request_unit', 'Frontend\Customer\CustomerController@request_unit_page')->name('customer_request_page');
   Route::get('/get_request_list/{status_request}', 'Frontend\Customer\RequestUnitController@get_request_list');
+  Route::put('/cancel_request/{request_id}', 'Frontend\Customer\RequestUnitController@cancel_request');
 });
 
 // Marketing

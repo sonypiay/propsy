@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend\Customer;
 use Illuminate\Http\Request;
 use App\Database\Customer;
 use App\Database\ProjectRequest;
+use App\Database\LogProjectRequest;
 use App\Http\Controllers\Controller;
 
 class RequestUnitController extends Controller
@@ -44,7 +45,25 @@ class RequestUnitController extends Controller
       'status' => 200,
       'statusText' => 'success'
     ];
-
     return response()->json( $res, 200 );
+  }
+
+  public function cancel_request( ProjectRequest $project_request, Customer $customer, LogProjectRequest $log_request, $request_id )
+  {
+    $getrequest = $project_request->where('request_unique_id', $request_id)->first();
+    $getcustomer = $customer->getinfo();
+    $data_log = [
+      'message' => $getcustomer->customer_name . ' membatalkan pengajuan pesanan ' . $request_id,
+      'request_id' => $request_id
+    ];
+
+    $getrequest->status_request = 'cancel';
+    $getrequest->save();
+    $log_request->insert_log( $data_log );
+    $res = [
+      'status' => 200,
+      'statusText' => 'success'
+    ];
+    return response()->json( $res, $res['status'] );
   }
 }

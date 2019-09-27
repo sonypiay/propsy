@@ -72,7 +72,7 @@ class ProjectMarketingController extends Controller
     else
     {
       $getmarketing = $marketing->where([
-        ['marketing_user.marketing_user.' . $column, 'like', '%' . $keywords. '%'],
+        ['marketing_user.' . $column, 'like', '%' . $keywords. '%'],
         ['marketing_user.dev_user_id', session()->get('dev_user_id')]
       ])
       ->orderBy('marketing_user.mkt_fullname', $sorting);
@@ -202,6 +202,17 @@ class ProjectMarketingController extends Controller
       $res = ['status' => 200, 'statusText' => 'success'];
     }
 
+    return response()->json( $res, $res['status'] );
+  }
+
+  public function delete_marketing( MarketingUser $marketinguser, $userid )
+  {
+    $getmarketing = $marketinguser->where('mkt_user_id', $userid);
+    if( $getmarketing->count() === 1 )
+    {
+      $getmarketing->delete();
+    }
+    $res = ['status' => 200, 'statusText' => 'success'];
     return response()->json( $res, $res['status'] );
   }
 }

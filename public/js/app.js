@@ -5288,7 +5288,46 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         form_marketing.submit = 'Simpan Perubahan';
       });
     },
-    onDeleteMarketing: function onDeleteMarketing(id) {}
+    onDeleteMarketing: function onDeleteMarketing(id) {
+      var _this7 = this;
+
+      swal({
+        title: 'Konfirmasi?',
+        text: 'Apakah anda ingin menghapus marketing ini?',
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Batal',
+          confirm: {
+            value: true,
+            text: 'Hapus'
+          }
+        }
+      }).then(function (val) {
+        if (val) {
+          axios({
+            method: 'delete',
+            url: _this7.$root.url + '/developer/marketing/delete_marketing/' + id
+          }).then(function (res) {
+            swal({
+              title: 'Sukses',
+              text: 'Marketing berhasil dihapus',
+              icon: 'success'
+            });
+            setTimeout(function () {
+              _this7.getMarketingList();
+            }, 2000);
+          })["catch"](function (err) {
+            swal({
+              title: 'Whoops',
+              text: 'Terjadi kesalahan',
+              icon: 'error',
+              dangerMode: true
+            });
+          });
+        }
+      });
+    }
   },
   mounted: function mounted() {
     this.getMarketingList();
@@ -7240,30 +7279,111 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['session_user', 'getproject', 'getgallery', 'getunit', 'projectcity', 'devcity'],
+  props: ['session_user', 'getproject', 'getgallery', 'getunit_price', 'projectcity', 'devcity'],
   data: function data() {
     return {
       forms: {
-        filterUnit: 'all'
+        filterUnit: 'available'
       },
       projectunit: {
         total: 0,
         results: [],
         isLoading: false,
-        currentOffset: 0,
-        isUpdating: true,
         pagination: {
           current_page: 1,
           last_page: 1,
           next_page_url: null,
           prev_page_url: null
         }
-      },
-      installment: {
-        total: 0,
-        results: [],
-        isLoading: false
       }
     };
   },
@@ -7272,7 +7392,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       var param = 'filterUnit=' + this.forms.filterUnit;
-      var url = this.$root.url + '/project/unit/' + this.getproject.project_id + '?page=' + this.projectunit.pagination.current_page + '&' + param;
+      var url = this.$root.url + '/project/unit/' + this.getproject.project_unique_id + '?page=' + this.projectunit.pagination.current_page + '&' + param;
       if (p !== undefined) url = p + '&' + param;
       axios({
         method: 'get',
@@ -7280,7 +7400,7 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (res) {
         var result = res.data;
         _this.projectunit.results = result.results.data;
-        _this.projectunit.results.total = result.results.total;
+        _this.projectunit.total = result.results.total;
         _this.projectunit.pagination = {
           current_page: result.results.current_page,
           last_page: result.results.last_page,
@@ -7290,8 +7410,7 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (err) {
         console.log(err.response.statusText);
       });
-    },
-    getProjectUnitInstallment: function getProjectUnitInstallment(unit_type) {}
+    }
   },
   mounted: function mounted() {
     this.getProjectUnit();
@@ -76000,6 +76119,20 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
+/***/ "./node_modules/vue-currency-filter/dist/VueCurrencyFilter.min.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/vue-currency-filter/dist/VueCurrencyFilter.min.js ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {/*! VueCurrencyFilter v3.4.3 by Irfan Maulana <github.com/mazipan> */
+!function(r,t){ true?module.exports=t():undefined}(global,function(){return function(r){var t={};function e(n){if(t[n])return t[n].exports;var o=t[n]={i:n,l:!1,exports:{}};return r[n].call(o.exports,o,o.exports,e),o.l=!0,o.exports}return e.m=r,e.c=t,e.d=function(r,t,n){e.o(r,t)||Object.defineProperty(r,t,{enumerable:!0,get:n})},e.r=function(r){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(r,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(r,"__esModule",{value:!0})},e.t=function(r,t){if(1&t&&(r=e(r)),8&t)return r;if(4&t&&"object"==typeof r&&r&&r.__esModule)return r;var n=Object.create(null);if(e.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:r}),2&t&&"string"!=typeof r)for(var o in r)e.d(n,o,function(t){return r[t]}.bind(null,o));return n},e.n=function(r){var t=r&&r.__esModule?function(){return r.default}:function(){return r};return e.d(t,"a",t),t},e.o=function(r,t){return Object.prototype.hasOwnProperty.call(r,t)},e.p="/dist",e(e.s=0)}([function(r,t,e){"use strict";e.r(t);var n=Array.prototype.map,o=Array.isArray,a=Object.prototype.toString,u={__isNull:function(r){return null==r},__isString:function(r){return!!(""===r||r&&r.charCodeAt&&r.substr)},__isArray:function(r){return o?o(r):"[object Array]"===a.call(r)},__isObject:function(r){return r&&"[object Object]"===a.call(r)},__defaults:function(r,t){var e;for(e in r=r||{},t=t||{})t.hasOwnProperty(e)&&null==r[e]&&(r[e]=t[e]);return r},__map:function(r,t,e){var o,a,u=[];if(!r)return u;if(n&&r.map===n)return r.map(t,e);for(o=0,a=r.length;o<a;o++)u[o]=t.call(e,r[o],o,r);return u}},i={};function s(r,t){return r=Math.round(Math.abs(r)),isNaN(r)?t:r}i.settings={currency:{symbol:"$",format:"%s%v",decimal:".",thousand:",",precision:2,grouping:3},number:{precision:0,grouping:3,thousand:",",decimal:"."}};var c=i.unformat=i.parse=function(r,t){if(u.__isArray(r))return u.__map(r,function(r){return c(r,t)});if("number"==typeof(r=r||0))return r;t=t||i.settings.number.decimal;var e=new RegExp("[^0-9-"+t+"]",["g"]),n=parseFloat((""+r).replace(/\((?=\d+)(.*)\)/,"-$1").replace(e,"").replace(t,"."));return isNaN(n)?0:n},f=i.toFixed=function(r,t){t=s(t,i.settings.number.precision);var e=Number(i.unformat(r)+"e"+t),n=Math.round(e);return Number(n+"e-"+t).toFixed(t)},l=i.formatNumber=i.format=function(r,t,e,n){if(u.__isArray(r))return u.__map(r,function(r){return l(r,t,e,n)});r=c(r);var o=u.__defaults(u.__isObject(t)?t:{precision:t,thousand:e,decimal:n},i.settings.number),a=s(o.precision),p=r<0?"-":"",y=parseInt(f(Math.abs(r||0),a),10)+"",m=y.length>3?y.length%3:0;return p+(m?y.substr(0,m)+o.thousand:"")+y.substr(m).replace(/(\d{3})(?=\d)/g,"$1"+o.thousand)+(a?o.decimal+f(Math.abs(r),a).split(".")[1]:"")},p=i.formatMoney=function(r,t,e,n,o,a){if(u.__isArray(r))return u.__map(r,function(r){return p(r,t,e,n,o,a)});r=c(r);var f=u.__defaults(u.__isObject(t)?t:{symbol:t,precision:e,thousand:n,decimal:o,format:a},i.settings.currency),y=function(r){var t=i.settings.currency.format;return"function"==typeof r&&(r=r()),u.__isString(r)&&r.match("%v")?{pos:r,neg:r.replace("-","").replace("%v","-%v"),zero:r}:r&&r.pos&&r.pos.match("%v")?r:u.__isString(t)?i.settings.currency.format={pos:t,neg:t.replace("%v","-%v"),zero:t}:t}(f.format);return(r>0?y.pos:r<0?y.neg:y.zero).replace("%s",f.symbol).replace("%v",l(Math.abs(r),s(f.precision),f.thousand,f.decimal))},y=i;function m(r){return(m="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(r){return typeof r}:function(r){return r&&"function"==typeof Symbol&&r.constructor===Symbol&&r!==Symbol.prototype?"symbol":typeof r})(r)}function b(r,t){if(null==r)return{};var e,n,o=function(r,t){if(null==r)return{};var e,n,o={},a=Object.keys(r);for(n=0;n<a.length;n++)e=a[n],t.indexOf(e)>=0||(o[e]=r[e]);return o}(r,t);if(Object.getOwnPropertySymbols){var a=Object.getOwnPropertySymbols(r);for(n=0;n<a.length;n++)e=a[n],t.indexOf(e)>=0||Object.prototype.propertyIsEnumerable.call(r,e)&&(o[e]=r[e])}return o}var d={install:function(r,t){var e={name:"currency",symbol:"",thousandsSeparator:".",fractionCount:0,fractionSeparator:",",symbolPosition:"front",symbolSpacing:!0};u.__isNull(t)&&(t={});var n=u.__defaults(t,e),o=n.name,a=b(n,["name"]);r.filter(o,function(r,t,e,n,o,i,s){var c=u.__defaults({symbol:t,thousandsSeparator:e,fractionCount:n,fractionSeparator:o,symbolPosition:i,symbolSpacing:s},a);"object"===m(t)&&(c=u.__defaults(t,a));var f=0,l="-"===String(r).charAt(0);l&&(r=String(r).slice(1));var p=parseFloat(r);isNaN(p)||(f=p);var b="%s%v";return b="front"===c.symbolPosition?c.symbolSpacing?"%s %v":"%s%v":c.symbolSpacing?"%v %s":"%v%s",c.fractionCount>0&&(r=y.toFixed(r,c.fractionCount)),f=y.formatMoney(r,{format:b,symbol:c.symbol,precision:c.fractionCount,thousand:c.thousandsSeparator,decimal:c.fractionSeparator}),l&&(f="-"+f),f}),r.prototype.$CurrencyFilter={setConfig:function(r){a=u.__defaults(r,e)},getConfig:function(){return a}}}};t.default=d}])});
+//# sourceMappingURL=VueCurrencyFilter.min.js.map
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Frontend/Customer/AccountInformation.vue?vue&type=template&id=0e47257e&":
 /*!***************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Frontend/Customer/AccountInformation.vue?vue&type=template&id=0e47257e& ***!
@@ -83287,7 +83420,7 @@ var render = function() {
       _c(
         "div",
         { staticClass: "uk-card-title uk-margin dashboard-content-heading" },
-        [_vm._v("Cari Marketing")]
+        [_vm._v("Kelola Marketing")]
       ),
       _vm._v(" "),
       _c(
@@ -87273,316 +87406,680 @@ var render = function() {
       ]
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "uk-margin-large-top uk-margin-large-bottom" }, [
-      _c("div", { staticClass: "uk-container" }, [
-        _c("div", { staticClass: "uk-grid-small ", attrs: { "uk-grid": "" } }, [
-          _c("div", { staticClass: "uk-width-expand" }, [
-            _c("div", { staticClass: "uk-card container-projectinfo" }, [
+    _c("div", { staticClass: "uk-cover-container uk-height-large" }, [
+      _vm.getproject.project_thumbnail
+        ? _c("img", {
+            attrs: {
+              src:
+                _vm.$root.url +
+                "/images/project/gallery/" +
+                _vm.getproject.project_thumbnail,
+              "uk-cover": ""
+            }
+          })
+        : _c("img", {
+            attrs: {
+              src: _vm.$root.url + "/images/banner/homepage2.jpg",
+              "uk-cover": ""
+            }
+          }),
+      _vm._v(" "),
+      _c("div", { staticClass: "uk-position-right uk-position-large" }, [
+        _c(
+          "div",
+          {
+            staticClass: "uk-card uk-card-body uk-card-default card-projectinfo"
+          },
+          [
+            _c("div", { staticClass: "uk-clearfix" }, [
               _c(
                 "div",
                 {
-                  staticClass:
-                    "uk-card-title uk-padding-small container-projectheading"
+                  staticClass: "uk-align-right card-projectinfo-statusproject"
                 },
                 [
+                  _vm.getproject.project_status === "available"
+                    ? _c("span", { staticClass: "available" }, [
+                        _vm._v("Tersedia")
+                      ])
+                    : _vm.getproject.project_status === "sold"
+                    ? _c("span", { staticClass: "sold" }, [_vm._v("Terjual")])
+                    : _c("span", { staticClass: "commingsoon" }, [
+                        _vm._v("Segera Launching")
+                      ])
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-projectinfo-name" }, [
+              _vm._v(_vm._s(_vm.getproject.project_name))
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-projectinfo-devname" }, [
+              _vm._v("Oleh " + _vm._s(_vm.getproject.dev_name))
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-margin-top card-projectinfo-body" }, [
+              _c(
+                "div",
+                { staticClass: "uk-margin-top card-projectinfo-location" },
+                [
+                  _c("span", {
+                    attrs: { "uk-icon": "icon: location; ratio: 1.1" }
+                  }),
                   _vm._v(
-                    "\n              " +
-                      _vm._s(_vm.getproject.project_name) +
-                      "\n            "
+                    "\n            " +
+                      _vm._s(_vm.getproject.project_address) +
+                      "\n          "
                   )
                 ]
               ),
               _vm._v(" "),
+              _c("div", { staticClass: "card-projectinfo-projecttype" }, [
+                _vm._v("\n            Jenis Proyek\n            "),
+                _vm.getproject.project_type === "residensial"
+                  ? _c("span", [_vm._v("Residensial")])
+                  : _c("span", [_vm._v("Apartemen")])
+              ]),
+              _vm._v(" "),
+              _vm.getunit_price !== null
+                ? _c("div", { staticClass: "card-projectinfo-price" }, [
+                    _vm._v("\n            Mulai dari\n            "),
+                    _c("span", [
+                      _vm._v(
+                        "Rp. " +
+                          _vm._s(
+                            _vm.$root.formatNumeral(
+                              _vm.getunit_price.unit_price
+                            )
+                          )
+                      )
+                    ])
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
               _c(
                 "div",
                 {
-                  staticClass:
-                    "uk-card-body uk-card-small container-projectbody"
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.getproject.project_estimate_launch !== null,
+                      expression: "getproject.project_estimate_launch !== null"
+                    }
+                  ],
+                  staticClass: "card-projectinfo-launch"
                 },
                 [
-                  _c(
-                    "div",
-                    { staticClass: "uk-margin content-projectdetail" },
-                    [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "uk-margin-small content-projectheading"
-                        },
-                        [
-                          _vm._v(
-                            "\n                  Deskripsi Proyek\n                "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "uk-margin-small content-projectlead" },
-                        [
-                          _vm._v(
-                            "\n                  " +
-                              _vm._s(_vm.getproject.project_description) +
-                              "\n                "
-                          )
-                        ]
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "uk-margin content-projectdetail" },
-                    [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "uk-margin-small content-projectheading"
-                        },
-                        [_vm._v("\n                  Alamat\n                ")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "uk-margin-small content-projectlead" },
-                        [
-                          _vm._v(
-                            "\n                  " +
-                              _vm._s(_vm.getproject.project_address) +
-                              " "
-                          ),
-                          _c("br"),
-                          _vm._v(" "),
-                          _c("strong", [
-                            _vm._v(_vm._s(_vm.projectcity.city_name) + ",")
-                          ]),
-                          _vm._v(" "),
-                          _c("strong", [
-                            _vm._v(_vm._s(_vm.projectcity.province_name))
-                          ])
-                        ]
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "uk-margin content-projectdetail" },
-                    [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "uk-margin-small content-projectheading"
-                        },
-                        [
-                          _vm._v(
-                            "\n                  Google Maps\n                "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "uk-margin-small content-projectlead" },
-                        [
-                          _c(
-                            "a",
-                            {
-                              attrs: { href: _vm.getproject.project_link_map }
-                            },
-                            [_vm._v("Lihat Google Map")]
-                          ),
-                          _vm._v(" "),
-                          _c("div", {
-                            domProps: {
-                              innerHTML: _vm._s(
-                                _vm.getproject.project_map_embed
-                              )
-                            }
-                          })
-                        ]
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _vm._m(0),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "uk-margin content-projectdetail" },
-                    [
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.forms.filterUnit,
-                              expression: "forms.filterUnit"
-                            }
-                          ],
-                          staticClass: "uk-select content-projectform",
-                          on: {
-                            change: [
-                              function($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function(o) {
-                                    return o.selected
-                                  })
-                                  .map(function(o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.$set(
-                                  _vm.forms,
-                                  "filterUnit",
-                                  $event.target.multiple
-                                    ? $$selectedVal
-                                    : $$selectedVal[0]
-                                )
-                              },
-                              function($event) {
-                                return _vm.getProjectUnit()
-                              }
-                            ]
-                          }
-                        },
-                        [
-                          _c("option", { attrs: { value: "all" } }, [
-                            _vm._v("Semua Unit")
-                          ]),
-                          _vm._v(" "),
-                          _vm._l(_vm.getunit, function(unit) {
-                            return _c(
-                              "option",
-                              { domProps: { value: unit.project_unit_id } },
-                              [_vm._v(_vm._s(unit.project_unit_name))]
-                            )
-                          })
-                        ],
-                        2
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "table",
-                        {
-                          staticClass:
-                            "uk-table uk-table-divider uk-table-hover uk-table-striped uk-table-small uk-table-middle"
-                        },
-                        [
-                          _vm._m(1),
-                          _vm._v(" "),
-                          _c(
-                            "tbody",
-                            _vm._l(_vm.projectunit.results, function(unit) {
-                              return _c("tr", [
-                                _c("td", [
-                                  _c(
-                                    "a",
-                                    {
-                                      staticClass:
-                                        "uk-button uk-button-small uk-button-primary content-viewbutton",
-                                      on: { click: function($event) {} }
-                                    },
-                                    [_vm._v("Lihat Cicilan")]
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _vm._v(_vm._s(unit.project_unit_name))
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _vm._v(
-                                    _vm._s(unit.unit_lt + " / " + unit.unit_lb)
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _vm._v(
-                                    _vm._s(unit.unit_km + " / " + unit.unit_kt)
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _vm._v(
-                                    "IDR " +
-                                      _vm._s(
-                                        _vm.$root.formatNumeral(
-                                          unit.unit_price,
-                                          "0,0"
-                                        )
-                                      )
-                                  )
-                                ])
-                              ])
-                            }),
-                            0
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "ul",
-                        { staticClass: "uk-pagination uk-flex-center" },
-                        [
-                          _vm.projectunit.pagination.prev_page_url !== null
-                            ? _c("li", [
-                                _c("a", {
-                                  attrs: { "uk-icon": "chevron-left" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.getProjectUnit(
-                                        _vm.projectunit.pagination.prev_page_url
-                                      )
-                                    }
-                                  }
-                                })
-                              ])
-                            : _c("li", { staticClass: "uk-disabled" }, [
-                                _c("a", {
-                                  attrs: { "uk-icon": "chevron-left" }
-                                })
-                              ]),
-                          _vm._v(" "),
-                          _vm.projectunit.pagination.next_page_url !== null
-                            ? _c("li", [
-                                _c("a", {
-                                  attrs: { "uk-icon": "chevron-right" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.getProjectUnit(
-                                        _vm.projectunit.pagination.next_page_url
-                                      )
-                                    }
-                                  }
-                                })
-                              ])
-                            : _c("li", { staticClass: "uk-disabled" }, [
-                                _c("a", {
-                                  attrs: { "uk-icon": "chevron-right" }
-                                })
-                              ])
-                        ]
-                      )
-                    ]
-                  )
+                  _vm._v("\n            Segera Launching\n            "),
+                  _c("span", [
+                    _vm._v(_vm._s(_vm.getproject.project_estimate_launch))
+                  ])
                 ]
               )
             ])
+          ]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "uk-margin-large-bottom" }, [
+      _c("div", { staticClass: "uk-card uk-card-body" }, [
+        _c("div", { staticClass: "uk-grid-medium", attrs: { "uk-grid": "" } }, [
+          _c("div", { staticClass: "uk-width-expand" }, [
+            _c(
+              "div",
+              { staticClass: "uk-card uk-card-default container-projectinfo" },
+              [
+                _c(
+                  "div",
+                  { staticClass: "uk-card-body container-projectbody" },
+                  [
+                    _c(
+                      "div",
+                      { staticClass: "uk-margin content-projectdetail" },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "uk-margin-small content-projectheading"
+                          },
+                          [
+                            _vm._v(
+                              "\n                  Deskripsi Proyek\n                "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass: "uk-margin-small content-projectlead"
+                          },
+                          [
+                            _vm._v(
+                              "\n                  " +
+                                _vm._s(_vm.getproject.project_description) +
+                                "\n                "
+                            )
+                          ]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "uk-margin content-projectdetail" },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "uk-margin-small content-projectheading"
+                          },
+                          [
+                            _vm._v(
+                              "\n                  Alamat\n                "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass: "uk-margin-small content-projectlead"
+                          },
+                          [
+                            _vm._v(
+                              "\n                  " +
+                                _vm._s(_vm.getproject.project_address) +
+                                " "
+                            ),
+                            _c("br"),
+                            _vm._v(" "),
+                            _c("strong", [
+                              _vm._v(_vm._s(_vm.projectcity.city_name) + ",")
+                            ]),
+                            _vm._v(" "),
+                            _c("strong", [
+                              _vm._v(_vm._s(_vm.projectcity.province_name))
+                            ]),
+                            _vm._v(" "),
+                            _c("div", {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.getproject.project_map_embed,
+                                  expression: "getproject.project_map_embed"
+                                }
+                              ],
+                              domProps: {
+                                innerHTML: _vm._s(
+                                  _vm.getproject.project_map_embed
+                                )
+                              }
+                            })
+                          ]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.getgallery !== null,
+                            expression: "getgallery !== null"
+                          }
+                        ],
+                        staticClass: "uk-margin content-projectdetail"
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "uk-margin-small content-projectheading"
+                          },
+                          [
+                            _vm._v(
+                              "\n                  Galeri\n                "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass: "uk-margin-small content-projectlead"
+                          },
+                          [
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "uk-position-relative uk-visible-toggle uk-light",
+                                attrs: {
+                                  tabindex: "-1",
+                                  "uk-slideshow": "animation: push"
+                                }
+                              },
+                              [
+                                _c(
+                                  "ul",
+                                  { staticClass: "uk-slideshow-items" },
+                                  _vm._l(_vm.getgallery, function(galeri) {
+                                    return _c("li", [
+                                      _c("img", {
+                                        attrs: {
+                                          src:
+                                            _vm.$root.url +
+                                            "/images/project/gallery/" +
+                                            galeri.gallery_filename,
+                                          "uk-cover": ""
+                                        }
+                                      })
+                                    ])
+                                  }),
+                                  0
+                                ),
+                                _vm._v(" "),
+                                _c("a", {
+                                  staticClass:
+                                    "uk-position-center-left uk-position-small uk-hidden-hover",
+                                  attrs: {
+                                    href: "#",
+                                    "uk-slidenav-previous": "",
+                                    "uk-slideshow-item": "previous"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("a", {
+                                  staticClass:
+                                    "uk-position-center-right uk-position-small uk-hidden-hover",
+                                  attrs: {
+                                    href: "#",
+                                    "uk-slidenav-next": "",
+                                    "uk-slideshow-item": "next"
+                                  }
+                                })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                staticClass:
+                                  "uk-button uk-button-primary uk-margin-top content-viewbutton",
+                                attrs: { "uk-toggle": "target: #galeri" }
+                              },
+                              [_vm._v("Lihat Galeri")]
+                            )
+                          ]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "uk-margin content-projectdetail" },
+                      [
+                        _c(
+                          "div",
+                          {
+                            attrs: {
+                              "uk-form-custom": "target: > * > span:first-child"
+                            }
+                          },
+                          [
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.forms.filterUnit,
+                                    expression: "forms.filterUnit"
+                                  }
+                                ],
+                                staticClass: "uk-select content-projectform",
+                                on: {
+                                  change: [
+                                    function($event) {
+                                      var $$selectedVal = Array.prototype.filter
+                                        .call($event.target.options, function(
+                                          o
+                                        ) {
+                                          return o.selected
+                                        })
+                                        .map(function(o) {
+                                          var val =
+                                            "_value" in o ? o._value : o.value
+                                          return val
+                                        })
+                                      _vm.$set(
+                                        _vm.forms,
+                                        "filterUnit",
+                                        $event.target.multiple
+                                          ? $$selectedVal
+                                          : $$selectedVal[0]
+                                      )
+                                    },
+                                    function($event) {
+                                      return _vm.getProjectUnit()
+                                    }
+                                  ]
+                                }
+                              },
+                              [
+                                _c(
+                                  "option",
+                                  { attrs: { value: "available" } },
+                                  [_vm._v("Unit Tersedia")]
+                                ),
+                                _vm._v(" "),
+                                _c("option", { attrs: { value: "sold" } }, [
+                                  _vm._v("Unit Terjual")
+                                ])
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _vm._m(0)
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "uk-grid-small uk-grid-divider uk-margin-top",
+                            attrs: { "uk-grid": "" }
+                          },
+                          _vm._l(_vm.projectunit.results, function(unit) {
+                            return _c("div", { staticClass: "uk-width-1-1" }, [
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "uk-card card-unit-project uk-grid-collapse uk-grid-match uk-margin",
+                                  attrs: {
+                                    "uk-tooltip": "",
+                                    title: unit.unit_name,
+                                    "uk-grid": ""
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "uk-width-1-3@xl uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s"
+                                    },
+                                    [
+                                      _c(
+                                        "div",
+                                        { staticClass: "uk-card-media-left" },
+                                        [
+                                          unit.unit_thumbnail
+                                            ? _c("div", {
+                                                staticClass:
+                                                  "uk-background-cover unit-thumbnail",
+                                                style: {
+                                                  "background-image":
+                                                    "url(" +
+                                                    _vm.$root.url +
+                                                    "/images/project/gallery/" +
+                                                    unit.unit_thumbnail +
+                                                    ")"
+                                                }
+                                              })
+                                            : _c("div", {
+                                                staticClass:
+                                                  "uk-background-cover unit-thumbnail",
+                                                style: {
+                                                  "background-image":
+                                                    "url(" +
+                                                    _vm.$root.url +
+                                                    "/images/banner/homepage2.jpg)"
+                                                }
+                                              })
+                                        ]
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    { staticClass: "uk-width-expand" },
+                                    [
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass:
+                                            "uk-card-body uk-card-small card-unit-body"
+                                        },
+                                        [
+                                          _c(
+                                            "a",
+                                            {
+                                              staticClass:
+                                                "uk-card-title unit-name"
+                                            },
+                                            [_vm._v(_vm._s(unit.unit_name))]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "div",
+                                            { staticClass: "unit-location" },
+                                            [
+                                              _c("span", {
+                                                attrs: {
+                                                  "uk-icon":
+                                                    "icon: location; ratio: 0.8"
+                                                }
+                                              }),
+                                              _vm._v(
+                                                "\n                            " +
+                                                  _vm._s(
+                                                    _vm.getproject
+                                                      .project_address
+                                                  ) +
+                                                  ",\n                            " +
+                                                  _vm._s(
+                                                    _vm.projectcity.city_name
+                                                  ) +
+                                                  ",\n                            " +
+                                                  _vm._s(
+                                                    _vm.projectcity
+                                                      .province_name
+                                                  ) +
+                                                  "\n                          "
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "div",
+                                            { staticClass: "unit-price" },
+                                            [
+                                              _vm._v(
+                                                "\n                            Rp. " +
+                                                  _vm._s(
+                                                    _vm._f("currency")(
+                                                      unit.unit_price
+                                                    )
+                                                  ) +
+                                                  "\n                          "
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass:
+                                            "uk-card-footer card-unit-footer uk-padding-small"
+                                        },
+                                        [
+                                          _c(
+                                            "div",
+                                            {
+                                              staticClass:
+                                                "uk-grid-small uk-child-width-auto",
+                                              attrs: { "uk-grid": "" }
+                                            },
+                                            [
+                                              _c("div", [
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "unit-specification"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                " +
+                                                        _vm._s(unit.unit_lb) +
+                                                        " m"
+                                                    ),
+                                                    _c("sup", [_vm._v("2")]),
+                                                    _vm._v(" "),
+                                                    _c("span", [
+                                                      _vm._v("Luas Bangunan")
+                                                    ])
+                                                  ]
+                                                )
+                                              ]),
+                                              _vm._v(" "),
+                                              _c("div", [
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "unit-specification"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                " +
+                                                        _vm._s(unit.unit_km) +
+                                                        "\n                                "
+                                                    ),
+                                                    _c("span", [
+                                                      _vm._v("Kamar Mandi")
+                                                    ])
+                                                  ]
+                                                )
+                                              ]),
+                                              _vm._v(" "),
+                                              _c("div", [
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "unit-specification"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                " +
+                                                        _vm._s(unit.unit_kt) +
+                                                        "\n                                "
+                                                    ),
+                                                    _c("span", [
+                                                      _vm._v("Kamar Tidur")
+                                                    ])
+                                                  ]
+                                                )
+                                              ]),
+                                              _vm._v(" "),
+                                              _vm._m(1, true)
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ])
+                          }),
+                          0
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "ul",
+                          { staticClass: "uk-pagination uk-flex-center" },
+                          [
+                            _vm.projectunit.pagination.prev_page_url !== null
+                              ? _c("li", [
+                                  _c("a", {
+                                    attrs: { "uk-icon": "chevron-left" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.getProjectUnit(
+                                          _vm.projectunit.pagination
+                                            .prev_page_url
+                                        )
+                                      }
+                                    }
+                                  })
+                                ])
+                              : _c("li", { staticClass: "uk-disabled" }, [
+                                  _c("a", {
+                                    attrs: { "uk-icon": "chevron-left" }
+                                  })
+                                ]),
+                            _vm._v(" "),
+                            _vm.projectunit.pagination.next_page_url !== null
+                              ? _c("li", [
+                                  _c("a", {
+                                    attrs: { "uk-icon": "chevron-right" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.getProjectUnit(
+                                          _vm.projectunit.pagination
+                                            .next_page_url
+                                        )
+                                      }
+                                    }
+                                  })
+                                ])
+                              : _c("li", { staticClass: "uk-disabled" }, [
+                                  _c("a", {
+                                    attrs: { "uk-icon": "chevron-right" }
+                                  })
+                                ])
+                          ]
+                        )
+                      ]
+                    )
+                  ]
+                )
+              ]
+            )
           ]),
           _vm._v(" "),
           _c(
             "div",
             {
               staticClass:
-                "uk-width-1-4@xl uk-width-1-4@l uk-width-1-4@m uk-width-1-2@s"
+                "uk-width-1-3@xl uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s"
             },
             [
               _c(
                 "div",
-                { staticClass: "uk-card uk-card-body sidebar-dev-info" },
+                {
+                  staticClass:
+                    "uk-card uk-card-body uk-card-default uk-margin sidebar-dev-info"
+                },
                 [
                   _vm.getproject.dev_logo === null
                     ? _c("div", { staticClass: "dev-withnologo" }, [
@@ -87623,7 +88120,9 @@ var render = function() {
                   _vm._v(" "),
                   _vm._m(2)
                 ]
-              )
+              ),
+              _vm._v(" "),
+              _vm._m(3)
             ]
           )
         ])
@@ -87636,43 +88135,33 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "uk-margin content-projectdetail" }, [
-      _c("div", { staticClass: "uk-margin-small content-projectheading" }, [
-        _vm._v("\n                  Galeri\n                ")
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "uk-margin-small content-projectlead" }, [
-        _c(
-          "a",
-          {
-            staticClass: "uk-button uk-button-primary content-viewbutton",
-            attrs: { "uk-toggle": "target: #galeri" }
-          },
-          [_vm._v("Lihat Galeri")]
-        )
-      ])
-    ])
+    return _c(
+      "button",
+      {
+        staticClass: "uk-button uk-button-default",
+        attrs: { type: "button", tabindex: "-1" }
+      },
+      [
+        _c("span"),
+        _vm._v(" "),
+        _c("span", { attrs: { "uk-icon": "icon: chevron-down" } })
+      ]
+    )
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Cicilan")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Blok / Prefix")]),
-        _vm._v(" "),
-        _c("th", { attrs: { "uk-tooltip": "Luas Tanah / Luas Bangunan" } }, [
-          _vm._v("LT / LB")
-        ]),
-        _vm._v(" "),
-        _c("th", { attrs: { "uk-tooltip": "Kamar Mandi / Kamar Tidur" } }, [
-          _vm._v("KM / KT")
-        ]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Harga")])
-      ])
+    return _c("div", [
+      _c(
+        "a",
+        {
+          staticClass:
+            "uk-button uk-button-small uk-button-primary unit-readmore",
+          attrs: { href: "#" }
+        },
+        [_vm._v("Lihat Lebih Lanjut")]
+      )
     ])
   },
   function() {
@@ -87690,6 +88179,65 @@ var staticRenderFns = [
         [_vm._v("Lihat Pengembang")]
       )
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "uk-card uk-card-body uk-card-default uk-margin sidebar-dev-info"
+      },
+      [
+        _c("div", { staticClass: "uk-margin sidebar-dev-heading" }, [
+          _vm._v("Apakah anda tertarik?")
+        ]),
+        _vm._v(" "),
+        _c(
+          "form",
+          {
+            staticClass: "uk-form-stacked uk-margin uk-grid-small",
+            attrs: { "uk-grid": "" }
+          },
+          [
+            _c("div", { staticClass: "uk-width-1-2" }, [
+              _c("input", {
+                staticClass: "uk-input",
+                attrs: { type: "text", placeholder: "Nama Anda" }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-width-1-2" }, [
+              _c("input", {
+                staticClass: "uk-input",
+                attrs: { type: "text", placeholder: "No. Telepon" }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-width-1-1" }, [
+              _c("textarea", {
+                staticClass: "uk-textarea uk-height-small",
+                attrs: { placeholder: "Ketik pesan..." }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-width-1-1" }, [
+              _c(
+                "button",
+                {
+                  staticClass:
+                    "uk-width-1-1 uk-button uk-button-primary btn-booking-unit",
+                  attrs: { href: "#" }
+                },
+                [_vm._v("Pesan Unit")]
+              )
+            ])
+          ]
+        )
+      ]
+    )
   }
 ]
 render._withStripped = true
@@ -99849,9 +100397,13 @@ module.exports = function(module) {
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue_currency_filter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-currency-filter */ "./node_modules/vue-currency-filter/dist/VueCurrencyFilter.min.js");
+/* harmony import */ var vue_currency_filter__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_currency_filter__WEBPACK_IMPORTED_MODULE_0__);
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
@@ -99886,6 +100438,8 @@ Vue.component('customer-profile-page', __webpack_require__(/*! ./components/Fron
 
 Vue.component('homepage-available-project', __webpack_require__(/*! ./components/Frontend/HomepageProject.vue */ "./resources/js/components/Frontend/HomepageProject.vue")["default"]);
 Vue.component('page-view-project', __webpack_require__(/*! ./components/Frontend/ViewProject.vue */ "./resources/js/components/Frontend/ViewProject.vue")["default"]);
+
+Vue.use(vue_currency_filter__WEBPACK_IMPORTED_MODULE_0___default.a);
 var app = new Vue({
   el: '#app',
   data: {

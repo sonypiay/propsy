@@ -38,6 +38,9 @@ Vue.component('customer-profile-page', require('./components/Frontend/Customer/P
 Vue.component('homepage-available-project', require('./components/Frontend/HomepageProject.vue').default);
 Vue.component('page-view-project', require('./components/Frontend/ViewProject.vue').default);
 
+import VueCurrencyFilter from 'vue-currency-filter';
+Vue.use(VueCurrencyFilter);
+
 const app = new Vue({
     el: '#app',
     data: {

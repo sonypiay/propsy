@@ -7,6 +7,19 @@
   margin-top: 6px;
 }
 
+.main-header .main-navbar .header-searchbar {
+  width: 550px;
+  border-radius: 20px;
+  border: none;
+  background: #f2f2f2;
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+}
+
 .main-header .main-navbar .main-nav li a {
   font-size: 13px;
   font-style: normal;
@@ -884,8 +897,15 @@ body {
   background: #1fc8c9;
 }
 
-.sidebar-dev-info {
-  border: 1px solid #e9e9e9;
+.sidebar-dev-info .sidebar-dev-heading {
+  text-align: center;
+  color: #333333;
+  font-size: 1.2rem;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
 }
 
 .sidebar-dev-info .sidebar-dev-profile {
@@ -946,8 +966,111 @@ body {
   color: #ffffff;
 }
 
-.container-projectinfo {
-  border: 1px solid #e9e9e9;
+.sidebar-dev-info .btn-booking-unit {
+  border: 1px solid #1fc8c9;
+  background: #ffffff;
+  color: #1fc8c9;
+  border-radius: 4px;
+  text-transform: capitalize;
+  font-size: 16px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+.sidebar-dev-info .btn-booking-unit:hover {
+  background: #1fc8c9;
+  color: #ffffff;
+}
+
+.card-projectinfo {
+  border-radius: 10px;
+}
+
+.card-projectinfo .card-projectinfo-statusproject {
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #333333;
+}
+
+.card-projectinfo .card-projectinfo-statusproject span {
+  padding: 6px 10px;
+  border-radius: 30px;
+}
+
+.card-projectinfo .card-projectinfo-statusproject .available {
+  background: #1fc8c9;
+  color: #ffffff !important;
+}
+
+.card-projectinfo .card-projectinfo-statusproject .sold {
+  background: #e02c2c;
+  color: #ffffff !important;
+}
+
+.card-projectinfo .card-projectinfo-statusproject .commingsoon {
+  background: #fbad70;
+  color: #ffffff !important;
+}
+
+.card-projectinfo .card-projectinfo-name {
+  margin-top: 0;
+  font-size: 42px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #07bec0;
+}
+
+.card-projectinfo .card-projectinfo-devname {
+  font-size: 20px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #1fc8c9;
+}
+
+.card-projectinfo .card-projectinfo-body {
+  border-top: 1px solid #dddddd;
+}
+
+.card-projectinfo .card-projectinfo-body .card-projectinfo-location {
+  font-size: 18px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #333333;
+}
+
+.card-projectinfo .card-projectinfo-body .card-projectinfo-projecttype,
+.card-projectinfo .card-projectinfo-body .card-projectinfo-price,
+.card-projectinfo .card-projectinfo-body .card-projectinfo-launch {
+  font-size: 16px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #333333;
+}
+
+.card-projectinfo .card-projectinfo-body .card-projectinfo-projecttype span,
+.card-projectinfo .card-projectinfo-body .card-projectinfo-price span,
+.card-projectinfo .card-projectinfo-body .card-projectinfo-launch span {
+  font-size: 20px !important;
+  font-weight: 600 !important;
 }
 
 .container-projectinfo .container-projectheading {
@@ -962,13 +1085,13 @@ body {
 }
 
 .container-projectinfo .container-projectbody .content-projectdetail .content-projectheading {
-  font-size: 16px;
+  font-size: 18px;
   font-style: normal;
   font-stretch: normal;
   font-family: "Lato", sans-serif;
   font-weight: 600;
   letter-spacing: 0.4px;
-  color: #555555;
+  color: #333333;
 }
 
 .container-projectinfo .container-projectbody .content-projectdetail .content-projectlead {
@@ -978,7 +1101,7 @@ body {
   font-family: "Lato", sans-serif;
   font-weight: 400;
   letter-spacing: 0.4px;
-  color: #777777;
+  color: #555555;
 }
 
 .container-projectinfo .container-projectbody .content-projectdetail .content-projectform {
@@ -1008,6 +1131,80 @@ body {
   font-weight: 400;
   letter-spacing: 0.4px;
   text-transform: capitalize;
+}
+
+.card-unit-project .unit-thumbnail {
+  min-height: 200px;
+}
+
+.card-unit-project .card-unit-body .unit-name {
+  font-size: 22px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #1fc8c9;
+  text-decoration: none;
+}
+
+.card-unit-project .card-unit-body .unit-location {
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #333333;
+}
+
+.card-unit-project .card-unit-body .unit-price {
+  font-size: 22px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #333333;
+}
+
+.card-unit-project .card-unit-footer {
+  border: 0;
+}
+
+.card-unit-project .card-unit-footer .unit-specification {
+  font-size: 16px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #333333;
+}
+
+.card-unit-project .card-unit-footer .unit-specification span {
+  font-size: 11px !important;
+  color: #888888;
+}
+
+.card-unit-project .card-unit-footer .unit-readmore {
+  background: #ffffff;
+  color: #1fc8c9;
+  font-size: 11px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  border: 1px solid #1fc8c9;
+  border-radius: 4px;
+  text-transform: capitalize;
+}
+
+.card-unit-project .card-unit-footer .unit-readmore:hover,
+.card-unit-project .card-unit-footer .unit-readmore:focus {
+  background: #1fc8c9;
+  color: #ffffff;
 }
 
 /* Layout */

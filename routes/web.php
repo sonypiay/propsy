@@ -108,6 +108,7 @@ Route::group(['prefix' => 'developer'], function() {
     Route::get('/list_marketing', 'Frontend\Developer\ProjectMarketingController@listOfMarketing');
     Route::post('/add_marketing', 'Frontend\Developer\ProjectMarketingController@add_marketing');
     Route::put('/save_marketing/{userid}', 'Frontend\Developer\ProjectMarketingController@save_marketing');
+    Route::delete('/delete_marketing/{userid}', 'Frontend\Developer\ProjectMarketingController@delete_marketing');
   });
 });
 

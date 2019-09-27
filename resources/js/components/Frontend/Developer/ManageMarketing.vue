@@ -120,7 +120,7 @@
     <!-- modal add/delete marketing -->
 
     <div class="uk-card dashboard-content">
-      <div class="uk-card-title uk-margin dashboard-content-heading">Cari Marketing</div>
+      <div class="uk-card-title uk-margin dashboard-content-heading">Kelola Marketing</div>
       <div class="uk-margin uk-grid-small uk-child-width-auto" uk-grid>
         <div>
           <select class="uk-select dash-form-input" v-model="forms.column" @change="getMarketingList()">
@@ -171,7 +171,7 @@
                     <ul class="uk-nav uk-dropdown-nav">
                       <li><a @click="detailMarketing(mkt)"><span uk-icon="forward"></span> Lihat Detail</a></li>
                       <li><a @click="onPopupModalAdd(mkt)"><span uk-icon="pencil"></span> Ubah</a></li>
-                      <li><a @click="onDeleteMarketing(mkt.mkt_user_id)"><span uk-icon="trash"></span> Hapus</a></li>
+                      <li><a @click="onDeleteMarketing( mkt.mkt_user_id )"><span uk-icon="trash"></span> Hapus</a></li>
                     </ul>
                   </div>
                 </div>
@@ -528,6 +528,38 @@ export default {
     },
     onDeleteMarketing( id )
     {
+      swal({
+        title: 'Konfirmasi?',
+        text: 'Apakah anda ingin menghapus marketing ini?',
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Batal',
+          confirm: { value: true, text: 'Hapus' }
+        }
+      }).then( val => {
+        if( val )
+        {
+          axios({
+            method: 'delete',
+            url: this.$root.url + '/developer/marketing/delete_marketing/' + id
+          }).then( res => {
+            swal({
+              title: 'Sukses',
+              text: 'Marketing berhasil dihapus',
+              icon: 'success'
+            });
+            setTimeout(() => { this.getMarketingList(); }, 2000);
+          }).catch( err => {
+            swal({
+              title: 'Whoops',
+              text: 'Terjadi kesalahan',
+              icon: 'error',
+              dangerMode: true
+            });
+          });
+        }
+      });
     }
   },
   mounted() {

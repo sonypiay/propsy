@@ -8,7 +8,7 @@
   :getgallery="{{ json_encode( $getgallery ) }}"
   :projectcity="{{ json_encode( $project_city ) }}"
   :devcity="{{ json_encode( $dev_city ) }}"
-  :getunit="{{ json_encode( $getunit ) }}"
+  :getunit_price="{{ json_encode( $getunit_price ) }}"
    />
 </div>
 <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>

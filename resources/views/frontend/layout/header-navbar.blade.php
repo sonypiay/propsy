@@ -5,12 +5,14 @@
         <a class="uk-navbar-item uk-logo navbar-logo" href="{{ url('/') }}">
           <img src="{{ asset('images/brand/logo_maps_primary.png') }}" alt="maps">
         </a>
-        @if( ! session()->has('isDeveloper') AND ! session()->has('isMarketing') AND ! session()->has('isCustomer') )
-        <ul class="uk-navbar-nav main-nav">
-          <li><a href="{{ route('developer_register_page') }}">Menjadi Pengembang</a></li>
-          <li><a href="{{ route('marketing_register_page') }}">Menjadi Marketing</a></li>
-        </ul>
-        @endif
+        <div class="uk-navbar-item">
+          <form class="uk-form-stacked" action="{{ url('/') }}" method="get">
+            <div class="uk-inline">
+              <span class="uk-form-icon" uk-icon="search"></span>
+              <input type="search" class="uk-input header-searchbar" value="{{ $request->search }}" name="search" placeholder="Cari proyek" />
+            </div>
+          </form>
+        </div>
       </div>
       <div class="uk-navbar-right">
         <ul class="uk-navbar-nav main-nav">
@@ -52,23 +54,15 @@
             </div>
           </li>
           @else
+          @if( ! session()->has('isDeveloper') AND ! session()->has('isCustomer') )
+          <li><a href="{{ route('developer_register_page') }}">Menjadi Pengembang</a></li>
+          @endif
           <li>
-            <a href="#">Masuk</a>
+            <a href="#">Masuk / Daftar</a>
             <div class="uk-navbar-dropdown dropdown-main-navbar">
               <ul class="uk-nav uk-navbar-dropdown-nav">
-                <li><a href="{{ route('developer_login_page') }}">Sebagai Pengembang</a></li>
-                <li><a href="{{ route('marketing_login_page') }}">Sebagai Marketing</a></li>
+                <li><a href="{{ route('developer_login_page') }}">Pengembang</a></li>
                 <li><a href="{{ route('customer_login_page') }}">Sebagai Konsumen</a></li>
-              </ul>
-            </div>
-          </li>
-          <li>
-            <a href="#">Daftar</a>
-            <div class="uk-navbar-dropdown dropdown-main-navbar">
-              <ul class="uk-nav uk-navbar-dropdown-nav">
-                <li><a href="{{ route('developer_register_page') }}">Sebagai Pengembang</a></li>
-                <li><a href="{{ route('marketing_register_page') }}">Sebagai Marketing</a></li>
-                <li><a href="{{ route('customer_register_page') }}">Sebagai Konsumen</a></li>
               </ul>
             </div>
           </li>

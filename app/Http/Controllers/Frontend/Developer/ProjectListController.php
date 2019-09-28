@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Database\DeveloperUser;
 use App\Database\ProjectList;
 use App\Database\ProjectGallery;
-use App\Database\ProjectSitePlan;
 use App\Database\UnitFacility;
-use App\Database\AreaDB;
 use App\Database\ProvinceDB;
 use App\Database\CityDB;
 use App\Http\Controllers\Controller;
@@ -108,7 +106,7 @@ class ProjectListController extends Controller
     return response()->json( $res, $res['status'] );
   }
 
-  public function edit_project_page( Request $request, DeveloperUser $developeruser, ProjectList $project_list, ProjectSitePlan $project_siteplan, $id )
+  public function edit_project_page( Request $request, DeveloperUser $developeruser, ProjectList $project_list, $id )
   {
     if( session()->has('isDeveloper') )
     {

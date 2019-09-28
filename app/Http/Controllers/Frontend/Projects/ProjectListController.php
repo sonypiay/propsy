@@ -11,7 +11,6 @@ use App\Database\LogProjectRequest;
 use App\Database\Customer;
 use App\Database\MarketingUser;
 use App\Database\DeveloperUser;
-use App\Database\AreaDB;
 use App\Database\CityDB;
 use App\Http\Controllers\Controller;
 
@@ -49,7 +48,7 @@ class ProjectListController extends Controller
       $data['session_active'] = 'customer';
       $data['session_user'] = $customer->getinfo();
     }
-    
+
     if( session()->has('isDeveloper') )
     {
       $developer = new DeveloperUser;
@@ -99,7 +98,7 @@ class ProjectListController extends Controller
     ->get();
 
     $getunit_price = $unit_type->where('project_unique_id', $getproject->project_unique_id)
-    ->orderBy('unit_price', 'desc')
+    ->orderBy('unit_price', 'asc')
     ->first();
 
     $data['getproject'] = $getproject;

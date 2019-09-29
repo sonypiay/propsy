@@ -129,33 +129,53 @@ class ProjectListController extends Controller
     $dev_user = $request->dev_user;
     $date = date('Ymd');
     $getcustomer = $customer->getinfo();
-    $get_last_id = $project_request->select('request_id')->orderBy('request_id', 'desc')->first();
-    $request_id = 1;
-    if( $get_last_id !== null )
+    $getunit = $unit_type->select(
+      'unit_name',
+      'unit_status'
+    )->where('unit_type_id', $unit_id)->first();
+    if( $getunit->unit_status === 'booked' )
     {
-      $request_id = $get_last_id->request_id + 1;
+      $res = [
+        'status' => 409,
+        'statusText' => 'Maaf, unit ini sudah dipesan'
+      ];
     }
+    else if( $getunit->unit_status === 'sold' )
+    {
+      $res = [
+        'status' => 409,
+        'statusText' => 'Maaf, unit ini sudah terjual'
+      ];
+    }
+    else
+    {
+      $get_last_id = $project_request->select('request_id')->orderBy('request_id', 'desc')->first();
+      $request_id = 1;
+      if( $get_last_id !== null )
+      {
+        $request_id = $get_last_id->request_id + 1;
+      }
 
-    $generate_request_id = 'REQ' . str_pad( $request_id, 5, '0', STR_PAD_LEFT ) . '-' . $date;
-    $getunit = $unit_type->select('unit_name')->where('unit_type_id', $unit_id)->first();
-    $data_log = [
-      'message' => $getcustomer->customer_name . ' mengajukan pemesanan unit ' . $getunit->unit_name,
-      'request_id' => $generate_request_id
-    ];
+      $generate_request_id = 'REQ' . str_pad( $request_id, 5, '0', STR_PAD_LEFT ) . '-' . $date;
+      $data_log = [
+        'message' => $getcustomer->customer_name . ' mengajukan pemesanan unit ' . $getunit->unit_name,
+        'request_id' => $generate_request_id
+      ];
 
-    $insert_request = new $project_request;
-    $insert_request->request_unique_id = $generate_request_id;
-    $insert_request->dev_user_id = $dev_user;
-    $insert_request->customer_id = $getcustomer->customer_id;
-    $insert_request->unit_type_id = $unit_id;
-    $insert_request->request_message = $message;
-    $insert_request->save();
-    $log_request->insert_log($data_log);
+      $insert_request = new $project_request;
+      $insert_request->request_unique_id = $generate_request_id;
+      $insert_request->dev_user_id = $dev_user;
+      $insert_request->customer_id = $getcustomer->customer_id;
+      $insert_request->unit_type_id = $unit_id;
+      $insert_request->request_message = $message;
+      $insert_request->save();
+      $log_request->insert_log($data_log);
 
-    $res = [
-      'status' => 200,
-      'statusText' => 'success'
-    ];
+      $res = [
+        'status' => 200,
+        'statusText' => 'success'
+      ];
+    }
 
     return response()->json( $res, $res['status'] );
   }

@@ -899,51 +899,6 @@ body {
   background: #1fc8c9;
 }
 
-.dashboard-container .dashboard-content .card-requestlist .card-requestlist-heading {
-  font-size: 22px;
-  font-style: normal;
-  font-stretch: normal;
-  font-family: "Lato", sans-serif;
-  font-weight: 600;
-  letter-spacing: 0.4px;
-  color: #333333;
-}
-
-.dashboard-container .dashboard-content .card-requestlist .card-requestlist-subtext {
-  font-size: 16px;
-  font-style: normal;
-  font-stretch: normal;
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  letter-spacing: 0.4px;
-  color: #666666;
-}
-
-.dashboard-container .dashboard-content .card-requestlist .btn-status-request {
-  background: #ffffff;
-  color: #1fc8c9;
-  font-size: 14px;
-  font-style: normal;
-  font-stretch: normal;
-  font-family: "Lato", sans-serif;
-  font-weight: 600;
-  letter-spacing: 0.4px;
-  border: 1px solid #1fc8c9;
-  border-radius: 20px;
-  text-transform: capitalize;
-}
-
-.dashboard-container .dashboard-content .card-requestlist .btn-status-request:hover,
-.dashboard-container .dashboard-content .card-requestlist .btn-status-request:focus {
-  background: #1fc8c9;
-  color: #ffffff;
-}
-
-.dashboard-container .dashboard-content .card-requestlist .btn-status-active {
-  background: #1fc8c9;
-  color: #ffffff;
-}
-
 .sidebar-dev-info .sidebar-dev-heading {
   text-align: center;
   color: #333333;
@@ -1219,6 +1174,10 @@ body {
   min-height: 200px;
 }
 
+.card-unit-project .card-unit-body {
+  border-radius: 10px;
+}
+
 .card-unit-project .card-unit-body .unit-status {
   font-size: 10px;
   font-style: normal;
@@ -1275,6 +1234,83 @@ body {
   font-weight: 600;
   letter-spacing: 0.4px;
   color: #333333;
+}
+
+.card-unit-project .card-unit-body .unit-body .unit-body-heading {
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #333333;
+}
+
+.card-unit-project .card-unit-body .unit-body .unit-body-content {
+  font-size: 16px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #666666;
+}
+
+.card-unit-project .card-unit-body .card-unit-setting-icon:hover,
+.card-unit-project .card-unit-body .card-unit-setting-icon:focus {
+  color: #1fc8c9;
+}
+
+.card-unit-project .card-unit-body .card-unit-setting-dropdown {
+  border-radius: 4px;
+}
+
+.card-unit-project .card-unit-body .card-unit-setting-dropdown ul li a {
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #333333;
+  text-align: center;
+}
+
+.card-unit-project .card-unit-body .card-unit-setting-dropdown ul li a:hover,
+.card-unit-project .card-unit-body .card-unit-setting-dropdown ul li a:focus {
+  color: #1fc8c9;
+}
+
+.card-unit-project .card-unit-header {
+  border: 0;
+}
+
+.card-unit-project .card-unit-header .status-request {
+  font-size: 11px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  padding: 6px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.card-unit-project .card-unit-header .status-request-waiting-response {
+  background: #2295f2;
+  color: #ffffff;
+}
+
+.card-unit-project .card-unit-header .status-request-meeting {
+  background: #fbad70;
+  color: #ffffff;
+}
+
+.card-unit-project .card-unit-header .status-request-cancel,
+.card-unit-project .card-unit-header .status-request-reject {
+  background: #e02c2c;
+  color: #ffffff;
 }
 
 .card-unit-project .card-unit-footer {

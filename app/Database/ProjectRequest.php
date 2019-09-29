@@ -14,12 +14,12 @@ class ProjectRequest extends Model
   {
     if( $session_user === null )
       $session_user = session()->get('dev_user_id');
-      
+
     $has_request = false;
 
     $check_request = $this->where([
       ['dev_user_id', '=', $session_user],
-      ['status_request', '=', 'open']
+      ['status_request', '=', 'waiting_response']
     ])->count();
     if( $check_request > 0 )
     {

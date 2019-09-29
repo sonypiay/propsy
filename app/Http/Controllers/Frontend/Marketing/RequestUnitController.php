@@ -25,7 +25,6 @@ class RequestUnitController extends Controller
         'session_user' => $marketinguser->getinfo(),
         'hasRequest' => $has_request
       ];
-
       return response()->view('frontend.pages.marketing.request_unit', $data);
     }
     else
@@ -48,20 +47,20 @@ class RequestUnitController extends Controller
       'project_request.request_note',
       'project_request.created_at',
       'project_request.updated_at',
+      'customer.customer_id',
+      'customer.customer_name',
+      'customer.customer_email',
+      'customer.customer_phone_number',
       'project_unit_type.unit_type_id',
       'project_unit_type.unit_name',
       'project_unit_type.unit_price',
-      'project_list.project_unique_id',
-      'project_list.project_name',
-      'project_list.project_address',
       'city.city_name',
       'province.province_name'
     )
     ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
-    ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
-    ->join('project_list', 'project_unit_type.project_unique_id', '=', 'project_unit_type.project_unique_id')
-    ->join('city', 'project_list.project_city', '=', 'city.city_id')
-    ->join('province', 'city.province_id', '=', 'province.province_id');
+    ->join('city', 'customer.customer_city', '=', 'city.city_id')
+    ->join('province', 'city.province_id', '=', 'province.province_id')
+    ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id');
 
     if( empty( $keywords ) )
     {
@@ -108,8 +107,7 @@ class RequestUnitController extends Controller
       }
     }
 
-    $getresult = $result->groupBy('project_request.request_unique_id')
-    ->paginate( $limit );
+    $getresult = $result->paginate( $limit );
 
     $res = [
       'results' => $getresult

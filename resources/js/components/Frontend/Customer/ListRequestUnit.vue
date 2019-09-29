@@ -24,7 +24,7 @@
           </div>
         </div>
 
-        <div v-show="errors.errorMessage" class="uk-alert-danger" uk-alert>{{ errors.errorMessage }}</div>
+        <div v-show="errors.errorMessage" class="uk-alert-danger uk-margin-top" uk-alert>{{ errors.errorMessage }}</div>
         <div v-if="request_list.isLoading === true" class="uk-margin-top uk-text-center">
           <span uk-spinner></span>
         </div>
@@ -118,7 +118,7 @@ export default {
   data() {
     return {
       forms: {
-        status_request: 'open'
+        status_request: 'waiting_response'
       },
       errors: {
         errorMessage: ''
@@ -142,7 +142,7 @@ export default {
       this.errors.errorMessage = '';
 
       if( status_request === undefined )
-        status_request = 'open';
+        status_request = 'waiting_response';
 
       this.forms.status_request = status_request;
       var url = this.$root.url + '/customer/get_request_list/' + this.forms.status_request;

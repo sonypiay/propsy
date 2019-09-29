@@ -234,7 +234,7 @@ export default {
       forms: {
         booking: {
           selectunit: '',
-          message: 'Halo ' + this.getproject.dev_name + ', saya ingin mengajukan pemesenan unit yang tersedia.',
+          message: 'Halo ' + this.getproject.dev_name + ', saya ingin mengajukan pemesenan unit.',
           errorMessage: ''
         }
       },
@@ -298,7 +298,14 @@ export default {
         });
         setTimeout(() => { document.location = this.$root.url + '/customer/request_unit' }, 2000);
       }).catch( err => {
-        this.forms.booking.errorMessage = 'Whoops, ' + err.response.statusText;
+        if( err.response.status === 500 )
+        {
+          this.forms.booking.errorMessage = 'Whoops, ' + err.response.statusText;
+        }
+        else
+        {
+          this.forms.booking.errorMessage = err.response.data.statusText;
+        }
       });
     }
   },

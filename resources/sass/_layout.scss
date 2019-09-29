@@ -334,29 +334,6 @@ html, body {
         }
       }
     }
-    .card-requestlist {
-      .card-requestlist-heading {
-        @include fontsetting( $font-primary, 22px, 600, normal, normal, 0.4px );
-        color: #333333;
-      }
-      .card-requestlist-subtext {
-        @include fontsetting( $font-primary, 16px, 400, normal, normal, 0.4px );
-        color: #666666;
-      }
-      .btn-status-request {
-        background: #ffffff;
-        color: $color3;
-        @include fontsetting( $font-primary, 14px, 600, normal, normal, 0.4px );
-        border: 1px solid $color3;
-        border-radius: 20px;
-        text-transform: capitalize;
-        &:hover, &:focus { background: $color3; color: #ffffff; }
-      }
-      .btn-status-active {
-        background: $color3;
-        color: #ffffff;
-      }
-    }
   }
 }
 
@@ -514,6 +491,7 @@ html, body {
 .card-unit-project {
   .unit-thumbnail { min-height: 200px; }
   .card-unit-body {
+    border-radius: 10px;
     .unit-status {
       @include fontsetting( $font-primary, 10px, 600, normal, normal, 0.4px );
       padding: 3px;
@@ -544,6 +522,58 @@ html, body {
     .unit-price {
       @include fontsetting( $font-primary, 22px, 600, normal, normal, 0.4px );
       color: #333333;
+    }
+    .unit-body {
+      .unit-body-heading {
+        @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+        color: #333333;
+      }
+      .unit-body-content {
+        @include fontsetting( $font-primary, 16px, 400, normal, normal, 0.4px );
+        color: #666666;
+      }
+    }
+    .card-unit-setting-icon {
+      &:hover, &:focus {
+        color: $color3;
+      }
+    }
+    .card-unit-setting-dropdown {
+      border-radius: 4px;
+      ul {
+        li {
+          a {
+            @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+            color: #333333;
+            text-align: center;
+            &:hover, &:focus {
+              color: $color3;
+            }
+          }
+        }
+      }
+    }
+  }
+  .card-unit-header {
+    border: 0;
+    .status-request {
+      @include fontsetting( $font-primary, 11px, 600, normal, normal, 0.4px );
+      padding: 6px;
+      border-radius: 4px;
+      text-align: center;
+    }
+    .status-request-waiting-response {
+      background: $color-blue;
+      color: #ffffff;
+    }
+    .status-request-meeting {
+      background: $color-warning;
+      color: #ffffff;
+    }
+    .status-request-cancel,
+    .status-request-reject {
+      background: $color-danger;
+      color: #ffffff;
     }
   }
   .card-unit-footer {

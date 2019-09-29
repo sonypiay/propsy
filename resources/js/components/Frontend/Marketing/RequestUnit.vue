@@ -34,35 +34,57 @@
       </div>
       <div v-else>
         <div v-if="request_list.total === 0" class="uk-alert-warning" uk-alert>
-          Anda belum mengajukan pemesanan unit.
+          Tidak ada pengajuan pemesanan unit
         </div>
-        <div v-else class="uk-grid-small uk-grid-divider uk-margin-top" uk-grid>
+        <div v-else class="uk-margin-top uk-grid-divider" uk-grid>
           <div v-for="unit in request_list.results" class="uk-width-1-1">
-            <div class="uk-card card-unit-project uk-grid-collapse uk-grid-match uk-margin" uk-grid>
-              <div class="uk-card-body uk-card-small card-unit-body">
-                <a class="uk-card-title unit-name">{{ unit.unit_name }}</a>
-                <div class="unit-location">
-                  <span uk-icon="icon: location; ratio: 0.8"></span>
-                  {{ unit.project_address }},
-                  {{ unit.city_name }},
-                  {{ unit.province_name }}
-                </div>
-                <div class="unit-price">
-                  Rp. {{ unit.unit_price | currency }}
-                </div>
-              </div>
-              <div class="uk-card-footer card-unit-footer uk-padding-small">
-                <div class="uk-grid-small uk-child-width-auto" uk-grid>
-                  <div>
-                    <div class="unit-specification">
-                      {{ unit.request_unique_id }}
-                      <span>Request ID</span>
+            <div class="uk-card uk-card-default card-unit-project uk-margin">
+              <div class="uk-card-body card-unit-body">
+                <div class="uk-margin-bottom card-unit-header">
+                  <div class="uk-grid-small uk-child-width-auto" uk-grid>
+                    <div>
+                      <div class="status-request status-request-waiting-response" v-if="unit.status_request === 'waiting_response'">Menunggu Tanggapan</div>
+                      <div class="status-request status-request-meeting" v-else-if="unit.status_request === 'meeting'">Dijadwalkan Meeting</div>
+                      <div class="status-request status-request-cancel" v-else-if="unit.status_request === 'cancel'">Pesanan Dibatalkan</div>
+                      <div class="status-request status-request-reject" v-else>Pesanan Ditolak</div>
+                    </div>
+                    <div class="uk-width-expand">
+                      <div class="uk-float-right">
+                        <div class="uk-inline">
+                          <a class="card-unit-setting-icon" uk-icon="icon: more"></a>
+                          <div uk-dropdown="mode: click" class="card-unit-setting-dropdown">
+                            <ul class="uk-nav uk-dropdown-nav">
+                              <li><a href="#">Buat Jadwal Meeting</a></li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div>
-                    <div class="unit-specification">
-                      {{ $root.formatDate( unit.created_at, 'DD MMMM YYYY' ) }}
-                      <span>Tanggal Pengajuan</span>
+                </div>
+                <div class="unit-name">{{ unit.unit_name }}</div>
+                <div class="uk-margin-small unit-body">
+                  <div class="uk-margin">
+                    <div class="unit-body-heading"><strong>Pemesan</strong></div>
+                    <div class="unit-body-content">
+                      {{ unit.customer_name }} | {{ unit.customer_phone_number }} <br>
+                      {{ unit.request_message }}
+                    </div>
+                  </div>
+                </div>
+                <div class="card-unit-footer">
+                  <div class="uk-grid-small uk-child-width-auto" uk-grid>
+                    <div>
+                      <div class="unit-specification">
+                        {{ unit.request_unique_id }}
+                        <span>Request ID</span>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="unit-specification">
+                        {{ $root.formatDate( unit.created_at, 'DD MMMM YYYY' ) }}
+                        <span>Tanggal Pengajuan</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -118,10 +140,10 @@ export default {
   methods: {
     getRequestUnit( p )
     {
-      var params = 'page=' + this.request_list.pagination.current_page + '&keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&status_request=' + this.forms.status_request;
+      var params = 'keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&status_request=' + this.forms.status_request;
       this.errors.errorMessage = '';
 
-      var url = this.$root.url + '/marketing/customer/get_request_unit';
+      var url = this.$root.url + '/marketing/customer/get_request_unit?page=' + this.request_list.pagination.current_page + '&' + params;
       if( p !== undefined )
         url = p;
 

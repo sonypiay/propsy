@@ -2204,7 +2204,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       forms: {
-        status_request: 'open'
+        status_request: 'waiting_response'
       },
       errors: {
         errorMessage: ''
@@ -2227,7 +2227,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.errors.errorMessage = '';
-      if (status_request === undefined) status_request = 'open';
+      if (status_request === undefined) status_request = 'waiting_response';
       this.forms.status_request = status_request;
       var url = this.$root.url + '/customer/get_request_list/' + this.forms.status_request;
       if (p !== undefined) url = p;
@@ -7275,6 +7275,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user'],
   data: function data() {
@@ -7304,9 +7326,9 @@ __webpack_require__.r(__webpack_exports__);
     getRequestUnit: function getRequestUnit(p) {
       var _this = this;
 
-      var params = 'page=' + this.request_list.pagination.current_page + '&keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&status_request=' + this.forms.status_request;
+      var params = 'keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&status_request=' + this.forms.status_request;
       this.errors.errorMessage = '';
-      var url = this.$root.url + '/marketing/customer/get_request_unit';
+      var url = this.$root.url + '/marketing/customer/get_request_unit?page=' + this.request_list.pagination.current_page + '&' + params;
       if (p !== undefined) url = p;
       this.request_list.isLoading = true;
       axios({
@@ -7591,7 +7613,7 @@ __webpack_require__.r(__webpack_exports__);
       forms: {
         booking: {
           selectunit: '',
-          message: 'Halo ' + this.getproject.dev_name + ', saya ingin mengajukan pemesenan unit yang tersedia.',
+          message: 'Halo ' + this.getproject.dev_name + ', saya ingin mengajukan pemesenan unit.',
           errorMessage: ''
         }
       },
@@ -7656,7 +7678,11 @@ __webpack_require__.r(__webpack_exports__);
           document.location = _this2.$root.url + '/customer/request_unit';
         }, 2000);
       })["catch"](function (err) {
-        _this2.forms.booking.errorMessage = 'Whoops, ' + err.response.statusText;
+        if (err.response.status === 500) {
+          _this2.forms.booking.errorMessage = 'Whoops, ' + err.response.statusText;
+        } else {
+          _this2.forms.booking.errorMessage = err.response.data.statusText;
+        }
       });
     }
   },
@@ -77225,7 +77251,7 @@ var render = function() {
                     expression: "errors.errorMessage"
                   }
                 ],
-                staticClass: "uk-alert-danger",
+                staticClass: "uk-alert-danger uk-margin-top",
                 attrs: { "uk-alert": "" }
               },
               [_vm._v(_vm._s(_vm.errors.errorMessage))]
@@ -87781,14 +87807,14 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n        Anda belum mengajukan pemesanan unit.\n      "
+                      "\n        Tidak ada pengajuan pemesanan unit\n      "
                     )
                   ]
                 )
               : _c(
                   "div",
                   {
-                    staticClass: "uk-grid-small uk-grid-divider uk-margin-top",
+                    staticClass: "uk-margin-top uk-grid-divider",
                     attrs: { "uk-grid": "" }
                   },
                   _vm._l(_vm.request_list.results, function(unit) {
@@ -87797,105 +87823,155 @@ var render = function() {
                         "div",
                         {
                           staticClass:
-                            "uk-card card-unit-project uk-grid-collapse uk-grid-match uk-margin",
-                          attrs: { "uk-grid": "" }
+                            "uk-card uk-card-default card-unit-project uk-margin"
                         },
                         [
                           _c(
                             "div",
-                            {
-                              staticClass:
-                                "uk-card-body uk-card-small card-unit-body"
-                            },
-                            [
-                              _c(
-                                "a",
-                                { staticClass: "uk-card-title unit-name" },
-                                [_vm._v(_vm._s(unit.unit_name))]
-                              ),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "unit-location" }, [
-                                _c("span", {
-                                  attrs: {
-                                    "uk-icon": "icon: location; ratio: 0.8"
-                                  }
-                                }),
-                                _vm._v(
-                                  "\n                " +
-                                    _vm._s(unit.project_address) +
-                                    ",\n                " +
-                                    _vm._s(unit.city_name) +
-                                    ",\n                " +
-                                    _vm._s(unit.province_name) +
-                                    "\n              "
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "unit-price" }, [
-                                _vm._v(
-                                  "\n                Rp. " +
-                                    _vm._s(
-                                      _vm._f("currency")(unit.unit_price)
-                                    ) +
-                                    "\n              "
-                                )
-                              ])
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            {
-                              staticClass:
-                                "uk-card-footer card-unit-footer uk-padding-small"
-                            },
+                            { staticClass: "uk-card-body card-unit-body" },
                             [
                               _c(
                                 "div",
                                 {
                                   staticClass:
-                                    "uk-grid-small uk-child-width-auto",
-                                  attrs: { "uk-grid": "" }
+                                    "uk-margin-bottom card-unit-header"
                                 },
                                 [
-                                  _c("div", [
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "uk-grid-small uk-child-width-auto",
+                                      attrs: { "uk-grid": "" }
+                                    },
+                                    [
+                                      _c("div", [
+                                        unit.status_request ===
+                                        "waiting_response"
+                                          ? _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "status-request status-request-waiting-response"
+                                              },
+                                              [_vm._v("Menunggu Tanggapan")]
+                                            )
+                                          : unit.status_request === "meeting"
+                                          ? _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "status-request status-request-meeting"
+                                              },
+                                              [_vm._v("Dijadwalkan Meeting")]
+                                            )
+                                          : unit.status_request === "cancel"
+                                          ? _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "status-request status-request-cancel"
+                                              },
+                                              [_vm._v("Pesanan Dibatalkan")]
+                                            )
+                                          : _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "status-request status-request-reject"
+                                              },
+                                              [_vm._v("Pesanan Ditolak")]
+                                            )
+                                      ]),
+                                      _vm._v(" "),
+                                      _vm._m(0, true)
+                                    ]
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "unit-name" }, [
+                                _vm._v(_vm._s(unit.unit_name))
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "uk-margin-small unit-body" },
+                                [
+                                  _c("div", { staticClass: "uk-margin" }, [
+                                    _vm._m(1, true),
+                                    _vm._v(" "),
                                     _c(
                                       "div",
-                                      { staticClass: "unit-specification" },
+                                      { staticClass: "unit-body-content" },
                                       [
                                         _vm._v(
                                           "\n                    " +
-                                            _vm._s(unit.request_unique_id) +
-                                            "\n                    "
+                                            _vm._s(unit.customer_name) +
+                                            " | " +
+                                            _vm._s(unit.customer_phone_number) +
+                                            " "
                                         ),
-                                        _c("span", [_vm._v("Request ID")])
-                                      ]
-                                    )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("div", [
-                                    _c(
-                                      "div",
-                                      { staticClass: "unit-specification" },
-                                      [
+                                        _c("br"),
                                         _vm._v(
                                           "\n                    " +
-                                            _vm._s(
-                                              _vm.$root.formatDate(
-                                                unit.created_at,
-                                                "DD MMMM YYYY"
-                                              )
-                                            ) +
-                                            "\n                    "
-                                        ),
-                                        _c("span", [
-                                          _vm._v("Tanggal Pengajuan")
-                                        ])
+                                            _vm._s(unit.request_message) +
+                                            "\n                  "
+                                        )
                                       ]
                                     )
                                   ])
                                 ]
-                              )
+                              ),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "card-unit-footer" }, [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "uk-grid-small uk-child-width-auto",
+                                    attrs: { "uk-grid": "" }
+                                  },
+                                  [
+                                    _c("div", [
+                                      _c(
+                                        "div",
+                                        { staticClass: "unit-specification" },
+                                        [
+                                          _vm._v(
+                                            "\n                      " +
+                                              _vm._s(unit.request_unique_id) +
+                                              "\n                      "
+                                          ),
+                                          _c("span", [_vm._v("Request ID")])
+                                        ]
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("div", [
+                                      _c(
+                                        "div",
+                                        { staticClass: "unit-specification" },
+                                        [
+                                          _vm._v(
+                                            "\n                      " +
+                                              _vm._s(
+                                                _vm.$root.formatDate(
+                                                  unit.created_at,
+                                                  "DD MMMM YYYY"
+                                                )
+                                              ) +
+                                              "\n                      "
+                                          ),
+                                          _c("span", [
+                                            _vm._v("Tanggal Pengajuan")
+                                          ])
+                                        ]
+                                      )
+                                    ])
+                                  ]
+                                )
+                              ])
                             ]
                           )
                         ]
@@ -87944,7 +88020,48 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "uk-width-expand" }, [
+      _c("div", { staticClass: "uk-float-right" }, [
+        _c("div", { staticClass: "uk-inline" }, [
+          _c("a", {
+            staticClass: "card-unit-setting-icon",
+            attrs: { "uk-icon": "icon: more" }
+          }),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "card-unit-setting-dropdown",
+              attrs: { "uk-dropdown": "mode: click" }
+            },
+            [
+              _c("ul", { staticClass: "uk-nav uk-dropdown-nav" }, [
+                _c("li", [
+                  _c("a", { attrs: { href: "#" } }, [
+                    _vm._v("Buat Jadwal Meeting")
+                  ])
+                ])
+              ])
+            ]
+          )
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "unit-body-heading" }, [
+      _c("strong", [_vm._v("Pemesan")])
+    ])
+  }
+]
 render._withStripped = true
 
 

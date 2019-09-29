@@ -87881,7 +87881,73 @@ var render = function() {
                                             )
                                       ]),
                                       _vm._v(" "),
-                                      _vm._m(0, true)
+                                      _c(
+                                        "div",
+                                        { staticClass: "uk-width-expand" },
+                                        [
+                                          _c(
+                                            "div",
+                                            { staticClass: "uk-float-right" },
+                                            [
+                                              _c(
+                                                "div",
+                                                { staticClass: "uk-inline" },
+                                                [
+                                                  _c("a", {
+                                                    staticClass:
+                                                      "card-unit-setting-icon",
+                                                    attrs: {
+                                                      "uk-icon": "icon: more"
+                                                    }
+                                                  }),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "card-unit-setting-dropdown",
+                                                      attrs: {
+                                                        "uk-dropdown":
+                                                          "mode: click"
+                                                      }
+                                                    },
+                                                    [
+                                                      _c(
+                                                        "ul",
+                                                        {
+                                                          staticClass:
+                                                            "uk-nav uk-dropdown-nav"
+                                                        },
+                                                        [
+                                                          _c("li", [
+                                                            _c(
+                                                              "a",
+                                                              {
+                                                                attrs: {
+                                                                  href:
+                                                                    _vm.$root
+                                                                      .url +
+                                                                    "/marketing/meeting/create_schedule/" +
+                                                                    unit.request_unique_id
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "Buat Jadwal Meeting"
+                                                                )
+                                                              ]
+                                                            )
+                                                          ])
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
                                     ]
                                   )
                                 ]
@@ -87896,7 +87962,7 @@ var render = function() {
                                 { staticClass: "uk-margin-small unit-body" },
                                 [
                                   _c("div", { staticClass: "uk-margin" }, [
-                                    _vm._m(1, true),
+                                    _vm._m(0, true),
                                     _vm._v(" "),
                                     _c(
                                       "div",
@@ -88018,38 +88084,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "uk-width-expand" }, [
-      _c("div", { staticClass: "uk-float-right" }, [
-        _c("div", { staticClass: "uk-inline" }, [
-          _c("a", {
-            staticClass: "card-unit-setting-icon",
-            attrs: { "uk-icon": "icon: more" }
-          }),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "card-unit-setting-dropdown",
-              attrs: { "uk-dropdown": "mode: click" }
-            },
-            [
-              _c("ul", { staticClass: "uk-nav uk-dropdown-nav" }, [
-                _c("li", [
-                  _c("a", { attrs: { href: "#" } }, [
-                    _vm._v("Buat Jadwal Meeting")
-                  ])
-                ])
-              ])
-            ]
-          )
-        ])
-      ])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -101245,8 +101279,8 @@ Vue.component('marketing-dashboard-page', __webpack_require__(/*! ./components/F
 Vue.component('marketing-profile-page', __webpack_require__(/*! ./components/Frontend/Marketing/Profile.vue */ "./resources/js/components/Frontend/Marketing/Profile.vue")["default"]);
 Vue.component('marketing-request-unit', __webpack_require__(/*! ./components/Frontend/Marketing/RequestUnit.vue */ "./resources/js/components/Frontend/Marketing/RequestUnit.vue")["default"]);
 Vue.component('marketing-meeting-list', __webpack_require__(/*! ./components/Frontend/Marketing/MeetingList.vue */ "./resources/js/components/Frontend/Marketing/MeetingList.vue")["default"]);
-Vue.component('marketing-create-meeting', __webpack_require__(/*! ./components/Frontend/Marketing/CreateMeetingSchedule.vue */ "./resources/js/components/Frontend/Marketing/CreateMeetingSchedule.vue")["default"]);
-Vue.component('marketing-update-meeting', __webpack_require__(/*! ./components/Frontend/Marketing/UpdateMeetingSchedule.vue */ "./resources/js/components/Frontend/Marketing/UpdateMeetingSchedule.vue")["default"]); // developer
+Vue.component('marketing-create-schedule', __webpack_require__(/*! ./components/Frontend/Marketing/CreateMeetingSchedule.vue */ "./resources/js/components/Frontend/Marketing/CreateMeetingSchedule.vue")["default"]);
+Vue.component('marketing-update-schedule', __webpack_require__(/*! ./components/Frontend/Marketing/UpdateMeetingSchedule.vue */ "./resources/js/components/Frontend/Marketing/UpdateMeetingSchedule.vue")["default"]); // developer
 
 Vue.component('developer-register-page', __webpack_require__(/*! ./components/Frontend/Developer/Daftar.vue */ "./resources/js/components/Frontend/Developer/Daftar.vue")["default"]);
 Vue.component('developer-login-page', __webpack_require__(/*! ./components/Frontend/Developer/Masuk.vue */ "./resources/js/components/Frontend/Developer/Masuk.vue")["default"]);

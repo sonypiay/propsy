@@ -43,12 +43,12 @@ CREATE TABLE `customer` (
   `customer_name` varchar(128) NOT NULL,
   `customer_email` varchar(128) NOT NULL,
   `customer_address` text DEFAULT NULL,
-  `customer_region` int(10) unsigned DEFAULT NULL,
   `customer_city` int(10) unsigned DEFAULT NULL,
   `customer_phone_number` varchar(16) NOT NULL,
   `customer_username` varchar(64) NOT NULL,
   `customer_password` varchar(64) NOT NULL,
   `customer_photo` varchar(128) DEFAULT NULL,
+  `status_verification` enum('Y','N') NOT NULL DEFAULT 'N',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`customer_id`),
@@ -58,7 +58,7 @@ CREATE TABLE `customer` (
 
 /*Data for the table `customer` */
 
-insert  into `customer`(`customer_id`,`customer_name`,`customer_email`,`customer_address`,`customer_region`,`customer_city`,`customer_phone_number`,`customer_username`,`customer_password`,`customer_photo`,`created_at`,`updated_at`) values (1,'Sony Darmawan','sonypiay@mail.com','Jl. Meruya Selatan No. 7',NULL,1,'08561969052','sonypiay','d5f3b4c238382e41fbe4b404e882cc73',NULL,'2019-09-27 21:19:47','2019-09-27 21:21:19');
+insert  into `customer`(`customer_id`,`customer_name`,`customer_email`,`customer_address`,`customer_city`,`customer_phone_number`,`customer_username`,`customer_password`,`customer_photo`,`status_verification`,`created_at`,`updated_at`) values (1,'Sony Darmawan','sonypiay@mail.com','Jl. Meruya Selatan No. 7',1,'08561969052','sonypiay','d5f3b4c238382e41fbe4b404e882cc73',NULL,'N','2019-09-27 21:19:47','2019-09-27 21:21:19');
 
 /*Table structure for table `developer_user` */
 
@@ -79,6 +79,7 @@ CREATE TABLE `developer_user` (
   `dev_mobile_phone` varchar(16) DEFAULT NULL,
   `dev_ownership` enum('perusahaan','individu') DEFAULT NULL,
   `dev_logo` varchar(255) DEFAULT NULL,
+  `status_verification` enum('Y','N') NOT NULL DEFAULT 'N',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`dev_user_id`),
@@ -88,7 +89,7 @@ CREATE TABLE `developer_user` (
 
 /*Data for the table `developer_user` */
 
-insert  into `developer_user`(`dev_user_id`,`dev_name`,`dev_ownername`,`dev_slug`,`dev_address`,`dev_city`,`dev_username`,`dev_password`,`dev_email`,`dev_biography`,`dev_phone_office`,`dev_mobile_phone`,`dev_ownership`,`dev_logo`,`created_at`,`updated_at`) values (1,'PT Agung Podomoro Land Tbk','PT Agung Podomoro Land Tbk','pt-agung-podomoro-land-tbk','APL Tower 43rd Floor, Podomoro City Jl. Let. Jend. S. Parman Kav. 28 Jakarta 11470 Indonesia',2,'podomoro','25d55ad283aa400af464c76d713c07ad','podomoro@gmail.com','PT Agung Podomoro Land Tbk. (APLN) is a leading integrated diversified real estate owner, developer and manager in the retail, commercial, and residential real estate segments with diversified holdings. We have an integrated property development model, from land acquisition and/or sourcing, to design and development, to project management, sales, commercial leasing and marketing, to the operation and management of our superblock developments, shopping malls, offices, hotels, and residential apartments and houses. We are known as a pioneer of the superblock development. Our high quality landmark projects, to name a few are Podomoro City, Kuningan City, and Senayan City.\n\n \n\nAPLN was established on July 30, 2004 under the name PT Tiara Metropolitan Jaya. In 2010, our shareholders completed a corporate restructuring, pursuant to which six developments and their holding companies were transferred to our control. APLN, is the flagship listed entity (IDX:APLN) of Agung Podomoro Group (APG), is one of the fastest growing and largest real estate developers in Indonesia with interests in superblocks, retail properties, office, apartments and residential, and hotels. APG established its first development, a housing complex in Simprug area, South Jakarta, in 1969 and completed its construction in 1973. From 1973 to present, members of APG completed or begun construction of more than 70 property projects, with majority addressed to middle class segments of society, with projects ranging from low cost apartments to high end apartments in South Jakarta, landed residentials, high end and the neighborhood mall, shop houses, hotels, soho and office towers.','622129034567','08561969052','perusahaan','E5J7mlIoEsknBfY1YRifZgs9JBwm3FFEuIi5CBNc.png','2019-09-19 17:02:30','2019-09-26 20:46:52');
+insert  into `developer_user`(`dev_user_id`,`dev_name`,`dev_ownername`,`dev_slug`,`dev_address`,`dev_city`,`dev_username`,`dev_password`,`dev_email`,`dev_biography`,`dev_phone_office`,`dev_mobile_phone`,`dev_ownership`,`dev_logo`,`status_verification`,`created_at`,`updated_at`) values (1,'PT Agung Podomoro Land Tbk','PT Agung Podomoro Land Tbk','pt-agung-podomoro-land-tbk','APL Tower 43rd Floor, Podomoro City Jl. Let. Jend. S. Parman Kav. 28 Jakarta 11470 Indonesia',2,'podomoro','25d55ad283aa400af464c76d713c07ad','podomoro@gmail.com','PT Agung Podomoro Land Tbk. (APLN) is a leading integrated diversified real estate owner, developer and manager in the retail, commercial, and residential real estate segments with diversified holdings. We have an integrated property development model, from land acquisition and/or sourcing, to design and development, to project management, sales, commercial leasing and marketing, to the operation and management of our superblock developments, shopping malls, offices, hotels, and residential apartments and houses. We are known as a pioneer of the superblock development. Our high quality landmark projects, to name a few are Podomoro City, Kuningan City, and Senayan City.\n\n \n\nAPLN was established on July 30, 2004 under the name PT Tiara Metropolitan Jaya. In 2010, our shareholders completed a corporate restructuring, pursuant to which six developments and their holding companies were transferred to our control. APLN, is the flagship listed entity (IDX:APLN) of Agung Podomoro Group (APG), is one of the fastest growing and largest real estate developers in Indonesia with interests in superblocks, retail properties, office, apartments and residential, and hotels. APG established its first development, a housing complex in Simprug area, South Jakarta, in 1969 and completed its construction in 1973. From 1973 to present, members of APG completed or begun construction of more than 70 property projects, with majority addressed to middle class segments of society, with projects ranging from low cost apartments to high end apartments in South Jakarta, landed residentials, high end and the neighborhood mall, shop houses, hotels, soho and office towers.','622129034567','08561969052','perusahaan','E5J7mlIoEsknBfY1YRifZgs9JBwm3FFEuIi5CBNc.png','N','2019-09-19 17:02:30','2019-09-26 20:46:52');
 
 /*Table structure for table `log_project_request` */
 
@@ -103,11 +104,11 @@ CREATE TABLE `log_project_request` (
   PRIMARY KEY (`log_id`),
   KEY `fk_log_request_id` (`request_unique_id`),
   CONSTRAINT `fk_log_request_id` FOREIGN KEY (`request_unique_id`) REFERENCES `project_request` (`request_unique_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `log_project_request` */
 
-insert  into `log_project_request`(`log_id`,`log_message`,`request_unique_id`,`created_at`,`updated_at`) values (1,'Sony Darmawan mengajukan pemesanan unit Podomoro Park Bandung Tipe 6','REQ00001-20190928','2019-09-28 00:40:36','2019-09-28 00:40:36'),(2,'Sony Darmawan mengajukan pemesanan unit Podomoro Park Bandung Tipe 7','REQ00002-20190928','2019-09-28 00:40:51','2019-09-28 00:40:51'),(3,'Sony Darmawan mengajukan pemesanan unit Podomoro Park Bandung Tipe 8','REQ00003-20190928','2019-09-28 00:41:00','2019-09-28 00:41:00'),(4,'Sony Darmawan membatalkan pengajuan pesanan REQ00003-20190928','REQ00003-20190928','2019-09-28 00:42:26','2019-09-28 00:42:26'),(5,'Sony Darmawan membatalkan pengajuan pesanan REQ00002-20190928','REQ00002-20190928','2019-09-28 00:45:51','2019-09-28 00:45:51'),(6,'Sony Darmawan mengajukan pemesanan unit Podomoro Park Bandung Tipe 8','REQ00004-20190928','2019-09-28 00:46:09','2019-09-28 00:46:09'),(7,'Sony Darmawan mengajukan pemesanan unit Podomoro Park Bandung Tipe 7','REQ00005-20190928','2019-09-28 00:46:54','2019-09-28 00:46:54');
+insert  into `log_project_request`(`log_id`,`log_message`,`request_unique_id`,`created_at`,`updated_at`) values (1,'Sony Darmawan mengajukan pemesanan unit Podomoro Park Bandung Tipe 6','REQ00001-20190930','2019-09-30 00:42:06','2019-09-30 00:42:06');
 
 /*Table structure for table `marketing_user` */
 
@@ -135,7 +136,32 @@ CREATE TABLE `marketing_user` (
 
 /*Data for the table `marketing_user` */
 
-insert  into `marketing_user`(`mkt_user_id`,`mkt_fullname`,`mkt_email`,`mkt_username`,`mkt_password`,`mkt_phone_number`,`mkt_mobile_phone`,`mkt_city`,`mkt_address`,`mkt_biography`,`mkt_profile_photo`,`dev_user_id`,`created_at`,`updated_at`) values (1,'Jennifer Aryawinata','jennifer.winata@pijaru.com','jenniferwinata96','25d55ad283aa400af464c76d713c07ad','02121129888','08561969052',5,NULL,NULL,NULL,1,'2019-09-26 17:30:11','2019-09-26 17:51:14'),(2,'Getar Jagatraya','getar.jagatraya@pijaru.com','stickgetar','25d55ad283aa400af464c76d713c07ad','02121292928','08561969052',2,NULL,NULL,NULL,1,'2019-09-26 17:58:35','2019-09-26 17:58:35');
+insert  into `marketing_user`(`mkt_user_id`,`mkt_fullname`,`mkt_email`,`mkt_username`,`mkt_password`,`mkt_phone_number`,`mkt_mobile_phone`,`mkt_city`,`mkt_address`,`mkt_biography`,`mkt_profile_photo`,`dev_user_id`,`created_at`,`updated_at`) values (1,'Marketing Agency Depok','mktdepok@agungpodomoro.com','podomoro_depok','25d55ad283aa400af464c76d713c07ad','02121129888','08561969052',8,NULL,NULL,NULL,1,'2019-09-26 17:30:11','2019-09-29 21:18:27'),(2,'Marketing Agency Jakarta','mktjakarta@agungpodomoro.com','podomoro_jakarta','25d55ad283aa400af464c76d713c07ad','02121292928','08561969052',2,NULL,NULL,NULL,1,'2019-09-26 17:58:35','2019-09-29 21:17:47');
+
+/*Table structure for table `meeting_appointment` */
+
+DROP TABLE IF EXISTS `meeting_appointment`;
+
+CREATE TABLE `meeting_appointment` (
+  `meeting_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `meeting_time` datetime NOT NULL,
+  `meeting_status` enum('waiting_confirmation','accept','revision','cancel') DEFAULT NULL,
+  `mkt_user_id` int(10) unsigned NOT NULL,
+  `customer_id` int(10) unsigned NOT NULL,
+  `request_unique_id` varchar(18) NOT NULL,
+  `meeting_note` text DEFAULT NULL,
+  `meeting_result` text DEFAULT NULL,
+  `document_file` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`meeting_id`),
+  KEY `fk_meeting_mkt_user_idx` (`mkt_user_id`),
+  KEY `fk_meeting_customer_idx` (`customer_id`),
+  KEY `fk_meeting_request_idx` (`request_unique_id`),
+  CONSTRAINT `fk_meeting_customer_idx` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_meeting_mkt_user_idx` FOREIGN KEY (`mkt_user_id`) REFERENCES `marketing_user` (`mkt_user_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_meeting_request_idx` FOREIGN KEY (`request_unique_id`) REFERENCES `project_request` (`request_unique_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `meeting_appointment` */
 
 /*Table structure for table `project_gallery` */
 
@@ -196,28 +222,27 @@ DROP TABLE IF EXISTS `project_request`;
 CREATE TABLE `project_request` (
   `request_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `request_unique_id` varchar(18) NOT NULL,
-  `mkt_user_id` int(10) unsigned DEFAULT NULL,
   `dev_user_id` int(10) unsigned NOT NULL,
   `customer_id` int(10) unsigned NOT NULL,
   `unit_type_id` int(10) unsigned NOT NULL,
   `request_message` text NOT NULL,
   `request_note` text DEFAULT NULL,
-  `status_request` enum('open','hold','close','cancel','survey') NOT NULL DEFAULT 'open',
+  `status_request` enum('waiting_response','cancel','meeting','done','reject') NOT NULL DEFAULT 'waiting_response',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`request_id`),
   UNIQUE KEY `request_unique_id` (`request_unique_id`),
   KEY `fk_req_unit_type_idx` (`unit_type_id`),
-  KEY `fk_req_mkt_user_idx` (`mkt_user_id`),
   KEY `fk_req_cust_idx` (`customer_id`),
+  KEY `fk_req_dev_user_idx` (`dev_user_id`),
   CONSTRAINT `fk_req_cust_idx` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_req_mkt_user_idx` FOREIGN KEY (`mkt_user_id`) REFERENCES `marketing_user` (`mkt_user_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_req_dev_user_idx` FOREIGN KEY (`dev_user_id`) REFERENCES `developer_user` (`dev_user_id`) ON DELETE CASCADE,
   CONSTRAINT `fk_req_unit_type_idx` FOREIGN KEY (`unit_type_id`) REFERENCES `project_unit_type` (`unit_type_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_request` */
 
-insert  into `project_request`(`request_id`,`request_unique_id`,`mkt_user_id`,`dev_user_id`,`customer_id`,`unit_type_id`,`request_message`,`request_note`,`status_request`,`created_at`,`updated_at`) values (1,'REQ00001-20190928',NULL,1,1,1,'Halo PT Agung Podomoro Land Tbk, saya ingin mengajukan pemesenan unit yang tersedia.',NULL,'open','2019-09-28 00:40:36','2019-09-28 00:40:36'),(2,'REQ00002-20190928',NULL,1,1,4,'Halo PT Agung Podomoro Land Tbk, saya ingin mengajukan pemesenan unit yang tersedia.',NULL,'cancel','2019-09-28 00:40:51','2019-09-28 00:45:51'),(3,'REQ00003-20190928',NULL,1,1,5,'Halo PT Agung Podomoro Land Tbk, saya ingin mengajukan pemesenan unit yang tersedia.',NULL,'cancel','2019-09-28 00:41:00','2019-09-28 00:42:25'),(4,'REQ00004-20190928',NULL,1,1,5,'Halo PT Agung Podomoro Land Tbk, saya ingin mengajukan pemesenan unit yang tersedia.',NULL,'open','2019-09-28 00:46:09','2019-09-28 00:46:09'),(5,'REQ00005-20190928',NULL,1,1,4,'Halo PT Agung Podomoro Land Tbk, saya ingin mengajukan pemesenan unit yang tersedia.',NULL,'open','2019-09-28 00:46:54','2019-09-28 00:46:54');
+insert  into `project_request`(`request_id`,`request_unique_id`,`dev_user_id`,`customer_id`,`unit_type_id`,`request_message`,`request_note`,`status_request`,`created_at`,`updated_at`) values (1,'REQ00001-20190930',1,1,1,'Halo PT Agung Podomoro Land Tbk, saya ingin mengajukan pemesenan unit.',NULL,'waiting_response','2019-09-30 00:42:06','2019-09-30 00:42:06');
 
 /*Table structure for table `project_unit_gallery` */
 
@@ -229,7 +254,9 @@ CREATE TABLE `project_unit_gallery` (
   `unit_type_id` int(10) unsigned NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`unit_gallery_id`)
+  PRIMARY KEY (`unit_gallery_id`),
+  KEY `fk_unit_gallery_unit_type_idx` (`unit_type_id`),
+  CONSTRAINT `fk_unit_gallery_unit_type_idx` FOREIGN KEY (`unit_type_id`) REFERENCES `project_unit_type` (`unit_type_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
 
 /*Data for the table `project_unit_gallery` */
@@ -251,7 +278,7 @@ CREATE TABLE `project_unit_type` (
   `unit_km` tinyint(3) unsigned NOT NULL,
   `unit_price` bigint(20) unsigned NOT NULL,
   `unit_description` longtext DEFAULT NULL,
-  `unit_status` enum('available','sold') NOT NULL DEFAULT 'available',
+  `unit_status` enum('available','sold','booked') NOT NULL DEFAULT 'available',
   `unit_watt` int(10) unsigned DEFAULT NULL,
   `unit_facility` text DEFAULT NULL,
   `unit_thumbnail` varchar(255) DEFAULT NULL,
@@ -282,30 +309,6 @@ CREATE TABLE `province` (
 
 insert  into `province`(`province_id`,`province_name`,`province_slug`) values (1,'Banten','banten'),(2,'Jawa Barat','jawa-barat'),(3,'DKI Jakarta','dki-jakarta');
 
-/*Table structure for table `survey_schedule` */
-
-DROP TABLE IF EXISTS `survey_schedule`;
-
-CREATE TABLE `survey_schedule` (
-  `survey_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `survey_date` datetime NOT NULL,
-  `mkt_user_id` int(10) unsigned NOT NULL,
-  `customer_id` int(10) unsigned NOT NULL,
-  `request_id` int(10) unsigned NOT NULL,
-  `status_survey` enum('open','close') NOT NULL DEFAULT 'open',
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`survey_id`),
-  KEY `fk_survey_req_idx` (`request_id`),
-  KEY `fk_survey_mkt_user_idx` (`mkt_user_id`),
-  KEY `fk_survey_cust_idx` (`customer_id`),
-  CONSTRAINT `fk_survey_cust_idx` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`),
-  CONSTRAINT `fk_survey_mkt_user_idx` FOREIGN KEY (`mkt_user_id`) REFERENCES `marketing_user` (`mkt_user_id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_survey_req_idx` FOREIGN KEY (`request_id`) REFERENCES `project_request` (`request_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `survey_schedule` */
-
 /*Table structure for table `unit_facility` */
 
 DROP TABLE IF EXISTS `unit_facility`;
@@ -321,6 +324,45 @@ CREATE TABLE `unit_facility` (
 /*Data for the table `unit_facility` */
 
 insert  into `unit_facility`(`id_facility`,`facility_name`,`created_at`,`updated_at`) values (1,'Pendingin Ruangan (AC)','2019-09-23 20:12:15','2019-09-23 20:12:15'),(2,'Keamanan 24 Jam','2019-09-23 20:12:15','2019-09-23 20:12:15'),(3,'Air Panas','2019-09-23 20:12:15','2019-09-23 20:12:15'),(4,'Kolam Renang','2019-09-23 20:12:15','2019-09-23 20:12:15'),(5,'Telepon','2019-09-23 20:12:15','2019-09-23 20:12:15'),(6,'Balkon','2019-09-23 20:12:15','2019-09-23 20:12:15'),(7,'Taman','2019-09-23 20:12:15','2019-09-23 20:12:15'),(8,'Taman Bermain Anak','2019-09-23 20:12:15','2019-09-23 20:12:15'),(9,'Garasi','2019-09-23 20:12:15','2019-09-23 20:12:15'),(10,'Secure Parking','2019-09-23 20:12:15','2019-09-23 20:12:15'),(11,'Gym','2019-09-23 20:12:15','2019-09-23 20:12:15'),(12,'Halaman Terbuka','2019-09-23 20:12:15','2019-09-23 20:12:15');
+
+/*Table structure for table `verification_customer` */
+
+DROP TABLE IF EXISTS `verification_customer`;
+
+CREATE TABLE `verification_customer` (
+  `verify_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `customer_id` int(10) unsigned NOT NULL,
+  `hash_id` varchar(128) DEFAULT NULL,
+  `expire_date` time DEFAULT NULL,
+  `status_verify` enum('Y','N') DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`verify_id`),
+  KEY `fk_verify_customer_idx` (`customer_id`),
+  CONSTRAINT `fk_verify_customer_idx` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `verification_customer` */
+
+/*Table structure for table `verification_developer` */
+
+DROP TABLE IF EXISTS `verification_developer`;
+
+CREATE TABLE `verification_developer` (
+  `verify_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `dev_user_id` int(10) unsigned NOT NULL,
+  `id_card` varchar(16) NOT NULL,
+  `id_npwp` varchar(16) NOT NULL,
+  `document_file` varchar(64) NOT NULL,
+  `status_verification` enum('Y','N','R') DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`verify_id`),
+  KEY `fk_verify_devuser_idx` (`dev_user_id`),
+  CONSTRAINT `fk_verify_devuser_idx` FOREIGN KEY (`dev_user_id`) REFERENCES `developer_user` (`dev_user_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `verification_developer` */
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

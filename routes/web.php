@@ -64,6 +64,10 @@ Route::group(['prefix' => 'marketing'], function() {
     Route::get('/get_request_unit', 'Frontend\Marketing\RequestUnitController@get_request_unit');
     //Route::get('/detail_request/{reqid}', 'Frontend\Marketing\RequestUnitController@get_detail_request');
   });
+
+  Route::group(['prefix' => 'meeting'], function() {
+    Route::get('/create_schedule/{request_id?}', 'Frontend\Marketing\MeetingListController@create_schedule_page')->name('marketing_create_schedule');
+  });
 });
 
 Route::group(['prefix' => 'developer'], function() {

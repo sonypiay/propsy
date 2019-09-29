@@ -54,7 +54,7 @@
                           <a class="card-unit-setting-icon" uk-icon="icon: more"></a>
                           <div uk-dropdown="mode: click" class="card-unit-setting-dropdown">
                             <ul class="uk-nav uk-dropdown-nav">
-                              <li><a href="#">Buat Jadwal Meeting</a></li>
+                              <li><a :href="$root.url + '/marketing/meeting/create_schedule/' + unit.request_unique_id">Buat Jadwal Meeting</a></li>
                             </ul>
                           </div>
                         </div>

@@ -7,16 +7,19 @@
           <div class="uk-margin-small-bottom card-requestlist-subtext">Status Pengajuan</div>
           <div class="uk-grid-small uk-child-width-auto" uk-grid>
             <div>
-              <button @click="getRequestList('open')" :class="{'btn-status-active': forms.status_request === 'open'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Open</button>
+              <button @click="getRequestList('waiting_response')" :class="{'btn-status-active': forms.status_request === 'waiting_response'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Menunggu Tanggapan</button>
             </div>
             <div>
-              <button @click="getRequestList('cancel')" :class="{'btn-status-active': forms.status_request === 'cancel'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Cancel</button>
+              <button @click="getRequestList('cancel')" :class="{'btn-status-active': forms.status_request === 'cancel'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Dibatalkan</button>
             </div>
             <div>
-              <button @click="getRequestList('survey')" :class="{'btn-status-active': forms.status_request === 'survey'}" class="uk-button uk-button-primary uk-button-small btn-status-request">On Survey</button>
+              <button @click="getRequestList('meeting')" :class="{'btn-status-active': forms.status_request === 'meeting'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Dijadwalkan Meeting</button>
             </div>
             <div>
-              <button @click="getRequestList('done')" :class="{'btn-status-active': forms.status_request === 'done'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Done</button>
+              <button @click="getRequestList('reject')" :class="{'btn-status-active': forms.status_request === 'reject'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Ditolak</button>
+            </div>
+            <div>
+              <button @click="getRequestList('done')" :class="{'btn-status-active': forms.status_request === 'done'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Selesai</button>
             </div>
           </div>
         </div>
@@ -27,7 +30,7 @@
         </div>
         <div v-else>
           <div v-if="request_list.total === 0" class="uk-alert-warning" uk-alert>
-            Belum ada pengajuan pesanan.
+            Anda belum mengajukan pemesanan unit.
           </div>
           <div v-else class="uk-grid-small uk-grid-divider uk-margin-top" uk-grid>
             <div v-for="unit in request_list.results" class="uk-width-1-1">
@@ -78,7 +81,7 @@
                           Lihat Lebih Lanjut
                         </a>
                       </div>
-                      <div v-if="unit.status_request === 'open' || unit.status_request === 'survey'">
+                      <div v-if="unit.status_request === 'waiting_response' || unit.status_request === 'meeting'">
                         <button @click="onCancelRequest( unit.request_unique_id )" class="uk-button uk-button-small btn-cancel-request">Batalkan Pengajuan</button>
                       </div>
                     </div>

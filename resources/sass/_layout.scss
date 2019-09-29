@@ -334,6 +334,29 @@ html, body {
         }
       }
     }
+    .card-requestlist {
+      .card-requestlist-heading {
+        @include fontsetting( $font-primary, 22px, 600, normal, normal, 0.4px );
+        color: #333333;
+      }
+      .card-requestlist-subtext {
+        @include fontsetting( $font-primary, 16px, 400, normal, normal, 0.4px );
+        color: #666666;
+      }
+      .btn-status-request {
+        background: #ffffff;
+        color: $color3;
+        @include fontsetting( $font-primary, 14px, 600, normal, normal, 0.4px );
+        border: 1px solid $color3;
+        border-radius: 20px;
+        text-transform: capitalize;
+        &:hover, &:focus { background: $color3; color: #ffffff; }
+      }
+      .btn-status-active {
+        background: $color3;
+        color: #ffffff;
+      }
+    }
   }
 }
 
@@ -491,6 +514,24 @@ html, body {
 .card-unit-project {
   .unit-thumbnail { min-height: 200px; }
   .card-unit-body {
+    .unit-status {
+      @include fontsetting( $font-primary, 10px, 600, normal, normal, 0.4px );
+      padding: 3px;
+      border-radius: 4px;
+      text-align: center;
+    }
+    .unit-status-available {
+      background: $color3;
+      color: #ffffff;
+    }
+    .unit-status-sold {
+      background: $color-danger;
+      color: #ffffff;
+    }
+    .unit-status-booked {
+      background: $color-warning;
+      color: #ffffff;
+    }
     .unit-name {
       @include fontsetting( $font-primary, 22px, 700, normal, normal, 0.4px );
       color: $color3;

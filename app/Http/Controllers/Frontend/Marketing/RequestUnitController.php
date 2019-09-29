@@ -39,35 +39,41 @@ class RequestUnitController extends Controller
     $keywords = $request->keywords;
     $limit = $request->limit;
     $status_request = $request->status_request;
-    $offset = $request->offset;
     $mktuser = $marketinguser->getinfo();
 
     $query = $project_request->select(
+      'project_request.request_unique_id',
+      'project_request.request_message',
+      'project_request.status_request',
+      'project_request.request_note',
       'project_request.created_at',
       'project_request.updated_at',
-      'project_request.request_note',
-      'project_request.status_request',
-      'customer.customer_name',
-      'customer.customer_email',
-      'customer.customer_phone_number',
-      'customer.customer_city',
-      'customer.customer_region',
-      'customer.customer_address',
-      'project_unit.project_unit_id',
-      'project_unit.project_unit_name',
-      'project_unit.project_unit_number'
+      'project_unit_type.unit_type_id',
+      'project_unit_type.unit_name',
+      'project_unit_type.unit_price',
+      'project_list.project_unique_id',
+      'project_list.project_name',
+      'project_list.project_address',
+      'city.city_name',
+      'province.province_name'
     )
     ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
-    ->join('project_unit_type', 'project_request.project_unit_type_id', '=', 'project_unit_type.project_unit_type_id')
-    ->join('project_unit', 'project_unit_type.project_unit_id', '=', 'project_unit.project_unit_id');
+    ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
+    ->join('project_list', 'project_unit_type.project_unique_id', '=', 'project_unit_type.project_unique_id')
+    ->join('city', 'project_list.project_city', '=', 'city.city_id')
+    ->join('province', 'city.province_id', '=', 'province.province_id');
 
     if( empty( $keywords ) )
     {
-      $result = $query->where('project_request.mkt_user_id', $mktuser->mkt_user_id);
+      $result = $query->where([
+        ['project_request.dev_user_id', $mktuser->dev_user_id],
+        ['project_request.status_request', '!=', 'done']
+      ]);
+
       if( $status_request !== 'all' )
       {
         $result = $query->where([
-          ['project_request.mkt_user_id', $mktuser->mkt_user_id],
+          ['project_request.dev_user_id', $mktuser->dev_user_id],
           ['project_request.status_request', $status_request]
         ])
         ->orderBy('project_request.created_at', 'desc');
@@ -76,23 +82,25 @@ class RequestUnitController extends Controller
     else
     {
       $result = $query->where([
-        ['project_request.mkt_user_id', $mktuser->mkt_user_id],
-        ['customer.customer_name', 'like', '%' . $keywords . '%']
+        ['project_request.dev_user_id', $mktuser->dev_user_id],
+        ['customer.customer_name', 'like', '%' . $keywords . '%'],
+        ['project_request.status_request', '!=', 'done']
       ])
       ->orWhere([
-        ['project_request.mkt_user_id', $mktuser->mkt_user_id],
-        ['customer.customer_email', 'like', '%' . $keywords . '%']
+        ['project_request.dev_user_id', $mktuser->dev_user_id],
+        ['customer.customer_phone_number', 'like', '%' . $keywords . '%'],
+        ['project_request.status_request', '!=', 'done']
       ])
       ->orderBy('project_request.created_at', 'desc');
       if( $status_request !== 'all' )
       {
         $result = $query->where([
-          ['project_request.mkt_user_id', $mktuser->mkt_user_id],
+          ['project_request.dev_user_id', $mktuser->dev_user_id],
           ['customer.customer_name', 'like', '%' . $keywords . '%'],
           ['project_request.status_request', $status_request]
         ])
         ->orWhere([
-          ['project_request.mkt_user_id', $mktuser->mkt_user_id],
+          ['project_request.dev_user_id', $mktuser->dev_user_id],
           ['customer.customer_email', 'like', '%' . $keywords . '%'],
           ['project_request.status_request', $status_request]
         ])
@@ -100,14 +108,11 @@ class RequestUnitController extends Controller
       }
     }
 
-    $result = $result->offset( $offset )
-    ->limit( $limit )
-    ->get();
+    $getresult = $result->groupBy('project_request.request_unique_id')
+    ->paginate( $limit );
+
     $res = [
-      'data' => [
-        'total' => $result->count(),
-        'result' => $result
-      ]
+      'results' => $getresult
     ];
     return response()->json( $res, 200 );
   }

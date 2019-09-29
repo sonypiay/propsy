@@ -899,6 +899,51 @@ body {
   background: #1fc8c9;
 }
 
+.dashboard-container .dashboard-content .card-requestlist .card-requestlist-heading {
+  font-size: 22px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #333333;
+}
+
+.dashboard-container .dashboard-content .card-requestlist .card-requestlist-subtext {
+  font-size: 16px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #666666;
+}
+
+.dashboard-container .dashboard-content .card-requestlist .btn-status-request {
+  background: #ffffff;
+  color: #1fc8c9;
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  border: 1px solid #1fc8c9;
+  border-radius: 20px;
+  text-transform: capitalize;
+}
+
+.dashboard-container .dashboard-content .card-requestlist .btn-status-request:hover,
+.dashboard-container .dashboard-content .card-requestlist .btn-status-request:focus {
+  background: #1fc8c9;
+  color: #ffffff;
+}
+
+.dashboard-container .dashboard-content .card-requestlist .btn-status-active {
+  background: #1fc8c9;
+  color: #ffffff;
+}
+
 .sidebar-dev-info .sidebar-dev-heading {
   text-align: center;
   color: #333333;
@@ -1172,6 +1217,33 @@ body {
 
 .card-unit-project .unit-thumbnail {
   min-height: 200px;
+}
+
+.card-unit-project .card-unit-body .unit-status {
+  font-size: 10px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  padding: 3px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.card-unit-project .card-unit-body .unit-status-available {
+  background: #1fc8c9;
+  color: #ffffff;
+}
+
+.card-unit-project .card-unit-body .unit-status-sold {
+  background: #e02c2c;
+  color: #ffffff;
+}
+
+.card-unit-project .card-unit-body .unit-status-booked {
+  background: #fbad70;
+  color: #ffffff;
 }
 
 .card-unit-project .card-unit-body .unit-name {

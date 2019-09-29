@@ -4,7 +4,7 @@
       <div class="uk-card-title uk-margin dashboard-content-heading">Pengajuan Pemesanan</div>
       <div class="uk-margin uk-grid-small uk-child-width-auto" uk-grid>
         <div>
-          <select class="uk-select uk-select dash-form-input" v-model="forms.limit" @change="getRequestInfo()">
+          <select class="uk-select uk-select dash-form-input" v-model="forms.limit" @change="getRequestUnit()">
             <option value="5">5 baris</option>
             <option value="10">10 baris</option>
             <option value="15">15 baris</option>
@@ -12,62 +12,79 @@
           </select>
         </div>
         <div>
-          <select class="uk-select uk-select dash-form-input" v-model="forms.status_request" @change="getRequestInfo()">
+          <select class="uk-select uk-select dash-form-input" v-model="forms.status_request" @change="getRequestUnit()">
             <option value="all">Semua Status</option>
-            <option value="open">Open</option>
-            <option value="cancel">Cancel</option>
-            <option value="survey">On Survey</option>
-            <option value="close">Closed</option>
+            <option value="waiting_response">Meunggu Tanggapan</option>
+            <option value="cancel">Dibatalkan</option>
+            <option value="meeting">Dijadwalkan Meeting</option>
+            <option value="reject">Ditolak</option>
           </select>
         </div>
         <div>
           <div class="uk-inline">
             <span class="uk-form-icon" uk-icon="search"></span>
-            <input type="search" class="uk-input dash-form-input" v-model="forms.keywords" @keyup.enter="getRequestInfo()" placeholder="Cari customer...">
+            <input type="search" class="uk-input dash-form-input" v-model="forms.keywords" @keyup.enter="getRequestUnit()" placeholder="Cari customer...">
           </div>
         </div>
       </div>
 
-      <div v-if="request_list.isLoading === true" class="uk-text-center">
+      <div v-show="errors.errorMessage" class="uk-alert-danger" uk-alert>{{ errors.errorMessage }}</div>
+      <div v-if="request_list.isLoading === true" class="uk-margin-top uk-text-center">
         <span uk-spinner></span>
       </div>
-      <div else class="uk-margin">
+      <div v-else>
         <div v-if="request_list.total === 0" class="uk-alert-warning" uk-alert>
-          Belum ada proyek.
+          Anda belum mengajukan pemesanan unit.
         </div>
-        <div v-else>
-          <table class="uk-table uk-table-middle uk-table-hover uk-table-divider uk-table-striped uk-table-small">
-            <thead>
-              <tr>
-                <th>Aksi</th>
-                <th>Nama Customer</th>
-                <th>Email</th>
-                <th>No. Telepon</th>
-                <th>Status Permintaan</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="req in request_list.results">
-                <td>
-                  <div class="uk-inline">
-                    <a class="uk-button uk-button-primary uk-button-small dash-btn dash-action-btn" uk-icon="cog"></a>
+        <div v-else class="uk-grid-small uk-grid-divider uk-margin-top" uk-grid>
+          <div v-for="unit in request_list.results" class="uk-width-1-1">
+            <div class="uk-card card-unit-project uk-grid-collapse uk-grid-match uk-margin" uk-grid>
+              <div class="uk-card-body uk-card-small card-unit-body">
+                <a class="uk-card-title unit-name">{{ unit.unit_name }}</a>
+                <div class="unit-location">
+                  <span uk-icon="icon: location; ratio: 0.8"></span>
+                  {{ unit.project_address }},
+                  {{ unit.city_name }},
+                  {{ unit.province_name }}
+                </div>
+                <div class="unit-price">
+                  Rp. {{ unit.unit_price | currency }}
+                </div>
+              </div>
+              <div class="uk-card-footer card-unit-footer uk-padding-small">
+                <div class="uk-grid-small uk-child-width-auto" uk-grid>
+                  <div>
+                    <div class="unit-specification">
+                      {{ unit.request_unique_id }}
+                      <span>Request ID</span>
+                    </div>
                   </div>
-                </td>
-                <td>{{ req.customer_name }}</td>
-                <td>{{ req.customer_email }}</td>
-                <td>{{ req.customer_phone_number }}</td>
-                <td>
-                  <label class="uk-label uk-label-success" v-if="req.status_request === 'open'">Open</label>
-                  <label class="uk-label uk-label-danger" v-else>Closed</label>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="uk-text-center uk-margin">
-            <a class="uk-button uk-button-small uk-button-primary dash-btn">Lihat Lebih Banyak</a>
+                  <div>
+                    <div class="unit-specification">
+                      {{ $root.formatDate( unit.created_at, 'DD MMMM YYYY' ) }}
+                      <span>Tanggal Pengajuan</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+      <ul class="uk-pagination uk-flex-center">
+        <li v-if="request_list.pagination.prev_page_url !== null">
+          <a @click="getRequestList( request_list.pagination.prev_page_url )" uk-icon="chevron-left"></a>
+        </li>
+        <li v-else class="uk-disabled">
+          <a uk-icon="chevron-left"></a>
+        </li>
+        <li v-if="request_list.pagination.next_page_url !== null">
+          <a @click="getRequestList( request_list.pagination.next_page_url )" uk-icon="chevron-right"></a>
+        </li>
+        <li v-else class="uk-disabled">
+          <a uk-icon="chevron-right"></a>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -81,56 +98,56 @@ export default {
         isLoading: false,
         total: 0,
         results: [],
-        currentOffset: 0,
-        nextOffset: null
+        pagination: {
+          current_page: 1,
+          last_page: 1,
+          prev_page_url: null,
+          next_page_url: null
+        }
       },
       forms: {
         keywords: '',
         limit: 10,
         status_request: 'all'
+      },
+      errors: {
+        errorMessage: ''
       }
     }
   },
   methods: {
-    getRequestInfo( offset )
+    getRequestUnit( p )
     {
-      if( offset === undefined )
-      {
-        this.request_list.nextOffset = 0;
-      }
-      else
-      {
-        this.request_list.nextOffset = this.request_list.nextOffset + offset;
-      }
-      this.request_list.currentOffset = this.request_list.nextOffset;
-      var params = 'offset=' + this.request_list.currentOffset + '&keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&status_request=' + this.forms.status_request;
+      var params = 'page=' + this.request_list.pagination.current_page + '&keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&status_request=' + this.forms.status_request;
+      this.errors.errorMessage = '';
 
+      var url = this.$root.url + '/marketing/customer/get_request_unit';
+      if( p !== undefined )
+        url = p;
+
+      this.request_list.isLoading = true;
       axios({
         method: 'get',
-        url: this.$root.url + '/marketing/customer/get_request_info?' + params
+        url: url
       }).then( res => {
-        let results = res.data;
-        if( this.request_list.total === 0 )
-        {
-          this.request_list.results = results.data.result;
-        }
-        else
-        {
-          var newdata = results.data;
-          if( newdata.total !== 0 )
-          {
-            for( let i = 0; i < newdata.result.total; i++ )
-            {
-              this.request_list.results.pust(newdata.result[i]);
-            }
-          }
-        }
-        this.request_list.total = this.request_list.results.length;
+        let result = res.data;
+        this.request_list.isLoading = false;
+        this.request_list.results = result.results.data;
+        this.request_list.total = result.results.total;
+        this.request_list.pagination = {
+          current_page: result.results.current_page,
+          last_page: result.results.last_page,
+          prev_page_url: result.results.prev_page_url,
+          next_page_url: result.results.next_page_url
+        };
+      }).catch( err => {
+        this.request_list.isLoading = false;
+        this.errors.errorMessage = err.response.statusText;
       });
     }
   },
   mounted() {
-    this.getRequestInfo();
+    this.getRequestUnit();
   }
 }
 </script>

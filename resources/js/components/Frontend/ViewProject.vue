@@ -108,7 +108,16 @@
                         </div>
                         <div class="uk-width-expand">
                           <div class="uk-card-body uk-card-small card-unit-body">
-                            <a class="uk-card-title unit-name">{{ unit.unit_name }}</a>
+                            <div class="uk-grid-small" uk-grid>
+                              <div class="uk-width-expand">
+                                <a class="uk-card-title unit-name">{{ unit.unit_name }}</a>
+                              </div>
+                              <div class="uk-width-1-6">
+                                <div class="unit-status unit-status-available" v-if="unit.unit_status === 'available'">Tersedia</div>
+                                <div class="unit-status unit-status-booked" v-else-if="unit.unit_status === 'booked'">Sudah dipesan</div>
+                                <div class="unit-status unit-status-sold" v-else>Terjual</div>
+                              </div>
+                            </div>
                             <div class="unit-location">
                               <span uk-icon="icon: location; ratio: 0.8"></span>
                               {{ getproject.project_address }},
@@ -223,7 +232,6 @@ export default {
   data() {
     return {
       forms: {
-        filterUnit: 'available',
         booking: {
           selectunit: '',
           message: 'Halo ' + this.getproject.dev_name + ', saya ingin mengajukan pemesenan unit yang tersedia.',
@@ -246,9 +254,8 @@ export default {
   methods: {
     getProjectUnit( p )
     {
-      var param = 'filterUnit=' + this.forms.filterUnit;
-      var url = this.$root.url + '/project/unit/' + this.getproject.project_unique_id + '?page=' + this.projectunit.pagination.current_page + '&' + param;
-      if( p !== undefined ) url = p + '&' + param;
+      var url = this.$root.url + '/project/unit/' + this.getproject.project_unique_id + '?page=' + this.projectunit.pagination.current_page;
+      if( p !== undefined ) url = p;
 
       axios({
         method: 'get',

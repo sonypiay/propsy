@@ -2196,6 +2196,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user'],
   data: function data() {
@@ -7255,6 +7258,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user'],
   data: function data() {
@@ -7263,52 +7283,54 @@ __webpack_require__.r(__webpack_exports__);
         isLoading: false,
         total: 0,
         results: [],
-        currentOffset: 0,
-        nextOffset: null
+        pagination: {
+          current_page: 1,
+          last_page: 1,
+          prev_page_url: null,
+          next_page_url: null
+        }
       },
       forms: {
         keywords: '',
         limit: 10,
         status_request: 'all'
+      },
+      errors: {
+        errorMessage: ''
       }
     };
   },
   methods: {
-    getRequestInfo: function getRequestInfo(offset) {
+    getRequestUnit: function getRequestUnit(p) {
       var _this = this;
 
-      if (offset === undefined) {
-        this.request_list.nextOffset = 0;
-      } else {
-        this.request_list.nextOffset = this.request_list.nextOffset + offset;
-      }
-
-      this.request_list.currentOffset = this.request_list.nextOffset;
-      var params = 'offset=' + this.request_list.currentOffset + '&keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&status_request=' + this.forms.status_request;
+      var params = 'page=' + this.request_list.pagination.current_page + '&keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&status_request=' + this.forms.status_request;
+      this.errors.errorMessage = '';
+      var url = this.$root.url + '/marketing/customer/get_request_unit';
+      if (p !== undefined) url = p;
+      this.request_list.isLoading = true;
       axios({
         method: 'get',
-        url: this.$root.url + '/marketing/customer/get_request_info?' + params
+        url: url
       }).then(function (res) {
-        var results = res.data;
-
-        if (_this.request_list.total === 0) {
-          _this.request_list.results = results.data.result;
-        } else {
-          var newdata = results.data;
-
-          if (newdata.total !== 0) {
-            for (var i = 0; i < newdata.result.total; i++) {
-              _this.request_list.results.pust(newdata.result[i]);
-            }
-          }
-        }
-
-        _this.request_list.total = _this.request_list.results.length;
+        var result = res.data;
+        _this.request_list.isLoading = false;
+        _this.request_list.results = result.results.data;
+        _this.request_list.total = result.results.total;
+        _this.request_list.pagination = {
+          current_page: result.results.current_page,
+          last_page: result.results.last_page,
+          prev_page_url: result.results.prev_page_url,
+          next_page_url: result.results.next_page_url
+        };
+      })["catch"](function (err) {
+        _this.request_list.isLoading = false;
+        _this.errors.errorMessage = err.response.statusText;
       });
     }
   },
   mounted: function mounted() {
-    this.getRequestInfo();
+    this.getRequestUnit();
   }
 });
 
@@ -7553,12 +7575,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user', 'getproject', 'getgallery', 'getunit_price', 'projectcity', 'devcity', 'session_active'],
   data: function data() {
     return {
       forms: {
-        filterUnit: 'available',
         booking: {
           selectunit: '',
           message: 'Halo ' + this.getproject.dev_name + ', saya ingin mengajukan pemesenan unit yang tersedia.',
@@ -7582,9 +7612,8 @@ __webpack_require__.r(__webpack_exports__);
     getProjectUnit: function getProjectUnit(p) {
       var _this = this;
 
-      var param = 'filterUnit=' + this.forms.filterUnit;
-      var url = this.$root.url + '/project/unit/' + this.getproject.project_unique_id + '?page=' + this.projectunit.pagination.current_page + '&' + param;
-      if (p !== undefined) url = p + '&' + param;
+      var url = this.$root.url + '/project/unit/' + this.getproject.project_unique_id + '?page=' + this.projectunit.pagination.current_page;
+      if (p !== undefined) url = p;
       axios({
         method: 'get',
         url: url
@@ -77090,15 +77119,15 @@ var render = function() {
                           "uk-button uk-button-primary uk-button-small btn-status-request",
                         class: {
                           "btn-status-active":
-                            _vm.forms.status_request === "open"
+                            _vm.forms.status_request === "waiting_response"
                         },
                         on: {
                           click: function($event) {
-                            return _vm.getRequestList("open")
+                            return _vm.getRequestList("waiting_response")
                           }
                         }
                       },
-                      [_vm._v("Open")]
+                      [_vm._v("Menunggu Tanggapan")]
                     )
                   ]),
                   _vm._v(" "),
@@ -77118,7 +77147,7 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v("Cancel")]
+                      [_vm._v("Dibatalkan")]
                     )
                   ]),
                   _vm._v(" "),
@@ -77130,15 +77159,35 @@ var render = function() {
                           "uk-button uk-button-primary uk-button-small btn-status-request",
                         class: {
                           "btn-status-active":
-                            _vm.forms.status_request === "survey"
+                            _vm.forms.status_request === "meeting"
                         },
                         on: {
                           click: function($event) {
-                            return _vm.getRequestList("survey")
+                            return _vm.getRequestList("meeting")
                           }
                         }
                       },
-                      [_vm._v("On Survey")]
+                      [_vm._v("Dijadwalkan Meeting")]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", [
+                    _c(
+                      "button",
+                      {
+                        staticClass:
+                          "uk-button uk-button-primary uk-button-small btn-status-request",
+                        class: {
+                          "btn-status-active":
+                            _vm.forms.status_request === "reject"
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.getRequestList("reject")
+                          }
+                        }
+                      },
+                      [_vm._v("Ditolak")]
                     )
                   ]),
                   _vm._v(" "),
@@ -77158,7 +77207,7 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v("Done")]
+                      [_vm._v("Selesai")]
                     )
                   ])
                 ]
@@ -77196,7 +77245,7 @@ var render = function() {
                         },
                         [
                           _vm._v(
-                            "\n          Belum ada pengajuan pesanan.\n        "
+                            "\n          Anda belum mengajukan pemesanan unit.\n        "
                           )
                         ]
                       )
@@ -77393,8 +77442,9 @@ var render = function() {
                                         [
                                           _vm._m(1, true),
                                           _vm._v(" "),
-                                          unit.status_request === "open" ||
-                                          unit.status_request === "survey"
+                                          unit.status_request ===
+                                            "waiting_response" ||
+                                          unit.status_request === "meeting"
                                             ? _c("div", [
                                                 _c(
                                                   "button",
@@ -87579,7 +87629,7 @@ var render = function() {
                       )
                     },
                     function($event) {
-                      return _vm.getRequestInfo()
+                      return _vm.getRequestUnit()
                     }
                   ]
                 }
@@ -87629,7 +87679,7 @@ var render = function() {
                       )
                     },
                     function($event) {
-                      return _vm.getRequestInfo()
+                      return _vm.getRequestUnit()
                     }
                   ]
                 }
@@ -87639,17 +87689,21 @@ var render = function() {
                   _vm._v("Semua Status")
                 ]),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "open" } }, [_vm._v("Open")]),
+                _c("option", { attrs: { value: "waiting_response" } }, [
+                  _vm._v("Meunggu Tanggapan")
+                ]),
                 _vm._v(" "),
                 _c("option", { attrs: { value: "cancel" } }, [
-                  _vm._v("Cancel")
+                  _vm._v("Dibatalkan")
                 ]),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "survey" } }, [
-                  _vm._v("On Survey")
+                _c("option", { attrs: { value: "meeting" } }, [
+                  _vm._v("Dijadwalkan Meeting")
                 ]),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "close" } }, [_vm._v("Closed")])
+                _c("option", { attrs: { value: "reject" } }, [
+                  _vm._v("Ditolak")
+                ])
               ]
             )
           ]),
@@ -87681,7 +87735,7 @@ var render = function() {
                     ) {
                       return null
                     }
-                    return _vm.getRequestInfo()
+                    return _vm.getRequestUnit()
                   },
                   input: function($event) {
                     if ($event.target.composing) {
@@ -87696,113 +87750,201 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.errors.errorMessage,
+              expression: "errors.errorMessage"
+            }
+          ],
+          staticClass: "uk-alert-danger",
+          attrs: { "uk-alert": "" }
+        },
+        [_vm._v(_vm._s(_vm.errors.errorMessage))]
+      ),
+      _vm._v(" "),
       _vm.request_list.isLoading === true
-        ? _c("div", { staticClass: "uk-text-center" }, [
+        ? _c("div", { staticClass: "uk-margin-top uk-text-center" }, [
             _c("span", { attrs: { "uk-spinner": "" } })
           ])
-        : _vm._e(),
+        : _c("div", [
+            _vm.request_list.total === 0
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "uk-alert-warning",
+                    attrs: { "uk-alert": "" }
+                  },
+                  [
+                    _vm._v(
+                      "\n        Anda belum mengajukan pemesanan unit.\n      "
+                    )
+                  ]
+                )
+              : _c(
+                  "div",
+                  {
+                    staticClass: "uk-grid-small uk-grid-divider uk-margin-top",
+                    attrs: { "uk-grid": "" }
+                  },
+                  _vm._l(_vm.request_list.results, function(unit) {
+                    return _c("div", { staticClass: "uk-width-1-1" }, [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "uk-card card-unit-project uk-grid-collapse uk-grid-match uk-margin",
+                          attrs: { "uk-grid": "" }
+                        },
+                        [
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "uk-card-body uk-card-small card-unit-body"
+                            },
+                            [
+                              _c(
+                                "a",
+                                { staticClass: "uk-card-title unit-name" },
+                                [_vm._v(_vm._s(unit.unit_name))]
+                              ),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "unit-location" }, [
+                                _c("span", {
+                                  attrs: {
+                                    "uk-icon": "icon: location; ratio: 0.8"
+                                  }
+                                }),
+                                _vm._v(
+                                  "\n                " +
+                                    _vm._s(unit.project_address) +
+                                    ",\n                " +
+                                    _vm._s(unit.city_name) +
+                                    ",\n                " +
+                                    _vm._s(unit.province_name) +
+                                    "\n              "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "unit-price" }, [
+                                _vm._v(
+                                  "\n                Rp. " +
+                                    _vm._s(
+                                      _vm._f("currency")(unit.unit_price)
+                                    ) +
+                                    "\n              "
+                                )
+                              ])
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "uk-card-footer card-unit-footer uk-padding-small"
+                            },
+                            [
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "uk-grid-small uk-child-width-auto",
+                                  attrs: { "uk-grid": "" }
+                                },
+                                [
+                                  _c("div", [
+                                    _c(
+                                      "div",
+                                      { staticClass: "unit-specification" },
+                                      [
+                                        _vm._v(
+                                          "\n                    " +
+                                            _vm._s(unit.request_unique_id) +
+                                            "\n                    "
+                                        ),
+                                        _c("span", [_vm._v("Request ID")])
+                                      ]
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", [
+                                    _c(
+                                      "div",
+                                      { staticClass: "unit-specification" },
+                                      [
+                                        _vm._v(
+                                          "\n                    " +
+                                            _vm._s(
+                                              _vm.$root.formatDate(
+                                                unit.created_at,
+                                                "DD MMMM YYYY"
+                                              )
+                                            ) +
+                                            "\n                    "
+                                        ),
+                                        _c("span", [
+                                          _vm._v("Tanggal Pengajuan")
+                                        ])
+                                      ]
+                                    )
+                                  ])
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ])
+                  }),
+                  0
+                )
+          ]),
       _vm._v(" "),
-      _c("div", { staticClass: "uk-margin", attrs: { else: "" } }, [
-        _vm.request_list.total === 0
-          ? _c(
-              "div",
-              { staticClass: "uk-alert-warning", attrs: { "uk-alert": "" } },
-              [_vm._v("\n        Belum ada proyek.\n      ")]
-            )
-          : _c("div", [
-              _c(
-                "table",
-                {
-                  staticClass:
-                    "uk-table uk-table-middle uk-table-hover uk-table-divider uk-table-striped uk-table-small"
-                },
-                [
-                  _vm._m(0),
-                  _vm._v(" "),
-                  _c(
-                    "tbody",
-                    _vm._l(_vm.request_list.results, function(req) {
-                      return _c("tr", [
-                        _vm._m(1, true),
-                        _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(req.customer_name))]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(req.customer_email))]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(req.customer_phone_number))]),
-                        _vm._v(" "),
-                        _c("td", [
-                          req.status_request === "open"
-                            ? _c(
-                                "label",
-                                { staticClass: "uk-label uk-label-success" },
-                                [_vm._v("Open")]
-                              )
-                            : _c(
-                                "label",
-                                { staticClass: "uk-label uk-label-danger" },
-                                [_vm._v("Closed")]
-                              )
-                        ])
-                      ])
-                    }),
-                    0
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _vm._m(2)
+      _c("ul", { staticClass: "uk-pagination uk-flex-center" }, [
+        _vm.request_list.pagination.prev_page_url !== null
+          ? _c("li", [
+              _c("a", {
+                attrs: { "uk-icon": "chevron-left" },
+                on: {
+                  click: function($event) {
+                    return _vm.getRequestList(
+                      _vm.request_list.pagination.prev_page_url
+                    )
+                  }
+                }
+              })
+            ])
+          : _c("li", { staticClass: "uk-disabled" }, [
+              _c("a", { attrs: { "uk-icon": "chevron-left" } })
+            ]),
+        _vm._v(" "),
+        _vm.request_list.pagination.next_page_url !== null
+          ? _c("li", [
+              _c("a", {
+                attrs: { "uk-icon": "chevron-right" },
+                on: {
+                  click: function($event) {
+                    return _vm.getRequestList(
+                      _vm.request_list.pagination.next_page_url
+                    )
+                  }
+                }
+              })
+            ])
+          : _c("li", { staticClass: "uk-disabled" }, [
+              _c("a", { attrs: { "uk-icon": "chevron-right" } })
             ])
       ])
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Aksi")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Nama Customer")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Email")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("No. Telepon")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Status Permintaan")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", [
-      _c("div", { staticClass: "uk-inline" }, [
-        _c("a", {
-          staticClass:
-            "uk-button uk-button-primary uk-button-small dash-btn dash-action-btn",
-          attrs: { "uk-icon": "cog" }
-        })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "uk-text-center uk-margin" }, [
-      _c(
-        "a",
-        { staticClass: "uk-button uk-button-small uk-button-primary dash-btn" },
-        [_vm._v("Lihat Lebih Banyak")]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -88302,12 +88444,72 @@ var render = function() {
                                         },
                                         [
                                           _c(
-                                            "a",
+                                            "div",
                                             {
-                                              staticClass:
-                                                "uk-card-title unit-name"
+                                              staticClass: "uk-grid-small",
+                                              attrs: { "uk-grid": "" }
                                             },
-                                            [_vm._v(_vm._s(unit.unit_name))]
+                                            [
+                                              _c(
+                                                "div",
+                                                {
+                                                  staticClass: "uk-width-expand"
+                                                },
+                                                [
+                                                  _c(
+                                                    "a",
+                                                    {
+                                                      staticClass:
+                                                        "uk-card-title unit-name"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        _vm._s(unit.unit_name)
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "div",
+                                                { staticClass: "uk-width-1-6" },
+                                                [
+                                                  unit.unit_status ===
+                                                  "available"
+                                                    ? _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            "unit-status unit-status-available"
+                                                        },
+                                                        [_vm._v("Tersedia")]
+                                                      )
+                                                    : unit.unit_status ===
+                                                      "booked"
+                                                    ? _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            "unit-status unit-status-booked"
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "Sudah dipesan"
+                                                          )
+                                                        ]
+                                                      )
+                                                    : _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            "unit-status unit-status-sold"
+                                                        },
+                                                        [_vm._v("Terjual")]
+                                                      )
+                                                ]
+                                              )
+                                            ]
                                           ),
                                           _vm._v(" "),
                                           _c(

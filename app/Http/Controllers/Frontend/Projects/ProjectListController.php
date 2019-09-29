@@ -112,11 +112,7 @@ class ProjectListController extends Controller
 
   public function list_project_unit( Request $request, ProjectUnitType $project_unit, $project_id )
   {
-    $filterUnit = $request->filterUnit;
-    $getunit = $project_unit->where([
-      ['project_unit_type.project_unique_id', $project_id],
-      ['project_unit_type.unit_status', $filterUnit]
-    ])
+    $getunit = $project_unit->where('project_unit_type.project_unique_id', $project_id)
     ->orderBy('project_unit_type.created_at', 'desc')
     ->paginate( 10 );
 

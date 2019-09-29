@@ -36,7 +36,7 @@
         <div v-if="request_list.total === 0" class="uk-alert-warning" uk-alert>
           Tidak ada pengajuan pemesanan unit
         </div>
-        <div v-else class="uk-margin-top uk-grid-divider" uk-grid>
+        <div v-else class="uk-margin-top">
           <div v-for="unit in request_list.results" class="uk-width-1-1">
             <div class="uk-card uk-card-default card-unit-project uk-margin">
               <div class="uk-card-body card-unit-body">

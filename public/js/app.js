@@ -87813,10 +87813,7 @@ var render = function() {
                 )
               : _c(
                   "div",
-                  {
-                    staticClass: "uk-margin-top uk-grid-divider",
-                    attrs: { "uk-grid": "" }
-                  },
+                  { staticClass: "uk-margin-top" },
                   _vm._l(_vm.request_list.results, function(unit) {
                     return _c("div", { staticClass: "uk-width-1-1" }, [
                       _c(

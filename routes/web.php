@@ -60,8 +60,8 @@ Route::group(['prefix' => 'marketing'], function() {
   });
 
   Route::group(['prefix' => 'customer'], function() {
-    Route::get('/request_unit', 'Frontend\Marketing\RequestUnitController@customer_request_info')->name('marketing_request_unit');
-    Route::get('/get_request_unit', 'Frontend\Marketing\RequestUnitController@get_request_info');
+    Route::get('/request_unit', 'Frontend\Marketing\RequestUnitController@customer_request_unit')->name('marketing_request_unit');
+    Route::get('/get_request_unit', 'Frontend\Marketing\RequestUnitController@get_request_unit');
     //Route::get('/detail_request/{reqid}', 'Frontend\Marketing\RequestUnitController@get_detail_request');
   });
 });

@@ -7253,6 +7253,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user'],
   data: function data() {
@@ -87534,7 +87536,7 @@ var render = function() {
       _c(
         "div",
         { staticClass: "uk-card-title uk-margin dashboard-content-heading" },
-        [_vm._v("Permintaan Pelanggan")]
+        [_vm._v("Pengajuan Pemesanan")]
       ),
       _vm._v(" "),
       _c(
@@ -87638,6 +87640,14 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("option", { attrs: { value: "open" } }, [_vm._v("Open")]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "cancel" } }, [
+                  _vm._v("Cancel")
+                ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "survey" } }, [
+                  _vm._v("On Survey")
+                ]),
                 _vm._v(" "),
                 _c("option", { attrs: { value: "close" } }, [_vm._v("Closed")])
               ]

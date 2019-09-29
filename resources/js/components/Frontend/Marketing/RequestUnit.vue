@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="uk-card dashboard-content">
-      <div class="uk-card-title uk-margin dashboard-content-heading">Permintaan Pelanggan</div>
+      <div class="uk-card-title uk-margin dashboard-content-heading">Pengajuan Pemesanan</div>
       <div class="uk-margin uk-grid-small uk-child-width-auto" uk-grid>
         <div>
           <select class="uk-select uk-select dash-form-input" v-model="forms.limit" @change="getRequestInfo()">
@@ -15,6 +15,8 @@
           <select class="uk-select uk-select dash-form-input" v-model="forms.status_request" @change="getRequestInfo()">
             <option value="all">Semua Status</option>
             <option value="open">Open</option>
+            <option value="cancel">Cancel</option>
+            <option value="survey">On Survey</option>
             <option value="close">Closed</option>
           </select>
         </div>

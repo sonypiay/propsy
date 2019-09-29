@@ -14,7 +14,7 @@
       'dashboard' => route('marketing_dashboard_page'),
       'project' => '#',
       'marketing' => '#',
-      'pemesanan' => '#',
+      'pemesanan' => route('marketing_request_unit'),
       'laporan' => '#'
     ]
   @endphp
@@ -49,7 +49,11 @@
       </ul>
     </li>
     <li>
-      <a href="{{ $link_nav['pemesanan'] }}"><span class="uk-margin-small-right" uk-icon="icon: cart; ratio: 1"></span> Pemesanan</a>
+      <a @if( $hasRequest ) uk-tooltip="Anda memiliki pengajuan pemesanan" @endif href="{{ $link_nav['pemesanan'] }}"><span class="uk-margin-small-right" uk-icon="icon: cart; ratio: 1"></span> Pemesanan
+        @if( $hasRequest )
+          <span class="uk-float-right" uk-icon="icon: info; ratio: 1"></span>
+        @endif
+      </a>
     </li>
     <li>
       <a href="{{ route('auth_logout_mkt') }}"><span class="uk-margin-small-right" uk-icon="icon: sign-out; ratio: 1"></span> Keluar</a>

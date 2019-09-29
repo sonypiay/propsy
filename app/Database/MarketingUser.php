@@ -25,6 +25,7 @@ class MarketingUser extends Model
       'marketing_user.mkt_address',
       'marketing_user.mkt_biography',
       'marketing_user.mkt_profile_photo',
+      'marketing_user.dev_user_id',
       'marketing_user.created_at',
       'marketing_user.updated_at',
       'city.city_name',

@@ -29,13 +29,8 @@
           </li>
           @else
           <li>
-            <a class="navlogin" uk-toggle="target: #modal-login">
-              <span>Masuk</span>
-            </a>
-          </li>
-          <li>
-            <a class="navjoin" uk-toggle="target: #modal-signup">
-              <span>Daftar</span>
+            <a href="{{ route('developer_login_page') }}">
+              Masuk / Daftar
             </a>
           </li>
           @endif

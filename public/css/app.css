@@ -79,7 +79,7 @@
 
 .side-navbar .side-nav li a {
   color: #ffffff;
-  font-size: 14px;
+  font-size: 16px;
   font-style: normal;
   font-stretch: normal;
   font-family: "Lato", sans-serif;
@@ -88,16 +88,17 @@
   transition: all 0.1s linear 0s;
   -moz-transition: all 0.1s linear 0s;
   -webkit-transition: all 0.1s linear 0s;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: 8px 30px;
 }
 
 .side-navbar .side-nav li a:hover {
-  border-left: 2px solid #ffffff;
+  background: #ffffff;
+  color: #1fc8c9;
 }
 
 .side-navbar .side-nav li .active {
-  border-left: 2px solid #ffffff;
+  background: #ffffff;
+  color: #1fc8c9;
 }
 
 .side-navbar .side-nav li .side-nav-sub li a {
@@ -108,10 +109,11 @@
   font-family: "Lato", sans-serif;
   font-weight: 400;
   letter-spacing: 0.4px;
+  padding: 8px 10px !important;
 }
 
 .side-navbar .side-nav li .side-nav-sub li a:hover {
-  border-left: 0 !important;
+  background: none;
   color: #ffffff;
 }
 

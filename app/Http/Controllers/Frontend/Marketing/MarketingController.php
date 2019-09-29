@@ -6,17 +6,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Database\MarketingUser;
+use App\Database\ProjectRequest;
 use App\Http\Controllers\Controller;
 
 class MarketingController extends Controller
 {
-  public function index( Request $request, MarketingUser $marketinguser )
+  public function index( Request $request, MarketingUser $marketinguser, ProjectRequest $project_request )
   {
     if( session()->has('isMarketing') )
     {
+      $getmarketing = $marketinguser->getinfo();
+      $has_request = $project_request->hasNewRequest( $getmarketing->dev_user_id );
       $data = [
         'request' => $request,
-        'session_user' => $marketinguser->getinfo()
+        'session_user' => $getmarketing,
+        'hasRequest' => $has_request
       ];
 
       return response()->view('frontend.pages.marketing.dashboard_page', $data);

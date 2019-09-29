@@ -61,7 +61,7 @@
             <a href="#">Masuk / Daftar</a>
             <div class="uk-navbar-dropdown dropdown-main-navbar">
               <ul class="uk-nav uk-navbar-dropdown-nav">
-                <li><a href="{{ route('developer_login_page') }}">Pengembang</a></li>
+                <li><a href="{{ route('developer_login_page') }}">Pengembang / Marketing</a></li>
                 <li><a href="{{ route('customer_login_page') }}">Konsumen</a></li>
               </ul>
             </div>

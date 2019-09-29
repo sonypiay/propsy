@@ -60,9 +60,9 @@ Route::group(['prefix' => 'marketing'], function() {
   });
 
   Route::group(['prefix' => 'customer'], function() {
-    Route::get('/request', 'Frontend\Marketing\RequestInfoController@customer_request_info')->name('marketing_request_info');
-    Route::get('/get_request_info', 'Frontend\Marketing\RequestInfoController@get_request_info');
-    Route::get('/detail_request/{reqid}', 'Frontend\Marketing\RequestInfoController@get_detail_request');
+    Route::get('/request_unit', 'Frontend\Marketing\RequestUnitController@customer_request_info')->name('marketing_request_unit');
+    Route::get('/get_request_unit', 'Frontend\Marketing\RequestUnitController@get_request_info');
+    //Route::get('/detail_request/{reqid}', 'Frontend\Marketing\RequestUnitController@get_detail_request');
   });
 });
 

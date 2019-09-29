@@ -76,22 +76,28 @@
     li {
       a {
         color: #ffffff;
-        @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+        @include fontsetting( $font-primary, 16px, 400, normal, normal, 0.4px );
         transition: all 0.10s linear 0s;
         -moz-transition: all 0.10s linear 0s;
         -webkit-transition: all 0.10s linear 0s;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        &:hover { border-left: 2px solid #ffffff; }
+        padding: 8px 30px;
+        &:hover {
+          background: #ffffff;
+          color: $color3;
+        }
       }
-      .active { border-left: 2px solid #ffffff; }
+      .active {
+        background: #ffffff;
+        color: $color3;
+      }
       .side-nav-sub {
         li {
           a {
             color: #ffffff;
             @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+            padding: 8px 10px !important;
             &:hover {
-              border-left: 0 !important;
+              background: none;
               color: #ffffff;
             }
           }

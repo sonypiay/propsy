@@ -9,21 +9,24 @@ window.numeral = require('numeral');
 //Vue.component('modal-signup-component', require('./components/Frontend/SignUpComponent.vue').default);
 
 // marketing
+//Vue.component('marketing-register-page', require('./components/Frontend/Marketing/Daftar.vue').default);
+Vue.component('marketing-login-page', require('./components/Frontend/Marketing/Masuk.vue').default);
 Vue.component('marketing-dashboard-page', require('./components/Frontend/Marketing/Dashboard.vue').default);
 Vue.component('marketing-profile-page', require('./components/Frontend/Marketing/Profile.vue').default);
-Vue.component('marketing-request-info', require('./components/Frontend/Marketing/RequestInfo.vue').default);
-Vue.component('marketing-register-page', require('./components/Frontend/Marketing/Daftar.vue').default);
-Vue.component('marketing-login-page', require('./components/Frontend/Marketing/Masuk.vue').default);
+Vue.component('marketing-request-unit', require('./components/Frontend/Marketing/RequestUnit.vue').default);
+Vue.component('marketing-meeting-list', require('./components/Frontend/Marketing/MeetingList.vue').default);
+Vue.component('marketing-create-meeting', require('./components/Frontend/Marketing/CreateMeetingSchedule.vue').default);
+Vue.component('marketing-update-meeting', require('./components/Frontend/Marketing/UpdateMeetingSchedule.vue').default);
 
 // developer
+Vue.component('developer-register-page', require('./components/Frontend/Developer/Daftar.vue').default);
+Vue.component('developer-login-page', require('./components/Frontend/Developer/Masuk.vue').default);
 Vue.component('developer-dashboard-page', require('./components/Frontend/Developer/Dashboard.vue').default);
 Vue.component('developer-profile-page', require('./components/Frontend/Developer/Profile.vue').default);
 Vue.component('developer-manage-project', require('./components/Frontend/Developer/Projects.vue').default);
 Vue.component('developer-project-gallery', require('./components/Frontend/Developer/ProjectGallery.vue').default);
 Vue.component('developer-manage-marketing', require('./components/Frontend/Developer/ManageMarketing.vue').default);
 Vue.component('developer-detail-project', require('./components/Frontend/Developer/DetailProject.vue').default);
-Vue.component('developer-register-page', require('./components/Frontend/Developer/Daftar.vue').default);
-Vue.component('developer-login-page', require('./components/Frontend/Developer/Masuk.vue').default);
 Vue.component('developer-add-project', require('./components/Frontend/Developer/AddProject.vue').default);
 Vue.component('developer-edit-project', require('./components/Frontend/Developer/EditProject.vue').default);
 Vue.component('developer-add-unit', require('./components/Frontend/Developer/AddUnit.vue').default);

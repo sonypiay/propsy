@@ -2,7 +2,9 @@
 @section('tag_title', 'Permintaan Pelanggan')
 @section('main_content')
 <div id="app">
-  <marketing-request-info :session_user="{{ json_encode( $session_user ) }}" />
+  <marketing-request-unit
+  :session_user="{{ json_encode( $session_user ) }}"
+  />
 </div>
 <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
 @endsection

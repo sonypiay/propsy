@@ -10,16 +10,13 @@
               <button @click="getRequestList('open')" :class="{'btn-status-active': forms.status_request === 'open'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Open</button>
             </div>
             <div>
-              <button @click="getRequestList('hold')" :class="{'btn-status-active': forms.status_request === 'hold'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Hold</button>
-            </div>
-            <div>
               <button @click="getRequestList('cancel')" :class="{'btn-status-active': forms.status_request === 'cancel'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Cancel</button>
             </div>
             <div>
               <button @click="getRequestList('survey')" :class="{'btn-status-active': forms.status_request === 'survey'}" class="uk-button uk-button-primary uk-button-small btn-status-request">On Survey</button>
             </div>
             <div>
-              <button @click="getRequestList('close')" :class="{'btn-status-active': forms.status_request === 'close'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Close</button>
+              <button @click="getRequestList('done')" :class="{'btn-status-active': forms.status_request === 'done'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Done</button>
             </div>
           </div>
         </div>
@@ -81,7 +78,7 @@
                           Lihat Lebih Lanjut
                         </a>
                       </div>
-                      <div>
+                      <div v-if="unit.status_request === 'open' || unit.status_request === 'survey'">
                         <button @click="onCancelRequest( unit.request_unique_id )" class="uk-button uk-button-small btn-cancel-request">Batalkan Pengajuan</button>
                       </div>
                     </div>

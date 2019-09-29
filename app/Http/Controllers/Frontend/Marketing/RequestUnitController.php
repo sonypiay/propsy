@@ -6,23 +6,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Database\MarketingUser;
-use App\Database\ProjectRequestInfo;
+use App\Database\ProjectRequest;
 use App\Database\Customer;
 use App\Database\AreaDB;
 use App\Http\Controllers\Controller;
 
-class RequestInfoController extends Controller
+class RequestUnitController extends Controller
 {
-  public function customer_request_info( Request $request, MarketingUser $marketinguser )
+  public function customer_request_info( Request $request, MarketingUser $marketinguser, ProjectRequest $project_request )
   {
     if( session()->has('isMarketing') )
     {
+      $getmarketing = $marketinguser->getinfo();
+      $has_request = $project_request->hasNewRequest( $getmarketing->dev_user_id );
       $data = [
         'request' => $request,
         'session_user' => $marketinguser->getinfo()
       ];
 
-      return response()->view('frontend.pages.marketing.request_info', $data);
+      return response()->view('frontend.pages.marketing.request_unit', $data);
     }
     else
     {
@@ -30,7 +32,7 @@ class RequestInfoController extends Controller
     }
   }
 
-  public function get_request_info( Request $request, ProjectRequestInfo $request_info, MarketingUser $marketinguser )
+  public function get_request_unit( Request $request, ProjectRequest $project_request, MarketingUser $marketinguser )
   {
     $keywords = $request->keywords;
     $limit = $request->limit;
@@ -38,7 +40,7 @@ class RequestInfoController extends Controller
     $offset = $request->offset;
     $mktuser = $marketinguser->getinfo();
 
-    $query = $request_info->select(
+    $query = $project_request->select(
       'project_request.created_at',
       'project_request.updated_at',
       'project_request.request_note',
@@ -108,11 +110,11 @@ class RequestInfoController extends Controller
     return response()->json( $res, 200 );
   }
 
-  public function get_detail_request( ProjectRequestInfo $request_info, MarketingUser $marketinguser, AreaDB $area, $reqid )
+  public function get_detail_request( ProjectRequest $project_request, MarketingUser $marketinguser, AreaDB $area, $reqid )
   {
     $mktuser = $marketinguser->getinfo();
 
-    $getrequest = $request_info->select(
+    $getrequest = $project_request->select(
       'project_request.created_at',
       'project_request.updated_at',
       'project_request.request_note',

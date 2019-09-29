@@ -15,6 +15,7 @@ class RequestUnitController extends Controller
     $session_user = session()->get('customer_id');
     $getrequest = $project_request->select(
       'project_request.request_unique_id',
+      'project_request.status_request',
       'project_unit_type.unit_type_id',
       'project_unit_type.unit_name',
       'project_unit_type.unit_thumbnail',

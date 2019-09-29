@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Frontend\Developer;
 use Illuminate\Http\Request;
 use App\Database\DeveloperUser;
 use App\Database\MarketingUser;
-use App\Database\AreaDB;
 use App\Database\CityDB;
 use App\Http\Controllers\Controller;
 

@@ -3,7 +3,7 @@
     'dashboard' => '#',
     'project' => '#',
     'marketing' => '#',
-    'pelanggan' => '#',
+    'pemesanan' => '#',
     'laporan' => '#'
   ]
 @endphp
@@ -14,7 +14,7 @@
       'dashboard' => route('marketing_dashboard_page'),
       'project' => '#',
       'marketing' => '#',
-      'pelanggan' => '#',
+      'pemesanan' => route('marketing_request_unit'),
       'laporan' => '#'
     ]
   @endphp
@@ -24,7 +24,7 @@
       'dashboard' => '#',
       'project' => route('developer_manage_project'),
       'marketing' => route('developer_manage_marketing'),
-      'pelanggan' => '#',
+      'pemesanan' => '#',
       'laporan' => '#'
     ]
   @endphp
@@ -38,21 +38,57 @@
   </div>
   <ul class="uk-nav-default side-nav" uk-nav>
     @if( session()->has('isMarketing') )
-    <li><a href="{{ $link_nav['dashboard'] }}">Dashboard</a></li>
-    <li><a href="{{ $link_nav['project'] }}">Proyek</a></li>
-    <li class="uk-parent"><a href="#">Pelanggan <span class="uk-float-right" uk-icon="chevron-down"></span></a>
+    <li>
+      <a href="{{ $link_nav['dashboard'] }}"><span class="uk-margin-small-right" uk-icon="icon: home; ratio: 1"></span> Dashboard</a>
+    </li>
+    <li class="uk-parent">
+      <a href="#"><span class="uk-margin-small-right" uk-icon="icon: clock; ratio: 1"></span> Meeting <span class="uk-float-right" uk-icon="icon: chevron-down; ratio: 1"></span> </a>
       <ul class="uk-nav-sub side-nav-sub">
-        <li><a href="{{ route('marketing_request_info') }}">Permintaan</a></li>
-        <li><a href="#">Survey</a></li>
+        <li><a href="{{ $link_nav['project'] }}"><span class="uk-margin-small-right" uk-icon="icon: list; ratio: 1"></span> Meeting Pelanggan</a></li>
+        <li><a href="{{ route('developer_add_project_page') }}"><span class="uk-margin-small-right" uk-icon="icon: plus; ratio: 1"></span> Buat Jadwal Meeting</a></li>
       </ul>
     </li>
-    <li><a href="{{ $link_nav['laporan'] }}">Laporan</a></li>
+    <li>
+      <a @if( $hasRequest ) uk-tooltip="Anda memiliki pengajuan pemesanan" @endif href="{{ $link_nav['pemesanan'] }}"><span class="uk-margin-small-right" uk-icon="icon: cart; ratio: 1"></span> Pemesanan
+        @if( $hasRequest )
+          <span class="uk-float-right" uk-icon="icon: info; ratio: 1"></span>
+        @endif
+      </a>
+    </li>
+    <li>
+      <a href="{{ route('auth_logout_mkt') }}"><span class="uk-margin-small-right" uk-icon="icon: sign-out; ratio: 1"></span> Keluar</a>
+    </li>
     @else
-    <li><a href="{{ $link_nav['dashboard'] }}">Dashboard</a></li>
-    <li><a href="{{ $link_nav['project'] }}">Kelola Proyek</a></li>
-    <li><a href="{{ $link_nav['pelanggan'] }}">Kelola Pelanggan</a></li>
-    <li><a href="{{ $link_nav['marketing'] }}">Kelola Marketing</a></li>
-    <li><a href="{{ $link_nav['laporan'] }}">Laporan</a></li>
+    <li>
+      <a href="{{ $link_nav['dashboard'] }}"><span class="uk-margin-small-right" uk-icon="icon: home; ratio: 1"></span> Dashboard</a>
+    </li>
+    <li class="uk-parent">
+      <a href="#"><span class="uk-margin-small-right" uk-icon="icon: link; ratio: 1"></span> Proyek <span class="uk-float-right" uk-icon="icon: chevron-down; ratio: 1"></span> </a>
+      <ul class="uk-nav-sub side-nav-sub">
+        <li><a href="{{ route('developer_manage_project') }}"><span class="uk-margin-small-right" uk-icon="icon: list; ratio: 1"></span> Daftar Proyek</a></li>
+        <li><a href="{{ route('developer_add_project_page') }}"><span class="uk-margin-small-right" uk-icon="icon: plus; ratio: 1"></span> Buat Proyek Baru</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="{{ $link_nav['pemesanan'] }}"><span class="uk-margin-small-right" uk-icon="icon: cart; ratio: 1"></span> Pemesanan</a>
+    </li>
+    <li>
+      <a href="{{ $link_nav['marketing'] }}"><span class="uk-margin-small-right" uk-icon="icon: users; ratio: 1"></span> Marketing</a>
+    </li>
+    <li>
+      <a href="#"><span class="uk-margin-small-right" uk-icon="icon: clock; ratio: 1"></span>Meeting</a>
+    </li>
+    <li class="uk-parent">
+      <a href="#"><span class="uk-margin-small-right" uk-icon="icon: file-text; ratio: 1"></span> Laporan <span class="uk-float-right" uk-icon="icon: chevron-down; ratio: 1"></span></a>
+      <ul class="uk-nav-sub side-nav-sub">
+        <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: list; ratio: 1"></span> Unit Terjual</a></li>
+        <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: list; ratio: 1"></span> Unit Dipesan</a></li>
+        <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: list; ratio: 1"></span> Hasil Meeting</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="{{ route('auth_logout_dev') }}"><span class="uk-margin-small-right" uk-icon="icon: sign-out; ratio: 1"></span> Keluar</a>
+    </li>
     @endif
   </ul>
 </div>

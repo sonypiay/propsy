@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Database\DeveloperUser;
-use App\Database\AreaDB;
 use App\Database\ProvinceDB;
 use App\Database\CityDB;
 use App\Http\Controllers\Controller;

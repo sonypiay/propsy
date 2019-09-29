@@ -15,6 +15,7 @@ class AuthController extends Controller
     $check_username = $marketinguser->where('mkt_username', $username);
     $check_email = $marketinguser->where('mkt_email', $username);
     $valid = false;
+    
     if( $check_username->count() === 1 )
     {
       $result = $check_username->first();

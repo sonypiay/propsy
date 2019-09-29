@@ -18,6 +18,7 @@ $color3: #1fc8c9;
 $color4: #aae5e6;
 $color-danger: #e02c2c;
 $color-warning: #fbad70;
+$color-blue: #2295f2;
 
 @mixin fontsetting( $type, $size, $weight, $style, $stretch, $spacing ) {
   font-size: $size;

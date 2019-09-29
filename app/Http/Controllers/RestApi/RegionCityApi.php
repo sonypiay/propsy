@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\RestApi;
 
 use Illuminate\Http\Request;
-use App\Database\AreaDB;
 use App\Database\ProvinceDB;
 use App\Database\CityDB;
 use App\Http\Controllers\Controller;

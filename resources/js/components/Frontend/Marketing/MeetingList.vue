@@ -1,5 +1,82 @@
 <template >
   <div>
+    <div id="detail-schedule" class="uk-modal-full" uk-modal>
+      <div class="uk-modal-dialog uk-modal-body" uk-height-viewport>
+        <a class="uk-modal-close-full uk-close-large" type="button" uk-close></a>
+        <div class="uk-card uk-card-body container-viewschedule">
+          <div class="uk-card-title container-viewschedule-heading">
+            Detail Meeting {{ meeting_list.details.request_unique_id }}
+          </div>
+          <div class="uk-margin container-viewschedule-body">
+            <table class="uk-table uk-table-divider uk-table-hover uk-table-middle uk-table-striped uk-table-small">
+              <tbody>
+                <th>Unit Dipesan</th>
+                <td colspan="3">
+                  {{ meeting_list.details.unit_name }}
+                </td>
+                <tr>
+                  <th>Nama Pelanggan</th>
+                  <td>{{ meeting_list.details.customer_name }}</td>
+                  <th>Nomor Telepon</th>
+                  <td>{{ meeting_list.details.customer_phone_number }}</td>
+                </tr>
+                <tr>
+                  <th>Alamat Email</th>
+                  <td>{{ meeting_list.details.customer_email }}</td>
+                  <th>Alamat</th>
+                  <td>
+                    {{ meeting_list.details.customer_address }} <br>
+                    {{ meeting_list.details.city_name }}, {{ meeting_list.details.province_name }}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Pesan</th>
+                  <td colspan="3">{{ meeting_list.details.request_message }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <table class="uk-table uk-table-divider uk-table-hover uk-table-middle uk-table-striped uk-table-small">
+              <thead>
+                <tr>
+                  <th>Tanggal Meeting</th>
+                  <th>Jam</th>
+                  <th>Status</th>
+                  <th>Dokumen</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="uk-width-medium">{{ $root.formatDate( meeting_list.details.meeting_time, 'dddd, DD MMMM YYYY' ) }}</td>
+                  <td class="uk-width-medium">{{ $root.formatDate( meeting_list.details.meeting_time, 'HH:mm' ) }}</td>
+                  <td>
+                    <label class="uk-label" v-if="meeting_list.details.meeting_status === 'waiting_confirmation'">Menunggu Konfirmasi</label>
+                    <label class="uk-label uk-label-success" v-else-if="meeting_list.details.meeting_status === 'accept'">Diterima</label>
+                    <label class="uk-label uk-label-danger" v-else-if="meeting_list.details.meeting_status === 'reject'">Ditolak</label>
+                    <label class="uk-label uk-label-danger" v-else-if="meeting_list.details.meeting_status === 'cancel'">Dibatalkan</label>
+                    <label class="uk-label uk-label-warning" v-else-if="meeting_list.details.meeting_status === 'revision'">Revisi</label>
+                    <label class="uk-label uk-label-success" v-else>Selesai</label>
+                  </td>
+                  <td>
+                    <a class="uk-button uk-button-primary" href="#"><span uk-icon="download"></span> Unduh Dokumen</a>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Hasil Meeting</th>
+                  <td colspan="3">
+                    {{ meeting_list.details.meeting_result }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table>
+              <tbody>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="uk-card dashboard-content">
       <div class="uk-card-title uk-margin dashboard-content-heading">Jadwal Meeting</div>
       <div class="uk-margin uk-grid-small uk-child-width-auto" uk-grid>
@@ -29,6 +106,8 @@
             <option value="accept">Diterima</option>
             <option value="revision">Revisi</option>
             <option value="cancel">Dibatalkan</option>
+            <option value="reject">Ditolak</option>
+            <option value="done">Selesai</option>
           </select>
         </div>
         <div>
@@ -82,9 +161,11 @@
                       <a class="uk-button uk-button-primary uk-button-small dash-btn dash-btn-action" uk-icon="icon: more-vertical; ratio: 0.7"></a>
                       <div uk-dropdown="mode: click">
                         <ul class="uk-nav uk-dropdown-nav">
-                          <li><a @click=""><span uk-icon="forward"></span> Lihat Jadwal</a></li>
-                          <li><a :href="$root.url + '/marketing/meeting/edit_schedule/' + meet.request_unique_id"><span uk-icon="pencil"></span> Edit</a></li>
-                          <li><a @click=""><span uk-icon="close"></span> Batalkan Jadwal</a></li>
+                          <li><a @click="getDetailSchedule( meet.request_unique_id )"><span uk-icon="forward"></span> Lihat Jadwal</a></li>
+                          <li><a :href="$root.url + '/marketing/meeting/edit_schedule/' + meet.request_unique_id"><span uk-icon="pencil"></span>
+                            Edit Jadwal
+                          </a></li>
+                          <li><a v-show="meet.meeting_status === 'waiting_confirmation' || meet.meeting_status === 'revision'" @click=""><span uk-icon="close"></span> Batalkan</a></li>
                         </ul>
                       </div>
                     </div>
@@ -94,9 +175,11 @@
                   <td>{{ $root.formatDate( meet.meeting_time, 'DD MMM YYYY, HH:mm' ) }}</td>
                   <td>
                     <label class="uk-label" v-if="meet.meeting_status === 'waiting_confirmation'">Menunggu Konfirmasi</label>
-                    <label class="uk-label uk-label-danger" v-else-if="meet.meeting_status === 'accept'">Diterima</label>
+                    <label class="uk-label uk-label-success" v-else-if="meet.meeting_status === 'accept'">Diterima</label>
                     <label class="uk-label uk-label-danger" v-else-if="meet.meeting_status === 'reject'">Ditolak</label>
-                    <label class="uk-label uk-label-warning" v-else>Revisi</label>
+                    <label class="uk-label uk-label-danger" v-else-if="meet.meeting_status === 'cancel'">Dibatalkan</label>
+                    <label class="uk-label uk-label-warning" v-else-if="meet.meeting_status === 'revision'">Revisi</label>
+                    <label class="uk-label uk-label-success" v-else>Selesai</label>
                   </td>
                   <td>{{ $root.formatDate( meet.updated_at, 'DD MMM YYYY, HH:mm' ) }}</td>
                 </tr>
@@ -157,7 +240,8 @@ export default {
           last_page: 1,
           prev_page_url: null,
           next_page_url: null
-        }
+        },
+        details: {}
       }
     }
   },
@@ -199,6 +283,20 @@ export default {
       }).catch( err => {
         this.meeting_list.errorMessage = err.response.statusText;
         this.meeting_list.isLoading = false;
+      });
+    },
+    getDetailSchedule( id )
+    {
+      this.meeting_list.details = {};
+      axios({
+        method: 'get',
+        url: this.$root.url + '/marketing/meeting/detail_meeting/' + id
+      }).then( res => {
+        let result = res.data;
+        this.meeting_list.details = result.results;
+        UIkit.modal('#detail-schedule').show();
+      }).catch( err => {
+        console.log( err.response.statusText );
       });
     }
   },

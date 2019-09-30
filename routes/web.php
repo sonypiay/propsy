@@ -73,6 +73,7 @@ Route::group(['prefix' => 'marketing'], function() {
     Route::get('/get_meeting_list', 'Frontend\Marketing\MeetingListController@get_meeting_list');
     Route::post('/create_schedule/{request_id}', 'Frontend\Marketing\MeetingListController@create_schedule');
     Route::post('/update_schedule/{request_id}', 'Frontend\Marketing\MeetingListController@update_schedule');
+    Route::get('/detail_meeting/{request_id}', 'Frontend\Marketing\MeetingListController@get_detail_schedule');
   });
 });
 

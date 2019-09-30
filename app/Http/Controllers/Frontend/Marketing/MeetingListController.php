@@ -9,6 +9,7 @@ use App\Database\ProjectRequest;
 use App\Database\LogProjectRequest;
 use App\Http\Controllers\Controller;
 use DB;
+use Storage;
 
 class MeetingListController extends Controller
 {
@@ -144,28 +145,69 @@ class MeetingListController extends Controller
 
   public function update_schedule( Request $request, MarketingUser $marketinguser, MeetingAppointment $meeting_appointment, LogProjectRequest $log_request, $request_id )
   {
-    $tanggal_meeting = $request->tanggal_meeting;
-    $jam_meeting = $request->jam_meeting;
-    $note = $request->note;
-    $meeting_time = $tanggal_meeting . ' ' . $jam_meeting;
     $mktuser = $marketinguser->getinfo();
     $status_meeting = $request->status_meeting;
-
-    $message_log = '';
-    $data_log = [
-      'request_id' => $request_id,
-      'message' => $mktuser->mkt_fullname . ' me-revisi jadwal meeting dengan Anda.'
-    ];
-
     $update = $meeting_appointment->where('request_unique_id', $request_id)->first();
-    $update->meeting_time = $meeting_time;
-    $update->meeting_note = $note;
-    $update->meeting_status = $status_meeting;
-    $update->last_updated_by = $mktuser->mkt_fullname;
-    $update->save();
 
-    $log_request->insert_log( $data_log );
-    $res = [ 'status' => 200, 'statusText' => 'success' ];
+    if( $status_meeting === 'revision' )
+    {
+      $tanggal_meeting = $request->tanggal_meeting;
+      $jam_meeting = $request->jam_meeting;
+      $note = $request->note;
+      $meeting_time = $tanggal_meeting . ' ' . $jam_meeting;
+      $data_log = [
+        'request_id' => $request_id,
+        'message' => $mktuser->mkt_fullname . ' me-revisi jadwal meeting dengan Anda.'
+      ];
+
+      $update->meeting_time = $meeting_time;
+      $update->meeting_note = $note;
+      $update->meeting_status = $status_meeting;
+      $update->last_updated_by = $mktuser->mkt_fullname;
+      $update->save();
+    }
+    else
+    {
+      $storage = Storage::disk('assets');
+      $meeting_result = $request->meeting_result;
+      $document_file = $request->document_file;
+      $document_path = 'document/meeting';
+      $filename = empty( $document_file ) ? '' : 'result_' . $document_file->hashName();
+      $data_log = [];
+      if( $update->meeting_status != 'done' )
+      {
+        $data_log = [
+          'request_id' => $request_id,
+          'message' => 'Meeting telah selesai dilakukan. Dokumen telah diupload.'
+        ];
+      }
+
+      $update->meeting_result = $meeting_result;
+      $update->meeting_status = 'done';
+
+      if( empty( $update->document_file ) && ! empty( $document_file ) )
+      {
+        $storage->putFileAs( $document_path, $document_file, $filename );
+        $update->document_file = $filename;
+      }
+      else
+      {
+        if( ! empty( $document_file ) )
+        {
+          if( $storage->exists( $document_path . '/' . $update->document_file ) )
+          {
+            $storage->delete( $document_path . '/' . $update->document_file );
+          }
+          $storage->putFileAs( $document_path, $document_file, $filename );
+          $update->document_file = $filename;
+        }
+      }
+      $update->save();
+    }
+
+    if( count( $data_log ) != 0 ) $log_request->insert_log( $data_log );
+
+    $res = [ 'status' => 200, 'statusText' => 'success', 'request' => $request->all() ];
 
     return response()->json( $res, $res['status'] );
   }
@@ -265,5 +307,43 @@ class MeetingListController extends Controller
     ];
 
     return response()->json( $res, 200 );
+  }
+
+  public function get_detail_schedule( Request $request, MeetingAppointment $meeting_appointment, $request_id )
+  {
+    $getresult = $meeting_appointment->select(
+      'meeting_appointment.meeting_time',
+      'meeting_appointment.meeting_status',
+      'meeting_appointment.meeting_result',
+      'meeting_appointment.meeting_note',
+      'meeting_appointment.document_file',
+      'meeting_appointment.last_updated_by',
+      'meeting_appointment.updated_at',
+      'project_request.request_unique_id',
+      'project_request.status_request',
+      'project_request.request_message',
+      'project_request.request_note',
+      'project_request.isReviewed',
+      'customer.customer_name',
+      'customer.customer_phone_number',
+      'customer.customer_email',
+      'customer.customer_address',
+      'city.city_name',
+      'province.province_name',
+      'project_unit_type.unit_name'
+    )
+    ->join('project_request', 'meeting_appointment.request_unique_id', '=', 'project_request.request_unique_id')
+    ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
+    ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
+    ->join('city', 'customer.customer_city', '=', 'city.city_id')
+    ->join('province', 'city.province_id', '=', 'province.province_id')
+    ->where('project_request.request_unique_id', '=', $request_id)
+    ->first();
+
+    $result = [
+      'results' => $getresult
+    ];
+
+    return response()->json( $result, 200 );
   }
 }

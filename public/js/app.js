@@ -7237,6 +7237,89 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user'],
   data: function data() {
@@ -7276,7 +7359,8 @@ __webpack_require__.r(__webpack_exports__);
           last_page: 1,
           prev_page_url: null,
           next_page_url: null
-        }
+        },
+        details: {}
       }
     };
   },
@@ -7314,6 +7398,21 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (err) {
         _this.meeting_list.errorMessage = err.response.statusText;
         _this.meeting_list.isLoading = false;
+      });
+    },
+    getDetailSchedule: function getDetailSchedule(id) {
+      var _this2 = this;
+
+      this.meeting_list.details = {};
+      axios({
+        method: 'get',
+        url: this.$root.url + '/marketing/meeting/detail_meeting/' + id
+      }).then(function (res) {
+        var result = res.data;
+        _this2.meeting_list.details = result.results;
+        UIkit.modal('#detail-schedule').show();
+      })["catch"](function (err) {
+        console.log(err.response.statusText);
       });
     }
   },
@@ -7861,6 +7960,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -7876,7 +8003,12 @@ __webpack_require__.r(__webpack_exports__);
       forms: {
         request_id: this.getrequest.request_unique_id,
         meeting_note: this.getmeeting.meeting_note,
-        status_meeting: 'revision',
+        status_meeting: this.getmeeting.meeting_status !== 'done' ? 'revision' : this.getmeeting.meeting_status,
+        meeting_result: this.getmeeting.meeting_result === null ? '' : this.getmeeting.meeting_result,
+        document_file: {
+          data: {},
+          isSelected: false
+        },
         submit: 'Update Jadwal',
         timepicker: {
           selectedTime: {
@@ -7915,32 +8047,92 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    selectedFile: function selectedFile(event) {
+      var targetFile = event.target.files;
+      this.forms.document_file.data = {};
+      this.forms.document_file.isSelected = false;
+
+      if (targetFile.length !== 0) {
+        this.forms.document_file.data = targetFile[0];
+        this.forms.document_file.isSelected = true;
+      }
+    },
     onUpdateSchedule: function onUpdateSchedule() {
       var _this = this;
 
       this.errors.name = {};
       this.errors.errorMessage = '';
       this.errors.iserror = false;
-      this.forms.submit = '<span uk-spinner></span>';
 
       if (this.forms.timepicker.selectedTime.HH === '' || this.forms.timepicker.selectedTime.mm === '') {
         this.errors.name.timepicker = 'Silakan pilih jam meeting';
         this.errors.iserror = true;
       }
 
+      if (this.forms.status_meeting === 'done') {
+        if (this.forms.meeting_result === '') {
+          this.errors.name.meeting_result = 'Catatan hasil meeting harap diisi';
+          this.errors.iserror = true;
+        }
+
+        if (this.forms.document_file.isSelected === false && this.getmeeting.document_file === null) {
+          this.errors.name.document_file = 'Dokumen harap diupload';
+          this.errors.iserror = true;
+        }
+      }
+
       if (this.errors.iserror === true) return false;
       var tanggal_meeting = this.$root.formatDate(this.forms.datepicker.selectedDate, 'YYYY-MM-DD');
       var jam_meeting = this.forms.timepicker.selectedTime.HH + ':' + this.forms.timepicker.selectedTime.mm;
-      axios({
-        method: 'post',
-        url: this.$root.url + '/marketing/meeting/update_schedule/' + this.forms.request_id,
-        params: {
-          tanggal_meeting: tanggal_meeting,
-          jam_meeting: jam_meeting,
-          note: this.forms.meeting_note,
-          status_meeting: this.forms.status_meeting
+      var url = this.$root.url + '/marketing/meeting/update_schedule/' + this.forms.request_id;
+
+      if (this.forms.status_meeting === 'done') {
+        var ax;
+        var fd = new FormData();
+        var documentfile = '';
+        var getformat = this.forms.document_file.isSelected === true ? this.$root.getFormatFile(this.forms.document_file.data.name) : '';
+        fd.append('document_file', '');
+
+        if (this.getmeeting.document_file === null) {
+          if (getformat === 'pdf' || getformat === 'zip') {
+            fd.append('document_file', this.forms.document_file.data);
+          } else {
+            this.errors.name.document_file = 'Format dokumen tidak valid.';
+            this.forms.document_file.isSelected = false;
+            this.forms.document_file.data = {};
+            return false;
+          }
+        } else {
+          if (this.forms.document_file.isSelected) {
+            if (getformat === 'pdf' || getformat === 'zip') {
+              fd.append('document_file', this.forms.document_file.data);
+            } else {
+              this.errors.name.document_file = 'Format dokumen tidak valid.';
+              this.forms.document_file.isSelected = false;
+              this.forms.document_file.data = {};
+              return false;
+            }
+          }
         }
-      }).then(function (res) {
+
+        fd.append('meeting_result', this.forms.meeting_result);
+        fd.append('status_meeting', this.forms.status_meeting);
+        ax = axios.post(url, fd);
+      } else {
+        ax = axios({
+          method: 'post',
+          url: url,
+          params: {
+            tanggal_meeting: tanggal_meeting,
+            jam_meeting: jam_meeting,
+            note: this.forms.meeting_note,
+            status_meeting: this.forms.status_meeting
+          }
+        });
+      }
+
+      this.forms.submit = '<span uk-spinner></span>';
+      ax.then(function (res) {
         swal({
           title: 'Sukses',
           text: 'Jadwal meeting berhasil dibuat',
@@ -88096,6 +88288,240 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c(
+      "div",
+      {
+        staticClass: "uk-modal-full",
+        attrs: { id: "detail-schedule", "uk-modal": "" }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "uk-modal-dialog uk-modal-body",
+            attrs: { "uk-height-viewport": "" }
+          },
+          [
+            _c("a", {
+              staticClass: "uk-modal-close-full uk-close-large",
+              attrs: { type: "button", "uk-close": "" }
+            }),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "uk-card uk-card-body container-viewschedule" },
+              [
+                _c(
+                  "div",
+                  {
+                    staticClass: "uk-card-title container-viewschedule-heading"
+                  },
+                  [
+                    _vm._v(
+                      "\n          Detail Meeting " +
+                        _vm._s(_vm.meeting_list.details.request_unique_id) +
+                        "\n        "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "uk-margin container-viewschedule-body" },
+                  [
+                    _c(
+                      "table",
+                      {
+                        staticClass:
+                          "uk-table uk-table-divider uk-table-hover uk-table-middle uk-table-striped uk-table-small"
+                      },
+                      [
+                        _c("tbody", [
+                          _c("th", [_vm._v("Unit Dipesan")]),
+                          _vm._v(" "),
+                          _c("td", { attrs: { colspan: "3" } }, [
+                            _vm._v(
+                              "\n                " +
+                                _vm._s(_vm.meeting_list.details.unit_name) +
+                                "\n              "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("th", [_vm._v("Nama Pelanggan")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(_vm.meeting_list.details.customer_name)
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Nomor Telepon")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.meeting_list.details.customer_phone_number
+                                )
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("th", [_vm._v("Alamat Email")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(_vm.meeting_list.details.customer_email)
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Alamat")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                "\n                  " +
+                                  _vm._s(
+                                    _vm.meeting_list.details.customer_address
+                                  ) +
+                                  " "
+                              ),
+                              _c("br"),
+                              _vm._v(
+                                "\n                  " +
+                                  _vm._s(_vm.meeting_list.details.city_name) +
+                                  ", " +
+                                  _vm._s(
+                                    _vm.meeting_list.details.province_name
+                                  ) +
+                                  "\n                "
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("th", [_vm._v("Pesan")]),
+                            _vm._v(" "),
+                            _c("td", { attrs: { colspan: "3" } }, [
+                              _vm._v(
+                                _vm._s(_vm.meeting_list.details.request_message)
+                              )
+                            ])
+                          ])
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "table",
+                      {
+                        staticClass:
+                          "uk-table uk-table-divider uk-table-hover uk-table-middle uk-table-striped uk-table-small"
+                      },
+                      [
+                        _vm._m(0),
+                        _vm._v(" "),
+                        _c("tbody", [
+                          _c("tr", [
+                            _c("td", { staticClass: "uk-width-medium" }, [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.$root.formatDate(
+                                    _vm.meeting_list.details.meeting_time,
+                                    "dddd, DD MMMM YYYY"
+                                  )
+                                )
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "uk-width-medium" }, [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.$root.formatDate(
+                                    _vm.meeting_list.details.meeting_time,
+                                    "HH:mm"
+                                  )
+                                )
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm.meeting_list.details.meeting_status ===
+                              "waiting_confirmation"
+                                ? _c("label", { staticClass: "uk-label" }, [
+                                    _vm._v("Menunggu Konfirmasi")
+                                  ])
+                                : _vm.meeting_list.details.meeting_status ===
+                                  "accept"
+                                ? _c(
+                                    "label",
+                                    {
+                                      staticClass: "uk-label uk-label-success"
+                                    },
+                                    [_vm._v("Diterima")]
+                                  )
+                                : _vm.meeting_list.details.meeting_status ===
+                                  "reject"
+                                ? _c(
+                                    "label",
+                                    { staticClass: "uk-label uk-label-danger" },
+                                    [_vm._v("Ditolak")]
+                                  )
+                                : _vm.meeting_list.details.meeting_status ===
+                                  "cancel"
+                                ? _c(
+                                    "label",
+                                    { staticClass: "uk-label uk-label-danger" },
+                                    [_vm._v("Dibatalkan")]
+                                  )
+                                : _vm.meeting_list.details.meeting_status ===
+                                  "revision"
+                                ? _c(
+                                    "label",
+                                    {
+                                      staticClass: "uk-label uk-label-warning"
+                                    },
+                                    [_vm._v("Revisi")]
+                                  )
+                                : _c(
+                                    "label",
+                                    {
+                                      staticClass: "uk-label uk-label-success"
+                                    },
+                                    [_vm._v("Selesai")]
+                                  )
+                            ]),
+                            _vm._v(" "),
+                            _vm._m(1)
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("th", [_vm._v("Hasil Meeting")]),
+                            _vm._v(" "),
+                            _c("td", { attrs: { colspan: "3" } }, [
+                              _vm._v(
+                                "\n                  " +
+                                  _vm._s(
+                                    _vm.meeting_list.details.meeting_result
+                                  ) +
+                                  "\n                "
+                              )
+                            ])
+                          ])
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm._m(2)
+                  ]
+                )
+              ]
+            )
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
     _c("div", { staticClass: "uk-card dashboard-content" }, [
       _c(
         "div",
@@ -88225,7 +88651,13 @@ var render = function() {
                 _vm._v(" "),
                 _c("option", { attrs: { value: "cancel" } }, [
                   _vm._v("Dibatalkan")
-                ])
+                ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "reject" } }, [
+                  _vm._v("Ditolak")
+                ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "done" } }, [_vm._v("Selesai")])
               ]
             )
           ]),
@@ -88392,7 +88824,7 @@ var render = function() {
                           "uk-table uk-table-responsive uk-table-divider uk-table-middle uk-table-small"
                       },
                       [
-                        _vm._m(0),
+                        _vm._m(3),
                         _vm._v(" "),
                         _c(
                           "tbody",
@@ -88424,7 +88856,11 @@ var render = function() {
                                               "a",
                                               {
                                                 on: {
-                                                  click: function($event) {}
+                                                  click: function($event) {
+                                                    return _vm.getDetailSchedule(
+                                                      meet.request_unique_id
+                                                    )
+                                                  }
                                                 }
                                               },
                                               [
@@ -88453,7 +88889,9 @@ var render = function() {
                                                 _c("span", {
                                                   attrs: { "uk-icon": "pencil" }
                                                 }),
-                                                _vm._v(" Edit")
+                                                _vm._v(
+                                                  "\n                          Edit Jadwal\n                        "
+                                                )
                                               ]
                                             )
                                           ]),
@@ -88462,6 +88900,19 @@ var render = function() {
                                             _c(
                                               "a",
                                               {
+                                                directives: [
+                                                  {
+                                                    name: "show",
+                                                    rawName: "v-show",
+                                                    value:
+                                                      meet.meeting_status ===
+                                                        "waiting_confirmation" ||
+                                                      meet.meeting_status ===
+                                                        "revision",
+                                                    expression:
+                                                      "meet.meeting_status === 'waiting_confirmation' || meet.meeting_status === 'revision'"
+                                                  }
+                                                ],
                                                 on: {
                                                   click: function($event) {}
                                                 }
@@ -88470,7 +88921,7 @@ var render = function() {
                                                 _c("span", {
                                                   attrs: { "uk-icon": "close" }
                                                 }),
-                                                _vm._v(" Batalkan Jadwal")
+                                                _vm._v(" Batalkan")
                                               ]
                                             )
                                           ])
@@ -88507,7 +88958,7 @@ var render = function() {
                                   ? _c(
                                       "label",
                                       {
-                                        staticClass: "uk-label uk-label-danger"
+                                        staticClass: "uk-label uk-label-success"
                                       },
                                       [_vm._v("Diterima")]
                                     )
@@ -88519,12 +88970,28 @@ var render = function() {
                                       },
                                       [_vm._v("Ditolak")]
                                     )
-                                  : _c(
+                                  : meet.meeting_status === "cancel"
+                                  ? _c(
+                                      "label",
+                                      {
+                                        staticClass: "uk-label uk-label-danger"
+                                      },
+                                      [_vm._v("Dibatalkan")]
+                                    )
+                                  : meet.meeting_status === "revision"
+                                  ? _c(
                                       "label",
                                       {
                                         staticClass: "uk-label uk-label-warning"
                                       },
                                       [_vm._v("Revisi")]
+                                    )
+                                  : _c(
+                                      "label",
+                                      {
+                                        staticClass: "uk-label uk-label-success"
+                                      },
+                                      [_vm._v("Selesai")]
                                     )
                               ]),
                               _vm._v(" "),
@@ -88596,6 +89063,43 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Tanggal Meeting")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Jam")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Status")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Dokumen")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", [
+      _c(
+        "a",
+        { staticClass: "uk-button uk-button-primary", attrs: { href: "#" } },
+        [
+          _c("span", { attrs: { "uk-icon": "download" } }),
+          _vm._v(" Unduh Dokumen")
+        ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("table", [_c("tbody")])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -89809,7 +90313,17 @@ var render = function() {
             _c("div", { staticClass: "uk-form-controls" }, [
               _c(
                 "div",
-                { staticClass: "uk-margin" },
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.getmeeting.meeting_status !== "done",
+                      expression: "getmeeting.meeting_status !== 'done'"
+                    }
+                  ],
+                  staticClass: "uk-margin"
+                },
                 [
                   _c("vue-timepicker", {
                     attrs: { format: _vm.forms.timepicker.format },
@@ -89843,29 +90357,56 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "div",
-                { staticClass: "uk-margin" },
+                {
+                  class: {
+                    "uk-margin": _vm.getmeeting.meeting_status !== "done"
+                  }
+                },
                 [
-                  _c("v-date-picker", {
-                    attrs: {
-                      mode: "single",
-                      formats: _vm.forms.datepicker.formats,
-                      "is-inline": true,
-                      "select-attribute": _vm.forms.datepicker.attributes,
-                      "input-props": _vm.forms.datepicker.props,
-                      "theme-styles": _vm.forms.datepicker.themeStyles,
-                      "show-caps": "",
-                      "is-expanded": ""
-                    },
-                    model: {
-                      value: _vm.forms.datepicker.selectedDate,
-                      callback: function($$v) {
-                        _vm.$set(_vm.forms.datepicker, "selectedDate", $$v)
-                      },
-                      expression: "forms.datepicker.selectedDate"
-                    }
-                  })
-                ],
-                1
+                  _vm.getmeeting.meeting_status === "done"
+                    ? _c("div", [
+                        _c("input", {
+                          staticClass: "uk-input dash-form-input",
+                          attrs: { disabled: "" },
+                          domProps: {
+                            value: _vm.$root.formatDate(
+                              _vm.getmeeting.meeting_time,
+                              "dddd, DD MMMM YYYY HH:mm"
+                            )
+                          }
+                        })
+                      ])
+                    : _c(
+                        "div",
+                        [
+                          _c("v-date-picker", {
+                            attrs: {
+                              mode: "single",
+                              formats: _vm.forms.datepicker.formats,
+                              "is-inline": true,
+                              "select-attribute":
+                                _vm.forms.datepicker.attributes,
+                              "input-props": _vm.forms.datepicker.props,
+                              "theme-styles": _vm.forms.datepicker.themeStyles,
+                              "show-caps": "",
+                              "is-expanded": ""
+                            },
+                            model: {
+                              value: _vm.forms.datepicker.selectedDate,
+                              callback: function($$v) {
+                                _vm.$set(
+                                  _vm.forms.datepicker,
+                                  "selectedDate",
+                                  $$v
+                                )
+                              },
+                              expression: "forms.datepicker.selectedDate"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                ]
               )
             ])
           ]),
@@ -89886,6 +90427,7 @@ var render = function() {
                   }
                 ],
                 staticClass: "uk-textarea dash-form-input uk-height-small",
+                attrs: { disabled: _vm.getmeeting.meeting_status === "done" },
                 domProps: { value: _vm.forms.meeting_note },
                 on: {
                   input: function($event) {
@@ -89917,6 +90459,7 @@ var render = function() {
                     }
                   ],
                   staticClass: "uk-select dash-form-input",
+                  attrs: { disabled: _vm.getmeeting.meeting_status === "done" },
                   on: {
                     change: function($event) {
                       var $$selectedVal = Array.prototype.filter
@@ -89949,6 +90492,156 @@ var render = function() {
               )
             ])
           ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.forms.status_meeting === "done",
+                  expression: "forms.status_meeting === 'done'"
+                }
+              ],
+              staticClass: "uk-margin"
+            },
+            [
+              _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+                _vm._v("Catatan Hasil Meeting")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-form-controls" }, [
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.forms.meeting_result,
+                      expression: "forms.meeting_result"
+                    }
+                  ],
+                  staticClass: "uk-textarea dash-form-input uk-height-small",
+                  domProps: { value: _vm.forms.meeting_result },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.forms, "meeting_result", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.errors.name.meeting_result,
+                      expression: "errors.name.meeting_result"
+                    }
+                  ],
+                  staticClass: "uk-text-small uk-text-danger"
+                },
+                [
+                  _vm._v(
+                    "\n          " +
+                      _vm._s(_vm.errors.name.meeting_result) +
+                      "\n        "
+                  )
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.forms.status_meeting === "done",
+                  expression: "forms.status_meeting === 'done'"
+                }
+              ],
+              staticClass: "uk-margin"
+            },
+            [
+              _c("label", { staticClass: "uk-form-label dash-form-label" }, [
+                _vm._v("Upload Dokumen Penting")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-form-controls" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "uk-width-1-1 uk-placeholder uk-text-center",
+                    attrs: { "uk-form-custom": "" }
+                  },
+                  [
+                    _c("span", { attrs: { "uk-icon": "icon: cloud-upload" } }),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "uk-text-middle" }, [
+                      _vm._v("Dokumen dalam bentuk PDF / ZIP")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      attrs: { type: "file", id: "selectedFile" },
+                      on: { change: _vm.selectedFile }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.errors.name.document_file,
+                        expression: "errors.name.document_file"
+                      }
+                    ],
+                    staticClass: "uk-text-small uk-text-danger"
+                  },
+                  [
+                    _vm._v(
+                      "\n            " +
+                        _vm._s(_vm.errors.name.document_file) +
+                        "\n          "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.forms.document_file.isSelected,
+                        expression: "forms.document_file.isSelected"
+                      }
+                    ],
+                    staticClass: "uk-text-small"
+                  },
+                  [
+                    _vm._v(
+                      _vm._s(_vm.forms.document_file.data.name) +
+                        " akan diupload"
+                    )
+                  ]
+                )
+              ])
+            ]
+          ),
           _vm._v(" "),
           _c("div", { staticClass: "uk-margin" }, [
             _c("button", {

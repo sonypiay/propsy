@@ -39,13 +39,13 @@
   <ul class="uk-nav-default side-nav" uk-nav>
     @if( session()->has('isMarketing') )
     <li>
-      <a href="{{ $link_nav['dashboard'] }}"><span class="uk-margin-small-right" uk-icon="icon: home; ratio: 1"></span> Dashboard</a>
+      <a href="{{ route('marketing_dashboard_page') }}"><span class="uk-margin-small-right" uk-icon="icon: home; ratio: 1"></span> Dashboard</a>
     </li>
     <li class="uk-parent">
       <a href="#"><span class="uk-margin-small-right" uk-icon="icon: clock; ratio: 1"></span> Meeting <span class="uk-float-right" uk-icon="icon: chevron-down; ratio: 1"></span> </a>
       <ul class="uk-nav-sub side-nav-sub">
-        <li><a href="{{ $link_nav['project'] }}"><span class="uk-margin-small-right" uk-icon="icon: list; ratio: 1"></span> Meeting Pelanggan</a></li>
-        <li><a href="{{ route('developer_add_project_page') }}"><span class="uk-margin-small-right" uk-icon="icon: plus; ratio: 1"></span> Buat Jadwal Meeting</a></li>
+        <li><a href="{{ route('marketing_meeting_list') }}"><span class="uk-margin-small-right" uk-icon="icon: list; ratio: 1"></span> Jadwal Meeting</a></li>
+        <li><a href="{{ route('marketing_create_schedule') }}"><span class="uk-margin-small-right" uk-icon="icon: plus; ratio: 1"></span> Buat Jadwal Meeting</a></li>
       </ul>
     </li>
     <li>

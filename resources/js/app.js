@@ -50,7 +50,10 @@ const app = new Vue({
     data: {
       url: labmode.url,
       formatNumeral(str, format) {
-        return numeral(str).format(format);
+        if( format === undefined )
+          return numeral(str).format();
+        else
+          return numeral(str).format(format);
       },
       formatDate(str, format, locale) {
         if( locale === undefined ) locale = 'id';

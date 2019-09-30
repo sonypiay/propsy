@@ -66,7 +66,12 @@ Route::group(['prefix' => 'marketing'], function() {
   });
 
   Route::group(['prefix' => 'meeting'], function() {
+    Route::get('/meeting_list', 'Frontend\Marketing\MeetingListController@index')->name('marketing_meeting_list');
     Route::get('/create_schedule/{request_id?}', 'Frontend\Marketing\MeetingListController@create_schedule_page')->name('marketing_create_schedule');
+    Route::get('/edit_schedule/{request_id}', 'Frontend\Marketing\MeetingListController@edit_schedule_page')->name('marketing_edit_schedule');
+    Route::get('/get_meeting_list', 'Frontend\Marketing\MeetingListController@get_meeting_list');
+    Route::post('/create_schedule/{request_id}', 'Frontend\Marketing\MeetingListController@create_schedule');
+    Route::post('/update_schedule/{request_id}', 'Frontend\Marketing\MeetingListController@update_schedule');
   });
 });
 

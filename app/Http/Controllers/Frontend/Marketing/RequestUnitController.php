@@ -81,6 +81,11 @@ class RequestUnitController extends Controller
     {
       $result = $query->where([
         ['project_request.dev_user_id', $mktuser->dev_user_id],
+        ['project_request.request_unique_id', 'like', '%' . $keywords . '%'],
+        ['project_request.status_request', '!=', 'done']
+      ])
+      ->orWhere([
+        ['project_request.dev_user_id', $mktuser->dev_user_id],
         ['customer.customer_name', 'like', '%' . $keywords . '%'],
         ['project_request.status_request', '!=', 'done']
       ])
@@ -116,6 +121,6 @@ class RequestUnitController extends Controller
 
   public function get_detail_request( ProjectRequest $project_request, MarketingUser $marketinguser, $reqid )
   {
-    
+
   }
 }

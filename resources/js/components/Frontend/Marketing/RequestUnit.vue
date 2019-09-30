@@ -54,7 +54,8 @@
                           <a class="card-unit-setting-icon" uk-icon="icon: more"></a>
                           <div uk-dropdown="mode: click" class="card-unit-setting-dropdown">
                             <ul class="uk-nav uk-dropdown-nav">
-                              <li><a :href="$root.url + '/marketing/meeting/create_schedule/' + unit.request_unique_id">Buat Jadwal Meeting</a></li>
+                              <li v-show="unit.status_request === 'waiting_response'"><a :href="$root.url + '/marketing/meeting/create_schedule/' + unit.request_unique_id">Buat Jadwal Meeting</a></li>
+                              <li v-show="unit.status_request === 'meeting'"><a :href="$root.url + '/marketing/meeting/edit_schedule/' + unit.request_unique_id">Revisi Jadwal Meeting</a></li>
                             </ul>
                           </div>
                         </div>

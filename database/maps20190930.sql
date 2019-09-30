@@ -104,11 +104,11 @@ CREATE TABLE `log_project_request` (
   PRIMARY KEY (`log_id`),
   KEY `fk_log_request_id` (`request_unique_id`),
   CONSTRAINT `fk_log_request_id` FOREIGN KEY (`request_unique_id`) REFERENCES `project_request` (`request_unique_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 /*Data for the table `log_project_request` */
 
-insert  into `log_project_request`(`log_id`,`log_message`,`request_unique_id`,`created_at`,`updated_at`) values (1,'Sony Darmawan mengajukan pemesanan unit Podomoro Park Bandung Tipe 6','REQ00001-20190930','2019-09-30 00:42:06','2019-09-30 00:42:06'),(2,'Marketing Agency Jakarta mengundang Anda untuk meeting.','REQ00001-20190930','2019-09-30 18:51:26','2019-09-30 18:51:26'),(3,'Marketing Agency Jakarta me-revisi jadwal meeting dengan Anda.','REQ00001-20190930','2019-09-30 20:30:17','2019-09-30 20:30:17');
+insert  into `log_project_request`(`log_id`,`log_message`,`request_unique_id`,`created_at`,`updated_at`) values (1,'Sony Darmawan mengajukan pemesanan unit Podomoro Park Bandung Tipe 6','REQ00001-20190930','2019-09-30 00:42:06','2019-09-30 00:42:06'),(2,'Marketing Agency Jakarta mengundang Anda untuk meeting.','REQ00001-20190930','2019-09-30 18:51:26','2019-09-30 18:51:26'),(3,'Marketing Agency Jakarta me-revisi jadwal meeting dengan Anda.','REQ00001-20190930','2019-09-30 20:30:17','2019-09-30 20:30:17'),(4,'Sony Darmawan telah menerima undangan.','REQ00001-20190930','2019-09-30 21:59:12','2019-09-30 21:59:12');
 
 /*Table structure for table `marketing_user` */
 
@@ -160,7 +160,7 @@ CREATE TABLE `meeting_appointment` (
 
 /*Data for the table `meeting_appointment` */
 
-insert  into `meeting_appointment`(`meeting_id`,`meeting_time`,`meeting_status`,`request_unique_id`,`meeting_note`,`meeting_result`,`document_file`,`last_updated_by`,`created_at`,`updated_at`) values (1,'2019-10-03 10:00:00','revision','REQ00001-20190930','Terima kasih atas ketertarikan Anda untuk membeli properti Podomoro Park Bandung Tipe 6. Kami mengundang Anda untuk meeting sehingga kita dapat berdiskusi lebih lanjut. Kami tunggu kabar dari Anda. Hormat kami, Marketing',NULL,NULL,'Marketing Agency Jakarta','2019-09-30 18:51:26','2019-09-30 20:30:17');
+insert  into `meeting_appointment`(`meeting_id`,`meeting_time`,`meeting_status`,`request_unique_id`,`meeting_note`,`meeting_result`,`document_file`,`last_updated_by`,`created_at`,`updated_at`) values (1,'2019-10-03 10:00:00','accept','REQ00001-20190930','Terima kasih atas ketertarikan Anda untuk membeli properti Podomoro Park Bandung Tipe 6. Kami mengundang Anda untuk meeting sehingga kita dapat berdiskusi lebih lanjut. Kami tunggu kabar dari Anda. Hormat kami, Marketing',NULL,NULL,'Marketing Agency Jakarta','2019-09-30 18:51:26','2019-09-30 21:59:12');
 
 /*Table structure for table `project_gallery` */
 

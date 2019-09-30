@@ -2199,6 +2199,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user'],
   data: function data() {
@@ -2288,6 +2314,49 @@ __webpack_require__.r(__webpack_exports__);
               icon: 'error',
               dangerMode: true,
               timer: 3000
+            });
+          });
+        }
+      });
+    },
+    onResponseMeeting: function onResponseMeeting(id, status_request) {
+      var _this3 = this;
+
+      var message = status_request === 'accept' ? 'Anda telah menerima undangan dari Marketing' : 'Anda telah menolak undangan dari Marketing';
+      var messageConfirmation = status_request === 'accept' ? 'Apakah anda ingin menerima undangan ini?' : 'Apakah anda ingin menolak undangan ini?';
+      swal({
+        title: 'Konfirmasi',
+        text: messageConfirmation,
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Tidak',
+          confirm: {
+            value: true,
+            text: 'Ya'
+          }
+        }
+      }).then(function (val) {
+        if (val) {
+          axios({
+            method: 'put',
+            url: _this3.$root.url + '/customer/response_meeting_invitation/' + id + '/' + status_request
+          }).then(function (res) {
+            swal({
+              title: 'Berhasil',
+              text: message,
+              icon: 'success',
+              timer: 3000
+            });
+            setTimeout(function () {
+              _this3.getRequestList(_this3.forms.status_request);
+            }, 1000);
+          })["catch"](function (err) {
+            swal({
+              title: 'Whoops',
+              text: 'Terjadi kesalahan',
+              icon: 'error',
+              dangerMode: true
             });
           });
         }
@@ -77857,7 +77926,7 @@ var render = function() {
               ? _c("div", { staticClass: "uk-margin-top uk-text-center" }, [
                   _c("span", { attrs: { "uk-spinner": "" } })
                 ])
-              : _c("div", [
+              : _c("div", { staticClass: "uk-margin" }, [
                   _vm.request_list.total === 0
                     ? _c(
                         "div",
@@ -77975,7 +78044,177 @@ var render = function() {
                                             ) +
                                             "\n                  "
                                         )
-                                      ])
+                                      ]),
+                                      _vm._v(" "),
+                                      unit.meeting_time !== null
+                                        ? _c("div", [
+                                            unit.meeting_status === "meeting" ||
+                                            unit.meeting_status === "revision"
+                                              ? _c("div", [
+                                                  unit.meeting_status ===
+                                                    "meeting" ||
+                                                  unit.meeting_status ===
+                                                    "revision"
+                                                    ? _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            "uk-text-small uk-margin-small-bottom"
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                        Anda menerima undangan dari Marketing pada :"
+                                                          ),
+                                                          _c("br"),
+                                                          _vm._v(" "),
+                                                          _c("strong", [
+                                                            _vm._v(
+                                                              "\n                          " +
+                                                                _vm._s(
+                                                                  _vm.$root.formatDate(
+                                                                    unit.meeting_time,
+                                                                    "dddd, DD MMMM YYYY"
+                                                                  )
+                                                                ) +
+                                                                "\n                        "
+                                                            )
+                                                          ])
+                                                        ]
+                                                      )
+                                                    : _vm._e(),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "button",
+                                                    {
+                                                      staticClass:
+                                                        "uk-button uk-button-small btn-approve",
+                                                      on: {
+                                                        click: function(
+                                                          $event
+                                                        ) {
+                                                          return _vm.onResponseMeeting(
+                                                            unit.request_unique_id,
+                                                            "accept"
+                                                          )
+                                                        }
+                                                      }
+                                                    },
+                                                    [_vm._v("Terima")]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "button",
+                                                    {
+                                                      staticClass:
+                                                        "uk-button uk-button-small btn-reject",
+                                                      on: {
+                                                        click: function(
+                                                          $event
+                                                        ) {
+                                                          return _vm.onResponseMeeting(
+                                                            unit.request_unique_id,
+                                                            "reject"
+                                                          )
+                                                        }
+                                                      }
+                                                    },
+                                                    [_vm._v("Tolak")]
+                                                  )
+                                                ])
+                                              : _c("div", [
+                                                  unit.meeting_status ===
+                                                  "cancel"
+                                                    ? _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            "uk-label uk-label-danger",
+                                                          attrs: {
+                                                            "uk-tooltip":
+                                                              "Meeting telah dibatalkan oleh pihak Marketing"
+                                                          }
+                                                        },
+                                                        [
+                                                          _c("span", {
+                                                            attrs: {
+                                                              "uk-icon": "close"
+                                                            }
+                                                          }),
+                                                          _vm._v(
+                                                            " Dibatalkan\n                      "
+                                                          )
+                                                        ]
+                                                      )
+                                                    : unit.meeting_status ===
+                                                      "reject"
+                                                    ? _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            "uk-label uk-label-danger",
+                                                          attrs: {
+                                                            "uk-tooltip":
+                                                              "Anda telah menolak undangan ini"
+                                                          }
+                                                        },
+                                                        [
+                                                          _c("span", {
+                                                            attrs: {
+                                                              "uk-icon": "close"
+                                                            }
+                                                          }),
+                                                          _vm._v(
+                                                            " Ditolak\n                      "
+                                                          )
+                                                        ]
+                                                      )
+                                                    : unit.meeting_status ===
+                                                      "accept"
+                                                    ? _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            "uk-label uk-label-success",
+                                                          attrs: {
+                                                            "uk-tooltip":
+                                                              "Anda telah menerima undangan ini"
+                                                          }
+                                                        },
+                                                        [
+                                                          _c("span", {
+                                                            attrs: {
+                                                              "uk-icon": "check"
+                                                            }
+                                                          }),
+                                                          _vm._v(
+                                                            " Diterima\n                      "
+                                                          )
+                                                        ]
+                                                      )
+                                                    : _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            "uk-label uk-label-success",
+                                                          attrs: {
+                                                            "uk-tooltip":
+                                                              "Meeting telah selesai dilakukan"
+                                                          }
+                                                        },
+                                                        [
+                                                          _c("span", {
+                                                            attrs: {
+                                                              "uk-icon": "check"
+                                                            }
+                                                          }),
+                                                          _vm._v(
+                                                            " Selesai\n                      "
+                                                          )
+                                                        ]
+                                                      )
+                                                ])
+                                          ])
+                                        : _vm._e()
                                     ]
                                   ),
                                   _vm._v(" "),

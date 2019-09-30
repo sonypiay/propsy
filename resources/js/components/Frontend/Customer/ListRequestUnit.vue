@@ -28,7 +28,7 @@
         <div v-if="request_list.isLoading === true" class="uk-margin-top uk-text-center">
           <span uk-spinner></span>
         </div>
-        <div v-else>
+        <div v-else class="uk-margin">
           <div v-if="request_list.total === 0" class="uk-alert-warning" uk-alert>
             Anda belum mengajukan pemesanan unit.
           </div>
@@ -54,6 +54,32 @@
                     </div>
                     <div class="unit-price">
                       Rp. {{ unit.unit_price | currency }}
+                    </div>
+                    <div v-if="unit.meeting_time !== null">
+                      <div v-if="unit.meeting_status === 'meeting' || unit.meeting_status === 'revision'">
+                        <div v-if="unit.meeting_status === 'meeting' || unit.meeting_status === 'revision'" class="uk-text-small uk-margin-small-bottom">
+                          Anda menerima undangan dari Marketing pada :<br>
+                          <strong>
+                            {{ $root.formatDate( unit.meeting_time, 'dddd, DD MMMM YYYY' ) }}
+                          </strong>
+                        </div>
+                        <button @click="onResponseMeeting( unit.request_unique_id, 'accept' )" class="uk-button uk-button-small btn-approve">Terima</button>
+                        <button @click="onResponseMeeting( unit.request_unique_id, 'reject' )" class="uk-button uk-button-small btn-reject">Tolak</button>
+                      </div>
+                      <div v-else>
+                        <div uk-tooltip="Meeting telah dibatalkan oleh pihak Marketing" class="uk-label uk-label-danger" v-if="unit.meeting_status === 'cancel'">
+                          <span uk-icon="close"></span> Dibatalkan
+                        </div>
+                        <div uk-tooltip="Anda telah menolak undangan ini" class="uk-label uk-label-danger" v-else-if="unit.meeting_status === 'reject'">
+                          <span uk-icon="close"></span> Ditolak
+                        </div>
+                        <div uk-tooltip="Anda telah menerima undangan ini" class="uk-label uk-label-success" v-else-if="unit.meeting_status === 'accept'">
+                          <span uk-icon="check"></span> Diterima
+                        </div>
+                        <div uk-tooltip="Meeting telah selesai dilakukan" class="uk-label uk-label-success" v-else>
+                          <span uk-icon="check"></span> Selesai
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div class="uk-card-footer card-unit-footer uk-padding-small">
@@ -201,6 +227,49 @@ export default {
               icon: 'error',
               dangerMode: true,
               timer: 3000
+            });
+          });
+        }
+      });
+    },
+    onResponseMeeting( id, status_request )
+    {
+      var message = status_request === 'accept' ? 'Anda telah menerima undangan dari Marketing' : 'Anda telah menolak undangan dari Marketing';
+      var messageConfirmation = status_request === 'accept' ? 'Apakah anda ingin menerima undangan ini?' : 'Apakah anda ingin menolak undangan ini?';
+
+      swal({
+        title: 'Konfirmasi',
+        text: messageConfirmation,
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Tidak',
+          confirm: {
+            value: true, text: 'Ya'
+          }
+        }
+      }).then( val => {
+        if( val )
+        {
+          axios({
+            method: 'put',
+            url: this.$root.url + '/customer/response_meeting_invitation/' + id + '/' + status_request
+          }).then( res => {
+            swal({
+              title: 'Berhasil',
+              text: message,
+              icon: 'success',
+              timer: 3000
+            });
+            setTimeout(() => {
+              this.getRequestList( this.forms.status_request );
+            }, 1000);
+          }).catch( err => {
+            swal({
+              title: 'Whoops',
+              text: 'Terjadi kesalahan',
+              icon: 'error',
+              dangerMode: true
             });
           });
         }

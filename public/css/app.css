@@ -1281,6 +1281,45 @@ body {
   color: #1fc8c9;
 }
 
+.card-unit-project .card-unit-body .btn-approve {
+  background: #ffffff;
+  color: #1fc8c9;
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  border: 1px solid #1fc8c9;
+  border-radius: 4px;
+  text-transform: capitalize;
+}
+
+.card-unit-project .card-unit-body .btn-approve:hover,
+.card-unit-project .card-unit-body .btn-approve:focus {
+  background: #1fc8c9;
+  color: #ffffff;
+}
+
+.card-unit-project .card-unit-body .btn-reject {
+  border: 1px solid #e02c2c;
+  color: #e02c2c;
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  text-transform: capitalize;
+  background: #ffffff;
+  border-radius: 4px;
+}
+
+.card-unit-project .card-unit-body .btn-reject:hover {
+  background: #e02c2c;
+  color: #ffffff;
+}
+
 .card-unit-project .card-unit-header {
   border: 0;
 }
@@ -1335,7 +1374,7 @@ body {
 .card-unit-project .card-unit-footer .unit-readmore {
   background: #ffffff;
   color: #1fc8c9;
-  font-size: 11px;
+  font-size: 13px;
   font-style: normal;
   font-stretch: normal;
   font-family: "Lato", sans-serif;

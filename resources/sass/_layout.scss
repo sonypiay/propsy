@@ -553,6 +553,27 @@ html, body {
         }
       }
     }
+    .btn-approve {
+      background: #ffffff;
+      color: $color3;
+      @include fontsetting( $font-primary, 13px, 600, normal, normal, 0.4px );
+      border: 1px solid $color3;
+      border-radius: 4px;
+      text-transform: capitalize;
+      &:hover, &:focus { background: $color3; color: #ffffff; }
+    }
+    .btn-reject {
+      border: 1px solid #e02c2c;
+      color: #e02c2c;
+      @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+      text-transform: capitalize;
+      background: #ffffff;
+      border-radius: 4px;
+      &:hover {
+        background: #e02c2c;
+        color: #ffffff;
+      }
+    }
   }
   .card-unit-header {
     border: 0;
@@ -589,7 +610,7 @@ html, body {
     .unit-readmore {
       background: #ffffff;
       color: $color3;
-      @include fontsetting( $font-primary, 11px, 600, normal, normal, 0.4px );
+      @include fontsetting( $font-primary, 13px, 600, normal, normal, 0.4px );
       border: 1px solid $color3;
       border-radius: 4px;
       text-transform: capitalize;

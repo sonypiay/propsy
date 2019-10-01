@@ -577,13 +577,13 @@ html, body {
   }
   .card-unit-header {
     border: 0;
-    .status-request {
+    .status-request, .status-review {
       @include fontsetting( $font-primary, 11px, 600, normal, normal, 0.4px );
       padding: 6px;
       border-radius: 4px;
       text-align: center;
     }
-    .status-request-waiting-response {
+    .status-request-waiting-response, .status-review-waiting {
       background: $color-blue;
       color: #ffffff;
     }
@@ -591,8 +591,13 @@ html, body {
       background: $color-warning;
       color: #ffffff;
     }
+    .status-request-meeting-done, .status-review-accept {
+      background: $color3;
+      color: #ffffff;
+    }
     .status-request-cancel,
-    .status-request-reject {
+    .status-request-reject,
+    .status-review-reject {
       background: $color-danger;
       color: #ffffff;
     }
@@ -656,6 +661,6 @@ html, body {
 }
 
 .container-viewschedule {
-  
+
 }
 /* Layout */

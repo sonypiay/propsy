@@ -19,7 +19,7 @@
               <button @click="getRequestList('reject')" :class="{'btn-status-active': forms.status_request === 'reject'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Ditolak</button>
             </div>
             <div>
-              <button @click="getRequestList('done')" :class="{'btn-status-active': forms.status_request === 'done'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Selesai</button>
+              <button @click="getRequestList('accept')" :class="{'btn-status-active': forms.status_request === 'accept'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Selesai</button>
             </div>
           </div>
         </div>

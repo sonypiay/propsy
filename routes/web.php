@@ -133,6 +133,7 @@ Route::group(['prefix' => 'developer'], function() {
     Route::get('/request_unit', 'Frontend\Developer\RequestUnitController@customer_request_unit')->name('developer_request_unit');
     Route::get('/get_request_unit', 'Frontend\Developer\RequestUnitController@get_request_unit');
     Route::get('/detail_request/{request_id}', 'Frontend\Developer\RequestUnitController@detail_request');
+    Route::put('/review_request_unit/{request_id}/{status_review}', 'Frontend\Developer\RequestUnitController@review_request_unit');
   });
 });
 

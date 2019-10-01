@@ -127,11 +127,20 @@
               <div class="uk-card-body card-unit-body">
                 <div class="uk-margin-bottom card-unit-header">
                   <div class="uk-grid-small uk-child-width-auto" uk-grid>
+                    <div v-if="unit.meeting_time !== null">
+                      <div class="status-request status-request-meeting" v-if="unit.meeting_status !== 'done'">Dijadwalkan meeting</div>
+                      <div class="status-request status-request-meeting-done" v-if="unit.isReviewed === 'N'">Meeting telah selesai</div>
+                      <div class="status-review status-review-accept" v-if="unit.status_request === 'accept' && unit.isReviewed === 'Y'">Pengajuan Diteima</div>
+                      <div class="status-review status-review-accept" v-if="unit.status_request === 'reject' && unit.isReviewed === 'Y'">Pengajuan Ditolak</div>
+                    </div>
                     <div>
                       <div class="status-request status-request-waiting-response" v-if="unit.status_request === 'waiting_response'">Menunggu Tanggapan</div>
-                      <div class="status-request status-request-meeting" v-else-if="unit.status_request === 'meeting'">Dijadwalkan Meeting</div>
-                      <div class="status-request status-request-cancel" v-else-if="unit.status_request === 'cancel'">Pesanan Dibatalkan</div>
-                      <div class="status-request status-request-reject" v-else-if="unit.status_request === 'reject'">Pesanan Ditolak</div>
+                      <div class="status-request status-request-cancel" v-if="unit.status_request === 'cancel'">Pesanan Dibatalkan</div>
+                      <div class="status-request status-request-reject" v-if="unit.status_request === 'reject'">Pesanan Ditolak</div>
+                    </div>
+                    <div v-show="unit.meeting_status === 'done'">
+                      <span class="status-review status-review-waiting" v-if="unit.isReviewed === 'N'">Belum direview</span>
+                      <span class="status-review status-review-accept" v-if="unit.isReviewed === 'Y'">Sudah direview</span>
                     </div>
                     <div class="uk-width-expand">
                       <div class="uk-float-right">
@@ -172,6 +181,10 @@
                       </div>
                     </div>
                   </div>
+                </div>
+                <div v-if="unit.meeting_status === 'done' && unit.isReviewed === 'N'" class="uk-margin-small-top card-unit-header">
+                  <a @click="onReviewRequest('accept', unit.request_unique_id)" class="uk-button uk-button-primary uk-button-small status-review status-review-accept">Terima</a>
+                  <a @click="onReviewRequest('reject', unit.request_unique_id)" class="uk-button uk-button-primary uk-button-small status-review status-review-reject">Tolak</a>
                 </div>
               </div>
             </div>
@@ -274,6 +287,45 @@ export default {
     },
     onCancelRequest( id )
     {
+    },
+    onReviewRequest( status_review, id )
+    {
+      var messageConfirmation = status_review === 'accept' ? 'Apakah anda ingin menerima pengajuan ini?' : 'Apakah anda ingin menolak pengajuan ini?';
+      swal({
+        title: 'Konfirmasi',
+        text: messageConfirmation,
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Tidak',
+          confirm: { value: true, text: 'Ya' }
+        }
+      }).then( val => {
+        if( val )
+        {
+          axios({
+            method: 'put',
+            url: this.$root.url + '/developer/customer/review_request_unit/' + id + '/' + status_review
+          }).then( res => {
+            swal({
+              title: 'Sukses',
+              text: id + ' berhasil diupdate.',
+              icon: 'success',
+              timer: 3000
+            });
+            setTimeout(() => {
+              this.getRequestUnit();
+            }, 1000);
+          }).catch( err => {
+            swal({
+              title: 'Whoops',
+              text: 'Terjadi kesalahan',
+              icon: 'error',
+              dangerMode: true
+            });
+          });
+        }
+      });
     }
   },
   mounted() {

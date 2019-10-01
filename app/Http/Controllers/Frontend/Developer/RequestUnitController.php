@@ -45,6 +45,7 @@ class RequestUnitController extends Controller
       'project_request.request_message',
       'project_request.status_request',
       'project_request.request_note',
+      'project_request.isReviewed',
       'project_request.created_at',
       'project_request.updated_at',
       'customer.customer_id',
@@ -167,6 +168,34 @@ class RequestUnitController extends Controller
         'log' => $getlog,
         'data' => $getrequest
       ]
+    ];
+
+    return response()->json( $res, 200 );
+  }
+
+  public function review_request_unit( ProjectRequest $project_request, LogProjectRequest $log_request, ProjectUnitType $unit_type, $request_id, $status_review )
+  {
+    $getrequest = $project_request->where('request_unique_id', $request_id)
+    ->first();
+
+    if( $getrequest->isReviewed === 'N' )
+    {
+      $getrequest->status_request = $status_review;
+      $getrequest->isReviewed = 'Y';
+      $getrequest->save();
+
+      $getunit = $unit_type->where('unit_type_id', '=', $getrequest->unit_type_id)->first();
+      $getunit->unit_status = $status_review === 'reject' ? 'available' : 'sold';
+
+      $log_request->insert_log([
+        'request_id' => $request_id,
+        'message' => 'Developer telah me-review pengajuan pemesanan unit.'
+      ]);
+    }
+
+    $res = [
+      'status' => 200,
+      'statusText' => 'success'
     ];
 
     return response()->json( $res, 200 );

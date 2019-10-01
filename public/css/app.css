@@ -1324,7 +1324,8 @@ body {
   border: 0;
 }
 
-.card-unit-project .card-unit-header .status-request {
+.card-unit-project .card-unit-header .status-request,
+.card-unit-project .card-unit-header .status-review {
   font-size: 11px;
   font-style: normal;
   font-stretch: normal;
@@ -1336,7 +1337,8 @@ body {
   text-align: center;
 }
 
-.card-unit-project .card-unit-header .status-request-waiting-response {
+.card-unit-project .card-unit-header .status-request-waiting-response,
+.card-unit-project .card-unit-header .status-review-waiting {
   background: #2295f2;
   color: #ffffff;
 }
@@ -1346,8 +1348,15 @@ body {
   color: #ffffff;
 }
 
+.card-unit-project .card-unit-header .status-request-meeting-done,
+.card-unit-project .card-unit-header .status-review-accept {
+  background: #1fc8c9;
+  color: #ffffff;
+}
+
 .card-unit-project .card-unit-header .status-request-cancel,
-.card-unit-project .card-unit-header .status-request-reject {
+.card-unit-project .card-unit-header .status-request-reject,
+.card-unit-project .card-unit-header .status-review-reject {
   background: #e02c2c;
   color: #ffffff;
 }

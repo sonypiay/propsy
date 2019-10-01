@@ -6976,6 +6976,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user'],
   data: function data() {
@@ -7050,7 +7063,49 @@ __webpack_require__.r(__webpack_exports__);
         console.log(err.response.statusText);
       });
     },
-    onCancelRequest: function onCancelRequest(id) {}
+    onCancelRequest: function onCancelRequest(id) {},
+    onReviewRequest: function onReviewRequest(status_review, id) {
+      var _this3 = this;
+
+      var messageConfirmation = status_review === 'accept' ? 'Apakah anda ingin menerima pengajuan ini?' : 'Apakah anda ingin menolak pengajuan ini?';
+      swal({
+        title: 'Konfirmasi',
+        text: messageConfirmation,
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Tidak',
+          confirm: {
+            value: true,
+            text: 'Ya'
+          }
+        }
+      }).then(function (val) {
+        if (val) {
+          axios({
+            method: 'put',
+            url: _this3.$root.url + '/developer/customer/review_request_unit/' + id + '/' + status_review
+          }).then(function (res) {
+            swal({
+              title: 'Sukses',
+              text: id + ' berhasil diupdate.',
+              icon: 'success',
+              timer: 3000
+            });
+            setTimeout(function () {
+              _this3.getRequestUnit();
+            }, 1000);
+          })["catch"](function (err) {
+            swal({
+              title: 'Whoops',
+              text: 'Terjadi kesalahan',
+              icon: 'error',
+              dangerMode: true
+            });
+          });
+        }
+      });
+    }
   },
   mounted: function mounted() {
     this.getRequestUnit();
@@ -78691,11 +78746,11 @@ var render = function() {
                           "uk-button uk-button-primary uk-button-small btn-status-request",
                         class: {
                           "btn-status-active":
-                            _vm.forms.status_request === "done"
+                            _vm.forms.status_request === "accept"
                         },
                         on: {
                           click: function($event) {
-                            return _vm.getRequestList("done")
+                            return _vm.getRequestList("accept")
                           }
                         }
                       },
@@ -89164,6 +89219,64 @@ var render = function() {
                                       attrs: { "uk-grid": "" }
                                     },
                                     [
+                                      unit.meeting_time !== null
+                                        ? _c("div", [
+                                            unit.meeting_status !== "done"
+                                              ? _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "status-request status-request-meeting"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "Dijadwalkan meeting"
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e(),
+                                            _vm._v(" "),
+                                            unit.isReviewed === "N"
+                                              ? _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "status-request status-request-meeting-done"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "Meeting telah selesai"
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e(),
+                                            _vm._v(" "),
+                                            unit.status_request === "accept" &&
+                                            unit.isReviewed === "Y"
+                                              ? _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "status-review status-review-accept"
+                                                  },
+                                                  [_vm._v("Pengajuan Diteima")]
+                                                )
+                                              : _vm._e(),
+                                            _vm._v(" "),
+                                            unit.status_request === "reject" &&
+                                            unit.isReviewed === "Y"
+                                              ? _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "status-review status-review-accept"
+                                                  },
+                                                  [_vm._v("Pengajuan Ditolak")]
+                                                )
+                                              : _vm._e()
+                                          ])
+                                        : _vm._e(),
+                                      _vm._v(" "),
                                       _c("div", [
                                         unit.status_request ===
                                         "waiting_response"
@@ -89175,16 +89288,9 @@ var render = function() {
                                               },
                                               [_vm._v("Menunggu Tanggapan")]
                                             )
-                                          : unit.status_request === "meeting"
-                                          ? _c(
-                                              "div",
-                                              {
-                                                staticClass:
-                                                  "status-request status-request-meeting"
-                                              },
-                                              [_vm._v("Dijadwalkan Meeting")]
-                                            )
-                                          : unit.status_request === "cancel"
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        unit.status_request === "cancel"
                                           ? _c(
                                               "div",
                                               {
@@ -89193,7 +89299,9 @@ var render = function() {
                                               },
                                               [_vm._v("Pesanan Dibatalkan")]
                                             )
-                                          : unit.status_request === "reject"
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        unit.status_request === "reject"
                                           ? _c(
                                               "div",
                                               {
@@ -89204,6 +89312,45 @@ var render = function() {
                                             )
                                           : _vm._e()
                                       ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        {
+                                          directives: [
+                                            {
+                                              name: "show",
+                                              rawName: "v-show",
+                                              value:
+                                                unit.meeting_status === "done",
+                                              expression:
+                                                "unit.meeting_status === 'done'"
+                                            }
+                                          ]
+                                        },
+                                        [
+                                          unit.isReviewed === "N"
+                                            ? _c(
+                                                "span",
+                                                {
+                                                  staticClass:
+                                                    "status-review status-review-waiting"
+                                                },
+                                                [_vm._v("Belum direview")]
+                                              )
+                                            : _vm._e(),
+                                          _vm._v(" "),
+                                          unit.isReviewed === "Y"
+                                            ? _c(
+                                                "span",
+                                                {
+                                                  staticClass:
+                                                    "status-review status-review-accept"
+                                                },
+                                                [_vm._v("Sudah direview")]
+                                              )
+                                            : _vm._e()
+                                        ]
+                                      ),
                                       _vm._v(" "),
                                       _c(
                                         "div",
@@ -89360,7 +89507,53 @@ var render = function() {
                                     ])
                                   ]
                                 )
-                              ])
+                              ]),
+                              _vm._v(" "),
+                              unit.meeting_status === "done" &&
+                              unit.isReviewed === "N"
+                                ? _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "uk-margin-small-top card-unit-header"
+                                    },
+                                    [
+                                      _c(
+                                        "a",
+                                        {
+                                          staticClass:
+                                            "uk-button uk-button-primary uk-button-small status-review status-review-accept",
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.onReviewRequest(
+                                                "accept",
+                                                unit.request_unique_id
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("Terima")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "a",
+                                        {
+                                          staticClass:
+                                            "uk-button uk-button-primary uk-button-small status-review status-review-reject",
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.onReviewRequest(
+                                                "reject",
+                                                unit.request_unique_id
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("Tolak")]
+                                      )
+                                    ]
+                                  )
+                                : _vm._e()
                             ]
                           )
                         ]

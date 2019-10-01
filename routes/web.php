@@ -124,6 +124,15 @@ Route::group(['prefix' => 'developer'], function() {
     Route::post('/add_marketing', 'Frontend\Developer\ProjectMarketingController@add_marketing');
     Route::put('/save_marketing/{userid}', 'Frontend\Developer\ProjectMarketingController@save_marketing');
     Route::delete('/delete_marketing/{userid}', 'Frontend\Developer\ProjectMarketingController@delete_marketing');
+
+    Route::get('/meeting_list', 'Frontend\Marketing\MeetingListController@index')->name('developer_meeting_list');
+    Route::get('/get_meeting_list', 'Frontend\Marketing\MeetingListController@get_meeting_list');
+  });
+
+  Route::group(['prefix' => 'customer'], function() {
+    Route::get('/request_unit', 'Frontend\Developer\RequestUnitController@customer_request_unit')->name('developer_request_unit');
+    Route::get('/get_request_unit', 'Frontend\Developer\RequestUnitController@get_request_unit');
+    Route::get('/detail_request/{request_id}', 'Frontend\Developer\RequestUnitController@detail_request');
   });
 });
 

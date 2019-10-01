@@ -133,6 +133,7 @@ class ProjectListController extends Controller
       'unit_name',
       'unit_status'
     )->where('unit_type_id', $unit_id)->first();
+
     if( $getunit->unit_status === 'booked' )
     {
       $res = [
@@ -170,6 +171,9 @@ class ProjectListController extends Controller
       $insert_request->request_message = $message;
       $insert_request->save();
       $log_request->insert_log($data_log);
+
+      $getunit->unit_status = 'booked';
+      $getunit->save();
 
       $res = [
         'status' => 200,

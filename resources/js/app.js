@@ -31,6 +31,8 @@ Vue.component('developer-add-project', require('./components/Frontend/Developer/
 Vue.component('developer-edit-project', require('./components/Frontend/Developer/EditProject.vue').default);
 Vue.component('developer-add-unit', require('./components/Frontend/Developer/AddUnit.vue').default);
 Vue.component('developer-edit-unit', require('./components/Frontend/Developer/EditUnit.vue').default);
+Vue.component('developer-request-unit', require('./components/Frontend/Developer/RequestUnit.vue').default);
+Vue.component('developer-meeting-list', require('./components/Frontend/Developer/MeetingList.vue').default);
 
 // customer
 Vue.component('customer-register-page', require('./components/Frontend/Customer/Daftar.vue').default);

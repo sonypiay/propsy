@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend\Marketing;
 use Illuminate\Http\Request;
 use App\Database\MeetingAppointment;
 use App\Database\MarketingUser;
+use App\Database\Customer;
 use App\Database\ProjectRequest;
 use App\Database\LogProjectRequest;
 use App\Http\Controllers\Controller;
@@ -67,7 +68,7 @@ class MeetingListController extends Controller
     }
   }
 
-  public function create_schedule( Request $request, MarketingUser $marketinguser, MeetingAppointment $meeting_appointment, LogProjectRequest $log_request, ProjectRequest $project_request, $request_id )
+  public function create_schedule( Request $request, MarketingUser $marketinguser, MeetingAppointment $meeting_appointment, LogProjectRequest $log_request, ProjectRequest $project_request, Customer $customer, $request_id )
   {
     $tanggal_meeting = $request->tanggal_meeting;
     $jam_meeting = $request->jam_meeting;
@@ -75,6 +76,7 @@ class MeetingListController extends Controller
     $meeting_time = $tanggal_meeting . ' ' . $jam_meeting;
     $mktuser = $marketinguser->getinfo();
     $getrequest = $project_request->where('request_unique_id', $request_id)->first();
+    $getcustomer = $customer->where('customer_id', $getrequest->customer_id)->first();
     $check_meeting = $meeting_appointment->where('request_unique_id', $request_id)->count();
 
     if( $check_meeting === 1 )
@@ -89,7 +91,7 @@ class MeetingListController extends Controller
       $message_log = '';
       $data_log = [
         'request_id' => $request_id,
-        'message' => $mktuser->mkt_fullname . ' mengundang Anda untuk meeting.'
+        'message' => $mktuser->mkt_fullname . ' mengundang ' . $getcustomer->customer_name . ' untuk meeting bersama.'
       ];
 
       $insert = new $meeting_appointment;
@@ -143,10 +145,12 @@ class MeetingListController extends Controller
     }
   }
 
-  public function update_schedule( Request $request, MarketingUser $marketinguser, MeetingAppointment $meeting_appointment, LogProjectRequest $log_request, $request_id )
+  public function update_schedule( Request $request, MarketingUser $marketinguser, MeetingAppointment $meeting_appointment, LogProjectRequest $log_request, ProjectRequest $project_request, Customer $customer, $request_id )
   {
     $mktuser = $marketinguser->getinfo();
     $status_meeting = $request->status_meeting;
+    $getrequest = $project_request->select('customer_id', 'request_unique_id')->where('request_unique_id', $request_id)->first();
+    $getcustomer = $customer->where('customer_id', $getrequest->customer_id)->first();
     $update = $meeting_appointment->where('request_unique_id', $request_id)->first();
 
     if( $status_meeting === 'revision' )
@@ -157,7 +161,7 @@ class MeetingListController extends Controller
       $meeting_time = $tanggal_meeting . ' ' . $jam_meeting;
       $data_log = [
         'request_id' => $request_id,
-        'message' => $mktuser->mkt_fullname . ' me-revisi jadwal meeting dengan Anda.'
+        'message' => $mktuser->mkt_fullname . ' me-revisi jadwal undangan meeting.'
       ];
 
       $update->meeting_time = $meeting_time;

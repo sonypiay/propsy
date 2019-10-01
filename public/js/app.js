@@ -7141,15 +7141,15 @@ __webpack_require__.r(__webpack_exports__);
             method: 'put',
             url: _this4.$root.url + '/developer/customer/review_request_unit/' + id + '/' + status_review
           }).then(function (res) {
-            /*swal({
+            swal({
               title: 'Sukses',
               text: id + ' berhasil diupdate.',
               icon: 'success',
               timer: 3000
             });
-            setTimeout(() => {
-              this.getRequestUnit();
-            }, 1000);*/
+            setTimeout(function () {
+              _this4.getRequestUnit();
+            }, 1000);
           })["catch"](function (err) {
             swal({
               title: 'Whoops',

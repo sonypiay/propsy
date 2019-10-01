@@ -129,10 +129,7 @@ class ProjectListController extends Controller
     $dev_user = $request->dev_user;
     $date = date('Ymd');
     $getcustomer = $customer->getinfo();
-    $getunit = $unit_type->select(
-      'unit_name',
-      'unit_status'
-    )->where('unit_type_id', $unit_id)->first();
+    $getunit = $unit_type->where('unit_type_id', $unit_id)->first();
 
     if( $getunit->unit_status === 'booked' )
     {
@@ -163,6 +160,9 @@ class ProjectListController extends Controller
         'request_id' => $generate_request_id
       ];
 
+      $getunit->unit_status = 'booked';
+      $getunit->save();
+
       $insert_request = new $project_request;
       $insert_request->request_unique_id = $generate_request_id;
       $insert_request->dev_user_id = $dev_user;
@@ -171,9 +171,6 @@ class ProjectListController extends Controller
       $insert_request->request_message = $message;
       $insert_request->save();
       $log_request->insert_log($data_log);
-
-      $getunit->unit_status = 'booked';
-      $getunit->save();
 
       $res = [
         'status' => 200,

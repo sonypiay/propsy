@@ -9,6 +9,7 @@ use App\Database\DeveloperUser;
 use App\Database\MarketingUser;
 use App\Database\ProjectRequest;
 use App\Database\LogProjectRequest;
+use App\Database\ProjectUnitType;
 use App\Database\Customer;
 use App\Http\Controllers\Controller;
 
@@ -102,7 +103,7 @@ class RequestUnitController extends Controller
         ['project_request.status_request', '!=', 'done']
       ])
       ->orderBy('project_request.created_at', 'desc');
-      
+
       if( $status_request !== 'all' )
       {
         $result = $query->where([
@@ -182,12 +183,13 @@ class RequestUnitController extends Controller
 
     if( $getrequest->isReviewed === 'N' )
     {
+      $getunit = $unit_type->where('unit_type_id', '=', $getrequest->unit_type_id)->first();
+      $getunit->unit_status = $status_review === 'reject' ? 'available' : 'sold';
+      $getunit->save();
+
       $getrequest->status_request = $status_review;
       $getrequest->isReviewed = 'Y';
       $getrequest->save();
-
-      $getunit = $unit_type->where('unit_type_id', '=', $getrequest->unit_type_id)->first();
-      $getunit->unit_status = $status_review === 'reject' ? 'available' : 'sold';
 
       $log_request->insert_log([
         'request_id' => $request_id,

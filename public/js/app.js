@@ -7002,6 +7002,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user'],
   data: function data() {
@@ -8484,6 +8486,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -79140,7 +79144,8 @@ var render = function() {
                                       unit.meeting_time !== null
                                         ? _c("div", [
                                             unit.meeting_status ===
-                                            "waiting_confirmation"
+                                              "waiting_confirmation" ||
+                                            unit.meeting_status === "revision"
                                               ? _c("div", [
                                                   _c(
                                                     "div",
@@ -79160,7 +79165,7 @@ var render = function() {
                                                             _vm._s(
                                                               _vm.$root.formatDate(
                                                                 unit.meeting_time,
-                                                                "dddd, DD MMMM YYYY"
+                                                                "dddd, DD MMMM YYYY HH:mm"
                                                               )
                                                             ) +
                                                             "\n                        "
@@ -79226,7 +79231,7 @@ var render = function() {
                                                             _vm._s(
                                                               _vm.$root.formatDate(
                                                                 unit.meeting_time,
-                                                                "dddd, DD MMMM YYYY"
+                                                                "dddd, DD MMMM YYYY HH:mm"
                                                               )
                                                             ) +
                                                             "\n                        "
@@ -89514,9 +89519,31 @@ var render = function() {
                                                   },
                                                   [
                                                     _vm._v(
-                                                      "Jadwal Meeting Dibatalkan"
+                                                      "Undangan Dibatalkan"
                                                     )
                                                   ]
+                                                )
+                                              : _vm._e(),
+                                            _vm._v(" "),
+                                            unit.meeting_status === "reject"
+                                              ? _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "status-request status-request-reject"
+                                                  },
+                                                  [_vm._v("Undangan Ditolak")]
+                                                )
+                                              : _vm._e(),
+                                            _vm._v(" "),
+                                            unit.meeting_status === "accept"
+                                              ? _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "status-request status-request-accept"
+                                                  },
+                                                  [_vm._v("Undangan diterima")]
                                                 )
                                               : _vm._e()
                                           ])
@@ -93223,9 +93250,31 @@ var render = function() {
                                                   },
                                                   [
                                                     _vm._v(
-                                                      "Jadwal Meeting Dibatalkan"
+                                                      "Undangan Dibatalkan"
                                                     )
                                                   ]
+                                                )
+                                              : _vm._e(),
+                                            _vm._v(" "),
+                                            unit.meeting_status === "reject"
+                                              ? _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "status-request status-request-reject"
+                                                  },
+                                                  [_vm._v("Undangan Ditolak")]
+                                                )
+                                              : _vm._e(),
+                                            _vm._v(" "),
+                                            unit.meeting_status === "accept"
+                                              ? _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "status-request status-request-accept"
+                                                  },
+                                                  [_vm._v("Undangan diterima")]
                                                 )
                                               : _vm._e()
                                           ])

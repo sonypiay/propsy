@@ -56,11 +56,11 @@
                       Rp. {{ unit.unit_price | currency }}
                     </div>
                     <div v-if="unit.meeting_time !== null">
-                      <div v-if="unit.meeting_status === 'waiting_confirmation'">
+                      <div v-if="unit.meeting_status === 'waiting_confirmation' || unit.meeting_status === 'revision'">
                         <div class="uk-text-small uk-margin-small-bottom">
                           Anda menerima undangan dari Marketing pada :<br>
                           <strong>
-                            {{ $root.formatDate( unit.meeting_time, 'dddd, DD MMMM YYYY' ) }}
+                            {{ $root.formatDate( unit.meeting_time, 'dddd, DD MMMM YYYY HH:mm' ) }}
                           </strong>
                         </div>
                         <button @click="onResponseMeeting( unit.request_unique_id, 'accept' )" class="uk-button uk-button-small btn-approve">Terima</button>
@@ -70,7 +70,7 @@
                         <div class="uk-text-small uk-margin-small-bottom">
                           Jadwal undangan meeting :<br>
                           <strong>
-                            {{ $root.formatDate( unit.meeting_time, 'dddd, DD MMMM YYYY' ) }}
+                            {{ $root.formatDate( unit.meeting_time, 'dddd, DD MMMM YYYY HH:mm' ) }}
                           </strong>
                         </div>
                         <div uk-tooltip="Meeting telah dibatalkan oleh pihak Marketing" class="uk-label uk-label-danger" v-if="unit.meeting_status === 'cancel'">

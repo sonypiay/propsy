@@ -68,6 +68,7 @@ class RequestUnitController extends Controller
 
     $getunit = $unit_type->where('unit_type_id', '=', $getrequest->unit_type_id)->first();
     $getunit->unit_status = 'available';
+    $getunit->save();
 
     $log_request->insert_log( $data_log );
     $res = [

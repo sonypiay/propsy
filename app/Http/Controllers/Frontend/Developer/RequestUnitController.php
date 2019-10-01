@@ -185,6 +185,7 @@ class RequestUnitController extends Controller
     {
       $getunit = $unit_type->where('unit_type_id', '=', $getrequest->unit_type_id)->first();
       $getunit->unit_status = $status_review === 'reject' ? 'available' : 'sold';
+
       $getunit->save();
 
       $getrequest->status_request = $status_review;
@@ -199,7 +200,8 @@ class RequestUnitController extends Controller
 
     $res = [
       'status' => 200,
-      'statusText' => 'success'
+      'statusText' => 'success',
+      'status_review' => $status_review
     ];
 
     return response()->json( $res, 200 );

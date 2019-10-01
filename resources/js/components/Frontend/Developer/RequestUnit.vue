@@ -351,7 +351,7 @@ export default {
             method: 'put',
             url: this.$root.url + '/developer/customer/review_request_unit/' + id + '/' + status_review
           }).then( res => {
-            swal({
+            /*swal({
               title: 'Sukses',
               text: id + ' berhasil diupdate.',
               icon: 'success',
@@ -359,7 +359,7 @@ export default {
             });
             setTimeout(() => {
               this.getRequestUnit();
-            }, 1000);
+            }, 1000);*/
           }).catch( err => {
             swal({
               title: 'Whoops',

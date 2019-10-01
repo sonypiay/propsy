@@ -31,6 +31,8 @@ Vue.component('developer-add-project', require('./components/Frontend/Developer/
 Vue.component('developer-edit-project', require('./components/Frontend/Developer/EditProject.vue').default);
 Vue.component('developer-add-unit', require('./components/Frontend/Developer/AddUnit.vue').default);
 Vue.component('developer-edit-unit', require('./components/Frontend/Developer/EditUnit.vue').default);
+Vue.component('developer-request-unit', require('./components/Frontend/Developer/RequestUnit.vue').default);
+Vue.component('developer-meeting-list', require('./components/Frontend/Developer/MeetingList.vue').default);
 
 // customer
 Vue.component('customer-register-page', require('./components/Frontend/Customer/Daftar.vue').default);
@@ -41,6 +43,7 @@ Vue.component('customer-list-request', require('./components/Frontend/Customer/L
 // main page
 Vue.component('homepage-available-project', require('./components/Frontend/HomepageProject.vue').default);
 Vue.component('page-view-project', require('./components/Frontend/ViewProject.vue').default);
+Vue.component('page-view-unit', require('./components/Frontend/ViewDetailUnit.vue').default);
 
 import VueCurrencyFilter from 'vue-currency-filter';
 Vue.use(VueCurrencyFilter);
@@ -50,7 +53,10 @@ const app = new Vue({
     data: {
       url: labmode.url,
       formatNumeral(str, format) {
-        return numeral(str).format(format);
+        if( format === undefined )
+          return numeral(str).format();
+        else
+          return numeral(str).format(format);
       },
       formatDate(str, format, locale) {
         if( locale === undefined ) locale = 'id';

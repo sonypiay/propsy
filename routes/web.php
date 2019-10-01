@@ -42,6 +42,7 @@ Route::group(['prefix' => 'customer'], function() {
   Route::get('/request_unit', 'Frontend\Customer\CustomerController@request_unit_page')->name('customer_request_page');
   Route::get('/get_request_list/{status_request}', 'Frontend\Customer\RequestUnitController@get_request_list');
   Route::put('/cancel_request/{request_id}', 'Frontend\Customer\RequestUnitController@cancel_request');
+  Route::put('/response_meeting_invitation/{request_id}/{status_request}', 'Frontend\Customer\RequestUnitController@response_meeting_invitation');
 });
 
 // Marketing
@@ -62,11 +63,18 @@ Route::group(['prefix' => 'marketing'], function() {
   Route::group(['prefix' => 'customer'], function() {
     Route::get('/request_unit', 'Frontend\Marketing\RequestUnitController@customer_request_unit')->name('marketing_request_unit');
     Route::get('/get_request_unit', 'Frontend\Marketing\RequestUnitController@get_request_unit');
-    //Route::get('/detail_request/{reqid}', 'Frontend\Marketing\RequestUnitController@get_detail_request');
+    Route::get('/detail_request/{request_id}', 'Frontend\Developer\RequestUnitController@detail_request');
   });
 
   Route::group(['prefix' => 'meeting'], function() {
+    Route::get('/meeting_list', 'Frontend\Marketing\MeetingListController@index')->name('marketing_meeting_list');
     Route::get('/create_schedule/{request_id?}', 'Frontend\Marketing\MeetingListController@create_schedule_page')->name('marketing_create_schedule');
+    Route::get('/edit_schedule/{request_id}', 'Frontend\Marketing\MeetingListController@edit_schedule_page')->name('marketing_edit_schedule');
+    Route::get('/get_meeting_list', 'Frontend\Marketing\MeetingListController@get_meeting_list');
+    Route::post('/create_schedule/{request_id}', 'Frontend\Marketing\MeetingListController@create_schedule');
+    Route::post('/update_schedule/{request_id}', 'Frontend\Marketing\MeetingListController@update_schedule');
+    Route::get('/detail_meeting/{request_id}', 'Frontend\Marketing\MeetingListController@get_detail_schedule');
+    Route::put('/cancel_request/{request_id}', 'Frontend\Marketing\MeetingListController@cancel_request');
   });
 });
 
@@ -117,6 +125,17 @@ Route::group(['prefix' => 'developer'], function() {
     Route::post('/add_marketing', 'Frontend\Developer\ProjectMarketingController@add_marketing');
     Route::put('/save_marketing/{userid}', 'Frontend\Developer\ProjectMarketingController@save_marketing');
     Route::delete('/delete_marketing/{userid}', 'Frontend\Developer\ProjectMarketingController@delete_marketing');
+
+    Route::get('/meeting_list', 'Frontend\Marketing\MeetingListController@index')->name('developer_meeting_list');
+    Route::get('/get_meeting_list', 'Frontend\Marketing\MeetingListController@get_meeting_list');
+  });
+
+  Route::group(['prefix' => 'customer'], function() {
+    Route::get('/request_unit', 'Frontend\Developer\RequestUnitController@customer_request_unit')->name('developer_request_unit');
+    Route::get('/get_request_unit', 'Frontend\Developer\RequestUnitController@get_request_unit');
+    Route::get('/detail_request/{request_id}', 'Frontend\Developer\RequestUnitController@detail_request');
+    Route::put('/review_request_unit/{request_id}/{status_review}', 'Frontend\Developer\RequestUnitController@review_request_unit');
+    Route::put('/reject_request_unit/{request_id}', 'Frontend\Developer\RequestUnitController@review_request_unit');
   });
 });
 
@@ -125,4 +144,5 @@ Route::group(['prefix' => 'project'], function() {
   Route::get('/view/{slug}', 'Frontend\Projects\ProjectListController@view_project')->name('project_view_detail');
   Route::get('/unit/{project_id}', 'Frontend\Projects\ProjectListController@list_project_unit')->name('list_project_unit');
   Route::post('/request_unit/{unit_id}', 'Frontend\Projects\ProjectListController@request_unit');
+  Route::get('/detail_unit/{unit_id}', 'Frontend\Projects\ProjectListController@detail_unit')->name('project_detail_unit');
 });

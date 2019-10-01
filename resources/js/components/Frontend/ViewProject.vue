@@ -110,7 +110,7 @@
                           <div class="uk-card-body uk-card-small card-unit-body">
                             <div class="uk-grid-small" uk-grid>
                               <div class="uk-width-expand">
-                                <a class="uk-card-title unit-name">{{ unit.unit_name }}</a>
+                                <a :href="$root.url + '/project/detail_unit/' + unit.unit_slug" class="uk-card-title unit-name">{{ unit.unit_name }}</a>
                               </div>
                               <div class="uk-width-1-6">
                                 <div class="unit-status unit-status-available" v-if="unit.unit_status === 'available'">Tersedia</div>
@@ -149,7 +149,7 @@
                                 </div>
                               </div>
                               <div>
-                                <a class="uk-button uk-button-small uk-button-primary unit-readmore" href="#">Lihat Lebih Lanjut</a>
+                                <a class="uk-button uk-button-small uk-button-primary unit-readmore" :href="$root.url + '/project/detail_unit/' + unit.unit_slug">Lihat Lebih Lanjut</a>
                               </div>
                             </div>
                           </div>

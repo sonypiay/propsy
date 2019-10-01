@@ -1111,12 +1111,31 @@ body {
 }
 
 .container-projectinfo .container-projectheading {
-  border-bottom: 1px solid #e9e9e9;
+  font-size: 32px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #1fc8c9;
+}
+
+.container-projectinfo .container-projectlead {
   font-size: 22px;
   font-style: normal;
   font-stretch: normal;
   font-family: "Lato", sans-serif;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #333333;
+}
+
+.container-projectinfo .container-projectsublead {
+  font-size: 18px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
   letter-spacing: 0.4px;
   color: #333333;
 }
@@ -1266,14 +1285,13 @@ body {
 }
 
 .card-unit-project .card-unit-body .card-unit-setting-dropdown ul li a {
-  font-size: 13px;
+  font-size: 14px;
   font-style: normal;
   font-stretch: normal;
   font-family: "Lato", sans-serif;
   font-weight: 400;
   letter-spacing: 0.4px;
   color: #333333;
-  text-align: center;
 }
 
 .card-unit-project .card-unit-body .card-unit-setting-dropdown ul li a:hover,
@@ -1281,11 +1299,51 @@ body {
   color: #1fc8c9;
 }
 
+.card-unit-project .card-unit-body .btn-approve {
+  background: #ffffff;
+  color: #1fc8c9;
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  border: 1px solid #1fc8c9;
+  border-radius: 4px;
+  text-transform: capitalize;
+}
+
+.card-unit-project .card-unit-body .btn-approve:hover,
+.card-unit-project .card-unit-body .btn-approve:focus {
+  background: #1fc8c9;
+  color: #ffffff;
+}
+
+.card-unit-project .card-unit-body .btn-reject {
+  border: 1px solid #e02c2c;
+  color: #e02c2c;
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  text-transform: capitalize;
+  background: #ffffff;
+  border-radius: 4px;
+}
+
+.card-unit-project .card-unit-body .btn-reject:hover {
+  background: #e02c2c;
+  color: #ffffff;
+}
+
 .card-unit-project .card-unit-header {
   border: 0;
 }
 
-.card-unit-project .card-unit-header .status-request {
+.card-unit-project .card-unit-header .status-request,
+.card-unit-project .card-unit-header .status-review {
   font-size: 11px;
   font-style: normal;
   font-stretch: normal;
@@ -1297,7 +1355,8 @@ body {
   text-align: center;
 }
 
-.card-unit-project .card-unit-header .status-request-waiting-response {
+.card-unit-project .card-unit-header .status-request-waiting-response,
+.card-unit-project .card-unit-header .status-review-waiting {
   background: #2295f2;
   color: #ffffff;
 }
@@ -1307,8 +1366,16 @@ body {
   color: #ffffff;
 }
 
+.card-unit-project .card-unit-header .status-request-meeting-done,
+.card-unit-project .card-unit-header .status-review-accept,
+.card-unit-project .card-unit-header .status-request-accept {
+  background: #1fc8c9;
+  color: #ffffff;
+}
+
 .card-unit-project .card-unit-header .status-request-cancel,
-.card-unit-project .card-unit-header .status-request-reject {
+.card-unit-project .card-unit-header .status-request-reject,
+.card-unit-project .card-unit-header .status-review-reject {
   background: #e02c2c;
   color: #ffffff;
 }
@@ -1335,7 +1402,7 @@ body {
 .card-unit-project .card-unit-footer .unit-readmore {
   background: #ffffff;
   color: #1fc8c9;
-  font-size: 11px;
+  font-size: 13px;
   font-style: normal;
   font-stretch: normal;
   font-family: "Lato", sans-serif;
@@ -1413,6 +1480,53 @@ body {
 
 .card-requestlist .btn-status-active {
   background: #1fc8c9;
+  color: #ffffff;
+}
+
+.navbar-detail-unit {
+  background: #ffffff;
+}
+
+.navbar-detail-unit .nav-unit-subtitle {
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #666666;
+  text-align: left !important;
+}
+
+.navbar-detail-unit .nav-unit-item {
+  font-size: 20px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #333333;
+  text-align: center;
+}
+
+.navbar-menu-unit {
+  background: #1fc8c9;
+}
+
+.navbar-menu-unit ul li a {
+  text-align: center;
+  font-size: 24px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #ffffff;
+  text-transform: capitalize;
+}
+
+.navbar-menu-unit ul li a:hover,
+.navbar-menu-unit ul li a:focus {
   color: #ffffff;
 }
 

@@ -44,6 +44,7 @@ class RequestUnitController extends Controller
       'project_request.request_message',
       'project_request.status_request',
       'project_request.request_note',
+      'project_request.isReviewed',
       'project_request.created_at',
       'project_request.updated_at',
       'customer.customer_id',
@@ -54,19 +55,24 @@ class RequestUnitController extends Controller
       'project_unit_type.unit_name',
       'project_unit_type.unit_price',
       'city.city_name',
-      'province.province_name'
+      'province.province_name',
+      'meeting_appointment.meeting_time',
+      'meeting_appointment.meeting_status',
+      'meeting_appointment.meeting_note'
     )
     ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
     ->join('city', 'customer.customer_city', '=', 'city.city_id')
     ->join('province', 'city.province_id', '=', 'province.province_id')
-    ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id');
+    ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
+    ->leftJoin('meeting_appointment', 'project_request.request_unique_id', '=', 'meeting_appointment.request_unique_id');
 
     if( empty( $keywords ) )
     {
       $result = $query->where([
         ['project_request.dev_user_id', $mktuser->dev_user_id],
         ['project_request.status_request', '!=', 'done']
-      ]);
+      ])
+      ->orderBy('project_request.created_at', 'desc');
 
       if( $status_request !== 'all' )
       {
@@ -80,6 +86,11 @@ class RequestUnitController extends Controller
     else
     {
       $result = $query->where([
+        ['project_request.dev_user_id', $mktuser->dev_user_id],
+        ['project_request.request_unique_id', 'like', '%' . $keywords . '%'],
+        ['project_request.status_request', '!=', 'done']
+      ])
+      ->orWhere([
         ['project_request.dev_user_id', $mktuser->dev_user_id],
         ['customer.customer_name', 'like', '%' . $keywords . '%'],
         ['project_request.status_request', '!=', 'done']
@@ -114,8 +125,51 @@ class RequestUnitController extends Controller
     return response()->json( $res, 200 );
   }
 
-  public function get_detail_request( ProjectRequest $project_request, MarketingUser $marketinguser, $reqid )
+  public function detail_request( ProjectRequest $project_request, LogProjectRequest $log_request, $request_id )
   {
-    
+    $getrequest = $project_request->select(
+      'project_request.request_unique_id',
+      'project_request.request_message',
+      'project_request.status_request',
+      'project_request.request_note',
+      'project_request.created_at',
+      'project_request.updated_at',
+      'customer.customer_id',
+      'customer.customer_name',
+      'customer.customer_email',
+      'customer.customer_phone_number',
+      'project_unit_type.unit_type_id',
+      'project_unit_type.unit_name',
+      'city.city_name',
+      'province.province_name',
+      'meeting_appointment.meeting_time',
+      'meeting_appointment.meeting_status',
+      'meeting_appointment.meeting_note',
+      'meeting_appointment.meeting_result',
+      'meeting_appointment.document_file',
+      'meeting_appointment.last_updated_by',
+      'meeting_appointment.created_at',
+      'meeting_appointment.updated_at'
+    )
+    ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
+    ->join('city', 'customer.customer_city', '=', 'city.city_id')
+    ->join('province', 'city.province_id', '=', 'province.province_id')
+    ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
+    ->leftJoin('meeting_appointment', 'project_request.request_unique_id', '=', 'meeting_appointment.request_unique_id')
+    ->where('project_request.request_unique_id', '=', $request_id)
+    ->first();
+
+    $getlog = $log_request->where('request_unique_id', '=', $request_id)
+    ->orderBy('created_at', 'desc')
+    ->get();
+
+    $res = [
+      'results' => [
+        'log' => $getlog,
+        'data' => $getrequest
+      ]
+    ];
+
+    return response()->json( $res, 200 );
   }
 }

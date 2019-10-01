@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend\Projects;
 use Illuminate\Http\Request;
 use App\Database\ProjectList;
 use App\Database\ProjectGallery;
+use App\Database\ProjectUnitGallery;
 use App\Database\ProjectUnitType;
 use App\Database\ProjectRequest;
 use App\Database\LogProjectRequest;
@@ -54,6 +55,13 @@ class ProjectListController extends Controller
       $developer = new DeveloperUser;
       $data['session_active'] = 'developer';
       $data['session_user'] = $developer->getinfo();
+    }
+
+    if( session()->has('isMarketing') )
+    {
+      $marketing = new MarketingUser;
+      $data['session_active'] = 'marketing';
+      $data['session_user'] = $marketing->getinfo();
     }
 
     $getproject  = $project_list->select(
@@ -110,6 +118,87 @@ class ProjectListController extends Controller
     return response()->view('frontend.pages.view_project', $data);
   }
 
+  public function detail_unit( Request $request, ProjectUnitGallery $project_gallery, ProjectUnitType $unit_type, Customer $customer, DeveloperUser $developer, MarketingUser $marketing, $slug )
+  {
+    $data['request'] = $request;
+    $data['session_user'] = null;
+    $data['session_active'] = null;
+
+    if( session()->has('isCustomer') )
+    {
+      $data['session_active'] = 'customer';
+      $data['session_user'] = $customer->getinfo();
+    }
+
+    if( session()->has('isDeveloper') )
+    {
+      $data['session_active'] = 'developer';
+      $data['session_user'] = $developer->getinfo();
+    }
+
+    if( session()->has('isMarketing') )
+    {
+      $marketing = new MarketingUser;
+      $data['session_user'] = $marketing->getinfo();
+    }
+
+    $getunit  = $unit_type->select(
+      'project_unit_type.unit_type_id',
+      'project_unit_type.unit_name',
+      'project_unit_type.unit_slug',
+      'project_unit_type.unit_floor',
+      'project_unit_type.unit_lb',
+      'project_unit_type.unit_lt',
+      'project_unit_type.unit_kt',
+      'project_unit_type.unit_km',
+      'project_unit_type.unit_price',
+      'project_unit_type.unit_description',
+      'project_unit_type.unit_status',
+      'project_unit_type.unit_watt',
+      'project_unit_type.unit_facility',
+      'project_unit_type.unit_thumbnail',
+      'project_list.project_name',
+      'project_list.project_slug',
+      'project_list.project_thumbnail',
+      'project_list.project_description',
+      'project_list.project_address',
+      'project_list.project_city',
+      'developer_user.dev_user_id',
+      'developer_user.dev_name',
+      'developer_user.dev_slug',
+      'developer_user.dev_logo',
+      'developer_user.dev_city',
+      'developer_user.dev_biography'
+    )
+    ->join('project_list', 'project_unit_type.project_unique_id', '=', 'project_list.project_unique_id')
+    ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
+    ->where('project_unit_type.unit_slug', $slug)
+    ->first();
+
+    if( ! $getunit ) abort(404);
+
+    $city = new CityDB;
+    $project_city = $city->join( 'province', 'city.province_id', '=', 'province.province_id' )
+    ->where('city.city_id', $getunit->project_city)->first();
+
+    $dev_city = $city->join( 'province', 'city.province_id', '=', 'province.province_id' )
+    ->where('city.city_id', $getunit->dev_city)->first();
+
+    $getgallery = $project_gallery->where('unit_type_id', $getunit->unit_type_id)
+    ->orderBy('created_at', 'desc')
+    ->get();
+
+    $getmarketing = $marketing->where('dev_user_id', $getunit->dev_user_id)->get();
+
+    $data['getunit'] = $getunit;
+    $data['getgallery'] = $getgallery;
+    $data['project_city'] = $project_city;
+    $data['dev_city'] = $dev_city;
+    $data['getmarketing'] = $getmarketing;
+
+    return response()->view('frontend.pages.detail_unit', $data);
+  }
+
   public function list_project_unit( Request $request, ProjectUnitType $project_unit, $project_id )
   {
     $getunit = $project_unit->where('project_unit_type.project_unique_id', $project_id)
@@ -129,10 +218,8 @@ class ProjectListController extends Controller
     $dev_user = $request->dev_user;
     $date = date('Ymd');
     $getcustomer = $customer->getinfo();
-    $getunit = $unit_type->select(
-      'unit_name',
-      'unit_status'
-    )->where('unit_type_id', $unit_id)->first();
+    $getunit = $unit_type->where('unit_type_id', $unit_id)->first();
+
     if( $getunit->unit_status === 'booked' )
     {
       $res = [
@@ -161,6 +248,9 @@ class ProjectListController extends Controller
         'message' => $getcustomer->customer_name . ' mengajukan pemesanan unit ' . $getunit->unit_name,
         'request_id' => $generate_request_id
       ];
+
+      $getunit->unit_status = 'booked';
+      $getunit->save();
 
       $insert_request = new $project_request;
       $insert_request->request_unique_id = $generate_request_id;

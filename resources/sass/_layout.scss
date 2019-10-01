@@ -457,8 +457,15 @@ html, body {
 }
 .container-projectinfo {
   .container-projectheading {
-    border-bottom: 1px solid #e9e9e9;
-    @include fontsetting( $font-primary, 22px, 600, normal, normal, 0.4px );
+    @include fontsetting( $font-primary, 32px, 700, normal, normal, 0.4px );
+    color: $color3;
+  }
+  .container-projectlead {
+    @include fontsetting( $font-primary, 22px, 700, normal, normal, 0.4px );
+    color: #333333;
+  }
+  .container-projectsublead {
+    @include fontsetting( $font-primary, 18px, 400, normal, normal, 0.4px );
     color: #333333;
   }
   .container-projectbody {
@@ -543,9 +550,8 @@ html, body {
       ul {
         li {
           a {
-            @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+            @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
             color: #333333;
-            text-align: center;
             &:hover, &:focus {
               color: $color3;
             }
@@ -553,16 +559,37 @@ html, body {
         }
       }
     }
+    .btn-approve {
+      background: #ffffff;
+      color: $color3;
+      @include fontsetting( $font-primary, 13px, 600, normal, normal, 0.4px );
+      border: 1px solid $color3;
+      border-radius: 4px;
+      text-transform: capitalize;
+      &:hover, &:focus { background: $color3; color: #ffffff; }
+    }
+    .btn-reject {
+      border: 1px solid #e02c2c;
+      color: #e02c2c;
+      @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+      text-transform: capitalize;
+      background: #ffffff;
+      border-radius: 4px;
+      &:hover {
+        background: #e02c2c;
+        color: #ffffff;
+      }
+    }
   }
   .card-unit-header {
     border: 0;
-    .status-request {
+    .status-request, .status-review {
       @include fontsetting( $font-primary, 11px, 600, normal, normal, 0.4px );
       padding: 6px;
       border-radius: 4px;
       text-align: center;
     }
-    .status-request-waiting-response {
+    .status-request-waiting-response, .status-review-waiting {
       background: $color-blue;
       color: #ffffff;
     }
@@ -570,8 +597,15 @@ html, body {
       background: $color-warning;
       color: #ffffff;
     }
+    .status-request-meeting-done,
+    .status-review-accept,
+    .status-request-accept {
+      background: $color3;
+      color: #ffffff;
+    }
     .status-request-cancel,
-    .status-request-reject {
+    .status-request-reject,
+    .status-review-reject {
       background: $color-danger;
       color: #ffffff;
     }
@@ -589,7 +623,7 @@ html, body {
     .unit-readmore {
       background: #ffffff;
       color: $color3;
-      @include fontsetting( $font-primary, 11px, 600, normal, normal, 0.4px );
+      @include fontsetting( $font-primary, 13px, 600, normal, normal, 0.4px );
       border: 1px solid $color3;
       border-radius: 4px;
       text-transform: capitalize;
@@ -631,6 +665,36 @@ html, body {
   .btn-status-active {
     background: $color3;
     color: #ffffff;
+  }
+}
+
+.navbar-detail-unit {
+  background: #ffffff;
+  .nav-unit-subtitle {
+    @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+    color: #666666;
+    text-align: left !important;
+  }
+  .nav-unit-item {
+    @include fontsetting( $font-primary, 20px, 600, normal, normal, 0.4px );
+    color: #333333;
+    text-align: center;
+  }
+}
+.navbar-menu-unit {
+  background: $color3;
+  ul {
+    li {
+      a {
+        text-align: center;
+        @include fontsetting( $font-primary, 24px, 400, normal, normal, 0.4px );
+        color: #ffffff;
+        text-transform: capitalize;
+        &:hover, &:focus {
+          color: #ffffff;
+        }
+      }
+    }
   }
 }
 /* Layout */

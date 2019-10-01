@@ -1,5 +1,96 @@
 <template>
   <div>
+    <div id="detail-request" class="uk-modal-full" uk-modal>
+      <div class="uk-modal-dialog uk-modal-body" uk-height-viewport>
+        <a class="uk-modal-close-full uk-close-large" type="button" uk-close></a>
+        <div class="uk-card uk-card-body container-viewschedule">
+          <div class="uk-card-title container-viewschedule-heading">
+            Rincian Pemesanan Unit {{ request_list.details.data.request_unique_id }}
+          </div>
+          <div class="uk-margin container-viewschedule-body">
+            <table class="uk-table uk-table-divider uk-table-hover uk-table-middle uk-table-striped uk-table-small">
+              <tbody>
+                <tr>
+                  <th>Nama Pelanggan</th>
+                  <td>{{ request_list.details.data.customer_name }}</td>
+                </tr>
+                <tr>
+                  <th>Nomor Telepon</th>
+                  <td>{{ request_list.details.data.customer_phone_number }}</td>
+                </tr>
+                <tr>
+                  <th>Alamat Email</th>
+                  <td>{{ request_list.details.data.customer_email }}</td>
+                </tr>
+                <tr>
+                  <th>Alamat</th>
+                  <td>
+                    {{ request_list.details.data.customer_address }} <br>
+                    {{ request_list.details.data.city_name }}, {{ request_list.details.data.province_name }}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Unit Dipesan</th>
+                  <td>
+                    {{ request_list.details.data.unit_name }}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Pesan</th>
+                  <td>{{ request_list.details.data.request_message }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <table v-show="request_list.details.data.meeting_time" class="uk-table uk-table-divider uk-table-hover uk-table-middle uk-table-striped uk-table-small">
+              <thead>
+                <tr>
+                  <th>Tanggal Meeting</th>
+                  <th>Jam</th>
+                  <th>Status</th>
+                  <th>Dokumen</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="uk-width-medium">{{ $root.formatDate( request_list.details.data.meeting_time, 'dddd, DD MMMM YYYY' ) }}</td>
+                  <td class="uk-width-medium">{{ $root.formatDate( request_list.details.data.meeting_time, 'HH:mm' ) }}</td>
+                  <td>
+                    <label class="uk-label" v-if="request_list.details.data.meeting_status === 'waiting_confirmation'">Menunggu Konfirmasi</label>
+                    <label class="uk-label uk-label-success" v-else-if="request_list.details.data.meeting_status === 'accept'">Diterima</label>
+                    <label class="uk-label uk-label-danger" v-else-if="request_list.details.data.meeting_status === 'reject'">Ditolak</label>
+                    <label class="uk-label uk-label-danger" v-else-if="request_list.details.data.meeting_status === 'cancel'">Dibatalkan</label>
+                    <label class="uk-label uk-label-warning" v-else-if="request_list.details.data.meeting_status === 'revision'">Revisi</label>
+                    <label class="uk-label uk-label-success" v-else>Selesai</label>
+                  </td>
+                  <td>
+                    <a v-if="request_list.details.data.document_file" target="_blank" class="uk-button uk-button-primary" :href="$root.url + '/document/meeting/' + request_list.details.data.document_file"><span uk-icon="download"></span> Unduh Dokumen</a>
+                    <a v-else class="uk-button uk-button-primary" href="#"><span uk-icon="download"></span> Unduh Dokumen</a>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Hasil Meeting</th>
+                  <td colspan="3">
+                    {{ request_list.details.data.meeting_result }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="uk-margin">
+              <h3 class="uk-h3">Track Pemesanan Unit</h3>
+              <ul class="uk-margin uk-list uk-list-divider">
+                <li v-for="log in request_list.details.log_request">
+                  <div class="uk-text-small uk-text-bold">
+                    {{ $root.formatDate( log.created_at, 'DD MMMM YYYY, HH:mm' ) }}
+                  </div>
+                  {{ log.log_message }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="uk-card dashboard-content">
       <div class="uk-card-title uk-margin dashboard-content-heading">Pengajuan Pemesanan</div>
       <div class="uk-margin uk-grid-small uk-child-width-auto" uk-grid>
@@ -42,11 +133,22 @@
               <div class="uk-card-body card-unit-body">
                 <div class="uk-margin-bottom card-unit-header">
                   <div class="uk-grid-small uk-child-width-auto" uk-grid>
+                    <div v-if="unit.meeting_time !== null">
+                      <div class="status-request status-request-meeting" v-if="unit.meeting_status === 'waiting_confirmation' || unit.meeting_status === 'revision'">Dijadwalkan meeting</div>
+                      <div class="status-request status-request-meeting-done" v-if="unit.meeting_status === 'done'">Meeting telah selesai</div>
+                      <div class="status-request status-request-cancel" v-if="unit.meeting_status === 'cancel'">Undangan Dibatalkan</div>
+                      <div class="status-request status-request-reject" v-if="unit.meeting_status === 'reject'">Undangan Ditolak</div>
+                      <div class="status-request status-request-accept" v-if="unit.meeting_status === 'accept'">Undangan diterima</div>
+                    </div>
                     <div>
                       <div class="status-request status-request-waiting-response" v-if="unit.status_request === 'waiting_response'">Menunggu Tanggapan</div>
-                      <div class="status-request status-request-meeting" v-else-if="unit.status_request === 'meeting'">Dijadwalkan Meeting</div>
-                      <div class="status-request status-request-cancel" v-else-if="unit.status_request === 'cancel'">Pesanan Dibatalkan</div>
-                      <div class="status-request status-request-reject" v-else>Pesanan Ditolak</div>
+                      <div class="status-request status-request-accept" v-if="unit.status_request === 'accept' && unit.isReviewed === 'Y'">Pengajuan Diteima</div>
+                      <div class="status-request status-request-reject" v-if="unit.status_request === 'reject' && unit.isReviewed === 'Y'">Pengajuan Ditolak</div>
+                      <div class="status-request status-request-cancel" v-if="unit.status_request === 'cancel'">Pesanan Dibatalkan</div>
+                    </div>
+                    <div v-show="unit.meeting_status === 'done'">
+                      <span class="status-review status-review-waiting" v-if="unit.isReviewed === 'N'">Belum direview</span>
+                      <span class="status-review status-review-accept" v-if="unit.isReviewed === 'Y'">Sudah direview</span>
                     </div>
                     <div class="uk-width-expand">
                       <div class="uk-float-right">
@@ -54,7 +156,9 @@
                           <a class="card-unit-setting-icon" uk-icon="icon: more"></a>
                           <div uk-dropdown="mode: click" class="card-unit-setting-dropdown">
                             <ul class="uk-nav uk-dropdown-nav">
-                              <li><a :href="$root.url + '/marketing/meeting/create_schedule/' + unit.request_unique_id">Buat Jadwal Meeting</a></li>
+                              <li v-if="unit.status_request === 'waiting_response'"><a :href="$root.url + '/marketing/meeting/create_schedule/' + unit.request_unique_id">Buat Jadwal Meeting</a></li>
+                              <li v-if="unit.status_request === 'meeting'"><a :href="$root.url + '/marketing/meeting/edit_schedule/' + unit.request_unique_id">Revisi Jadwal Meeting</a></li>
+                              <li><a @click="onDetailRequest( unit.request_unique_id )">Lihat Rincian</a></li>
                             </ul>
                           </div>
                         </div>
@@ -125,6 +229,10 @@ export default {
           last_page: 1,
           prev_page_url: null,
           next_page_url: null
+        },
+        details: {
+          data: {},
+          log_request: []
         }
       },
       forms: {
@@ -165,6 +273,22 @@ export default {
       }).catch( err => {
         this.request_list.isLoading = false;
         this.errors.errorMessage = err.response.statusText;
+      });
+    },
+    onDetailRequest( id )
+    {
+      this.request_list.details.data = {};
+      this.request_list.details.log_request = [];
+      axios({
+        method: 'get',
+        url: this.$root.url + '/marketing/customer/detail_request/' + id
+      }).then( res => {
+        let result = res.data;
+        this.request_list.details.data = result.results.data;
+        this.request_list.details.log_request = result.results.log;
+        UIkit.modal('#detail-request').show();
+      }).catch( err => {
+        console.log( err.response.statusText );
       });
     }
   },

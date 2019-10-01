@@ -457,8 +457,15 @@ html, body {
 }
 .container-projectinfo {
   .container-projectheading {
-    border-bottom: 1px solid #e9e9e9;
-    @include fontsetting( $font-primary, 22px, 600, normal, normal, 0.4px );
+    @include fontsetting( $font-primary, 32px, 700, normal, normal, 0.4px );
+    color: $color3;
+  }
+  .container-projectlead {
+    @include fontsetting( $font-primary, 22px, 700, normal, normal, 0.4px );
+    color: #333333;
+  }
+  .container-projectsublead {
+    @include fontsetting( $font-primary, 18px, 400, normal, normal, 0.4px );
     color: #333333;
   }
   .container-projectbody {
@@ -661,7 +668,33 @@ html, body {
   }
 }
 
-.container-viewschedule {
-
+.navbar-detail-unit {
+  background: #ffffff;
+  .nav-unit-subtitle {
+    @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+    color: #666666;
+    text-align: left !important;
+  }
+  .nav-unit-item {
+    @include fontsetting( $font-primary, 20px, 600, normal, normal, 0.4px );
+    color: #333333;
+    text-align: center;
+  }
+}
+.navbar-menu-unit {
+  background: $color3;
+  ul {
+    li {
+      a {
+        text-align: center;
+        @include fontsetting( $font-primary, 24px, 400, normal, normal, 0.4px );
+        color: #ffffff;
+        text-transform: capitalize;
+        &:hover, &:focus {
+          color: #ffffff;
+        }
+      }
+    }
+  }
 }
 /* Layout */

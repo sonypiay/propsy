@@ -144,4 +144,5 @@ Route::group(['prefix' => 'project'], function() {
   Route::get('/view/{slug}', 'Frontend\Projects\ProjectListController@view_project')->name('project_view_detail');
   Route::get('/unit/{project_id}', 'Frontend\Projects\ProjectListController@list_project_unit')->name('list_project_unit');
   Route::post('/request_unit/{unit_id}', 'Frontend\Projects\ProjectListController@request_unit');
+  Route::get('/detail_unit/{unit_id}', 'Frontend\Projects\ProjectListController@detail_unit')->name('project_detail_unit');
 });

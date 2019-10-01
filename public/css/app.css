@@ -1111,12 +1111,31 @@ body {
 }
 
 .container-projectinfo .container-projectheading {
-  border-bottom: 1px solid #e9e9e9;
+  font-size: 32px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #1fc8c9;
+}
+
+.container-projectinfo .container-projectlead {
   font-size: 22px;
   font-style: normal;
   font-stretch: normal;
   font-family: "Lato", sans-serif;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #333333;
+}
+
+.container-projectinfo .container-projectsublead {
+  font-size: 18px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
   letter-spacing: 0.4px;
   color: #333333;
 }
@@ -1461,6 +1480,53 @@ body {
 
 .card-requestlist .btn-status-active {
   background: #1fc8c9;
+  color: #ffffff;
+}
+
+.navbar-detail-unit {
+  background: #ffffff;
+}
+
+.navbar-detail-unit .nav-unit-subtitle {
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #666666;
+  text-align: left !important;
+}
+
+.navbar-detail-unit .nav-unit-item {
+  font-size: 20px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #333333;
+  text-align: center;
+}
+
+.navbar-menu-unit {
+  background: #1fc8c9;
+}
+
+.navbar-menu-unit ul li a {
+  text-align: center;
+  font-size: 24px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: #ffffff;
+  text-transform: capitalize;
+}
+
+.navbar-menu-unit ul li a:hover,
+.navbar-menu-unit ul li a:focus {
   color: #ffffff;
 }
 

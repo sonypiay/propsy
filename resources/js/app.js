@@ -43,6 +43,7 @@ Vue.component('customer-list-request', require('./components/Frontend/Customer/L
 // main page
 Vue.component('homepage-available-project', require('./components/Frontend/HomepageProject.vue').default);
 Vue.component('page-view-project', require('./components/Frontend/ViewProject.vue').default);
+Vue.component('page-view-unit', require('./components/Frontend/ViewDetailUnit.vue').default);
 
 import VueCurrencyFilter from 'vue-currency-filter';
 Vue.use(VueCurrencyFilter);

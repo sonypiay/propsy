@@ -313,28 +313,31 @@ class MeetingListController extends Controller
     return response()->json( $res, 200 );
   }
 
-  public function get_detail_schedule( Request $request, MeetingAppointment $meeting_appointment, $request_id )
+  public function get_detail_schedule( Request $request, MeetingAppointment $meeting_appointment, LogProjectRequest $log_request, $request_id )
   {
     $getresult = $meeting_appointment->select(
       'meeting_appointment.meeting_time',
       'meeting_appointment.meeting_status',
-      'meeting_appointment.meeting_result',
       'meeting_appointment.meeting_note',
+      'meeting_appointment.meeting_result',
       'meeting_appointment.document_file',
       'meeting_appointment.last_updated_by',
+      'meeting_appointment.created_at',
       'meeting_appointment.updated_at',
       'project_request.request_unique_id',
-      'project_request.status_request',
       'project_request.request_message',
+      'project_request.status_request',
       'project_request.request_note',
-      'project_request.isReviewed',
+      'project_request.created_at',
+      'project_request.updated_at',
+      'customer.customer_id',
       'customer.customer_name',
-      'customer.customer_phone_number',
       'customer.customer_email',
-      'customer.customer_address',
+      'customer.customer_phone_number',
+      'project_unit_type.unit_type_id',
+      'project_unit_type.unit_name',
       'city.city_name',
-      'province.province_name',
-      'project_unit_type.unit_name'
+      'province.province_name'
     )
     ->join('project_request', 'meeting_appointment.request_unique_id', '=', 'project_request.request_unique_id')
     ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
@@ -344,10 +347,40 @@ class MeetingListController extends Controller
     ->where('project_request.request_unique_id', '=', $request_id)
     ->first();
 
+    $getlog = $log_request->where('request_unique_id', '=', $request_id)
+    ->orderBy('created_at', 'desc')
+    ->get();
+
     $result = [
-      'results' => $getresult
+      'results' => [
+        'log' => $getlog,
+        'data' => $getresult
+      ]
     ];
 
     return response()->json( $result, 200 );
+  }
+
+  public function cancel_request( MeetingAppointment $meeting_appointment, MarketingUser $marketinguser, LogProjectRequest $log_request, $request_id )
+  {
+    $getmeeting = $meeting_appointment->where('request_unique_id', $request_id)->first();
+    $mktuser = $marketinguser->getinfo();
+
+    if( $getmeeting->meeting_status !== 'cancel' )
+    {
+      $getmeeting->meeting_status = 'cancel';
+      $getmeeting->save();
+
+      $log_request->insert_log([
+        'request_id' => $request_id,
+        'message' => $mktuser->mkt_fullname . ' telah membatalkan undangan meeting.'
+      ]);
+    }
+
+    $res = [
+      'status' => 200,
+      'statusText' => 'success'
+    ];
+    return response()->json( $res, 200 );
   }
 }

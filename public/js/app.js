@@ -8031,6 +8031,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user'],
   data: function data() {
@@ -8071,7 +8084,10 @@ __webpack_require__.r(__webpack_exports__);
           prev_page_url: null,
           next_page_url: null
         },
-        details: {}
+        details: {
+          data: {},
+          log_request: []
+        }
       }
     };
   },
@@ -8114,16 +8130,60 @@ __webpack_require__.r(__webpack_exports__);
     getDetailSchedule: function getDetailSchedule(id) {
       var _this2 = this;
 
-      this.meeting_list.details = {};
+      this.meeting_list.details.data = {};
+      this.meeting_list.details.log_request = [];
       axios({
         method: 'get',
         url: this.$root.url + '/marketing/meeting/detail_meeting/' + id
       }).then(function (res) {
         var result = res.data;
-        _this2.meeting_list.details = result.results;
+        _this2.meeting_list.details.data = result.results.data;
+        _this2.meeting_list.details.log_request = result.results.log;
         UIkit.modal('#detail-schedule').show();
       })["catch"](function (err) {
         console.log(err.response.statusText);
+      });
+    },
+    onCancelRequest: function onCancelRequest(id) {
+      var _this3 = this;
+
+      swal({
+        title: 'Konfirmasi',
+        text: 'Apakah anda ingin membatalkan undangan ini?',
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Tidak',
+          confirm: {
+            value: true,
+            text: 'Ya'
+          }
+        }
+      }).then(function (val) {
+        if (val) {
+          axios({
+            method: 'put',
+            url: _this3.$root.url + '/marketing/meeting/cancel_request/' + id
+          }).then(function (res) {
+            swal({
+              title: 'Sukses',
+              text: 'Jadwal meeting berhasil dibatalkan.',
+              icon: 'success',
+              timer: 3000
+            });
+            setTimeout(function () {
+              _this3.getMeetingList();
+            }, 1000);
+          })["catch"](function (err) {
+            swal({
+              title: 'Whoops',
+              text: 'Terjadi kesalahan',
+              icon: 'error',
+              dangerMode: true,
+              timer: 3000
+            });
+          });
+        }
       });
     }
   },
@@ -8532,6 +8592,107 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user'],
   data: function data() {
@@ -8545,6 +8706,10 @@ __webpack_require__.r(__webpack_exports__);
           last_page: 1,
           prev_page_url: null,
           next_page_url: null
+        },
+        details: {
+          data: {},
+          log_request: []
         }
       },
       forms: {
@@ -8583,6 +8748,23 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (err) {
         _this.request_list.isLoading = false;
         _this.errors.errorMessage = err.response.statusText;
+      });
+    },
+    onDetailRequest: function onDetailRequest(id) {
+      var _this2 = this;
+
+      this.request_list.details.data = {};
+      this.request_list.details.log_request = [];
+      axios({
+        method: 'get',
+        url: this.$root.url + '/marketing/customer/detail_request/' + id
+      }).then(function (res) {
+        var result = res.data;
+        _this2.request_list.details.data = result.results.data;
+        _this2.request_list.details.log_request = result.results.log;
+        UIkit.modal('#detail-request').show();
+      })["catch"](function (err) {
+        console.log(err.response.statusText);
       });
     }
   },
@@ -90949,8 +91131,10 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n          Detail Meeting " +
-                        _vm._s(_vm.meeting_list.details.request_unique_id) +
+                      "\n          Rincian Jadwal Meeting " +
+                        _vm._s(
+                          _vm.meeting_list.details.data.request_unique_id
+                        ) +
                         "\n        "
                     )
                   ]
@@ -90968,31 +91152,26 @@ var render = function() {
                       },
                       [
                         _c("tbody", [
-                          _c("th", [_vm._v("Unit Dipesan")]),
-                          _vm._v(" "),
-                          _c("td", { attrs: { colspan: "3" } }, [
-                            _vm._v(
-                              "\n                " +
-                                _vm._s(_vm.meeting_list.details.unit_name) +
-                                "\n              "
-                            )
-                          ]),
-                          _vm._v(" "),
                           _c("tr", [
                             _c("th", [_vm._v("Nama Pelanggan")]),
                             _vm._v(" "),
                             _c("td", [
                               _vm._v(
-                                _vm._s(_vm.meeting_list.details.customer_name)
+                                _vm._s(
+                                  _vm.meeting_list.details.data.customer_name
+                                )
                               )
-                            ]),
-                            _vm._v(" "),
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
                             _c("th", [_vm._v("Nomor Telepon")]),
                             _vm._v(" "),
                             _c("td", [
                               _vm._v(
                                 _vm._s(
-                                  _vm.meeting_list.details.customer_phone_number
+                                  _vm.meeting_list.details.data
+                                    .customer_phone_number
                                 )
                               )
                             ])
@@ -91003,27 +91182,48 @@ var render = function() {
                             _vm._v(" "),
                             _c("td", [
                               _vm._v(
-                                _vm._s(_vm.meeting_list.details.customer_email)
+                                _vm._s(
+                                  _vm.meeting_list.details.data.customer_email
+                                )
                               )
-                            ]),
-                            _vm._v(" "),
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
                             _c("th", [_vm._v("Alamat")]),
                             _vm._v(" "),
                             _c("td", [
                               _vm._v(
                                 "\n                  " +
                                   _vm._s(
-                                    _vm.meeting_list.details.customer_address
+                                    _vm.meeting_list.details.data
+                                      .customer_address
                                   ) +
                                   " "
                               ),
                               _c("br"),
                               _vm._v(
                                 "\n                  " +
-                                  _vm._s(_vm.meeting_list.details.city_name) +
+                                  _vm._s(
+                                    _vm.meeting_list.details.data.city_name
+                                  ) +
                                   ", " +
                                   _vm._s(
-                                    _vm.meeting_list.details.province_name
+                                    _vm.meeting_list.details.data.province_name
+                                  ) +
+                                  "\n                "
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("th", [_vm._v("Unit Dipesan")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                "\n                  " +
+                                  _vm._s(
+                                    _vm.meeting_list.details.data.unit_name
                                   ) +
                                   "\n                "
                               )
@@ -91033,9 +91233,11 @@ var render = function() {
                           _c("tr", [
                             _c("th", [_vm._v("Pesan")]),
                             _vm._v(" "),
-                            _c("td", { attrs: { colspan: "3" } }, [
+                            _c("td", [
                               _vm._v(
-                                _vm._s(_vm.meeting_list.details.request_message)
+                                _vm._s(
+                                  _vm.meeting_list.details.data.request_message
+                                )
                               )
                             ])
                           ])
@@ -91046,6 +91248,14 @@ var render = function() {
                     _c(
                       "table",
                       {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.meeting_list.details.data.meeting_time,
+                            expression: "meeting_list.details.data.meeting_time"
+                          }
+                        ],
                         staticClass:
                           "uk-table uk-table-divider uk-table-hover uk-table-middle uk-table-striped uk-table-small"
                       },
@@ -91058,7 +91268,7 @@ var render = function() {
                               _vm._v(
                                 _vm._s(
                                   _vm.$root.formatDate(
-                                    _vm.meeting_list.details.meeting_time,
+                                    _vm.meeting_list.details.data.meeting_time,
                                     "dddd, DD MMMM YYYY"
                                   )
                                 )
@@ -91069,7 +91279,7 @@ var render = function() {
                               _vm._v(
                                 _vm._s(
                                   _vm.$root.formatDate(
-                                    _vm.meeting_list.details.meeting_time,
+                                    _vm.meeting_list.details.data.meeting_time,
                                     "HH:mm"
                                   )
                                 )
@@ -91077,13 +91287,13 @@ var render = function() {
                             ]),
                             _vm._v(" "),
                             _c("td", [
-                              _vm.meeting_list.details.meeting_status ===
+                              _vm.meeting_list.details.data.meeting_status ===
                               "waiting_confirmation"
                                 ? _c("label", { staticClass: "uk-label" }, [
                                     _vm._v("Menunggu Konfirmasi")
                                   ])
-                                : _vm.meeting_list.details.meeting_status ===
-                                  "accept"
+                                : _vm.meeting_list.details.data
+                                    .meeting_status === "accept"
                                 ? _c(
                                     "label",
                                     {
@@ -91091,22 +91301,22 @@ var render = function() {
                                     },
                                     [_vm._v("Diterima")]
                                   )
-                                : _vm.meeting_list.details.meeting_status ===
-                                  "reject"
+                                : _vm.meeting_list.details.data
+                                    .meeting_status === "reject"
                                 ? _c(
                                     "label",
                                     { staticClass: "uk-label uk-label-danger" },
                                     [_vm._v("Ditolak")]
                                   )
-                                : _vm.meeting_list.details.meeting_status ===
-                                  "cancel"
+                                : _vm.meeting_list.details.data
+                                    .meeting_status === "cancel"
                                 ? _c(
                                     "label",
                                     { staticClass: "uk-label uk-label-danger" },
                                     [_vm._v("Dibatalkan")]
                                   )
-                                : _vm.meeting_list.details.meeting_status ===
-                                  "revision"
+                                : _vm.meeting_list.details.data
+                                    .meeting_status === "revision"
                                 ? _c(
                                     "label",
                                     {
@@ -91124,7 +91334,7 @@ var render = function() {
                             ]),
                             _vm._v(" "),
                             _c("td", [
-                              _vm.meeting_list.details.document_file
+                              _vm.meeting_list.details.data.document_file
                                 ? _c(
                                     "a",
                                     {
@@ -91135,7 +91345,8 @@ var render = function() {
                                         href:
                                           _vm.$root.url +
                                           "/document/meeting/" +
-                                          _vm.meeting_list.details.document_file
+                                          _vm.meeting_list.details.data
+                                            .document_file
                                       }
                                     },
                                     [
@@ -91169,7 +91380,7 @@ var render = function() {
                               _vm._v(
                                 "\n                  " +
                                   _vm._s(
-                                    _vm.meeting_list.details.meeting_result
+                                    _vm.meeting_list.details.data.meeting_result
                                   ) +
                                   "\n                "
                               )
@@ -91179,7 +91390,44 @@ var render = function() {
                       ]
                     ),
                     _vm._v(" "),
-                    _vm._m(1)
+                    _c("div", { staticClass: "uk-margin" }, [
+                      _c("h3", { staticClass: "uk-h3" }, [
+                        _vm._v("Track Pemesanan Unit")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "ul",
+                        { staticClass: "uk-margin uk-list uk-list-divider" },
+                        _vm._l(_vm.meeting_list.details.log_request, function(
+                          log
+                        ) {
+                          return _c("li", [
+                            _c(
+                              "div",
+                              { staticClass: "uk-text-small uk-text-bold" },
+                              [
+                                _vm._v(
+                                  "\n                  " +
+                                    _vm._s(
+                                      _vm.$root.formatDate(
+                                        log.created_at,
+                                        "DD MMMM YYYY, HH:mm"
+                                      )
+                                    ) +
+                                    "\n                "
+                                )
+                              ]
+                            ),
+                            _vm._v(
+                              "\n                " +
+                                _vm._s(log.log_message) +
+                                "\n              "
+                            )
+                          ])
+                        }),
+                        0
+                      )
+                    ])
                   ]
                 )
               ]
@@ -91491,7 +91739,7 @@ var render = function() {
                           "uk-table uk-table-responsive uk-table-divider uk-table-middle uk-table-small"
                       },
                       [
-                        _vm._m(2),
+                        _vm._m(1),
                         _vm._v(" "),
                         _c(
                           "tbody",
@@ -91581,7 +91829,11 @@ var render = function() {
                                                   }
                                                 ],
                                                 on: {
-                                                  click: function($event) {}
+                                                  click: function($event) {
+                                                    return _vm.onCancelRequest(
+                                                      meet.request_unique_id
+                                                    )
+                                                  }
                                                 }
                                               },
                                               [
@@ -91745,12 +91997,6 @@ var staticRenderFns = [
         _c("th", [_vm._v("Dokumen")])
       ])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("table", [_c("tbody")])
   },
   function() {
     var _vm = this
@@ -92330,6 +92576,342 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c(
+      "div",
+      {
+        staticClass: "uk-modal-full",
+        attrs: { id: "detail-request", "uk-modal": "" }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "uk-modal-dialog uk-modal-body",
+            attrs: { "uk-height-viewport": "" }
+          },
+          [
+            _c("a", {
+              staticClass: "uk-modal-close-full uk-close-large",
+              attrs: { type: "button", "uk-close": "" }
+            }),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "uk-card uk-card-body container-viewschedule" },
+              [
+                _c(
+                  "div",
+                  {
+                    staticClass: "uk-card-title container-viewschedule-heading"
+                  },
+                  [
+                    _vm._v(
+                      "\n          Rincian Pemesanan Unit " +
+                        _vm._s(
+                          _vm.request_list.details.data.request_unique_id
+                        ) +
+                        "\n        "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "uk-margin container-viewschedule-body" },
+                  [
+                    _c(
+                      "table",
+                      {
+                        staticClass:
+                          "uk-table uk-table-divider uk-table-hover uk-table-middle uk-table-striped uk-table-small"
+                      },
+                      [
+                        _c("tbody", [
+                          _c("tr", [
+                            _c("th", [_vm._v("Nama Pelanggan")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.request_list.details.data.customer_name
+                                )
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("th", [_vm._v("Nomor Telepon")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.request_list.details.data
+                                    .customer_phone_number
+                                )
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("th", [_vm._v("Alamat Email")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.request_list.details.data.customer_email
+                                )
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("th", [_vm._v("Alamat")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                "\n                  " +
+                                  _vm._s(
+                                    _vm.request_list.details.data
+                                      .customer_address
+                                  ) +
+                                  " "
+                              ),
+                              _c("br"),
+                              _vm._v(
+                                "\n                  " +
+                                  _vm._s(
+                                    _vm.request_list.details.data.city_name
+                                  ) +
+                                  ", " +
+                                  _vm._s(
+                                    _vm.request_list.details.data.province_name
+                                  ) +
+                                  "\n                "
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("th", [_vm._v("Unit Dipesan")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                "\n                  " +
+                                  _vm._s(
+                                    _vm.request_list.details.data.unit_name
+                                  ) +
+                                  "\n                "
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("th", [_vm._v("Pesan")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.request_list.details.data.request_message
+                                )
+                              )
+                            ])
+                          ])
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "table",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.request_list.details.data.meeting_time,
+                            expression: "request_list.details.data.meeting_time"
+                          }
+                        ],
+                        staticClass:
+                          "uk-table uk-table-divider uk-table-hover uk-table-middle uk-table-striped uk-table-small"
+                      },
+                      [
+                        _vm._m(0),
+                        _vm._v(" "),
+                        _c("tbody", [
+                          _c("tr", [
+                            _c("td", { staticClass: "uk-width-medium" }, [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.$root.formatDate(
+                                    _vm.request_list.details.data.meeting_time,
+                                    "dddd, DD MMMM YYYY"
+                                  )
+                                )
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "uk-width-medium" }, [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.$root.formatDate(
+                                    _vm.request_list.details.data.meeting_time,
+                                    "HH:mm"
+                                  )
+                                )
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm.request_list.details.data.meeting_status ===
+                              "waiting_confirmation"
+                                ? _c("label", { staticClass: "uk-label" }, [
+                                    _vm._v("Menunggu Konfirmasi")
+                                  ])
+                                : _vm.request_list.details.data
+                                    .meeting_status === "accept"
+                                ? _c(
+                                    "label",
+                                    {
+                                      staticClass: "uk-label uk-label-success"
+                                    },
+                                    [_vm._v("Diterima")]
+                                  )
+                                : _vm.request_list.details.data
+                                    .meeting_status === "reject"
+                                ? _c(
+                                    "label",
+                                    { staticClass: "uk-label uk-label-danger" },
+                                    [_vm._v("Ditolak")]
+                                  )
+                                : _vm.request_list.details.data
+                                    .meeting_status === "cancel"
+                                ? _c(
+                                    "label",
+                                    { staticClass: "uk-label uk-label-danger" },
+                                    [_vm._v("Dibatalkan")]
+                                  )
+                                : _vm.request_list.details.data
+                                    .meeting_status === "revision"
+                                ? _c(
+                                    "label",
+                                    {
+                                      staticClass: "uk-label uk-label-warning"
+                                    },
+                                    [_vm._v("Revisi")]
+                                  )
+                                : _c(
+                                    "label",
+                                    {
+                                      staticClass: "uk-label uk-label-success"
+                                    },
+                                    [_vm._v("Selesai")]
+                                  )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm.request_list.details.data.document_file
+                                ? _c(
+                                    "a",
+                                    {
+                                      staticClass:
+                                        "uk-button uk-button-primary",
+                                      attrs: {
+                                        target: "_blank",
+                                        href:
+                                          _vm.$root.url +
+                                          "/document/meeting/" +
+                                          _vm.request_list.details.data
+                                            .document_file
+                                      }
+                                    },
+                                    [
+                                      _c("span", {
+                                        attrs: { "uk-icon": "download" }
+                                      }),
+                                      _vm._v(" Unduh Dokumen")
+                                    ]
+                                  )
+                                : _c(
+                                    "a",
+                                    {
+                                      staticClass:
+                                        "uk-button uk-button-primary",
+                                      attrs: { href: "#" }
+                                    },
+                                    [
+                                      _c("span", {
+                                        attrs: { "uk-icon": "download" }
+                                      }),
+                                      _vm._v(" Unduh Dokumen")
+                                    ]
+                                  )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("th", [_vm._v("Hasil Meeting")]),
+                            _vm._v(" "),
+                            _c("td", { attrs: { colspan: "3" } }, [
+                              _vm._v(
+                                "\n                  " +
+                                  _vm._s(
+                                    _vm.request_list.details.data.meeting_result
+                                  ) +
+                                  "\n                "
+                              )
+                            ])
+                          ])
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "uk-margin" }, [
+                      _c("h3", { staticClass: "uk-h3" }, [
+                        _vm._v("Track Pemesanan Unit")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "ul",
+                        { staticClass: "uk-margin uk-list uk-list-divider" },
+                        _vm._l(_vm.request_list.details.log_request, function(
+                          log
+                        ) {
+                          return _c("li", [
+                            _c(
+                              "div",
+                              { staticClass: "uk-text-small uk-text-bold" },
+                              [
+                                _vm._v(
+                                  "\n                  " +
+                                    _vm._s(
+                                      _vm.$root.formatDate(
+                                        log.created_at,
+                                        "DD MMMM YYYY, HH:mm"
+                                      )
+                                    ) +
+                                    "\n                "
+                                )
+                              ]
+                            ),
+                            _vm._v(
+                              "\n                " +
+                                _vm._s(log.log_message) +
+                                "\n              "
+                            )
+                          ])
+                        }),
+                        0
+                      )
+                    ])
+                  ]
+                )
+              ]
+            )
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
     _c("div", { staticClass: "uk-card dashboard-content" }, [
       _c(
         "div",
@@ -92564,6 +93146,58 @@ var render = function() {
                                       attrs: { "uk-grid": "" }
                                     },
                                     [
+                                      unit.meeting_time !== null
+                                        ? _c("div", [
+                                            unit.meeting_status ===
+                                              "waiting_confirmation" ||
+                                            unit.meeting_status === "revision"
+                                              ? _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "status-request status-request-meeting"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "Dijadwalkan meeting"
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e(),
+                                            _vm._v(" "),
+                                            unit.isReviewed === "N" &&
+                                            unit.meeting_status === "done"
+                                              ? _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "status-request status-request-meeting-done"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "Meeting telah selesai"
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e(),
+                                            _vm._v(" "),
+                                            unit.meeting_status === "cancel"
+                                              ? _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "status-request status-request-cancel"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "Jadwal Meeting Dibatalkan"
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e()
+                                          ])
+                                        : _vm._e(),
+                                      _vm._v(" "),
                                       _c("div", [
                                         unit.status_request ===
                                         "waiting_response"
@@ -92575,16 +93209,33 @@ var render = function() {
                                               },
                                               [_vm._v("Menunggu Tanggapan")]
                                             )
-                                          : unit.status_request === "meeting"
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        unit.status_request === "accept" &&
+                                        unit.isReviewed === "Y"
                                           ? _c(
                                               "div",
                                               {
                                                 staticClass:
-                                                  "status-request status-request-meeting"
+                                                  "status-request status-request-accept"
                                               },
-                                              [_vm._v("Dijadwalkan Meeting")]
+                                              [_vm._v("Pengajuan Diteima")]
                                             )
-                                          : unit.status_request === "cancel"
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        unit.status_request === "reject" &&
+                                        unit.isReviewed === "Y"
+                                          ? _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "status-request status-request-reject"
+                                              },
+                                              [_vm._v("Pengajuan Ditolak")]
+                                            )
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        unit.status_request === "cancel"
                                           ? _c(
                                               "div",
                                               {
@@ -92593,15 +93244,47 @@ var render = function() {
                                               },
                                               [_vm._v("Pesanan Dibatalkan")]
                                             )
-                                          : _c(
-                                              "div",
-                                              {
-                                                staticClass:
-                                                  "status-request status-request-reject"
-                                              },
-                                              [_vm._v("Pesanan Ditolak")]
-                                            )
+                                          : _vm._e()
                                       ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        {
+                                          directives: [
+                                            {
+                                              name: "show",
+                                              rawName: "v-show",
+                                              value:
+                                                unit.meeting_status === "done",
+                                              expression:
+                                                "unit.meeting_status === 'done'"
+                                            }
+                                          ]
+                                        },
+                                        [
+                                          unit.isReviewed === "N"
+                                            ? _c(
+                                                "span",
+                                                {
+                                                  staticClass:
+                                                    "status-review status-review-waiting"
+                                                },
+                                                [_vm._v("Belum direview")]
+                                              )
+                                            : _vm._e(),
+                                          _vm._v(" "),
+                                          unit.isReviewed === "Y"
+                                            ? _c(
+                                                "span",
+                                                {
+                                                  staticClass:
+                                                    "status-review status-review-accept"
+                                                },
+                                                [_vm._v("Sudah direview")]
+                                              )
+                                            : _vm._e()
+                                        ]
+                                      ),
                                       _vm._v(" "),
                                       _c(
                                         "div",
@@ -92641,79 +93324,75 @@ var render = function() {
                                                             "uk-nav uk-dropdown-nav"
                                                         },
                                                         [
-                                                          _c(
-                                                            "li",
-                                                            {
-                                                              directives: [
-                                                                {
-                                                                  name: "show",
-                                                                  rawName:
-                                                                    "v-show",
-                                                                  value:
-                                                                    unit.status_request ===
-                                                                    "waiting_response",
-                                                                  expression:
-                                                                    "unit.status_request === 'waiting_response'"
-                                                                }
-                                                              ]
-                                                            },
-                                                            [
-                                                              _c(
-                                                                "a",
-                                                                {
-                                                                  attrs: {
-                                                                    href:
-                                                                      _vm.$root
-                                                                        .url +
-                                                                      "/marketing/meeting/create_schedule/" +
-                                                                      unit.request_unique_id
-                                                                  }
-                                                                },
-                                                                [
-                                                                  _vm._v(
-                                                                    "Buat Jadwal Meeting"
-                                                                  )
-                                                                ]
-                                                              )
-                                                            ]
-                                                          ),
+                                                          unit.status_request ===
+                                                          "waiting_response"
+                                                            ? _c("li", [
+                                                                _c(
+                                                                  "a",
+                                                                  {
+                                                                    attrs: {
+                                                                      href:
+                                                                        _vm
+                                                                          .$root
+                                                                          .url +
+                                                                        "/marketing/meeting/create_schedule/" +
+                                                                        unit.request_unique_id
+                                                                    }
+                                                                  },
+                                                                  [
+                                                                    _vm._v(
+                                                                      "Buat Jadwal Meeting"
+                                                                    )
+                                                                  ]
+                                                                )
+                                                              ])
+                                                            : _vm._e(),
                                                           _vm._v(" "),
-                                                          _c(
-                                                            "li",
-                                                            {
-                                                              directives: [
-                                                                {
-                                                                  name: "show",
-                                                                  rawName:
-                                                                    "v-show",
-                                                                  value:
-                                                                    unit.status_request ===
-                                                                    "meeting",
-                                                                  expression:
-                                                                    "unit.status_request === 'meeting'"
-                                                                }
-                                                              ]
-                                                            },
-                                                            [
-                                                              _c(
-                                                                "a",
-                                                                {
-                                                                  attrs: {
-                                                                    href:
-                                                                      _vm.$root
-                                                                        .url +
-                                                                      "/marketing/meeting/edit_schedule/" +
+                                                          unit.status_request ===
+                                                          "meeting"
+                                                            ? _c("li", [
+                                                                _c(
+                                                                  "a",
+                                                                  {
+                                                                    attrs: {
+                                                                      href:
+                                                                        _vm
+                                                                          .$root
+                                                                          .url +
+                                                                        "/marketing/meeting/edit_schedule/" +
+                                                                        unit.request_unique_id
+                                                                    }
+                                                                  },
+                                                                  [
+                                                                    _vm._v(
+                                                                      "Revisi Jadwal Meeting"
+                                                                    )
+                                                                  ]
+                                                                )
+                                                              ])
+                                                            : _vm._e(),
+                                                          _vm._v(" "),
+                                                          _c("li", [
+                                                            _c(
+                                                              "a",
+                                                              {
+                                                                on: {
+                                                                  click: function(
+                                                                    $event
+                                                                  ) {
+                                                                    return _vm.onDetailRequest(
                                                                       unit.request_unique_id
+                                                                    )
                                                                   }
-                                                                },
-                                                                [
-                                                                  _vm._v(
-                                                                    "Revisi Jadwal Meeting"
-                                                                  )
-                                                                ]
-                                                              )
-                                                            ]
-                                                          )
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "Lihat Rincian"
+                                                                )
+                                                              ]
+                                                            )
+                                                          ])
                                                         ]
                                                       )
                                                     ]
@@ -92738,7 +93417,7 @@ var render = function() {
                                 { staticClass: "uk-margin-small unit-body" },
                                 [
                                   _c("div", { staticClass: "uk-margin" }, [
-                                    _vm._m(0, true),
+                                    _vm._m(1, true),
                                     _vm._v(" "),
                                     _c(
                                       "div",
@@ -92860,6 +93539,22 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Tanggal Meeting")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Jam")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Status")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Dokumen")])
+      ])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

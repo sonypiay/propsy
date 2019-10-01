@@ -590,7 +590,9 @@ html, body {
       background: $color-warning;
       color: #ffffff;
     }
-    .status-request-meeting-done, .status-review-accept {
+    .status-request-meeting-done,
+    .status-review-accept,
+    .status-request-accept {
       background: $color3;
       color: #ffffff;
     }

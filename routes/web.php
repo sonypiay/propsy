@@ -63,7 +63,7 @@ Route::group(['prefix' => 'marketing'], function() {
   Route::group(['prefix' => 'customer'], function() {
     Route::get('/request_unit', 'Frontend\Marketing\RequestUnitController@customer_request_unit')->name('marketing_request_unit');
     Route::get('/get_request_unit', 'Frontend\Marketing\RequestUnitController@get_request_unit');
-    //Route::get('/detail_request/{reqid}', 'Frontend\Marketing\RequestUnitController@get_detail_request');
+    Route::get('/detail_request/{request_id}', 'Frontend\Developer\RequestUnitController@detail_request');
   });
 
   Route::group(['prefix' => 'meeting'], function() {
@@ -74,6 +74,7 @@ Route::group(['prefix' => 'marketing'], function() {
     Route::post('/create_schedule/{request_id}', 'Frontend\Marketing\MeetingListController@create_schedule');
     Route::post('/update_schedule/{request_id}', 'Frontend\Marketing\MeetingListController@update_schedule');
     Route::get('/detail_meeting/{request_id}', 'Frontend\Marketing\MeetingListController@get_detail_schedule');
+    Route::put('/cancel_request/{request_id}', 'Frontend\Marketing\MeetingListController@cancel_request');
   });
 });
 

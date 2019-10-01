@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Database\Customer;
 use App\Database\ProjectRequest;
 use App\Database\LogProjectRequest;
+use App\Database\ProjectUnitType;
 use App\Database\MeetingAppointment;
 use App\Http\Controllers\Controller;
 
@@ -53,17 +54,21 @@ class RequestUnitController extends Controller
     return response()->json( $res, 200 );
   }
 
-  public function cancel_request( ProjectRequest $project_request, Customer $customer, LogProjectRequest $log_request, $request_id )
+  public function cancel_request( ProjectRequest $project_request, Customer $customer, LogProjectRequest $log_request, ProjectUnitType $unit_type, $request_id )
   {
     $getrequest = $project_request->where('request_unique_id', $request_id)->first();
     $getcustomer = $customer->getinfo();
     $data_log = [
-      'message' => $getcustomer->customer_name . ' membatalkan pengajuan pesanan ' . $request_id,
+      'message' => $getcustomer->customer_name . ' membatalkan pengajuan pemesanan unit',
       'request_id' => $request_id
     ];
 
     $getrequest->status_request = 'cancel';
     $getrequest->save();
+
+    $getunit = $unit_type->where('unit_type_id', '=', $getrequest->unit_type_id)->first();
+    $getunit->unit_status = 'available';
+
     $log_request->insert_log( $data_log );
     $res = [
       'status' => 200,

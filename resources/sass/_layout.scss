@@ -543,9 +543,8 @@ html, body {
       ul {
         li {
           a {
-            @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+            @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
             color: #333333;
-            text-align: center;
             &:hover, &:focus {
               color: $color3;
             }

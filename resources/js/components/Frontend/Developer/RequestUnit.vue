@@ -10,19 +10,19 @@
           <div class="uk-margin container-viewschedule-body">
             <table class="uk-table uk-table-divider uk-table-hover uk-table-middle uk-table-striped uk-table-small">
               <tbody>
-                <th>Unit Dipesan</th>
-                <td colspan="3">
-                  {{ request_list.details.data.unit_name }}
-                </td>
                 <tr>
                   <th>Nama Pelanggan</th>
                   <td>{{ request_list.details.data.customer_name }}</td>
+                </tr>
+                <tr>
                   <th>Nomor Telepon</th>
                   <td>{{ request_list.details.data.customer_phone_number }}</td>
                 </tr>
                 <tr>
                   <th>Alamat Email</th>
                   <td>{{ request_list.details.data.customer_email }}</td>
+                </tr>
+                <tr>
                   <th>Alamat</th>
                   <td>
                     {{ request_list.details.data.customer_address }} <br>
@@ -30,8 +30,14 @@
                   </td>
                 </tr>
                 <tr>
+                  <th>Unit Dipesan</th>
+                  <td>
+                    {{ request_list.details.data.unit_name }}
+                  </td>
+                </tr>
+                <tr>
                   <th>Pesan</th>
-                  <td colspan="3">{{ request_list.details.data.request_message }}</td>
+                  <td>{{ request_list.details.data.request_message }}</td>
                 </tr>
               </tbody>
             </table>
@@ -71,7 +77,7 @@
             </table>
             <div class="uk-margin">
               <h3 class="uk-h3">Track Pemesanan Unit</h3>
-              <ul v-show="request_list.details.data.meeting_time" class="uk-margin uk-list uk-list-divider">
+              <ul class="uk-margin uk-list uk-list-divider">
                 <li v-for="log in request_list.details.log_request">
                   <div class="uk-text-small uk-text-bold">
                     {{ $root.formatDate( log.created_at, 'DD MMMM YYYY, HH:mm' ) }}
@@ -149,6 +155,7 @@
                           <div uk-dropdown="mode: click" class="card-unit-setting-dropdown">
                             <ul class="uk-nav uk-dropdown-nav">
                               <li><a @click="onDetailRequest( unit.request_unique_id )">Lihat Rincian</a></li>
+                              <li v-show="unit.status_request !== 'cancel' && unit.status_request !== 'reject' && unit.status_request !== 'accept'"><a @click="onRejectRequest( unit.request_unique_id )">Tolak Pengajuan</a></li>
                             </ul>
                           </div>
                         </div>
@@ -285,8 +292,43 @@ export default {
         console.log( err.response.statusText );
       });
     },
-    onCancelRequest( id )
+    onRejectRequest( id )
     {
+      swal({
+        title: 'Konfirmasi',
+        text: 'Apakah anda ingin menolak pengajuan ini?',
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Tidak',
+          confirm: { value: true, text: 'Ya' }
+        }
+      }).then( val => {
+        if( val )
+        {
+          axios({
+            method: 'put',
+            url: this.$root.url + '/developer/customer/reject_request_unit/' + id + '/' + status_review
+          }).then( res => {
+            swal({
+              title: 'Sukses',
+              text: id + ' berhasil ditolak',
+              icon: 'success',
+              timer: 3000
+            });
+            setTimeout(() => {
+              this.getRequestUnit();
+            }, 1000);
+          }).catch( err => {
+            swal({
+              title: 'Whoops',
+              text: 'Terjadi kesalahan',
+              icon: 'error',
+              dangerMode: true
+            });
+          });
+        }
+      });
     },
     onReviewRequest( status_review, id )
     {

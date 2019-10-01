@@ -72,7 +72,8 @@ class RequestUnitController extends Controller
       $result = $query->where([
         ['project_request.dev_user_id', $devuser->dev_user_id],
         ['project_request.status_request', '!=', 'done']
-      ]);
+      ])
+      ->orderBy('project_request.created_at', 'desc');
 
       if( $status_request !== 'all' )
       {
@@ -101,6 +102,7 @@ class RequestUnitController extends Controller
         ['project_request.status_request', '!=', 'done']
       ])
       ->orderBy('project_request.created_at', 'desc');
+      
       if( $status_request !== 'all' )
       {
         $result = $query->where([

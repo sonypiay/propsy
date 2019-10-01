@@ -6989,6 +6989,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user'],
   data: function data() {
@@ -7063,9 +7070,49 @@ __webpack_require__.r(__webpack_exports__);
         console.log(err.response.statusText);
       });
     },
-    onCancelRequest: function onCancelRequest(id) {},
-    onReviewRequest: function onReviewRequest(status_review, id) {
+    onRejectRequest: function onRejectRequest(id) {
       var _this3 = this;
+
+      swal({
+        title: 'Konfirmasi',
+        text: 'Apakah anda ingin menolak pengajuan ini?',
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Tidak',
+          confirm: {
+            value: true,
+            text: 'Ya'
+          }
+        }
+      }).then(function (val) {
+        if (val) {
+          axios({
+            method: 'put',
+            url: _this3.$root.url + '/developer/customer/reject_request_unit/' + id + '/' + status_review
+          }).then(function (res) {
+            swal({
+              title: 'Sukses',
+              text: id + ' berhasil ditolak',
+              icon: 'success',
+              timer: 3000
+            });
+            setTimeout(function () {
+              _this3.getRequestUnit();
+            }, 1000);
+          })["catch"](function (err) {
+            swal({
+              title: 'Whoops',
+              text: 'Terjadi kesalahan',
+              icon: 'error',
+              dangerMode: true
+            });
+          });
+        }
+      });
+    },
+    onReviewRequest: function onReviewRequest(status_review, id) {
+      var _this4 = this;
 
       var messageConfirmation = status_review === 'accept' ? 'Apakah anda ingin menerima pengajuan ini?' : 'Apakah anda ingin menolak pengajuan ini?';
       swal({
@@ -7084,7 +7131,7 @@ __webpack_require__.r(__webpack_exports__);
         if (val) {
           axios({
             method: 'put',
-            url: _this3.$root.url + '/developer/customer/review_request_unit/' + id + '/' + status_review
+            url: _this4.$root.url + '/developer/customer/review_request_unit/' + id + '/' + status_review
           }).then(function (res) {
             swal({
               title: 'Sukses',
@@ -7093,7 +7140,7 @@ __webpack_require__.r(__webpack_exports__);
               timer: 3000
             });
             setTimeout(function () {
-              _this3.getRequestUnit();
+              _this4.getRequestUnit();
             }, 1000);
           })["catch"](function (err) {
             swal({
@@ -88695,18 +88742,6 @@ var render = function() {
                       },
                       [
                         _c("tbody", [
-                          _c("th", [_vm._v("Unit Dipesan")]),
-                          _vm._v(" "),
-                          _c("td", { attrs: { colspan: "3" } }, [
-                            _vm._v(
-                              "\n                " +
-                                _vm._s(
-                                  _vm.request_list.details.data.unit_name
-                                ) +
-                                "\n              "
-                            )
-                          ]),
-                          _vm._v(" "),
                           _c("tr", [
                             _c("th", [_vm._v("Nama Pelanggan")]),
                             _vm._v(" "),
@@ -88716,8 +88751,10 @@ var render = function() {
                                   _vm.request_list.details.data.customer_name
                                 )
                               )
-                            ]),
-                            _vm._v(" "),
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
                             _c("th", [_vm._v("Nomor Telepon")]),
                             _vm._v(" "),
                             _c("td", [
@@ -88739,8 +88776,10 @@ var render = function() {
                                   _vm.request_list.details.data.customer_email
                                 )
                               )
-                            ]),
-                            _vm._v(" "),
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
                             _c("th", [_vm._v("Alamat")]),
                             _vm._v(" "),
                             _c("td", [
@@ -88768,9 +88807,23 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _c("tr", [
+                            _c("th", [_vm._v("Unit Dipesan")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                "\n                  " +
+                                  _vm._s(
+                                    _vm.request_list.details.data.unit_name
+                                  ) +
+                                  "\n                "
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
                             _c("th", [_vm._v("Pesan")]),
                             _vm._v(" "),
-                            _c("td", { attrs: { colspan: "3" } }, [
+                            _c("td", [
                               _vm._v(
                                 _vm._s(
                                   _vm.request_list.details.data.request_message
@@ -88934,18 +88987,7 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "ul",
-                        {
-                          directives: [
-                            {
-                              name: "show",
-                              rawName: "v-show",
-                              value: _vm.request_list.details.data.meeting_time,
-                              expression:
-                                "request_list.details.data.meeting_time"
-                            }
-                          ],
-                          staticClass: "uk-margin uk-list uk-list-divider"
-                        },
+                        { staticClass: "uk-margin uk-list uk-list-divider" },
                         _vm._l(_vm.request_list.details.log_request, function(
                           log
                         ) {
@@ -89410,7 +89452,50 @@ var render = function() {
                                                                 )
                                                               ]
                                                             )
-                                                          ])
+                                                          ]),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "li",
+                                                            {
+                                                              directives: [
+                                                                {
+                                                                  name: "show",
+                                                                  rawName:
+                                                                    "v-show",
+                                                                  value:
+                                                                    unit.status_request !==
+                                                                      "cancel" &&
+                                                                    unit.status_request !==
+                                                                      "reject" &&
+                                                                    unit.status_request !==
+                                                                      "accept",
+                                                                  expression:
+                                                                    "unit.status_request !== 'cancel' && unit.status_request !== 'reject' && unit.status_request !== 'accept'"
+                                                                }
+                                                              ]
+                                                            },
+                                                            [
+                                                              _c(
+                                                                "a",
+                                                                {
+                                                                  on: {
+                                                                    click: function(
+                                                                      $event
+                                                                    ) {
+                                                                      return _vm.onRejectRequest(
+                                                                        unit.request_unique_id
+                                                                      )
+                                                                    }
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _vm._v(
+                                                                    "Tolak Pengajuan"
+                                                                  )
+                                                                ]
+                                                              )
+                                                            ]
+                                                          )
                                                         ]
                                                       )
                                                     ]

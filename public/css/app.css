@@ -1266,14 +1266,13 @@ body {
 }
 
 .card-unit-project .card-unit-body .card-unit-setting-dropdown ul li a {
-  font-size: 13px;
+  font-size: 14px;
   font-style: normal;
   font-stretch: normal;
   font-family: "Lato", sans-serif;
   font-weight: 400;
   letter-spacing: 0.4px;
   color: #333333;
-  text-align: center;
 }
 
 .card-unit-project .card-unit-body .card-unit-setting-dropdown ul li a:hover,

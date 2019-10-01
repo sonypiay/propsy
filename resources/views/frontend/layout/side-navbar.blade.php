@@ -17,11 +17,7 @@
       </ul>
     </li>
     <li>
-      <a @if( $hasRequest ) uk-tooltip="Anda memiliki pengajuan pemesanan" @endif href="{{ $link_nav['pemesanan'] }}"><span class="uk-margin-small-right" uk-icon="icon: cart; ratio: 1"></span> Pemesanan
-        @if( $hasRequest )
-          <span class="uk-float-right" uk-icon="icon: info; ratio: 1"></span>
-        @endif
-      </a>
+      <a href="{{ route('marketing_request_unit') }}"><span class="uk-margin-small-right" uk-icon="icon: cart; ratio: 1"></span> Pemesanan</a>
     </li>
     <li>
       <a href="{{ route('auth_logout_mkt') }}"><span class="uk-margin-small-right" uk-icon="icon: sign-out; ratio: 1"></span> Keluar</a>

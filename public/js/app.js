@@ -2225,6 +2225,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user'],
   data: function data() {
@@ -78983,7 +78989,7 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v("Selesai")]
+                      [_vm._v("Diterima")]
                     )
                   ])
                 ]
@@ -79133,40 +79139,35 @@ var render = function() {
                                       _vm._v(" "),
                                       unit.meeting_time !== null
                                         ? _c("div", [
-                                            unit.meeting_status === "meeting" ||
-                                            unit.meeting_status === "revision"
+                                            unit.meeting_status ===
+                                            "waiting_confirmation"
                                               ? _c("div", [
-                                                  unit.meeting_status ===
-                                                    "meeting" ||
-                                                  unit.meeting_status ===
-                                                    "revision"
-                                                    ? _c(
-                                                        "div",
-                                                        {
-                                                          staticClass:
-                                                            "uk-text-small uk-margin-small-bottom"
-                                                        },
-                                                        [
-                                                          _vm._v(
-                                                            "\n                        Anda menerima undangan dari Marketing pada :"
-                                                          ),
-                                                          _c("br"),
-                                                          _vm._v(" "),
-                                                          _c("strong", [
-                                                            _vm._v(
-                                                              "\n                          " +
-                                                                _vm._s(
-                                                                  _vm.$root.formatDate(
-                                                                    unit.meeting_time,
-                                                                    "dddd, DD MMMM YYYY"
-                                                                  )
-                                                                ) +
-                                                                "\n                        "
-                                                            )
-                                                          ])
-                                                        ]
-                                                      )
-                                                    : _vm._e(),
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "uk-text-small uk-margin-small-bottom"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                        Anda menerima undangan dari Marketing pada :"
+                                                      ),
+                                                      _c("br"),
+                                                      _vm._v(" "),
+                                                      _c("strong", [
+                                                        _vm._v(
+                                                          "\n                          " +
+                                                            _vm._s(
+                                                              _vm.$root.formatDate(
+                                                                unit.meeting_time,
+                                                                "dddd, DD MMMM YYYY"
+                                                              )
+                                                            ) +
+                                                            "\n                        "
+                                                        )
+                                                      ])
+                                                    ]
+                                                  ),
                                                   _vm._v(" "),
                                                   _c(
                                                     "button",
@@ -79207,6 +79208,33 @@ var render = function() {
                                                   )
                                                 ])
                                               : _c("div", [
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "uk-text-small uk-margin-small-bottom"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                        Jadwal undangan meeting :"
+                                                      ),
+                                                      _c("br"),
+                                                      _vm._v(" "),
+                                                      _c("strong", [
+                                                        _vm._v(
+                                                          "\n                          " +
+                                                            _vm._s(
+                                                              _vm.$root.formatDate(
+                                                                unit.meeting_time,
+                                                                "dddd, DD MMMM YYYY"
+                                                              )
+                                                            ) +
+                                                            "\n                        "
+                                                        )
+                                                      ])
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
                                                   unit.meeting_status ===
                                                   "cancel"
                                                     ? _c(
@@ -79226,7 +79254,7 @@ var render = function() {
                                                             }
                                                           }),
                                                           _vm._v(
-                                                            " Dibatalkan\n                      "
+                                                            " Meeting Dibatalkan\n                      "
                                                           )
                                                         ]
                                                       )
@@ -79249,7 +79277,7 @@ var render = function() {
                                                             }
                                                           }),
                                                           _vm._v(
-                                                            " Ditolak\n                      "
+                                                            " Meeting Ditolak\n                      "
                                                           )
                                                         ]
                                                       )
@@ -79272,7 +79300,7 @@ var render = function() {
                                                             }
                                                           }),
                                                           _vm._v(
-                                                            " Diterima\n                      "
+                                                            " Meeting Diterima\n                      "
                                                           )
                                                         ]
                                                       )
@@ -79293,7 +79321,7 @@ var render = function() {
                                                             }
                                                           }),
                                                           _vm._v(
-                                                            " Selesai\n                      "
+                                                            " Meeting Selesai\n                      "
                                                           )
                                                         ]
                                                       )
@@ -89445,7 +89473,9 @@ var render = function() {
                                     [
                                       unit.meeting_time !== null
                                         ? _c("div", [
-                                            unit.meeting_status !== "done"
+                                            unit.meeting_status ===
+                                              "waiting_confirmation" ||
+                                            unit.meeting_status === "revision"
                                               ? _c(
                                                   "div",
                                                   {
@@ -89460,7 +89490,7 @@ var render = function() {
                                                 )
                                               : _vm._e(),
                                             _vm._v(" "),
-                                            unit.isReviewed === "N"
+                                            unit.meeting_status === "done"
                                               ? _c(
                                                   "div",
                                                   {
@@ -89475,27 +89505,18 @@ var render = function() {
                                                 )
                                               : _vm._e(),
                                             _vm._v(" "),
-                                            unit.status_request === "accept" &&
-                                            unit.isReviewed === "Y"
+                                            unit.meeting_status === "cancel"
                                               ? _c(
                                                   "div",
                                                   {
                                                     staticClass:
-                                                      "status-review status-review-accept"
+                                                      "status-request status-request-cancel"
                                                   },
-                                                  [_vm._v("Pengajuan Diteima")]
-                                                )
-                                              : _vm._e(),
-                                            _vm._v(" "),
-                                            unit.status_request === "reject" &&
-                                            unit.isReviewed === "Y"
-                                              ? _c(
-                                                  "div",
-                                                  {
-                                                    staticClass:
-                                                      "status-review status-review-accept"
-                                                  },
-                                                  [_vm._v("Pengajuan Ditolak")]
+                                                  [
+                                                    _vm._v(
+                                                      "Jadwal Meeting Dibatalkan"
+                                                    )
+                                                  ]
                                                 )
                                               : _vm._e()
                                           ])
@@ -89514,6 +89535,30 @@ var render = function() {
                                             )
                                           : _vm._e(),
                                         _vm._v(" "),
+                                        unit.status_request === "accept" &&
+                                        unit.isReviewed === "Y"
+                                          ? _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "status-request status-request-accept"
+                                              },
+                                              [_vm._v("Pengajuan Diteima")]
+                                            )
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        unit.status_request === "reject" &&
+                                        unit.isReviewed === "Y"
+                                          ? _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "status-request status-request-reject"
+                                              },
+                                              [_vm._v("Pengajuan Ditolak")]
+                                            )
+                                          : _vm._e(),
+                                        _vm._v(" "),
                                         unit.status_request === "cancel"
                                           ? _c(
                                               "div",
@@ -89522,17 +89567,6 @@ var render = function() {
                                                   "status-request status-request-cancel"
                                               },
                                               [_vm._v("Pesanan Dibatalkan")]
-                                            )
-                                          : _vm._e(),
-                                        _vm._v(" "),
-                                        unit.status_request === "reject"
-                                          ? _c(
-                                              "div",
-                                              {
-                                                staticClass:
-                                                  "status-request status-request-reject"
-                                              },
-                                              [_vm._v("Pesanan Ditolak")]
                                             )
                                           : _vm._e()
                                       ]),
@@ -93165,7 +93199,6 @@ var render = function() {
                                                 )
                                               : _vm._e(),
                                             _vm._v(" "),
-                                            unit.isReviewed === "N" &&
                                             unit.meeting_status === "done"
                                               ? _c(
                                                   "div",

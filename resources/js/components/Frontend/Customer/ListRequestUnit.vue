@@ -19,7 +19,7 @@
               <button @click="getRequestList('reject')" :class="{'btn-status-active': forms.status_request === 'reject'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Ditolak</button>
             </div>
             <div>
-              <button @click="getRequestList('accept')" :class="{'btn-status-active': forms.status_request === 'accept'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Selesai</button>
+              <button @click="getRequestList('accept')" :class="{'btn-status-active': forms.status_request === 'accept'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Diterima</button>
             </div>
           </div>
         </div>
@@ -56,8 +56,8 @@
                       Rp. {{ unit.unit_price | currency }}
                     </div>
                     <div v-if="unit.meeting_time !== null">
-                      <div v-if="unit.meeting_status === 'meeting' || unit.meeting_status === 'revision'">
-                        <div v-if="unit.meeting_status === 'meeting' || unit.meeting_status === 'revision'" class="uk-text-small uk-margin-small-bottom">
+                      <div v-if="unit.meeting_status === 'waiting_confirmation'">
+                        <div class="uk-text-small uk-margin-small-bottom">
                           Anda menerima undangan dari Marketing pada :<br>
                           <strong>
                             {{ $root.formatDate( unit.meeting_time, 'dddd, DD MMMM YYYY' ) }}
@@ -67,17 +67,23 @@
                         <button @click="onResponseMeeting( unit.request_unique_id, 'reject' )" class="uk-button uk-button-small btn-reject">Tolak</button>
                       </div>
                       <div v-else>
+                        <div class="uk-text-small uk-margin-small-bottom">
+                          Jadwal undangan meeting :<br>
+                          <strong>
+                            {{ $root.formatDate( unit.meeting_time, 'dddd, DD MMMM YYYY' ) }}
+                          </strong>
+                        </div>
                         <div uk-tooltip="Meeting telah dibatalkan oleh pihak Marketing" class="uk-label uk-label-danger" v-if="unit.meeting_status === 'cancel'">
-                          <span uk-icon="close"></span> Dibatalkan
+                          <span uk-icon="close"></span> Meeting Dibatalkan
                         </div>
                         <div uk-tooltip="Anda telah menolak undangan ini" class="uk-label uk-label-danger" v-else-if="unit.meeting_status === 'reject'">
-                          <span uk-icon="close"></span> Ditolak
+                          <span uk-icon="close"></span> Meeting Ditolak
                         </div>
                         <div uk-tooltip="Anda telah menerima undangan ini" class="uk-label uk-label-success" v-else-if="unit.meeting_status === 'accept'">
-                          <span uk-icon="check"></span> Diterima
+                          <span uk-icon="check"></span> Meeting Diterima
                         </div>
                         <div uk-tooltip="Meeting telah selesai dilakukan" class="uk-label uk-label-success" v-else>
-                          <span uk-icon="check"></span> Selesai
+                          <span uk-icon="check"></span> Meeting Selesai
                         </div>
                       </div>
                     </div>

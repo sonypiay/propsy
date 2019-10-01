@@ -135,7 +135,7 @@
                   <div class="uk-grid-small uk-child-width-auto" uk-grid>
                     <div v-if="unit.meeting_time !== null">
                       <div class="status-request status-request-meeting" v-if="unit.meeting_status === 'waiting_confirmation' || unit.meeting_status === 'revision'">Dijadwalkan meeting</div>
-                      <div class="status-request status-request-meeting-done" v-if="unit.isReviewed === 'N' && unit.meeting_status === 'done'">Meeting telah selesai</div>
+                      <div class="status-request status-request-meeting-done" v-if="unit.meeting_status === 'done'">Meeting telah selesai</div>
                       <div class="status-request status-request-cancel" v-if="unit.meeting_status === 'cancel'">Jadwal Meeting Dibatalkan</div>
                     </div>
                     <div>

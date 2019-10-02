@@ -39,9 +39,6 @@
     <li>
       <a href="{{ route('developer_meeting_list') }}"><span class="uk-margin-small-right" uk-icon="icon: users; ratio: 1"></span> Marketing</a>
     </li>
-    <li>
-      <a href="#"><span class="uk-margin-small-right" uk-icon="icon: clock; ratio: 1"></span>Meeting</a>
-    </li>
     <li class="uk-parent">
       <a href="#"><span class="uk-margin-small-right" uk-icon="icon: file-text; ratio: 1"></span> Laporan <span class="uk-float-right" uk-icon="icon: chevron-down; ratio: 1"></span></a>
       <ul class="uk-nav-sub side-nav-sub">

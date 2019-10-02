@@ -310,7 +310,7 @@ export default {
         {
           axios({
             method: 'put',
-            url: this.$root.url + '/developer/customer/reject_request_unit/' + id + '/' + status_review
+            url: this.$root.url + '/developer/customer/review_request_unit/' + id + '/reject'
           }).then( res => {
             swal({
               title: 'Sukses',

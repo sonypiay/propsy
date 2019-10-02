@@ -287,7 +287,8 @@ class ProjectListController extends Controller
     $getproject = $project_list->where('project_id', $project_id);
     if( $getproject->count() !== 0 )
     {
-      $getgallery = $gallery->where('project_id', $project_id);
+      $result_project = $getproject->first();
+      $getgallery = $gallery->where('project_unique_id', $result_project->project_unique_id);
       if( $getgallery->count() !== 0 )
       {
         foreach( $getgallery->get() as $g ):

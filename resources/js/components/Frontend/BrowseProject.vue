@@ -44,7 +44,7 @@
         <div v-if="getproject.total === 0" class="uk-alert-warning" uk-alert>
           Belum ada proyek
         </div>
-        <div v-else class="uk-margin uk-grid-small uk-grid-match" uk-grid>
+        <div v-else class="uk-margin uk-grid-medium uk-grid-match" uk-grid>
           <div class="uk-width-1-1">
             <div class="uk-text-large">
               <strong>{{ getproject.total }}</strong> Hasil ditemukan di {{ forms.city.name }}

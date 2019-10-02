@@ -72,6 +72,7 @@
             <select class="uk-select dash-form-input" v-model="forms.unit_status">
               <option value="available">Tersedia</option>
               <option value="sold">Terjual</option>
+              <option value="booked">Dipesan</option>
             </select>
           </div>
         </div>

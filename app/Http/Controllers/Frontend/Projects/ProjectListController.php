@@ -163,6 +163,7 @@ class ProjectListController extends Controller
       'project_list.project_description',
       'project_list.project_address',
       'project_list.project_city',
+      'project_list.project_map_embed',
       'developer_user.dev_user_id',
       'developer_user.dev_name',
       'developer_user.dev_slug',

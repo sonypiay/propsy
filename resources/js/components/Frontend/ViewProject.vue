@@ -62,8 +62,7 @@
                   <div class="uk-margin-small content-projectheading">
                     Deskripsi Proyek
                   </div>
-                  <div class="uk-margin-small content-projectlead">
-                    {{ getproject.project_description }}
+                  <div class="uk-margin-small content-projectlead" v-html="getproject.project_description">
                   </div>
                 </div>
                 <div class="uk-margin content-projectdetail">
@@ -82,7 +81,7 @@
                     Galeri
                   </div>
                   <div class="uk-margin-small content-projectlead">
-                    <div class="uk-position-relative uk-visible-toggle uk-light" tabindex="-1" uk-slideshow="animation: push">
+                    <div class="uk-position-relative uk-visible-toggle uk-light" tabindex="-1" uk-slideshow="animation: push; ratio: 16:9">
                       <ul class="uk-slideshow-items">
                         <li v-for="galeri in getgallery">
                           <img :src="$root.url + '/images/project/gallery/' + galeri.gallery_filename" uk-cover>

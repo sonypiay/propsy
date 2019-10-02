@@ -173,6 +173,17 @@
               </div>
             </div>
             <hr class="uk-divider-icon">
+            <div id="fasilitas" class="uk-card-body uk-card-small container-projectbody">
+              <div class="uk-margin content-projectdetail">
+                <div class="uk-margin-small content-projectheading">
+                  Google Maps
+                </div>
+                <div class="uk-margin-small content-projectlead" v-html="getunit.project_map_embed">
+
+                </div>
+              </div>
+            </div>
+            <hr class="uk-divider-icon">
             <div class="uk-card-body uk-card-small container-projectbody">
               <div class="uk-margin content-projectdetail">
                 <div class="uk-margin-small uk-text-uppercase content-projectheading">
@@ -188,7 +199,8 @@
                       <div class="uk-card-body">
                         <h3 class="uk-card-title">{{ getunit.project_name }}</h3>
                         <div class="uk-text-justify">
-                          {{ $root.htmlStripTags( getunit.project_description, 500 ) }} ... <br />
+                          <div v-html="$root.htmlStripTags( getunit.project_description, 500 ) + ' ...'">
+                          </div>
                           <a class="uk-button uk-button-small uk-button-default uk-margin-small-top" :href="$root.url + '/project/view/' + getunit.project_slug">Kunjungi Laman Proyek</a>
                         </div>
                       </div>

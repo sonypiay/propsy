@@ -325,12 +325,13 @@ class ProjectListController extends Controller
       'developer_user.dev_slug',
       'city.city_name',
       'province.province_name',
-      'project_unit_type.unit_price'
+      'project_unit_type.unit_price',
+      'project_unit_type.unit_lb'
     )
     ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
     ->join('city', 'project_list.project_city', '=', 'city.city_id')
     ->join('province', 'city.province_id', '=', 'province.province_id')
-    ->join('project_unit_type', 'project_list.unit_type_id', '=', 'project_unit_type.unit_type_id');
+    ->leftJoin('project_unit_type', 'project_list.project_unique_id', '=', 'project_unit_type.project_unique_id');
 
     if( empty( $keywords ) )
     {
@@ -359,11 +360,13 @@ class ProjectListController extends Controller
     }
     else
     {
-      $query = $getproject->where('project_list.project_name', 'like', '%' . $keywords . '%')
-      ->orWhere('developer_user.dev_name', 'like', '%' . $keywords . '%')
-      ->orderBy('project_list.created_at', 'desc');
-
-      if( $project_type !== 'all' && $filtercity === 'all' )
+      if( $project_type === 'all' && $filtercity === 'all' )
+      {
+        $query = $getproject->where('project_list.project_name', 'like', '%' . $keywords . '%')
+        ->orWhere('developer_user.dev_name', 'like', '%' . $keywords . '%')
+        ->orderBy('project_list.created_at', 'desc');
+      }
+      else if( $project_type !== 'all' && $filtercity === 'all' )
       {
         $query = $getproject->where([
           ['project_list.project_type', '=', $project_type],
@@ -403,7 +406,10 @@ class ProjectListController extends Controller
       }
     }
 
-    $result = $query->paginate( 10 );
+    $result = $query->orderBy('project_unit_type.unit_price', 'asc')
+    ->orderBy('project_unit_type.unit_lb', 'asc')
+    ->groupBy('project_list.project_unique_id')
+    ->paginate( 10 );
 
     $results = [
       'results' => $result

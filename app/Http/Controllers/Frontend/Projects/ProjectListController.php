@@ -324,11 +324,13 @@ class ProjectListController extends Controller
       'developer_user.dev_name',
       'developer_user.dev_slug',
       'city.city_name',
-      'province.province_name'
+      'province.province_name',
+      'project_unit_type.unit_price'
     )
     ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
     ->join('city', 'project_list.project_city', '=', 'city.city_id')
-    ->join('province', 'city.province_id', '=', 'province.province_id');
+    ->join('province', 'city.province_id', '=', 'province.province_id')
+    ->join('project_unit_type', 'project_list.unit_type_id', '=', 'project_unit_type.unit_type_id');
 
     if( empty( $keywords ) )
     {

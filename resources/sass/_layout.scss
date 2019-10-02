@@ -699,12 +699,71 @@ html, body {
 }
 
 .container-bannersearch {
+  background: rgba( 10, 10, 10, 0.7 );
   .bannersearch-heading {
     @include fontsetting( $font-primary, 28px, 700, normal, normal, 0.4px );
     color: #ffffff;
+    text-align: center;
   }
   .bannersearch-form {
+    .search-form {
+      background: #ffffff;
+      color: #333333;
+      @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+      border-radius: 4px;
+      &:hover, &:focus {
+        border: 1px solid #dddddd;
+      }
+    }
+    .search-button-form {
+      background: $color3;
+      color: #ffffff;
+      @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+      border-radius: 4px;
+      text-transform: capitalize;
+      &:hover, &:focus {
+        background: $color3;
+        color: #ffffff;
+      }
+    }
+  }
+}
 
+.grid-project-card {
+  background: #ffffff;
+  &:hover, &:focus {
+    text-decoration: none;
+  }
+  .project-card-background {color: #ffffff;}
+  .project-card-title {
+    color: #ffffff;
+    @include fontsetting( $font-primary, 24px, 600, normal, normal, 0.4px );
+  }
+  .project-card-devname {
+    color: #ffffff;
+    @include fontsetting( $font-primary, 16px, 400, normal, normal, 0.4px );
+  }
+  .project-card-location {
+    color: #ffffff;
+    @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+  }
+  .project-card-body {
+    .project-card-status {
+      label {
+        text-transform: capitalize;
+        @include fontsetting( $font-primary, 13px, 400, normal, normal, 0.4px );
+      }
+    }
+    .project-card-list {
+      .projectlist-text {
+        color: #666666;
+        @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+      }
+      .projectlist-subtext {
+        color: #333333;
+        @include fontsetting( $font-primary, 18px, 600, normal, normal, 0.4px );
+      }
+    }
   }
 }
 /* Layout */

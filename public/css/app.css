@@ -1530,6 +1530,10 @@ body {
   color: #ffffff;
 }
 
+.container-bannersearch {
+  background: rgba(10, 10, 10, 0.7);
+}
+
 .container-bannersearch .bannersearch-heading {
   font-size: 28px;
   font-style: normal;
@@ -1538,6 +1542,116 @@ body {
   font-weight: 700;
   letter-spacing: 0.4px;
   color: #ffffff;
+  text-align: center;
+}
+
+.container-bannersearch .bannersearch-form .search-form {
+  background: #ffffff;
+  color: #333333;
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  border-radius: 4px;
+}
+
+.container-bannersearch .bannersearch-form .search-form:hover,
+.container-bannersearch .bannersearch-form .search-form:focus {
+  border: 1px solid #dddddd;
+}
+
+.container-bannersearch .bannersearch-form .search-button-form {
+  background: #1fc8c9;
+  color: #ffffff;
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  border-radius: 4px;
+  text-transform: capitalize;
+}
+
+.container-bannersearch .bannersearch-form .search-button-form:hover,
+.container-bannersearch .bannersearch-form .search-button-form:focus {
+  background: #1fc8c9;
+  color: #ffffff;
+}
+
+.grid-project-card {
+  background: #ffffff;
+}
+
+.grid-project-card:hover,
+.grid-project-card:focus {
+  text-decoration: none;
+}
+
+.grid-project-card .project-card-background {
+  color: #ffffff;
+}
+
+.grid-project-card .project-card-title {
+  color: #ffffff;
+  font-size: 24px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+.grid-project-card .project-card-devname {
+  color: #ffffff;
+  font-size: 16px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+}
+
+.grid-project-card .project-card-location {
+  color: #ffffff;
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+}
+
+.grid-project-card .project-card-body .project-card-status label {
+  text-transform: capitalize;
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+}
+
+.grid-project-card .project-card-body .project-card-list .projectlist-text {
+  color: #666666;
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+}
+
+.grid-project-card .project-card-body .project-card-list .projectlist-subtext {
+  color: #333333;
+  font-size: 18px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
 }
 
 /* Layout */

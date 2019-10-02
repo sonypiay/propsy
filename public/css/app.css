@@ -1656,3 +1656,43 @@ body {
 
 /* Layout */
 
+.sidebar-filter {
+  border-radius: 4px;
+}
+
+.sidebar-filter .search-form-sidebar {
+  background: #ffffff;
+  color: #333333;
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  border-radius: 4px;
+}
+
+.sidebar-filter .search-form-sidebar:hover,
+.sidebar-filter .search-form-sidebar:focus {
+  border: 1px solid #dddddd;
+}
+
+.sidebar-filter .search-button-sidebar {
+  background: #1fc8c9;
+  color: #ffffff;
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  border-radius: 4px;
+  text-transform: capitalize;
+}
+
+.sidebar-filter .search-button-sidebar:hover,
+.sidebar-filter .search-button-sidebar:focus {
+  background: #1fc8c9;
+  color: #ffffff;
+}
+

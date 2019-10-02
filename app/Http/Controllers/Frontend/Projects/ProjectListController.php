@@ -13,6 +13,7 @@ use App\Database\Customer;
 use App\Database\MarketingUser;
 use App\Database\DeveloperUser;
 use App\Database\CityDB;
+use App\Database\UnitFacility;
 use App\Http\Controllers\Controller;
 
 class ProjectListController extends Controller
@@ -416,5 +417,124 @@ class ProjectListController extends Controller
       'results' => $result
     ];
     return response()->json( $results, 200 );
+  }
+
+  public function search_project( Request $request, Customer $customer, MarketingUser $marketing, DeveloperUser $developer )
+  {
+    $data['request'] = $request;
+    $data['session_user'] = null;
+    $data['session_active'] = null;
+
+    if( session()->has('isCustomer') )
+    {
+      $data['session_active'] = 'customer';
+      $data['session_user'] = $customer->getinfo();
+    }
+
+    if( session()->has('isDeveloper') )
+    {
+      $data['session_active'] = 'developer';
+      $data['session_user'] = $developer->getinfo();
+    }
+
+    if( session()->has('isMarketing') )
+    {
+      $data['session_active'] = 'marketing';
+      $data['session_user'] = $marketing->getinfo();
+    }
+
+    $city = new CityDB;
+    $getcity = $city->orderBy('city_name', 'asc')->get();
+    $data['getcity'] = $getcity;
+
+    $unit_facility = new UnitFacility;
+    $getfacility = $unit_facility->orderBy('facility_name', 'asc')->get();
+    $data['getfacility'] = $getfacility;
+
+
+    return response()->view('frontend.pages.search_project', $data);
+  }
+
+  public function get_search_list( Request $request, ProjectUnitType $unit_type )
+  {
+    $keywords = $request->keywords;
+    $type = $request->type;
+    $filtercity = $request->filtercity;
+    $price_min = $request->price_min;
+    $price_max = $request->price_max;
+    $facility = empty( $request->facility ) ? [] : explode(',', $request->facility);
+
+    $getunit  = $unit_type->select(
+      'project_unit_type.unit_name',
+      'project_unit_type.unit_slug',
+      'project_unit_type.unit_price',
+      'project_unit_type.unit_floor',
+      'project_unit_type.unit_kt',
+      'project_unit_type.unit_km',
+      'project_unit_type.unit_lb',
+      'project_unit_type.unit_price',
+      'project_unit_type.unit_status',
+      'project_unit_type.unit_thumbnail',
+      'project_unit_type.unit_facility',
+      'project_list.project_name',
+      'project_list.project_slug',
+      'project_list.project_type',
+      'developer_user.dev_name',
+      'developer_user.dev_slug',
+      'city.city_name',
+      'province.province_name'
+    )
+    ->join('project_list', 'project_unit_type.project_unique_id', '=', 'project_list.project_unique_id')
+    ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
+    ->join('city', 'project_list.project_city', '=', 'city.city_id')
+    ->join('province', 'city.province_id', '=', 'province.province_id');
+
+    $whereClause = [];
+    $orWhereClause = [];
+    $whereSearch = [];
+    $hasFilter = false;
+
+    if( $type !== 'all')
+    {
+      array_push( $whereClause, [ 'project_list.project_type','=', $type ]);
+      $hasFilter = true;
+    }
+    if( $filtercity !== 'all' )
+    {
+      array_push( $whereClause, [ 'project_list.project_city', '=', $filtercity ]);
+      $hasFilter = true;
+    }
+
+    $result = $getunit->where($whereClause)
+    ->where(function( $query ) use ($keywords) {
+      $query->where('project_unit_type.unit_name', 'like', '%' . $keywords . '%')
+      ->orWhere('project_list.project_name', 'like', '%' . $keywords . '%')
+      ->orWhere('developer_user.dev_name', 'like', '%' . $keywords . '%');
+    });
+    if( ! empty( $price_min ) && ! empty( $price_max ) )
+    {
+      $result = $result->whereBetween('project_unit_type.unit_price', [$price_min, $price_max]);
+    }
+
+    if( count( $facility ) != 0 )
+    {
+      foreach( $facility as $key => $val )
+      {
+        if( $key === 0 )
+        {
+          $result = $result->where(function($query) use ($val){
+            $query->where('project_unit_type.unit_facility', 'like', '%' . $val . '%');
+          });
+        }
+        else
+        {
+          $result = $result->orWhere(function($query) use ($val){
+            $query->where('project_unit_type.unit_facility', 'like', '%' . $val . '%');
+          });
+        }
+      }
+    }
+
+    return response()->json( $result->get(), 200 );
   }
 }

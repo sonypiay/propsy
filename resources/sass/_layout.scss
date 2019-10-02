@@ -767,3 +767,28 @@ html, body {
   }
 }
 /* Layout */
+
+
+.sidebar-filter {
+  border-radius: 4px;
+  .search-form-sidebar {
+    background: #ffffff;
+    color: #333333;
+    @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+    border-radius: 4px;
+    &:hover, &:focus {
+      border: 1px solid #dddddd;
+    }
+  }
+  .search-button-sidebar {
+    background: $color3;
+    color: #ffffff;
+    @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+    border-radius: 4px;
+    text-transform: capitalize;
+    &:hover, &:focus {
+      background: $color3;
+      color: #ffffff;
+    }
+  }
+}

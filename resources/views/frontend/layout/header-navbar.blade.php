@@ -6,10 +6,10 @@
           <img src="{{ asset('images/brand/logo_maps_primary.png') }}" alt="maps">
         </a>
         <div class="uk-navbar-item">
-          <form class="uk-form-stacked" action="{{ url('/') }}" method="get">
+          <form class="uk-form-stacked" action="{{ route('page_search_project') }}" method="get">
             <div class="uk-inline">
               <span class="uk-form-icon" uk-icon="search"></span>
-              <input type="search" class="uk-input header-searchbar" value="{{ $request->search }}" name="search" placeholder="Cari proyek" />
+              <input type="search" class="uk-input header-searchbar" value="{{ $request->keywords }}" name="keywords" placeholder="Cari proyek, tipe unit, pengembang..." />
             </div>
           </form>
         </div>

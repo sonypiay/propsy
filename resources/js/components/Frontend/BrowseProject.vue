@@ -5,7 +5,7 @@
       <div class="uk-overlay uk-position-cover container-bannersearch">
         <div class="uk-position-center">
           <div class="uk-width-1-1">
-            <div class="uk-margin-small-bottom bannersearch-heading">Cari Proyek Murah</div>
+            <!--<div class="uk-margin-small-bottom bannersearch-heading">Cari Proyek Murah</div>-->
             <div class="bannersearch-form">
               <div class="uk-form-stacked uk-grid-small" uk-grid>
                 <div class="uk-width-1-2">
@@ -36,8 +36,8 @@
         </div>
       </div>
     </div>
-    <div class="uk-margin-large-top uk-margin-large-bottom uk-container">
-      <div v-if="getproject.isLoading" class="uk-margin uk-text-center">
+    <div class="uk-margin-large-top uk-container">
+      <div v-if="getproject.isLoading" class="uk-margin uk-margin-large-bottom uk-text-center">
         <span uk-spinner></span>
       </div>
       <div v-else class="uk-margin">
@@ -100,6 +100,22 @@
             </a>
           </div>
         </div>
+
+        <ul class="uk-pagination uk-flex-center">
+          <li v-if="getproject.pagination.prev_page_url !== null">
+            <a @click="getProjectList( getproject.pagination.prev_page_url )" uk-icon="chevron-left"></a>
+          </li>
+          <li v-else class="uk-disabled">
+            <a uk-icon="chevron-left"></a>
+          </li>
+          <li v-if="getproject.pagination.next_page_url !== null">
+            <a @click="getProjectList( getproject.pagination.next_page_url )" uk-icon="chevron-right"></a>
+          </li>
+          <li v-else class="uk-disabled">
+            <a uk-icon="chevron-right"></a>
+          </li>
+        </ul>
+
       </div>
     </div>
   </div>
@@ -151,6 +167,12 @@ export default {
         let result = res.data;
         this.getproject.results = result.results.data;
         this.getproject.total = result.results.total;
+        this.getproject.pagination = {
+          current_page: result.results.current_page,
+          last_page: result.results.last_page,
+          prev_page_url: result.results.prev_page_url,
+          next_page_url: result.results.next_page_url
+        };
 
         if( this.forms.city.value !== 'all' )
         {

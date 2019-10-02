@@ -45,6 +45,7 @@ Vue.component('homepage-available-project', require('./components/Frontend/Homep
 Vue.component('page-view-project', require('./components/Frontend/ViewProject.vue').default);
 Vue.component('page-view-unit', require('./components/Frontend/ViewDetailUnit.vue').default);
 Vue.component('page-browse-project', require('./components/Frontend/BrowseProject.vue').default);
+Vue.component('page-search-project', require('./components/Frontend/SearchProject.vue').default);
 
 import VueCurrencyFilter from 'vue-currency-filter';
 Vue.use(VueCurrencyFilter);

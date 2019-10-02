@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'Frontend\HomepageController@index')->name('homepage');
+Route::get('/profile/developer/{slug}', 'Frontend\HomepageController@homepage_developer')->name('homepage_developer');
 Route::group(['prefix' => 'authentication'], function() {
   Route::post('/login/developer', 'Frontend\Developer\AuthController@do_login');
   Route::post('/login/marketing', 'Frontend\Marketing\AuthController@do_login');

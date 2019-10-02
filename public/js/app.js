@@ -9252,31 +9252,118 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['session_user', 'getunit', 'getgallery', 'getmarketing', 'projectcity', 'devcity', 'session_active'],
   data: function data() {
     return {
       forms: {
         booking: {
-          selectunit: '',
-          message: 'Halo ' + this.getunit.dev_name + ', saya ingin mengajukan pemesenan unit.',
+          selectunit: this.getunit.unit_type_id,
+          message: 'Halo ' + this.getunit.dev_name + ', saya ingin mengajukan pemesenan unit ' + this.getunit.unit_name + '.',
           errorMessage: ''
-        }
-      },
-      projectunit: {
-        total: 0,
-        results: [],
-        isLoading: false,
-        pagination: {
-          current_page: 1,
-          last_page: 1,
-          next_page_url: null,
-          prev_page_url: null
         }
       }
     };
   },
-  methods: {},
+  methods: {
+    requestUnit: function requestUnit() {
+      var _this = this;
+
+      this.forms.booking.errorMessage = '';
+      if (this.forms.booking.selectunit === '' || this.forms.booking.message === '') return false;
+      var param = {
+        message: this.forms.booking.message,
+        dev_user: this.getunit.dev_user_id
+      };
+      axios({
+        method: 'post',
+        url: this.$root.url + '/project/request_unit/' + this.forms.booking.selectunit,
+        params: param
+      }).then(function (res) {
+        var result = res.data;
+        swal({
+          title: 'Sukses',
+          text: 'Berhasil mengajukan pemesanan',
+          icon: 'success',
+          timer: 3000
+        });
+        setTimeout(function () {
+          document.location = _this.$root.url + '/customer/request_unit';
+        }, 2000);
+      })["catch"](function (err) {
+        if (err.response.status === 500) {
+          _this.forms.booking.errorMessage = 'Whoops, ' + err.response.statusText;
+        } else {
+          _this.forms.booking.errorMessage = err.response.data.statusText;
+        }
+      });
+    }
+  },
   computed: {
     getFacility: function getFacility() {
       var fasilitas = this.getunit.unit_facility.split(',');
@@ -9571,7 +9658,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.forms.booking.selectunit === '' || this.forms.booking.message === '') return false;
       var param = {
         message: this.forms.booking.message,
-        dev_user: this.getproject.dev_user_id
+        dev_user: this.getunit.dev_user_id
       };
       axios({
         method: 'post',
@@ -79382,7 +79469,14 @@ var render = function() {
                                       _c(
                                         "a",
                                         {
-                                          staticClass: "uk-card-title unit-name"
+                                          staticClass:
+                                            "uk-card-title unit-name",
+                                          attrs: {
+                                            href:
+                                              _vm.$root.url +
+                                              "/project/detail_unit/" +
+                                              unit.unit_slug
+                                          }
                                         },
                                         [_vm._v(_vm._s(unit.unit_name))]
                                       ),
@@ -79699,7 +79793,26 @@ var render = function() {
                                           attrs: { "uk-grid": "" }
                                         },
                                         [
-                                          _vm._m(1, true),
+                                          _c("div", [
+                                            _c(
+                                              "a",
+                                              {
+                                                staticClass:
+                                                  "uk-button uk-button-small uk-button-primary unit-readmore",
+                                                attrs: {
+                                                  href:
+                                                    _vm.$root.url +
+                                                    "/project/detail_unit/" +
+                                                    unit.unit_slug
+                                                }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                        Lihat Lebih Lanjut\n                      "
+                                                )
+                                              ]
+                                            )
+                                          ]),
                                           _vm._v(" "),
                                           unit.status_request ===
                                             "waiting_response" ||
@@ -79786,25 +79899,6 @@ var staticRenderFns = [
       { staticClass: "uk-heading-line card-requestlist-heading" },
       [_c("span", [_vm._v("Daftar Pengajuan Pemesanan")])]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c(
-        "a",
-        {
-          staticClass:
-            "uk-button uk-button-small uk-button-primary unit-readmore"
-        },
-        [
-          _vm._v(
-            "\n                        Lihat Lebih Lanjut\n                      "
-          )
-        ]
-      )
-    ])
   }
 ]
 render._withStripped = true
@@ -94386,9 +94480,91 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { attrs: { id: "background" } }, [
+    _c("div", { attrs: { id: "contact-agent", "uk-modal": "" } }, [
+      _c("div", { staticClass: "uk-modal-body uk-modal-dialog" }, [
+        _c("a", {
+          staticClass: "uk-modal-close uk-modal-close-outside",
+          attrs: { "uk-close": "" }
+        }),
+        _vm._v(" "),
+        _c("h3", { staticClass: "uk-h3" }, [_vm._v("Kontak Agen Marketing")]),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "uk-grid-small uk-grid-divider",
+            attrs: { "uk-grid": "" }
+          },
+          _vm._l(_vm.getmarketing, function(mkt) {
+            return _c("div", { staticClass: "uk-width-1-1" }, [
+              _c("div", { staticClass: "uk-card" }, [
+                _c("h4", { staticClass: "uk-h4" }, [
+                  _vm._v(_vm._s(mkt.mkt_fullname))
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: mkt.mkt_phone_number,
+                        expression: "mkt.mkt_phone_number"
+                      }
+                    ]
+                  },
+                  [
+                    _vm._v(
+                      "\n              " +
+                        _vm._s(mkt.mkt_phone_number) +
+                        "\n            "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: mkt.mkt_mobile_number,
+                        expression: "mkt.mkt_mobile_number"
+                      }
+                    ]
+                  },
+                  [
+                    _vm._v(
+                      "\n              " +
+                        _vm._s(mkt.mkt_mobile_number) +
+                        "\n            "
+                    )
+                  ]
+                )
+              ])
+            ])
+          }),
+          0
+        )
+      ])
+    ]),
+    _vm._v(" "),
     _c("div", { staticClass: "uk-padding container-projectinfo" }, [
       _c("div", { staticClass: "container-projectheading" }, [
-        _vm._v("\n      " + _vm._s(_vm.getunit.project_name) + "\n    ")
+        _vm._v("\n      " + _vm._s(_vm.getunit.project_name) + "\n      "),
+        _vm.getunit.unit_status === "available"
+          ? _c("label", { staticClass: "uk-label uk-label-success" }, [
+              _vm._v("Tersedia")
+            ])
+          : _vm.getunit.unit_status === "booked"
+          ? _c("label", { staticClass: "uk-label uk-label-warning" }, [
+              _vm._v("Sudah dipesan")
+            ])
+          : _c("label", { staticClass: "uk-label uk-label-danger" }, [
+              _vm._v("Terjual")
+            ])
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "uk-margin-bottom container-projectlead" }, [
@@ -94402,7 +94578,7 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "uk-grid-small", attrs: { "uk-grid": "" } }, [
+      _c("div", { staticClass: "uk-grid-medium", attrs: { "uk-grid": "" } }, [
         _c("div", { staticClass: "uk-width-expand" }, [
           _c(
             "div",
@@ -94410,7 +94586,7 @@ var render = function() {
               staticClass: "uk-position-relative uk-visible-toggle uk-light",
               attrs: {
                 tabindex: "-1",
-                "uk-slideshow": "ratio: 7:3; animation: push"
+                "uk-slideshow": "ratio: 16:9; animation: push"
               }
             },
             [
@@ -94561,7 +94737,8 @@ var render = function() {
                       _c(
                         "div",
                         {
-                          staticClass: "uk-margin-small content-projectheading"
+                          staticClass: "uk-margin-small content-projectheading",
+                          attrs: { id: "rincian" }
                         },
                         [
                           _vm._v(
@@ -94661,7 +94838,8 @@ var render = function() {
                       _c(
                         "div",
                         {
-                          staticClass: "uk-margin-small content-projectheading"
+                          staticClass: "uk-margin-small content-projectheading",
+                          attrs: { id: "deskripsi" }
                         },
                         [_vm._v("\n                Deskripsi\n              ")]
                       ),
@@ -94683,7 +94861,8 @@ var render = function() {
                 "div",
                 {
                   staticClass:
-                    "uk-card-body uk-card-small container-projectbody"
+                    "uk-card-body uk-card-small container-projectbody",
+                  attrs: { id: "fasilitas" }
                 },
                 [
                   _c(
@@ -94767,8 +94946,7 @@ var render = function() {
                           _c(
                             "div",
                             {
-                              staticClass:
-                                "uk-card uk-card-default uk-grid-collapse uk-margin",
+                              staticClass: "uk-card uk-grid-collapse uk-margin",
                               attrs: { "uk-grid": "" }
                             },
                             [
@@ -94849,10 +95027,196 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _c("div", {
-          staticClass:
-            "uk-width-1-4@xl uk-width-1-4@l uk-width-1-3@m uk-width-1-1@s"
-        })
+        _c(
+          "div",
+          {
+            staticClass:
+              "uk-width-1-3@xl uk-width-1-3@l uk-width-1-3@m uk-width-1-1@s"
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass:
+                  "uk-card uk-card-body uk-card-default uk-margin sidebar-dev-info"
+              },
+              [
+                _vm.getunit.dev_logo === null
+                  ? _c("div", { staticClass: "dev-withnologo" }, [
+                      _c("span", {
+                        attrs: { "uk-icon": "icon: users; ratio: 4" }
+                      })
+                    ])
+                  : _c("div", { staticClass: "dev-withlogo" }, [
+                      _c("img", {
+                        staticClass: "uk-align-center",
+                        attrs: {
+                          src:
+                            _vm.$root.url +
+                            "/images/devlogo/" +
+                            _vm.getunit.dev_logo,
+                          alt: _vm.getunit.dev_name
+                        }
+                      })
+                    ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "uk-margin sidebar-dev-profile" }, [
+                  _c(
+                    "a",
+                    { staticClass: "dev-profile-name", attrs: { href: "#" } },
+                    [_vm._v(_vm._s(_vm.getunit.dev_name))]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "dev-profile-region" }, [
+                    _vm._v(
+                      _vm._s(
+                        _vm.devcity.province_name + ", " + _vm.devcity.city_name
+                      )
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "uk-margin uk-text-center" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass:
+                        "uk-width-1-1 uk-button uk-button-primary uk-margin-small sidebar-viewproject",
+                      attrs: {
+                        href:
+                          _vm.$root.url +
+                          "/profile/developer/" +
+                          _vm.getunit.dev_slug
+                      }
+                    },
+                    [_vm._v("Lihat Pengembang")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    {
+                      staticClass:
+                        "uk-width-1-1 uk-button uk-button-primary uk-margin-small sidebar-viewproject",
+                      attrs: { "uk-toggle": "target: #contact-agent" }
+                    },
+                    [_vm._v("Kontak Agen")]
+                  )
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.session_active !== "developer",
+                    expression: "session_active !== 'developer'"
+                  }
+                ],
+                staticClass:
+                  "uk-card uk-card-body uk-card-default uk-margin sidebar-dev-info"
+              },
+              [
+                _c("div", { staticClass: "uk-margin sidebar-dev-heading" }, [
+                  _vm._v("Apakah anda tertarik?")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.forms.booking.errorMessage,
+                        expression: "forms.booking.errorMessage"
+                      }
+                    ],
+                    staticClass: "uk-alert-danger",
+                    attrs: { "uk-alert": "" }
+                  },
+                  [_vm._v(_vm._s(_vm.forms.booking.errorMessage))]
+                ),
+                _vm._v(" "),
+                _vm.session_active === "customer"
+                  ? _c(
+                      "div",
+                      {
+                        staticClass: "uk-margin uk-grid-small",
+                        attrs: { "uk-grid": "" }
+                      },
+                      [
+                        _c("div", { staticClass: "uk-width-1-1" }, [
+                          _c("input", {
+                            staticClass:
+                              "uk-width-1-1 uk-input form-booking-unit",
+                            attrs: { type: "text", readonly: "" },
+                            domProps: { value: _vm.getunit.unit_name }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "uk-width-1-1" }, [
+                          _c("textarea", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.forms.booking.message,
+                                expression: "forms.booking.message"
+                              }
+                            ],
+                            staticClass:
+                              "uk-textarea form-booking-unit uk-height-small",
+                            attrs: { placeholder: "Ketik pesan..." },
+                            domProps: { value: _vm.forms.booking.message },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.forms.booking,
+                                  "message",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "uk-width-1-1" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "uk-width-1-1 uk-button uk-button-primary btn-booking-unit",
+                              on: {
+                                click: function($event) {
+                                  return _vm.requestUnit()
+                                }
+                              }
+                            },
+                            [_vm._v("Ajukan Pemesanan")]
+                          )
+                        ])
+                      ]
+                    )
+                  : _c(
+                      "a",
+                      {
+                        staticClass:
+                          "uk-width-1-1 uk-button uk-button-primary btn-login",
+                        attrs: { href: _vm.$root.url + "/customer/masuk" }
+                      },
+                      [_vm._v("Masuk / Daftar")]
+                    )
+              ]
+            )
+          ]
+        )
       ])
     ])
   ])
@@ -94872,7 +95236,7 @@ var staticRenderFns = [
         _c("div", { staticClass: "uk-navbar-center" }, [
           _c("ul", { staticClass: "uk-navbar-nav" }, [
             _c("li", [
-              _c("a", { attrs: { href: "#" } }, [
+              _c("a", { attrs: { href: "#rincian", "uk-scroll": "" } }, [
                 _c("div", [
                   _c("span", { attrs: { "uk-icon": "thumbnails" } }),
                   _vm._v(" "),
@@ -94886,7 +95250,7 @@ var staticRenderFns = [
             ]),
             _vm._v(" "),
             _c("li", [
-              _c("a", { attrs: { href: "#" } }, [
+              _c("a", { attrs: { href: "#fasilitas", "uk-scroll": "" } }, [
                 _c("div", [
                   _c("span", { attrs: { "uk-icon": "album" } }),
                   _vm._v(" "),
@@ -94900,7 +95264,21 @@ var staticRenderFns = [
             ]),
             _vm._v(" "),
             _c("li", [
-              _c("a", { attrs: { href: "#" } }, [
+              _c("a", { attrs: { href: "#lokasi", "uk-scroll": "" } }, [
+                _c("div", [
+                  _c("span", { attrs: { "uk-icon": "location" } }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "uk-navbar-subtitle" }, [
+                    _vm._v(
+                      "\n                      Lokasi\n                    "
+                    )
+                  ])
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("li", [
+              _c("a", { attrs: { href: "#laman-proyek", "uk-scroll": "" } }, [
                 _c("div", [
                   _c("span", { attrs: { "uk-icon": "location" } }),
                   _vm._v(" "),

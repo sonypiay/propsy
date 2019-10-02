@@ -45,7 +45,7 @@
                 </div>
                 <div class="uk-width-expand">
                   <div class="uk-card-body uk-card-small card-unit-body">
-                    <a class="uk-card-title unit-name">{{ unit.unit_name }}</a>
+                    <a :href="$root.url + '/project/detail_unit/' + unit.unit_slug" class="uk-card-title unit-name">{{ unit.unit_name }}</a>
                     <div class="unit-location">
                       <span uk-icon="icon: location; ratio: 0.8"></span>
                       {{ unit.project_address }},
@@ -109,7 +109,7 @@
                   <div class="uk-card-footer card-unit-footer uk-padding-remove uk-margin-small-top">
                     <div class="uk-grid-small uk-child-width-auto" uk-grid>
                       <div>
-                        <a class="uk-button uk-button-small uk-button-primary unit-readmore">
+                        <a :href="$root.url + '/project/detail_unit/' + unit.unit_slug" class="uk-button uk-button-small uk-button-primary unit-readmore">
                           Lihat Lebih Lanjut
                         </a>
                       </div>

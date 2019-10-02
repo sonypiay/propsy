@@ -42,7 +42,7 @@
             <!--<ul class="uk-slider-nav uk-dotnav uk-flex-center uk-margin"></ul>-->
           </div>
           <div class="uk-text-center">
-            <a class="uk-margin-top uk-button uk-button-primary browse_project_btn">Lihat Proyek Lainnya</a>
+            <a :href="$root.url + '/project/browse_project'" class="uk-margin-top uk-button uk-button-primary browse_project_btn">Lihat Proyek Lainnya</a>
           </div>
         </div>
       </div>

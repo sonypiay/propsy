@@ -112,16 +112,6 @@
                     </div>
                   </a>
                 </li>
-                <li>
-                  <a href="#laman-proyek" uk-scroll>
-                    <div>
-                      <span uk-icon="location"></span>
-                      <div class="uk-navbar-subtitle">
-                        Lokasi
-                      </div>
-                    </div>
-                  </a>
-                </li>
               </ul>
             </div>
           </div>
@@ -157,7 +147,7 @@
                 </div>
               </div>
             </div>
-            <hr>
+            <hr class="uk-divider-icon">
             <div class="uk-card-body uk-card-small container-projectbody">
               <div class="uk-margin content-projectdetail">
                 <div id="deskripsi" class="uk-margin-small content-projectheading">
@@ -167,7 +157,7 @@
                 </div>
               </div>
             </div>
-            <hr>
+            <hr class="uk-divider-icon">
             <div id="fasilitas" class="uk-card-body uk-card-small container-projectbody">
               <div class="uk-margin content-projectdetail">
                 <div class="uk-margin-small content-projectheading">
@@ -182,7 +172,7 @@
                 </div>
               </div>
             </div>
-            <hr>
+            <hr class="uk-divider-icon">
             <div class="uk-card-body uk-card-small container-projectbody">
               <div class="uk-margin content-projectdetail">
                 <div class="uk-margin-small uk-text-uppercase content-projectheading">

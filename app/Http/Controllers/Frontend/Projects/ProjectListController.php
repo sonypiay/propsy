@@ -269,4 +269,143 @@ class ProjectListController extends Controller
 
     return response()->json( $res, $res['status'] );
   }
+
+  public function browse_project_page( Request $request )
+  {
+    $data['request'] = $request;
+    $data['session_user'] = null;
+    $data['session_active'] = null;
+
+    if( session()->has('isCustomer') )
+    {
+      $customer = new Customer;
+      $data['session_active'] = 'customer';
+      $data['session_user'] = $customer->getinfo();
+    }
+
+    if( session()->has('isDeveloper') )
+    {
+      $developer = new DeveloperUser;
+      $data['session_active'] = 'developer';
+      $data['session_user'] = $developer->getinfo();
+    }
+
+    if( session()->has('isMarketing') )
+    {
+      $marketing = new MarketingUser;
+      $data['session_active'] = 'marketing';
+      $data['session_user'] = $marketing->getinfo();
+    }
+
+    $city = new CityDB;
+    $getcity = $city->orderBy('city_name', 'asc')->get();
+
+    $data['getcity'] = $getcity;
+
+    return response()->view('frontend.pages.browse_project', $data);
+  }
+
+  public function browse_project( Request $request, ProjectList $project_list )
+  {
+    $keywords = $request->keywords;
+    $project_type = $request->type;
+    $filtercity = $request->filtercity;
+
+    $getproject  = $project_list->select(
+      'project_list.project_id',
+      'project_list.project_unique_id',
+      'project_list.project_name',
+      'project_list.project_slug',
+      'project_list.project_thumbnail',
+      'project_list.project_status',
+      'project_list.project_type',
+      'project_list.project_status',
+      'project_list.project_estimate_launch',
+      'developer_user.dev_name',
+      'developer_user.dev_slug',
+      'city.city_name',
+      'province.province_name'
+    )
+    ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
+    ->join('city', 'project_list.project_city', '=', 'city.city_id')
+    ->join('province', 'city.province_id', '=', 'province.province_id');
+
+    if( empty( $keywords ) )
+    {
+      if( $project_type === 'all' && $filtercity === 'all' )
+      {
+        $query = $getproject->orderBy('project_list.created_at', 'desc');
+      }
+      else if( $project_type !== 'all' && $filtercity === 'all' )
+      {
+        $query = $getproject->where('project_list.project_type', '=', $project_type)
+        ->orderBy('project_list.created_at', 'desc');
+      }
+      else if( $project_type === 'all' && $filtercity !== 'all' )
+      {
+        $query = $getproject->where('project_list.project_city', '=', $filtercity)
+        ->orderBy('project_list.created_at', 'desc');
+      }
+      else
+      {
+        $query = $getproject->where([
+          ['project_list.project_type', '=', $project_type],
+          ['project_list.project_city', '=', $filtercity]
+        ])
+        ->orderBy('project_list.created_at', 'desc');
+      }
+    }
+    else
+    {
+      $query = $getproject->where('project_list.project_name', 'like', '%' . $keywords . '%')
+      ->orWhere('developer_user.dev_name', 'like', '%' . $keywords . '%')
+      ->orderBy('project_list.created_at', 'desc');
+
+      if( $project_type !== 'all' && $filtercity === 'all' )
+      {
+        $query = $getproject->where([
+          ['project_list.project_type', '=', $project_type],
+          ['project_list.project_name', 'like', '%' . $keywords . '%']
+        ])
+        ->orWhere([
+          ['project_list.project_type', '=', $project_type],
+          ['developer_user.dev_name', 'like', '%' . $keywords . '%']
+        ])
+        ->orderBy('project_list.created_at', 'desc');
+      }
+      else if( $project_type === 'all' && $filtercity !== 'all' )
+      {
+        $query = $getproject->where([
+          ['project_list.project_city', '=', $filtercity],
+          ['project_list.project_name', 'like', '%' . $keywords . '%']
+        ])
+        ->orWhere([
+          ['project_list.project_city', '=', $filtercity],
+          ['developer_user.dev_name', 'like', '%' . $keywords . '%']
+        ])
+        ->orderBy('project_list.created_at', 'desc');
+      }
+      else
+      {
+        $query = $getproject->where([
+          ['project_list.project_city', '=', $filtercity],
+          ['project_list.project_type', '=', $project_type],
+          ['project_list.project_name', 'like', '%' . $keywords . '%']
+        ])
+        ->orWhere([
+          ['project_list.project_city', '=', $filtercity],
+          ['project_list.project_type', '=', $project_type],
+          ['developer_user.dev_name', 'like', '%' . $keywords . '%']
+        ])
+        ->orderBy('project_list.created_at', 'desc');
+      }
+    }
+
+    $result = $query->paginate( 10 );
+
+    $results = [
+      'results' => $result
+    ];
+    return response()->json( $results, 200 );
+  }
 }

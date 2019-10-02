@@ -697,4 +697,14 @@ html, body {
     }
   }
 }
+
+.container-bannersearch {
+  .bannersearch-heading {
+    @include fontsetting( $font-primary, 28px, 700, normal, normal, 0.4px );
+    color: #ffffff;
+  }
+  .bannersearch-form {
+
+  }
+}
 /* Layout */

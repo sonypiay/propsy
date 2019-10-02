@@ -1530,5 +1530,15 @@ body {
   color: #ffffff;
 }
 
+.container-bannersearch .bannersearch-heading {
+  font-size: 28px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #ffffff;
+}
+
 /* Layout */
 

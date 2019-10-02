@@ -146,4 +146,6 @@ Route::group(['prefix' => 'project'], function() {
   Route::get('/unit/{project_id}', 'Frontend\Projects\ProjectListController@list_project_unit')->name('list_project_unit');
   Route::post('/request_unit/{unit_id}', 'Frontend\Projects\ProjectListController@request_unit');
   Route::get('/detail_unit/{unit_id}', 'Frontend\Projects\ProjectListController@detail_unit')->name('project_detail_unit');
+  Route::get('/browse_project', 'Frontend\Projects\ProjectListController@browse_project_page')->name('browse_project_page');
+  Route::get('/project_list', 'Frontend\Projects\ProjectListController@browse_project');
 });

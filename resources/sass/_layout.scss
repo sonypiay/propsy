@@ -348,7 +348,7 @@ html, body {
         }
       }
     }
-    .card-overview-analytic {
+    .card-overview-primary {
       .card-overview-header {
         background: $color3;
         border: 0;
@@ -361,6 +361,23 @@ html, body {
       .card-overview-text {
         color: #ffffff;
         @include fontsetting( $font-primary, 24px, 400, normal, normal, 0.4px );
+        text-align: center;
+      }
+      border-radius: 4px;
+    }
+    .card-overview-default {
+      .card-overview-header {
+        background: #ffffff;
+        border: 0;
+      }
+      .card-overview-value {
+        color: #333333;
+        @include fontsetting( $font-primary, 48px, 700, normal, normal, 0.4px );
+        text-align: center;
+      }
+      .card-overview-text {
+        color: #333333;
+        @include fontsetting( $font-primary, 16px, 400, normal, normal, 0.4px );
         text-align: center;
       }
       border-radius: 4px;

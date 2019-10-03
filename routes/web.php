@@ -159,3 +159,9 @@ Route::group(['prefix' => 'verification'], function() {
   Route::get('/email_account', 'Frontend\Verification\CustomerController@view_template');
   Route::get('/validate/{hash_id}', 'Frontend\Verification\CustomerController@validate_email')->name('validate_email_customer');
 });
+
+Route::group(['prefix' => 'overview'], function() {
+  Route::get('/project', 'RestApi\ProjectApi@overview_project');
+  Route::get('/request_unit', 'RestApi\ProjectApi@overview_project_request');
+  Route::get('/latest_project', 'RestApi\ProjectApi@overview_latest_project');
+});

@@ -24,7 +24,3 @@ Route::group(['prefix' => 'region'], function() {
   Route::get('/kota/all/{provinsi}', 'RestApi\RegionCityApi@kota_all');
   Route::get('/kota/where/{provinsi}/{id}', 'RestApi\RegionCityApi@kota_single');
 });
-
-Route::group(['prefix' => 'analytic'], function() {
-  //Route::get('/project_list', 'Frontend');
-});

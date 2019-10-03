@@ -139,6 +139,11 @@ Route::group(['prefix' => 'developer'], function() {
     Route::put('/review_request_unit/{request_id}/{status_review}', 'Frontend\Developer\RequestUnitController@review_request_unit');
     Route::put('/reject_request_unit/{request_id}', 'Frontend\Developer\RequestUnitController@review_request_unit');
   });
+
+  Route::group(['prefix' => 'report'], function() {
+    Route::get('/unit', 'Frontend\Developer\ReportController@page_report_unit')->name('developer_report_unit_page');
+    Route::get('/get_unit', 'Frontend\Developer\ReportController@get_unit_sold');
+  });
 });
 
 Route::group(['prefix' => 'project'], function() {

@@ -42,9 +42,7 @@
     <li class="uk-parent">
       <a href="#"><span class="uk-margin-small-right" uk-icon="icon: file-text; ratio: 1"></span> Laporan <span class="uk-float-right" uk-icon="icon: chevron-down; ratio: 1"></span></a>
       <ul class="uk-nav-sub side-nav-sub">
-        <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: list; ratio: 1"></span> Unit Terjual</a></li>
-        <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: list; ratio: 1"></span> Unit Dipesan</a></li>
-        <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: list; ratio: 1"></span> Hasil Meeting</a></li>
+        <li><a href="{{ route('developer_report_unit_page') }}"><span class="uk-margin-small-right" uk-icon="icon: list; ratio: 1"></span> Unit Terjual</a></li>
       </ul>
     </li>
     <li>

@@ -102,7 +102,7 @@ class AuthController extends Controller
       ])->first();
 
       $expire_date = time() + 60 * 30;
-      $hash_id = base64_encode( md5( $getuser->customer_email ) );
+      $hash_id = base64_encode( uniqid() );
       $data_verify = [
         'customer_id' => $getuser->customer_id,
         'hash_id' => $hash_id,

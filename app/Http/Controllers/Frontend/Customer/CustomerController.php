@@ -104,7 +104,7 @@ class CustomerController extends Controller
       else
       {
         $expire_date = time() + 60 * 30;
-        $hash_id = base64_encode( md5( $email ) );
+        $hash_id = base64_encode( uniqid() );
         $data_verify = [
           'customer_id' => $getinfo->customer_id,
           'hash_id' => $hash_id,
@@ -116,6 +116,7 @@ class CustomerController extends Controller
         Mail::send( $send );
 
         $getinfo->customer_email = $email;
+        $getinfo->status_verification = 'N';
         $getinfo->save();
         $res = [ 'status' => 200, 'statusText' => 'success' ];
       }
@@ -201,5 +202,32 @@ class CustomerController extends Controller
     {
       return redirect()->route('homepage');
     }
+  }
+
+  public function resend_verification( Request $request, VerificationCustomer $verificationCustomer, Customer $customer )
+  {
+    $getcustomer = $customer->getinfo();
+
+    if( $getcustomer->status_verification === 'N' )
+    {
+      $expire_date = time() + 60 * 30;
+      $hash_id = base64_encode( uniqid() );
+      $data_verify = [
+        'customer_id' => $getcustomer->customer_id,
+        'hash_id' => $hash_id,
+        'expire_date' => $expire_date
+      ];
+
+      $verificationCustomer->makeVerification($data_verify);
+      $send = new CustomerEmailValidation( $data_verify['hash_id'], $getcustomer->customer_email );
+      Mail::send( $send );
+      $res = ['status' => 200, 'statusText' => 'Link verifikasi telah terkirim. Silakan cek inbox / spam Anda'];
+    }
+    else
+    {
+      $res = ['status' => 200, 'statusText' => 'Anda sudah terverifikasi'];
+    }
+
+    return response()->json( $res, $res['status'] );
   }
 }

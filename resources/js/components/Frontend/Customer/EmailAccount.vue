@@ -6,7 +6,13 @@
       <div class="uk-margin">
         <label class="uk-form-label content-form-label">Ganti Email</label>
         <div class="uk-form-controls">
-          <input type="email" v-model="forms.email" :placeholder="session_user.customer_email" class="uk-width-1-2 uk-input content-form-input">
+          <input type="email" v-model="forms.email" :placeholder="forms.email" class="uk-width-1-2 uk-input content-form-input">
+        </div>
+        <div v-if="session_user.status_verification === 'N'" class="uk-alert-warning" uk-alert>
+          Akun anda belum terverifikasi. <a @click="resendVerification()"><strong>Kirim ulang verifikasi</strong> </a>
+        </div>
+        <div v-else class="uk-alert-success" uk-alert>
+          <span uk-icon="check"></span> Akun anda telah terverifikasi
         </div>
       </div>
       <div class="uk-margin">
@@ -22,7 +28,7 @@ export default {
   data() {
     return {
       forms: {
-        email: '',
+        email: this.session_user.customer_email,
         submit: 'Simpan'
       },
       errors: {
@@ -61,6 +67,21 @@ export default {
         if( err.response.status === 500 ) this.errors.errorMessage = err.response.statusText;
         else this.errors.errorMessage = err.response.data.statusText;
         this.forms.submit = 'Simpan';
+      });
+    },
+    resendVerification()
+    {
+      axios({
+        method: 'post',
+        url: this.$root.url + '/customer/resend_verification'
+      }).then( res => {
+        swal({
+          title: 'Sukses',
+          text: res.data.statusText,
+          icon: 'success'
+        });
+      }).catch( err => {
+        this.errors.errorMessage = err.response.statusText;
       });
     }
   }

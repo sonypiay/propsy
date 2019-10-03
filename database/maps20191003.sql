@@ -54,11 +54,11 @@ CREATE TABLE `customer` (
   PRIMARY KEY (`customer_id`),
   UNIQUE KEY `customer_email` (`customer_email`),
   UNIQUE KEY `customer_username` (`customer_username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 /*Data for the table `customer` */
 
-insert  into `customer`(`customer_id`,`customer_name`,`customer_email`,`customer_address`,`customer_city`,`customer_phone_number`,`customer_username`,`customer_password`,`customer_photo`,`status_verification`,`created_at`,`updated_at`) values (1,'Sony Darmawan','sonypiay@mail.com','Jl. Meruya Selatan No. 7',1,'08561969052','sonypiay','d5f3b4c238382e41fbe4b404e882cc73',NULL,'N','2019-09-27 21:19:47','2019-09-27 21:21:19');
+insert  into `customer`(`customer_id`,`customer_name`,`customer_email`,`customer_address`,`customer_city`,`customer_phone_number`,`customer_username`,`customer_password`,`customer_photo`,`status_verification`,`created_at`,`updated_at`) values (1,'Sony Darmawan','sonypiay@mail.com','Jl. Meruya Selatan No. 7',1,'08561969052','sonypiay','d5f3b4c238382e41fbe4b404e882cc73',NULL,'Y','2019-09-27 21:19:47','2019-10-03 13:40:16'),(10,'Velvet Crowe','pyscho30@gmail.com','Jl. Blablabal',1,'08561969052','velvetcrowe','d5f3b4c238382e41fbe4b404e882cc73',NULL,'Y','2019-10-03 12:53:53','2019-10-03 13:37:54');
 
 /*Table structure for table `developer_user` */
 
@@ -333,16 +333,18 @@ CREATE TABLE `verification_customer` (
   `verify_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `customer_id` int(10) unsigned NOT NULL,
   `hash_id` varchar(128) DEFAULT NULL,
-  `expire_date` time DEFAULT NULL,
-  `status_verify` enum('Y','N') DEFAULT NULL,
+  `expire_date` varchar(32) NOT NULL,
+  `status_verify` enum('Y','N') NOT NULL DEFAULT 'N',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`verify_id`),
   KEY `fk_verify_customer_idx` (`customer_id`),
   CONSTRAINT `fk_verify_customer_idx` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `verification_customer` */
+
+insert  into `verification_customer`(`verify_id`,`customer_id`,`hash_id`,`expire_date`,`status_verify`,`created_at`,`updated_at`) values (1,10,'NWQ5NTk2ZmQ3MWY4Yg==','1570086405','Y','2019-10-03 12:53:54','2019-10-03 13:37:54'),(2,1,'NWQ5NTk3YWU5OGY1Mw==','1570086582','Y','2019-10-03 13:39:42','2019-10-03 13:40:16');
 
 /*Table structure for table `verification_developer` */
 

@@ -25,6 +25,7 @@ class Customer extends Model
       'customer.customer_photo',
       'customer.created_at',
       'customer.updated_at',
+      'customer.status_verification',
       'city.city_name',
       'city.city_slug',
       'province.province_id',

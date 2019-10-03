@@ -33,6 +33,7 @@ Route::group(['prefix' => 'customer'], function() {
   Route::get('/profile', 'Frontend\Customer\CustomerController@profile_page')->name('customer_profile_page');
   Route::get('/masuk', 'Frontend\Customer\CustomerController@login_page')->name('customer_login_page');
   Route::get('/daftar', 'Frontend\Customer\CustomerController@register_page')->name('customer_register_page');
+  Route::post('/resend_verification', 'Frontend\Customer\CustomerController@resend_verification');
   Route::group(['prefix' => 'profile'], function() {
     Route::put('/change_password', 'Frontend\Customer\CustomerController@change_password');
     Route::put('/change_email', 'Frontend\Customer\CustomerController@change_email');

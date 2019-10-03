@@ -46,7 +46,6 @@
             <div class="uk-navbar-dropdown main-nav-dropdown">
               <ul class="uk-nav uk-dropdown-nav">
                 <li><a href="{{ route('customer_request_page') }}">Pemesanan</a></li>
-                <li><a href="#">Survey</a></li>
                 <li><a href="{{ route('customer_profile_page') }}">Lihat Akun</a></li>
                 <li class="uk-nav-divider"></li>
                 <li><a href="{{ route('auth_logout_customer') }}">Keluar</a></li>

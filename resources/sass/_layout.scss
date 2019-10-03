@@ -348,6 +348,23 @@ html, body {
         }
       }
     }
+    .card-overview-analytic {
+      .card-overview-header {
+        background: $color3;
+        border: 0;
+      }
+      .card-overview-value {
+        color: #ffffff;
+        @include fontsetting( $font-primary, 48px, 700, normal, normal, 0.4px );
+        text-align: center;
+      }
+      .card-overview-text {
+        color: #ffffff;
+        @include fontsetting( $font-primary, 24px, 400, normal, normal, 0.4px );
+        text-align: center;
+      }
+      border-radius: 4px;
+    }
   }
 }
 

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Database\DeveloperUser;
 use App\Database\ProjectList;
+use App\Database\ProjectUnitType;
 use App\Database\ProjectGallery;
 use App\Database\UnitFacility;
 use App\Database\ProvinceDB;
@@ -353,5 +354,27 @@ class ProjectListController extends Controller
     {
       return redirect()->route('homepage');
     }
+  }
+
+  public function analytic_project( ProjectList $project_list, ProjectUnitType $project_type, DeveloperUser $developeruser )
+  {
+    $developer = $developeruser->getinfo();
+    $total_project = $project_list->select(
+      DB::raw('count(*) as total_project'),
+      DB::raw('count(if(project_status="available",1,NULL)) as project_available'),
+      DB::raw('count(if(project_status="soon",1,NULL)) as project_soon'),
+      DB::raw('count(if(project_status="sold",1,NULL)) as project_sold')
+    )
+    ->where('dev_user_id', $developer->dev_user_id)
+    ->get();
+
+    $res = [
+      'status' => 200,
+      'statusText' => 'data loaded...',
+      'data' => [
+        'project_list' => $total_project
+      ]
+    ];
+    return response()->json( $res, $res['status'] );
   }
 }

@@ -926,6 +926,37 @@ body {
   background: #1fc8c9;
 }
 
+.dashboard-container .dashboard-content .card-overview-analytic {
+  border-radius: 4px;
+}
+
+.dashboard-container .dashboard-content .card-overview-analytic .card-overview-header {
+  background: #1fc8c9;
+  border: 0;
+}
+
+.dashboard-container .dashboard-content .card-overview-analytic .card-overview-value {
+  color: #ffffff;
+  font-size: 48px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-align: center;
+}
+
+.dashboard-container .dashboard-content .card-overview-analytic .card-overview-text {
+  color: #ffffff;
+  font-size: 24px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  text-align: center;
+}
+
 .sidebar-dev-info .sidebar-dev-heading {
   text-align: center;
   color: #333333;

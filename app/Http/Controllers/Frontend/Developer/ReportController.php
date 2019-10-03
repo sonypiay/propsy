@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Frontend\Developer;
 
 use Illuminate\Http\Request;
+use App\Exports\UnitExport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Database\DeveloperUser;
 use App\Database\ProjectRequest;
 use App\Database\ProjectUnitType;
@@ -63,5 +65,48 @@ class ReportController extends Controller
     ->paginate( 10 );
 
     return response()->json( $result, 200 );
+  }
+
+  public function report_save_unit( Request $request, ProjectRequest $project_request, DeveloperUser $developeruser, UnitExport $unit_export, $type )
+  {
+    $start_date = $request->start_date;
+    $end_date = $request->end_date;
+    $developer = $developeruser->getinfo();
+
+    $whereClauses = [];
+    array_push( $whereClauses, ['project_unit_type.unit_status', '=', 'sold']);
+    array_push( $whereClauses, ['project_request.dev_user_id', '=', $developer->dev_user_id]);
+
+    $getrequest = $project_request->select(
+      'project_request.request_unique_id',
+      'project_request.created_at',
+      'project_request.updated_at',
+      'project_unit_type.unit_name',
+      'project_unit_type.unit_status',
+      'customer.customer_name'
+    )
+    ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
+    ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
+    ->where($whereClauses);
+
+    if( ! empty( $start_date ) && empty( $end_date ) )
+    {
+      $getrequest = $getrequest->where(DB::raw('date_format(project_request.created_at, "%Y-%m-%d")'), '=', $start_date);
+    }
+    else
+    {
+      $getrequest = $getrequest->whereBetween(DB::raw('date_format(project_request.created_at, "%Y-%m-%d")'), [$start_date, $end_date]);
+    }
+    $result = $getrequest->orderBy('project_request.created_at', 'desc')->get();
+    $filename = 'UnitSold-' . date('Ymd');
+
+    if( $type === 'xls' )
+    {
+      return Excel::download( $unit_export->export( $result ),  $filename . '.xlsx' );
+    }
+    else
+    {
+      
+    }
   }
 }

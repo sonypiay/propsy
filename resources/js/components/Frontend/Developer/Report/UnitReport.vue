@@ -38,6 +38,14 @@
           </div>
         </div>
       </div>
+      <div class="uk-margin uk-grid-small uk-child-width-auto" uk-grid>
+        <div>
+          <a class="uk-button uk-button-small uk-button-default" @click="onSaveAs('xls')">Excel</a>
+        </div>
+        <div>
+          <a class="uk-button uk-button-small uk-button-default" @click="onSaveAs('pdf')">Pdf</a>
+        </div>
+      </div>
       <div class="uk-margin">
         <table class="uk-table uk-table-responsive uk-table-divider uk-table-middle uk-table-small">
           <thead>
@@ -229,6 +237,17 @@ export default {
           next_page_url: result.next_page_url
         };
       });
+    },
+    onSaveAs( file )
+    {
+      let datepicker = this.forms.datepicker.selectedDate;
+      let start_datepicker = this.$root.formatDate( datepicker.start, 'YYYY-MM-DD' );
+      let end_datepicker = this.$root.formatDate( datepicker.end, 'YYYY-MM-DD' );
+      if( start_datepicker === end_datepicker ) end_datepicker = '';
+
+      var param = 'start_date=' + start_datepicker + '&end_date=' + end_datepicker;
+      var url = this.$root.url + '/developer/report/unit/save/' + file + '?' + param;
+      window.open( url, '_blank' );
     }
   },
   mounted() {

@@ -9,6 +9,7 @@ use App\Database\ProjectList;
 use App\Database\ProjectUnitType;
 use App\Database\MarketingUser;
 use App\Database\ProjectRequest;
+use App\Database\LogProjectRequest;
 use App\Http\Controllers\Controller;
 
 class ProjectApi extends Controller
@@ -92,9 +93,12 @@ class ProjectApi extends Controller
     $getproject = $project_list->select(
       'project_id',
       'project_unique_id',
+      'project_slug',
       'project_name',
       'project_thumbnail',
-      'project_status'
+      'project_status',
+      'created_at',
+      'updated_at'
     )
     ->where('dev_user_id', $developer->dev_user_id)
     ->orderBy('created_at', 'desc')
@@ -107,7 +111,8 @@ class ProjectApi extends Controller
       'project_unit_type.unit_slug',
       'project_unit_type.unit_thumbnail',
       'project_unit_type.unit_status',
-      'project_unit_type.unit_price'
+      'project_unit_type.unit_price',
+      'project_unit_type.project_unique_id'
     )
     ->join('project_list', 'project_unit_type.project_unique_id', '=', 'project_list.project_unique_id')
     ->where('project_list.dev_user_id', $developer->dev_user_id)
@@ -122,6 +127,30 @@ class ProjectApi extends Controller
         'latest_project' => $getproject,
         'latest_unit' => $getunit
       ]
+    ];
+
+    return response()->json( $res, $res['status'] );
+  }
+
+  public function latest_log_request( LogProjectRequest $log_request, DeveloperUser $developeruser )
+  {
+    $developer = $developeruser->getinfo();
+
+    $latest_log = $log_request->select(
+      'log_project_request.request_unique_id',
+      'log_project_request.log_message',
+      'log_project_request.created_at'
+    )
+    ->join('project_request', 'log_project_request.request_unique_id', '=', 'project_request.request_unique_id')
+    ->where('project_request.dev_user_id', $developer->dev_user_id)
+    ->orderBy('log_project_request.created_at', 'desc')
+    ->take(10)
+    ->get();
+
+    $res = [
+      'status' => 200,
+      'statusText' => 'data loaded...',
+      'data' => $latest_log
     ];
 
     return response()->json( $res, $res['status'] );

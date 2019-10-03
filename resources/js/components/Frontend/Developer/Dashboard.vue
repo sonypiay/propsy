@@ -166,6 +166,99 @@
             </div>
           </div>
         </div>
+
+        <div class="uk-grid-small uk-margin" uk-grid>
+          <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
+            <div class="uk-margin dashboard-content-heading">
+              Proyek Terkini
+            </div>
+            <div class="uk-grid-small uk-grid-divider" uk-grid>
+              <div class="uk-width-1-1" v-for="project in overviewData.latest_data.project.results">
+                <article class="uk-article card-latest-data">
+                  <div class="uk-article-title grid-latest-title">
+                    {{ project.project_name }}
+                  </div>
+                  <div class="uk-article-meta grid-latest-date">
+                    Di posting pada {{ $root.formatDate( project.created_at, 'dddd, DD MMMM YYYY HH:mm' ) }}
+                  </div>
+                  <div class="uk-grid-small uk-child-width-auto uk-margin" uk-grid>
+                    <div>
+                      <a target="_blank" :href="$root.url + '/developer/project/edit_project/' + project.project_id" class="uk-button uk-button-text">
+                        <span uk-icon="icon: pencil; ratio: 1"></span>
+                        Edit Proyek
+                      </a>
+                    </div>
+                    <div>
+                      <a target="_blank" :href="$root.url + '/developer/project/detail/' + project.project_unique_id" class="uk-button uk-button-text">
+                        <span uk-icon="icon: forward; ratio: 1"></span>
+                        Lihat Rincian
+                      </a>
+                    </div>
+                    <div>
+                      <a target="_blank" :href="$root.url + '/project/view/' + project.project_slug" class="uk-button uk-button-text">
+                        <span uk-icon="icon: file-text; ratio: 1"></span>
+                        Ke Laman Proyek
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+
+          <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
+            <div class="uk-margin dashboard-content-heading">
+              Tipe Unit Terkini
+            </div>
+            <div class="uk-grid-small uk-grid-divider" uk-grid>
+              <div class="uk-width-1-1" v-for="unit in overviewData.latest_data.unit.results">
+                <article class="uk-article card-latest-data">
+                  <div class="uk-article-title grid-latest-title">
+                    {{ unit.unit_name }}
+                  </div>
+                  <div class="uk-article-meta grid-latest-date">
+                    Di posting pada {{ $root.formatDate( unit.created_at, 'dddd, DD MMMM YYYY HH:mm' ) }}
+                  </div>
+                  <div class="uk-grid-small uk-child-width-auto uk-margin" uk-grid>
+                    <div>
+                      <a target="_blank" :href="$root.url + '/developer/project/detail/' + unit.project_unique_id" class="uk-button uk-button-text">
+                        <span uk-icon="icon: forward; ratio: 1"></span>
+                        Lihat Rincian
+                      </a>
+                    </div>
+                    <div>
+                      <a target="_blank" :href="$root.url + '/project/detail_unit/' + unit.unit_slug" class="uk-button uk-button-text">
+                        <span uk-icon="icon: file-text; ratio: 1"></span>
+                        Ke Laman Unit
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="uk-margin-top">
+          <div class="uk-margin dashboard-content-heading">
+            Track Pengajuan Pemesanan
+          </div>
+          <div class="uk-grid-medium uk-grid-divider uk-margin" uk-grid>
+            <div v-for="log in overviewData.latest_data.log_request.results" class="uk-width-1-2">
+              <article class="uk-article card-latest-data">
+                <div class="uk-article-meta">
+                  <strong>#{{ log.request_unique_id }}</strong>
+                </div>
+                <div class="uk-article-meta grid-latest-date">
+                  {{ $root.formatDate( log.created_at, 'dddd, DD MMMM YYYY HH:mm' ) }}
+                </div>
+                <div>
+                  {{ log.log_message }}
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -196,6 +289,25 @@ export default {
           reject: 0,
           cancel: 0,
           meeting: 0
+        },
+        log_request: {
+          total: 0,
+          results: [],
+          errorMessage: ''
+        },
+        latest_data: {
+          project: {
+            total: 0,
+            results: []
+          },
+          unit: {
+            total: 0,
+            results: []
+          },
+          log_request: {
+            total: 0,
+            results: []
+          }
         }
       }
     }
@@ -203,19 +315,6 @@ export default {
   methods: {
     getOverviewProject()
     {
-      this.overviewData.project = {
-        total: 0,
-        available: 0,
-        sold: 0,
-        soon: 0
-      };
-      this.overviewData.unit = {
-        total: 0,
-        available: 0,
-        sold: 0,
-        booked: 0
-      };
-
       axios({
         method: 'get',
         url: this.$root.url + '/overview/project'
@@ -242,15 +341,6 @@ export default {
     },
     getOverviewRequestUnit()
     {
-      this.overviewData.request_unit = {
-        total: 0,
-        waiting_response: 0,
-        accept: 0,
-        reject: 0,
-        cancel: 0,
-        meeting: 0
-      };
-
       axios({
         method: 'get',
         url: this.$root.url + '/overview/request_unit'
@@ -266,7 +356,36 @@ export default {
           reject: data_request.reject === null ? 0 : data_request.reject,
           meeting: data_request.meeting === null ? 0 : data_request.meeting,
         };
-        console.log( this.overviewData.request_unit );
+      }).catch( err => {
+        console.log( err.response.statusText );
+      });
+    },
+    getLatestProject()
+    {
+      axios({
+        method: 'get',
+        url: this.$root.url + '/overview/latest_project'
+      }).then( res => {
+        let result = res.data;
+        this.overviewData.latest_data.project.total = result.data.latest_project.length;
+        this.overviewData.latest_data.project.results = result.data.latest_project;
+
+        this.overviewData.latest_data.unit.total = result.data.latest_unit.length;
+        this.overviewData.latest_data.unit.results = result.data.latest_unit;
+
+      }).catch( err => {
+        console.log( err.response.statusText );
+      });
+    },
+    getLatestLogRequest()
+    {
+      axios({
+        method: 'get',
+        url: this.$root.url + '/overview/latest_log_request'
+      }).then( res => {
+        let result = res.data;
+        this.overviewData.latest_data.log_request.total = result.data.length;
+        this.overviewData.latest_data.log_request.results = result.data;
       }).catch( err => {
         console.log( err.response.statusText );
       });
@@ -275,6 +394,8 @@ export default {
   mounted() {
     this.getOverviewProject();
     this.getOverviewRequestUnit();
+    this.getLatestProject();
+    this.getLatestLogRequest();
   }
 }
 </script>

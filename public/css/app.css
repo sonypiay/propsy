@@ -958,6 +958,7 @@ body {
 }
 
 .dashboard-container .dashboard-content .card-overview-default {
+  background: #1fc8c9;
   border-radius: 4px;
 }
 
@@ -967,7 +968,7 @@ body {
 }
 
 .dashboard-container .dashboard-content .card-overview-default .card-overview-value {
-  color: #333333;
+  color: #ffffff;
   font-size: 48px;
   font-style: normal;
   font-stretch: normal;
@@ -978,7 +979,7 @@ body {
 }
 
 .dashboard-container .dashboard-content .card-overview-default .card-overview-text {
-  color: #333333;
+  color: #ffffff;
   font-size: 16px;
   font-style: normal;
   font-stretch: normal;
@@ -986,6 +987,22 @@ body {
   font-weight: 400;
   letter-spacing: 0.4px;
   text-align: center;
+}
+
+.dashboard-container .dashboard-content .card-latest-data .grid-latest-title {
+  color: #333333;
+  font-size: 18px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-decoration: none;
+}
+
+.dashboard-container .dashboard-content .card-latest-data .grid-latest-title:hover,
+.dashboard-container .dashboard-content .card-latest-data .grid-latest-title:focus {
+  color: #1fc8c9;
 }
 
 .sidebar-dev-info .sidebar-dev-heading {

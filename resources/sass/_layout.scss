@@ -366,21 +366,30 @@ html, body {
       border-radius: 4px;
     }
     .card-overview-default {
+      background: $color3;
       .card-overview-header {
         background: #ffffff;
         border: 0;
       }
       .card-overview-value {
-        color: #333333;
+        color: #ffffff;
         @include fontsetting( $font-primary, 48px, 700, normal, normal, 0.4px );
         text-align: center;
       }
       .card-overview-text {
-        color: #333333;
+        color: #ffffff;
         @include fontsetting( $font-primary, 16px, 400, normal, normal, 0.4px );
         text-align: center;
       }
       border-radius: 4px;
+    }
+    .card-latest-data {
+      .grid-latest-title {
+        color: #333333;
+        @include fontsetting( $font-primary, 18px, 600, normal, normal, 0.4px );
+        text-decoration: none;
+        &:hover, &:focus { color: $color3; }
+      }
     }
   }
 }

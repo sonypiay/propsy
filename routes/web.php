@@ -164,4 +164,5 @@ Route::group(['prefix' => 'overview'], function() {
   Route::get('/project', 'RestApi\ProjectApi@overview_project');
   Route::get('/request_unit', 'RestApi\ProjectApi@overview_project_request');
   Route::get('/latest_project', 'RestApi\ProjectApi@overview_latest_project');
+  Route::get('/latest_log_request', 'RestApi\ProjectApi@latest_log_request');
 });

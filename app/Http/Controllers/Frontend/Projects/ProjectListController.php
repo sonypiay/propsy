@@ -535,6 +535,12 @@ class ProjectListController extends Controller
       }
     }
 
-    return response()->json( $result->get(), 200 );
+    $result = $result->orderBy( 'project_unit_type.created_at', 'desc' )
+    ->paginate( 12 );
+    $res = [
+      'results' => $result
+    ];
+
+    return response()->json( $res, 200 );
   }
 }

@@ -219,6 +219,33 @@ body {
   border-radius: 4px;
 }
 
+.card-verify-email {
+  margin-top: 8em;
+}
+
+.card-verify-email .card-icon-verify {
+  font-size: 52px;
+}
+
+.card-verify-email .card-icon-verify .failed {
+  color: #f42e2e;
+}
+
+.card-verify-email .card-icon-verify .success {
+  color: #4fc08d;
+}
+
+.card-verify-email .card-congrats-verify {
+  font-size: 24px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  border-bottom: 1px solid #e9e9e9;
+  padding-bottom: 15px;
+}
+
 /* modal */
 
 .modal-login .modal-login-title {

@@ -152,3 +152,9 @@ Route::group(['prefix' => 'project'], function() {
   Route::get('/search', 'Frontend\Projects\ProjectListController@search_project')->name('page_search_project');
   Route::get('/search_list', 'Frontend\Projects\ProjectListController@get_search_list');
 });
+
+
+Route::group(['prefix' => 'verification'], function() {
+  Route::get('/email_account', 'Frontend\Verification\CustomerController@view_template');
+  Route::get('/validate/{hash_id}', 'Frontend\Verification\CustomerController@validate_email')->name('validate_email_customer');
+});

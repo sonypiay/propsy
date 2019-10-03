@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Database\Customer;
+use App\Database\VerificationCustomer;
 use App\Database\ProjectRequest;
 use App\Http\Controllers\Controller;
+use App\Mail\CustomerEmailValidation;
+use Mail;
 
 class CustomerController extends Controller
 {
@@ -86,7 +89,7 @@ class CustomerController extends Controller
     return response()->json([ 'status' => 200, 'statusText' => 'success' ], 200);
   }
 
-  public function change_email( Request $request, Customer $customer )
+  public function change_email( Request $request, Customer $customer, VerificationCustomer $verificationCustomer )
   {
     $email = $request->email;
     $getinfo = $customer->getinfo();
@@ -100,6 +103,18 @@ class CustomerController extends Controller
       }
       else
       {
+        $expire_date = time() + 60 * 30;
+        $hash_id = base64_encode( md5( $email ) );
+        $data_verify = [
+          'customer_id' => $getinfo->customer_id,
+          'hash_id' => $hash_id,
+          'expire_date' => $expire_date
+        ];
+
+        $verificationCustomer->makeVerification($data_verify);
+        $send = new CustomerEmailValidation( $data_verify['hash_id'], $email );
+        Mail::send( $send );
+
         $getinfo->customer_email = $email;
         $getinfo->save();
         $res = [ 'status' => 200, 'statusText' => 'success' ];

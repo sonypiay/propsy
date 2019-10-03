@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Frontend\Customer;
 
 use Illuminate\Http\Request;
 use App\Database\Customer;
+use App\Database\VerificationCustomer;
 use App\Http\Controllers\Controller;
+use App\Mail\CustomerEmailValidation;
+use Mail;
 
 class AuthController extends Controller
 {
@@ -60,7 +63,7 @@ class AuthController extends Controller
     return response()->json( $res, $res['status'] );
   }
 
-  public function do_register( Request $request, Customer $customer )
+  public function do_register( Request $request, Customer $customer, VerificationCustomer $verificationCustomer )
   {
     $fullname = $request->fullname;
     $email = $request->email;
@@ -97,6 +100,18 @@ class AuthController extends Controller
         ['customer_username', $username],
         ['customer_password', $hash_password]
       ])->first();
+
+      $expire_date = time() + 60 * 30;
+      $hash_id = base64_encode( md5( $getuser->customer_email ) );
+      $data_verify = [
+        'customer_id' => $getuser->customer_id,
+        'hash_id' => $hash_id,
+        'expire_date' => $expire_date
+      ];
+
+      $verificationCustomer->makeVerification($data_verify);
+      $send = new CustomerEmailValidation( $data_verify['hash_id'], $getuser->customer_email );
+      Mail::send( $send );
 
       session()->put('isCustomer', true);
       session()->put('customer_id', $getuser->customer_id);

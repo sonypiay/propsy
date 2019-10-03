@@ -5,6 +5,20 @@ html, body {
 
 @import 'form';
 
+.card-verify-email {
+  margin-top: 8em;
+  .card-icon-verify {
+    font-size: 52px;
+    .failed { color: #f42e2e; }
+    .success { color: #4fc08d; }
+  }
+  .card-congrats-verify {
+    @include fontsetting( $font-primary, 24px, 400, normal, normal, 0.4px );
+    border-bottom: 1px solid #e9e9e9;
+    padding-bottom: 15px;
+  }
+}
+
 /* modal */
 .modal-login {
   .modal-login-title {

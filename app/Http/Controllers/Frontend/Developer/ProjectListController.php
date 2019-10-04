@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Database\DeveloperUser;
 use App\Database\ProjectList;
+use App\Database\ProjectUnitType;
 use App\Database\ProjectGallery;
 use App\Database\UnitFacility;
 use App\Database\ProvinceDB;
@@ -287,7 +288,8 @@ class ProjectListController extends Controller
     $getproject = $project_list->where('project_id', $project_id);
     if( $getproject->count() !== 0 )
     {
-      $getgallery = $gallery->where('project_id', $project_id);
+      $result_project = $getproject->first();
+      $getgallery = $gallery->where('project_unique_id', $result_project->project_unique_id);
       if( $getgallery->count() !== 0 )
       {
         foreach( $getgallery->get() as $g ):
@@ -353,4 +355,5 @@ class ProjectListController extends Controller
       return redirect()->route('homepage');
     }
   }
+
 }

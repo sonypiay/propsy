@@ -47,4 +47,9 @@ class HomepageController extends Controller
       ->header('Accepts', 'text/html');
     }
   }
+
+  public function homepage_developer( Request $request, MarketingUser $marketinguser, DeveloperUser $developeruser, Customer $customer, $slug )
+  {
+    
+  }
 }

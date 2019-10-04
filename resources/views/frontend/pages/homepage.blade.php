@@ -16,11 +16,11 @@
   </div>-->
   <div class="uk-cover-container banner-homepage">
     <canvas width="300" height="400"></canvas>
-    <img src="{{ asset('images/banner/homepage2.jpg') }}" alt="" uk-cover>
+    <img src="{{ asset('images/banner/homepage3.jpg') }}" alt="" uk-cover>
     <div class="uk-overlay uk-overlay-primary uk-position-cover banner-content">
       <div class="uk-position-center uk-text-center">
         <div>
-          <strong>Manajemen Properti Syariah</strong>
+          <strong>Properti Syariah</strong>
         </div>
         <div>
           untuk <strong>Pengembang</strong> dan <strong>Marketing</strong>
@@ -35,7 +35,7 @@
         <img class="uk-width-1-4" src="{{ asset('images/brand/logo_maps_primary.png') }}" alt="">
       </div>
       <div class="maps-summary">
-        <strong>MaPS</strong> adalah aplikasi yang menghubungkan antara <strong>Pengembang</strong> dengan <strong>Marketing</strong> properti syariah untuk mengelola properti yang dipasarkan.
+        <strong>Prosy</strong> adalah aplikasi yang menghubungkan antara <strong>Pengembang</strong> dengan <strong>Marketing</strong> properti syariah untuk mengelola properti yang dipasarkan.
       </div>
     </div>
   </div>

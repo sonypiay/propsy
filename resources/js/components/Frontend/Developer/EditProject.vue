@@ -55,7 +55,11 @@
         <div class="uk-margin">
           <label class="uk-form-label dash-form-label">Deskripsi Proyek <span v-html="formRequired"></span></label>
           <div class="uk-form-controls">
-            <textarea class="uk-textarea uk-height-small dash-form-input" v-model="forms.project_description"></textarea>
+            <div class="uk-height-large">
+              <quill-editor
+                v-model="forms.project_description"
+                :options="forms.editor" />
+            </div>
           </div>
           <div v-show="errors.name.project_description" class="uk-text-small uk-text-danger">{{ errors.name.project_description }}</div>
         </div>
@@ -123,8 +127,16 @@
 </template>
 
 <script>
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.snow.css';
+import 'quill/dist/quill.bubble.css';
+import { quillEditor } from 'vue-quill-editor';
+
 export default {
   props: ['session_user', 'getproject'],
+  components: {
+    quillEditor
+  },
   data() {
     return {
       forms: {
@@ -143,6 +155,28 @@ export default {
           data: null
         },
         submit: 'Simpan Perubahan',
+        editor: {
+          modules: {
+            toolbar: [
+              ['bold', 'italic', 'underline', 'strike'],
+              ['blockquote', 'code-block'],
+              [{ 'header': 1 }, { 'header': 2 }],
+              [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+              [{ 'script': 'sub' }, { 'script': 'super' }],
+              [{ 'indent': '-1' }, { 'indent': '+1' }],
+              [{ 'direction': 'rtl' }],
+              [{ 'size': ['small', false, 'large', 'huge'] }],
+              [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+              [{ 'font': [] }],
+              [{ 'color': [] }, { 'background': [] }],
+              [{ 'align': [] }],
+              ['clean'],
+              ['link', 'image', 'video']
+            ]
+          },
+          theme: 'snow',
+          placeholder: 'Deskripsi proyek...'
+        }
       },
       errors: {
         name: {},
@@ -287,3 +321,23 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .quill-editor,
+  .quill-code {
+    height: 350px;
+  }
+  .quill-code {
+    border: none;
+    height: auto;
+    > code {
+      width: 100%;
+      margin: 0;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 0;
+      height: 10rem;
+      overflow-y: auto;
+    }
+  }
+</style>

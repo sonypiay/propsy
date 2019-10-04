@@ -20,6 +20,7 @@ class RequestUnitController extends Controller
       'project_request.status_request',
       'project_unit_type.unit_type_id',
       'project_unit_type.unit_name',
+      'project_unit_type.unit_slug',
       'project_unit_type.unit_thumbnail',
       'project_unit_type.unit_price',
       'project_unit_type.unit_lb',

@@ -157,6 +157,7 @@
                           <div uk-dropdown="mode: click" class="card-unit-setting-dropdown">
                             <ul class="uk-nav uk-dropdown-nav">
                               <li><a @click="onDetailRequest( unit.request_unique_id )">Lihat Rincian</a></li>
+                              <li><a target="_blank" :href="$root.url + '/developer/report/request_unit/save/' + unit.request_unique_id">Cetak</a></li>
                               <li v-show="unit.status_request !== 'cancel' && unit.status_request !== 'reject' && unit.status_request !== 'accept'"><a @click="onRejectRequest( unit.request_unique_id )">Tolak Pengajuan</a></li>
                             </ul>
                           </div>
@@ -310,7 +311,7 @@ export default {
         {
           axios({
             method: 'put',
-            url: this.$root.url + '/developer/customer/reject_request_unit/' + id + '/' + status_review
+            url: this.$root.url + '/developer/customer/review_request_unit/' + id + '/reject'
           }).then( res => {
             swal({
               title: 'Sukses',

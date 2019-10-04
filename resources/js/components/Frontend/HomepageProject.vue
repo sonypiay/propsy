@@ -27,8 +27,8 @@
                     <div class="uk-card-body">
                       <a :href="$root.url + '/project/view/' + p.project_slug" class="uk-card-title hmpg-card-title">{{ p.project_name }}</a>
                       <div class="hmpg-card-meta">{{ $root.formatDate( p.created_at, 'DD MMMM YYYY' ) }}</div>
-                      <div class="uk-text-truncate uk-margin-top hmpg-card-content">
-                        {{ p.project_description }}
+                      <div class="uk-text-truncate uk-margin-top hmpg-card-content" v-html="$root.htmlStripTags( p.project_description, 300 )">
+
                       </div>
                     </div>
                   </div>
@@ -42,7 +42,7 @@
             <!--<ul class="uk-slider-nav uk-dotnav uk-flex-center uk-margin"></ul>-->
           </div>
           <div class="uk-text-center">
-            <a class="uk-margin-top uk-button uk-button-primary browse_project_btn">Lihat Proyek Lainnya</a>
+            <a :href="$root.url + '/project/browse_project'" class="uk-margin-top uk-button uk-button-primary browse_project_btn">Lihat Proyek Lainnya</a>
           </div>
         </div>
       </div>

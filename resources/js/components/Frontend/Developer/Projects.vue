@@ -59,7 +59,9 @@
               <div class="uk-card-body uk-card-small">
                 <div class="uk-margin-small uk-card-title grid-box-title">{{ project.project_name }}</div>
                 <div class="uk-margin-small grid-box-lead">
-                  Terakhir diubah: {{ $root.formatDate( project.created_at, 'DD MMM YYYY', 'id' ) }}
+                  Terakhir diubah: {{ $root.formatDate( project.created_at, 'DD MMM YYYY', 'id' ) }} <br>
+                  <span class="uk-text-bold" v-if="project.project_type === 'residensial'">Residensial</span>
+                  <span class="uk-text-bold" v-else="project.project_type === 'apartemen'">Apartemen</span>
                 </div>
                 <!--<div class="uk-text-truncate uk-margin-small grid-box-content">{{ project.project_description }}</div>-->
               </div>

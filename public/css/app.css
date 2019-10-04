@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Nunito);@import url(https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap);@import url(https://fonts.googleapis.com/css?family=Nunito:300,600,700,900&display=swap);.main-header {
+@import url(https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap);@import url(https://fonts.googleapis.com/css?family=Nunito:300,600,700,900&display=swap);.main-header {
   background: #ffffff;
 }
 
@@ -217,6 +217,33 @@ body {
   background: #f9f9f9;
   text-align: center;
   border-radius: 4px;
+}
+
+.card-verify-email {
+  margin-top: 8em;
+}
+
+.card-verify-email .card-icon-verify {
+  font-size: 52px;
+}
+
+.card-verify-email .card-icon-verify .failed {
+  color: #f42e2e;
+}
+
+.card-verify-email .card-icon-verify .success {
+  color: #4fc08d;
+}
+
+.card-verify-email .card-congrats-verify {
+  font-size: 24px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  border-bottom: 1px solid #e9e9e9;
+  padding-bottom: 15px;
 }
 
 /* modal */
@@ -899,6 +926,85 @@ body {
   background: #1fc8c9;
 }
 
+.dashboard-container .dashboard-content .card-overview-primary {
+  border-radius: 4px;
+}
+
+.dashboard-container .dashboard-content .card-overview-primary .card-overview-header {
+  background: #1fc8c9;
+  border: 0;
+}
+
+.dashboard-container .dashboard-content .card-overview-primary .card-overview-value {
+  color: #ffffff;
+  font-size: 48px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-align: center;
+}
+
+.dashboard-container .dashboard-content .card-overview-primary .card-overview-text {
+  color: #ffffff;
+  font-size: 24px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  text-align: center;
+}
+
+.dashboard-container .dashboard-content .card-overview-default {
+  background: #1fc8c9;
+  border-radius: 4px;
+}
+
+.dashboard-container .dashboard-content .card-overview-default .card-overview-header {
+  background: #ffffff;
+  border: 0;
+}
+
+.dashboard-container .dashboard-content .card-overview-default .card-overview-value {
+  color: #ffffff;
+  font-size: 48px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-align: center;
+}
+
+.dashboard-container .dashboard-content .card-overview-default .card-overview-text {
+  color: #ffffff;
+  font-size: 16px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  text-align: center;
+}
+
+.dashboard-container .dashboard-content .card-latest-data .grid-latest-title {
+  color: #333333;
+  font-size: 18px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-decoration: none;
+}
+
+.dashboard-container .dashboard-content .card-latest-data .grid-latest-title:hover,
+.dashboard-container .dashboard-content .card-latest-data .grid-latest-title:focus {
+  color: #1fc8c9;
+}
+
 .sidebar-dev-info .sidebar-dev-heading {
   text-align: center;
   color: #333333;
@@ -1530,5 +1636,169 @@ body {
   color: #ffffff;
 }
 
+.container-bannersearch {
+  background: rgba(10, 10, 10, 0.7);
+}
+
+.container-bannersearch .bannersearch-heading {
+  font-size: 28px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.container-bannersearch .bannersearch-form .search-form {
+  background: #ffffff;
+  color: #333333;
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  border-radius: 4px;
+}
+
+.container-bannersearch .bannersearch-form .search-form:hover,
+.container-bannersearch .bannersearch-form .search-form:focus {
+  border: 1px solid #dddddd;
+}
+
+.container-bannersearch .bannersearch-form .search-button-form {
+  background: #1fc8c9;
+  color: #ffffff;
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  border-radius: 4px;
+  text-transform: capitalize;
+}
+
+.container-bannersearch .bannersearch-form .search-button-form:hover,
+.container-bannersearch .bannersearch-form .search-button-form:focus {
+  background: #1fc8c9;
+  color: #ffffff;
+}
+
+.grid-project-card {
+  background: #ffffff;
+}
+
+.grid-project-card:hover,
+.grid-project-card:focus {
+  text-decoration: none;
+}
+
+.grid-project-card .project-card-background {
+  color: #ffffff;
+}
+
+.grid-project-card .project-card-title {
+  color: #ffffff;
+  font-size: 24px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+.grid-project-card .project-card-devname {
+  color: #ffffff;
+  font-size: 16px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+}
+
+.grid-project-card .project-card-location {
+  color: #ffffff;
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+}
+
+.grid-project-card .project-card-body .project-card-status label {
+  text-transform: capitalize;
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+}
+
+.grid-project-card .project-card-body .project-card-list .projectlist-text {
+  color: #666666;
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+}
+
+.grid-project-card .project-card-body .project-card-list .projectlist-subtext {
+  color: #333333;
+  font-size: 18px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
 /* Layout */
+
+.sidebar-filter {
+  border-radius: 4px;
+}
+
+.sidebar-filter .search-form-sidebar {
+  background: #ffffff;
+  color: #333333;
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  border-radius: 4px;
+}
+
+.sidebar-filter .search-form-sidebar:hover,
+.sidebar-filter .search-form-sidebar:focus {
+  border: 1px solid #dddddd;
+}
+
+.sidebar-filter .search-button-sidebar {
+  background: #1fc8c9;
+  color: #ffffff;
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  border-radius: 4px;
+  text-transform: capitalize;
+}
+
+.sidebar-filter .search-button-sidebar:hover,
+.sidebar-filter .search-button-sidebar:focus {
+  background: #1fc8c9;
+  color: #ffffff;
+}
 

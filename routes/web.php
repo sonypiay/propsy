@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'Frontend\HomepageController@index')->name('homepage');
+Route::get('/profile/developer/{slug}', 'Frontend\HomepageController@homepage_developer')->name('homepage_developer');
 Route::group(['prefix' => 'authentication'], function() {
   Route::post('/login/developer', 'Frontend\Developer\AuthController@do_login');
   Route::post('/login/marketing', 'Frontend\Marketing\AuthController@do_login');
@@ -32,6 +33,7 @@ Route::group(['prefix' => 'customer'], function() {
   Route::get('/profile', 'Frontend\Customer\CustomerController@profile_page')->name('customer_profile_page');
   Route::get('/masuk', 'Frontend\Customer\CustomerController@login_page')->name('customer_login_page');
   Route::get('/daftar', 'Frontend\Customer\CustomerController@register_page')->name('customer_register_page');
+  Route::post('/resend_verification', 'Frontend\Customer\CustomerController@resend_verification');
   Route::group(['prefix' => 'profile'], function() {
     Route::put('/change_password', 'Frontend\Customer\CustomerController@change_password');
     Route::put('/change_email', 'Frontend\Customer\CustomerController@change_email');
@@ -137,6 +139,13 @@ Route::group(['prefix' => 'developer'], function() {
     Route::put('/review_request_unit/{request_id}/{status_review}', 'Frontend\Developer\RequestUnitController@review_request_unit');
     Route::put('/reject_request_unit/{request_id}', 'Frontend\Developer\RequestUnitController@review_request_unit');
   });
+
+  Route::group(['prefix' => 'report'], function() {
+    Route::get('/unit', 'Frontend\Developer\ReportController@page_report_unit')->name('developer_report_unit_page');
+    Route::get('/unit/save/{type}', 'Frontend\Developer\ReportController@report_save_unit');
+    Route::get('/get_unit', 'Frontend\Developer\ReportController@get_unit_sold');
+    Route::get('/request_unit/save/{request_id}', 'Frontend\Developer\ReportController@report_save_project_request');
+  });
 });
 
 Route::group(['prefix' => 'project'], function() {
@@ -145,4 +154,39 @@ Route::group(['prefix' => 'project'], function() {
   Route::get('/unit/{project_id}', 'Frontend\Projects\ProjectListController@list_project_unit')->name('list_project_unit');
   Route::post('/request_unit/{unit_id}', 'Frontend\Projects\ProjectListController@request_unit');
   Route::get('/detail_unit/{unit_id}', 'Frontend\Projects\ProjectListController@detail_unit')->name('project_detail_unit');
+  Route::get('/browse_project', 'Frontend\Projects\ProjectListController@browse_project_page')->name('browse_project_page');
+  Route::get('/project_list', 'Frontend\Projects\ProjectListController@browse_project');
+
+  Route::get('/search', 'Frontend\Projects\ProjectListController@search_project')->name('page_search_project');
+  Route::get('/search_list', 'Frontend\Projects\ProjectListController@get_search_list');
+});
+
+
+Route::group(['prefix' => 'verification'], function() {
+  Route::get('/email_account', 'Frontend\Verification\CustomerController@view_template');
+  Route::get('/validate/{hash_id}', 'Frontend\Verification\CustomerController@validate_email')->name('validate_email_customer');
+});
+
+Route::group(['prefix' => 'overview'], function() {
+  Route::get('/project', 'RestApi\ProjectApi@overview_project');
+  Route::get('/request_unit', 'RestApi\ProjectApi@overview_project_request');
+  Route::get('/latest_project', 'RestApi\ProjectApi@overview_latest_project');
+  Route::get('/latest_log_request', 'RestApi\ProjectApi@latest_log_request');
+});
+
+
+// Control Panel
+
+Route::group(['prefix' => 'cp'], function() {
+  Route::get('/', function() { return redirect()->route('cp_dashboard_page'); });
+  Route::get('/dashboard', 'ControlPanel\Pages\DashboardController@index')->name('cp_dashboard_page');
+  Route::get('/login', 'ControlPanel\LoginController@index')->name('cp_login_page');
+  Route::post('/login', 'ControlPanel\LoginController@do_login');
+
+  Route::group(['prefix' => 'account'], function() {
+    Route::get('/profile/{pagenav?}', 'ControlPanel\Pages\AdminOwnerController@index')->name('cp_account_profile_page');
+    Route::put('/edit_profile/password', 'ControlPanel\Pages\AdminOwnerController@change_password');
+    Route::put('/edit_profile/email', 'ControlPanel\Pages\AdminOwnerController@change_email');
+    Route::put('/edit_profile/profile', 'ControlPanel\Pages\AdminOwnerController@change_profile');
+  });
 });

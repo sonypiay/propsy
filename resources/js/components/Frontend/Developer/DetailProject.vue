@@ -16,7 +16,7 @@
         {{ getproject.project_address }}
       </div>
       <div v-show="getproject.project_thumbnail" class="uk-background-cover uk-height-large uk-panel" :style="{'background-image': 'url(' + $root.url + '/images/project/gallery/' + getproject.project_thumbnail + ')'}"></div>
-      <div v-show="getproject.project_map_embed"></div>
+      <div v-show="getproject.project_map_embed" v-html="getproject.project_map_embed" class="uk-margin"></div>
       <!-- gallery -->
       <div id="modal-view-gallery" class="uk-modal-full" uk-modal>
         <div class="uk-modal-dialog uk-modal-body uk-height-viewport">
@@ -45,7 +45,7 @@
             </div>
             <div class="uk-width-expand">
               <div class="uk-card uk-card-body uk-overflow-auto" style="height: 620px;">
-                <h1 class="uk-h1">Rp. {{ $root.formatNumeral( unit_tipe.detail.unit_price, '0,0' ) }}</h1>
+                <h1 class="uk-h1">Rp. {{ unit_tipe.detail.unit_price | currency }}</h1>
                 <h3 class="uk-h3">{{ unit_tipe.detail.unit_name }}</h3>
                 <table class="uk-table uk-table-striped uk-table-hover uk-table-small uk-table-middle uk-table-responsive">
                   <tbody>
@@ -135,7 +135,8 @@
         Deskripsi Proyek
       </div>
       <div class="uk-margin dashboard-content-subheading">
-        {{ getproject.project_description }} <br>
+        <div v-html="getproject.project_description">
+        </div>
         <a class="uk-button uk-button-primary uk-margin-small-top dash-btn" uk-toggle="target: #modal-view-gallery">Lihat Galeri</a>
       </div>
 
@@ -170,15 +171,15 @@
             <div v-for="unit in unit_tipe.results" class="uk-width-1-3@xl uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s">
               <div class="uk-card uk-card-default dash-grid-box">
                 <div class="uk-card-media-top">
-                  <div v-if="unit.unit_thumbnail === null" class="uk-tile uk-tile-default grid-image">
-                    <div class="uk-position-top-right">
-                      <div class="grid-badge">
-                        <label v-if="unit.unit_status === 'available'" class="uk-label uk-label-success">Tersedia</label>
-                        <label v-else class="uk-label uk-label-danger">Terjual</label>
+                  <div v-if="unit.unit_thumbnail === null" class="uk-cover-container grid-image">
+                    <img :src="$root.url + '/images/banner/homepage3.jpg'" alt="" uk-cover>
+                    <div class="uk-overlay uk-position-cover">
+                      <div class="uk-position-top-right">
+                        <div class="grid-badge">
+                          <label v-if="unit.unit_status === 'available'" class="uk-label uk-label-success">Tersedia</label>
+                          <label v-else class="uk-label uk-label-danger">Terjual</label>
+                        </div>
                       </div>
-                    </div>
-                    <div class="uk-text-center">
-                      <span uk-icon="icon: image; ratio: 3"></span>
                     </div>
                   </div>
                   <div v-else class="uk-cover-container grid-image">
@@ -197,7 +198,7 @@
                   <div class="uk-margin-small uk-card-title grid-box-title">{{ unit.unit_name }}</div>
                   <div class="uk-margin-small grid-box-lead">
                     Terakhir diubah: {{ $root.formatDate( unit.updated_at, 'DD MMM YYYY', 'id' ) }} <br>
-                    Rp. {{ $root.formatNumeral( unit.unit_price, '0,0' ) }}
+                    Rp. {{ unit.unit_price | currency }}
                   </div>
                   <!--<div class="uk-text-truncate uk-margin-small grid-box-content">{{ project.project_description }}</div>-->
                 </div>

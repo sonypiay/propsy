@@ -32,7 +32,7 @@ Vue.component('developer-edit-project', require('./components/Frontend/Developer
 Vue.component('developer-add-unit', require('./components/Frontend/Developer/AddUnit.vue').default);
 Vue.component('developer-edit-unit', require('./components/Frontend/Developer/EditUnit.vue').default);
 Vue.component('developer-request-unit', require('./components/Frontend/Developer/RequestUnit.vue').default);
-Vue.component('developer-meeting-list', require('./components/Frontend/Developer/MeetingList.vue').default);
+Vue.component('developer-report-unit', require('./components/Frontend/Developer/Report/UnitReport.vue').default);
 
 // customer
 Vue.component('customer-register-page', require('./components/Frontend/Customer/Daftar.vue').default);
@@ -44,6 +44,9 @@ Vue.component('customer-list-request', require('./components/Frontend/Customer/L
 Vue.component('homepage-available-project', require('./components/Frontend/HomepageProject.vue').default);
 Vue.component('page-view-project', require('./components/Frontend/ViewProject.vue').default);
 Vue.component('page-view-unit', require('./components/Frontend/ViewDetailUnit.vue').default);
+Vue.component('page-browse-project', require('./components/Frontend/BrowseProject.vue').default);
+Vue.component('page-search-project', require('./components/Frontend/SearchProject.vue').default);
+
 
 import VueCurrencyFilter from 'vue-currency-filter';
 Vue.use(VueCurrencyFilter);

@@ -144,6 +144,7 @@ Route::group(['prefix' => 'developer'], function() {
     Route::get('/unit', 'Frontend\Developer\ReportController@page_report_unit')->name('developer_report_unit_page');
     Route::get('/unit/save/{type}', 'Frontend\Developer\ReportController@report_save_unit');
     Route::get('/get_unit', 'Frontend\Developer\ReportController@get_unit_sold');
+    Route::get('/request_unit/save/{request_id}', 'Frontend\Developer\ReportController@report_save_project_request');
   });
 });
 

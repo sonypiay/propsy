@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\ProjectUnitType;
+use App\Database\ProjectUnitType;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
 class UnitExport implements FromCollection

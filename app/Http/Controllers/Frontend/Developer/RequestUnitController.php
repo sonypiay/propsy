@@ -150,9 +150,7 @@ class RequestUnitController extends Controller
       'meeting_appointment.meeting_note',
       'meeting_appointment.meeting_result',
       'meeting_appointment.document_file',
-      'meeting_appointment.last_updated_by',
-      'meeting_appointment.created_at',
-      'meeting_appointment.updated_at'
+      'meeting_appointment.last_updated_by'
     )
     ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
     ->join('city', 'customer.customer_city', '=', 'city.city_id')

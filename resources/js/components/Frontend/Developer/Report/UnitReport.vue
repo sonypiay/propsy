@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="uk-card dashboard-content">
-      <div class="uk-card-title uk-margin dashboard-content-heading">Kelola Marketing</div>
+      <div class="uk-card-title uk-margin dashboard-content-heading">Laporan Unit Terjual</div>
       <div class="uk-width-1-1 uk-inline uk-margin">
         <button type="button" class="uk-button uk-button-primary dash-btn" v-html="filterdate.text"></button>
         <div id="dropdown-date" class="uk-width-3-4@xl uk-width-3-4@l uk-width-2-3@m uk-width-1-1@s" uk-dropdown="mode: click">
@@ -40,10 +40,7 @@
       </div>
       <div class="uk-margin uk-grid-small uk-child-width-auto" uk-grid>
         <div>
-          <a class="uk-button uk-button-small uk-button-default" @click="onSaveAs('xls')">Excel</a>
-        </div>
-        <div>
-          <a class="uk-button uk-button-small uk-button-default" @click="onSaveAs('pdf')">Pdf</a>
+          <a class="uk-button uk-button-small uk-button-default dash-btn" @click="onSaveAs('pdf')"><span uk-icon="file-pdf"></span> Cetak PDF</a>
         </div>
       </div>
       <div class="uk-margin">

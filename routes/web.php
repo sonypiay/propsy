@@ -173,3 +173,20 @@ Route::group(['prefix' => 'overview'], function() {
   Route::get('/latest_project', 'RestApi\ProjectApi@overview_latest_project');
   Route::get('/latest_log_request', 'RestApi\ProjectApi@latest_log_request');
 });
+
+
+// Control Panel
+
+Route::group(['prefix' => 'cp'], function() {
+  Route::get('/', function() { return redirect()->route('cp_dashboard_page'); });
+  Route::get('/dashboard', 'ControlPanel\Pages\DashboardController@index')->name('cp_dashboard_page');
+  Route::get('/login', 'ControlPanel\LoginController@index')->name('cp_login_page');
+  Route::post('/login', 'ControlPanel\LoginController@do_login');
+
+  Route::group(['prefix' => 'account'], function() {
+    Route::get('/profile/{pagenav?}', 'ControlPanel\Pages\AdminOwnerController@index')->name('cp_account_profile_page');
+    Route::put('/edit_profile/password', 'ControlPanel\Pages\AdminOwnerController@change_password');
+    Route::put('/edit_profile/email', 'ControlPanel\Pages\AdminOwnerController@change_email');
+    Route::put('/edit_profile/profile', 'ControlPanel\Pages\AdminOwnerController@change_profile');
+  });
+});

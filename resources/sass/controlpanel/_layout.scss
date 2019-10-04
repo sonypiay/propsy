@@ -1,0 +1,19 @@
+html, body {
+  font-family: $font-primary;
+  background: #f2f2f2;
+}
+
+.header {
+  background: #ffffff;
+  .navbar {
+    ul {
+      li {
+        a {
+          color: #333333;
+          @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+          text-transform: capitalize;
+        }
+      }
+    }
+  }
+}

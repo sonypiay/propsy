@@ -57,4 +57,16 @@ class LoginController extends Controller
 
     return response()->json( $res, $res['status'] );
   }
+
+  public function do_logout()
+  {
+    if( session()->has('isControlPanel') )
+    {
+      session()->forget('isControlPanel');
+      session()->forget('cp_admin_id');
+      session()->flush();
+    }
+
+    return redirect()->route('cp_login_page');
+  }
 }

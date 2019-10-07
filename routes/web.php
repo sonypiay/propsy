@@ -182,11 +182,30 @@ Route::group(['prefix' => 'cp'], function() {
   Route::get('/dashboard', 'ControlPanel\Pages\DashboardController@index')->name('cp_dashboard_page');
   Route::get('/login', 'ControlPanel\LoginController@index')->name('cp_login_page');
   Route::post('/login', 'ControlPanel\LoginController@do_login');
+  Route::get('/logout', 'ControlPanel\LoginController@do_logout')->name('cp_logout');
 
   Route::group(['prefix' => 'account'], function() {
     Route::get('/profile/{pagenav?}', 'ControlPanel\Pages\AdminOwnerController@index')->name('cp_account_profile_page');
     Route::put('/edit_profile/password', 'ControlPanel\Pages\AdminOwnerController@change_password');
     Route::put('/edit_profile/email', 'ControlPanel\Pages\AdminOwnerController@change_email');
     Route::put('/edit_profile/profile', 'ControlPanel\Pages\AdminOwnerController@change_profile');
+  });
+
+  Route::group(['prefix' => 'wilayah'], function() {
+    Route::group(['prefix' => 'province'], function() {
+      Route::get('/', 'ControlPanel\Pages\ProvinceController@index')->name('cp_province_page');
+      Route::get('/get_province', 'ControlPanel\Pages\ProvinceController@get_province');
+      Route::post('/store', 'ControlPanel\Pages\ProvinceController@store');
+      Route::put('/save/{id}', 'ControlPanel\Pages\ProvinceController@save');
+      Route::delete('/delete/{id}', 'ControlPanel\Pages\ProvinceController@destroy');
+    });
+
+    Route::group(['prefix' => 'city'], function() {
+      Route::get('/', 'ControlPanel\Pages\CityController@index')->name('cp_city_page');
+      Route::get('/get_city', 'ControlPanel\Pages\CityController@get_city');
+      Route::post('/store', 'ControlPanel\Pages\CityController@store');
+      Route::put('/save/{id}', 'ControlPanel\Pages\CityController@save');
+      Route::delete('/delete/{id}', 'ControlPanel\Pages\CityController@destroy');
+    });
   });
 });

@@ -3,24 +3,23 @@
 namespace App\Http\Controllers\ControlPanel\Pages;
 
 use Illuminate\Http\Request;
+use App\Database\AdminOwner;
 use App\Database\CityDB;
 use App\Database\ProvinceDB;
 use App\Http\Controllers\Controller;
 
 class CityController extends Controller
 {
-  public function index( Request $request, AdminOwner $owner, ProvinceDB $province )
+  public function index( Request $request, AdminOwner $owner )
   {
     if( session()->has('isControlPanel') )
     {
-      $getprovince = $province->orderBy('province_name', 'asc')->get();
       $data = [
         'request' => $request,
-        'session_user' => $owner->getinfo(),
-        'getprovince' => $getprovince
+        'session_user' => $owner->getinfo()
       ];
 
-      return respose()->view('controlpanel.pages.city', $data);
+      return response()->view('controlpanel.pages.wilayah.kota', $data);
     }
     else
     {
@@ -31,12 +30,13 @@ class CityController extends Controller
   public function get_city( Request $request, CityDB $city )
   {
     $keywords = $request->keywords;
-    $limit = $request->limit;
+    $limit = 10;
     $whereClause = [];
 
-    $getcity = $province->select(
+    $getcity = $city->select(
       'city.city_id',
       'city.city_name',
+      'province.province_id',
       'province.province_name'
     )
     ->join('province', 'city.province_id', '=' ,'province.province_id')
@@ -50,7 +50,7 @@ class CityController extends Controller
 
   public function store( Request $request, CityDB $city )
   {
-    $city_name = $request->province_name;
+    $city_name = $request->city_name;
     $slug_name = str_slug( $city_name );
     $province = $request->province;
 
@@ -64,23 +64,26 @@ class CityController extends Controller
     return response()->json( $res, 200 );
   }
 
-  public function save( Request $request, ProvinceDB $province, $id )
+  public function save( Request $request, CityDB $city, $id )
   {
-    $province_name = $request->province_name;
+    $city_name = $request->city_name;
+    $slug_name = str_slug( $city_name );
+    $province = $request->province;
+    $getcity = $city->where('city_id', $id)->first();
 
-    $getprovince = $province->where('province_id', $id)->first();
-    $getprovince->province_name = $province_name;
-    $getprovince->province_slug = $slug_name;
-    $getprovince->save();
+    $getcity->city_name = $city_name;
+    $getcity->city_slug = $slug_name;
+    $getcity->province_id = $province;
+    $getcity->save();
 
     $res = ['status' => 200, 'statusText' => 'success'];
     return response()->json( $res, 200 );
   }
 
-  public function destroy( Request $request, ProvinceDB $province, $id )
+  public function destroy( Request $request, CityDB $city, $id )
   {
-    $getprovince = $province->where('province_id', $id);
-    $getprovince->delete();
+    $getcity = $city->where('city_id', $id);
+    $getcity->delete();
 
     $res = ['status' => 200, 'statusText' => 'success'];
     return response()->json( $res, 200 );

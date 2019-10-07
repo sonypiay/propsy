@@ -2197,6 +2197,627 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ControlPanel/Wilayah/City.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ControlPanel/Wilayah/City.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: [],
+  data: function data() {
+    return {
+      forms: {
+        keywords: '',
+        city_name: '',
+        city_id: '',
+        province: '',
+        isedit: false,
+        submit: 'Tambah'
+      },
+      message: {
+        errors: {},
+        errorMessage: '',
+        iserror: false
+      },
+      getcity: {
+        total: 0,
+        results: [],
+        paginate: {
+          current_page: 1,
+          last_page: 1,
+          next_page_url: '',
+          prev_page_url: ''
+        }
+      },
+      getprovince: []
+    };
+  },
+  methods: {
+    getProvince: function getProvince() {
+      var _this = this;
+
+      axios({
+        method: 'get',
+        url: this.$root.url + '/api/region/provinsi/all'
+      }).then(function (res) {
+        var results = res.data;
+        _this.getprovince = results.results.data;
+      })["catch"](function (err) {
+        console.log(err.response.statusText);
+      });
+    },
+    getCity: function getCity(p) {
+      var _this2 = this;
+
+      var params = 'keywords=' + this.forms.keywords;
+      var url = this.$root.url + '/cp/wilayah/city/get_city?page=' + this.getcity.paginate.current_page + '&' + params;
+      if (p !== undefined) url = p + '&' + params;
+      axios({
+        method: 'get',
+        url: url
+      }).then(function (res) {
+        var result = res.data;
+        _this2.getcity.total = result.total;
+        _this2.getcity.results = result.data;
+        _this2.getcity.paginate = {
+          current_page: result.current_page,
+          last_page: result.last_page,
+          next_page_url: result.next_page_url,
+          prev_page_url: result.prev_page_url
+        };
+      })["catch"](function (err) {
+        console.log(err.response.statusText);
+      });
+    },
+    onClickModal: function onClickModal(data) {
+      this.message.errors = {};
+      this.message.errorMessage = '';
+      this.message.iserror = false;
+
+      if (data === undefined) {
+        this.forms.city_name = '';
+        this.forms.city_id = '';
+        this.forms.province = '';
+        this.forms.isedit = false;
+        this.forms.submit = 'Tambah';
+      } else {
+        this.forms.city_name = data.city_name;
+        this.forms.city_id = data.city_id;
+        this.forms.province = data.province_id;
+        this.forms.isedit = true;
+        this.forms.submit = 'Simpan';
+      }
+
+      this.getProvince();
+      UIkit.modal('#modal-city').show();
+    },
+    addCity: function addCity() {
+      var _this3 = this;
+
+      this.message.errors = {};
+      this.message.errorMessage = '';
+      this.message.iserror = false;
+
+      if (this.forms.province === '') {
+        this.message.errors.province = 'Provinsi tidak boleh kosong';
+        this.message.iserror = true;
+      }
+
+      if (this.forms.city_name === '') {
+        this.message.errors.city_name = 'Nama kota tidak boleh kosong';
+        this.message.iserror = true;
+      }
+
+      if (this.message.iserror === true) return false;
+      this.forms.submit = '<span uk-spinner></span>';
+      axios({
+        method: 'post',
+        url: this.$root.url + '/cp/wilayah/city/store',
+        params: {
+          city_name: this.forms.city_name,
+          province: this.forms.province
+        }
+      }).then(function (res) {
+        swal({
+          title: 'Berhasil',
+          text: 'Kota baru berhasil ditambah',
+          icon: 'success'
+        });
+        setTimeout(function () {
+          _this3.getCity();
+
+          UIkit.modal('#modal-city').hide();
+        }, 1000);
+      })["catch"](function (err) {
+        _this3.message.errorMessage = err.response.statusText;
+        _this3.forms.submit = 'Tambah';
+      });
+    },
+    saveCity: function saveCity() {
+      var _this4 = this;
+
+      this.message.errors = {};
+      this.message.errorMessage = '';
+      this.message.iserror = false;
+
+      if (this.forms.province === '') {
+        this.message.errors.province = 'Provinsi tidak boleh kosong';
+        this.message.iserror = true;
+      }
+
+      if (this.forms.city_name === '') {
+        this.message.errors.city_name = 'Nama kota tidak boleh kosong';
+        this.message.iserror = true;
+      }
+
+      if (this.message.iserror === true) return false;
+      this.forms.submit = '<span uk-spinner></span>';
+      axios({
+        method: 'put',
+        url: this.$root.url + '/cp/wilayah/city/save/' + this.forms.city_id,
+        params: {
+          city_name: this.forms.city_name,
+          province: this.forms.province
+        }
+      }).then(function (res) {
+        swal({
+          title: 'Berhasil',
+          text: 'Kota berhasil disimpan',
+          icon: 'success'
+        });
+        setTimeout(function () {
+          _this4.getCity();
+
+          UIkit.modal('#modal-city').hide();
+        }, 1000);
+      })["catch"](function (err) {
+        _this4.message.errorMessage = err.response.statusText;
+        _this4.forms.submit = 'Simpan';
+      });
+    },
+    deleteCity: function deleteCity(id) {
+      var _this5 = this;
+
+      swal({
+        title: 'Konfirmasi',
+        text: 'Apakah anda ingin menghapus kota ini?',
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Batal',
+          confirm: {
+            value: true,
+            text: 'Ya'
+          }
+        }
+      }).then(function (val) {
+        if (val) {
+          axios({
+            method: 'delete',
+            url: _this5.$root.url + '/cp/wilayah/city/delete/' + id
+          }).then(function (res) {
+            swal({
+              title: 'Berhasil',
+              text: 'Kota berhasil dihapus',
+              icon: 'success'
+            });
+            setTimeout(function () {
+              _this5.getCity();
+            }, 1000);
+          })["catch"](function (err) {
+            swal({
+              title: 'Whoops',
+              text: 'Terjadi kesalahan',
+              icon: 'error'
+            });
+          });
+        }
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.getCity();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ControlPanel/Wilayah/Province.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ControlPanel/Wilayah/Province.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: [],
+  data: function data() {
+    return {
+      forms: {
+        keywords: '',
+        province_name: '',
+        province_id: '',
+        isedit: false,
+        submit: 'Tambah'
+      },
+      message: {
+        errors: {},
+        errorMessage: '',
+        iserror: false
+      },
+      getprovince: {
+        total: 0,
+        results: [],
+        paginate: {
+          current_page: 1,
+          last_page: 1,
+          next_page_url: '',
+          prev_page_url: ''
+        }
+      }
+    };
+  },
+  methods: {
+    getProvince: function getProvince(p) {
+      var _this = this;
+
+      var params = 'keywords=' + this.forms.keywords;
+      var url = this.$root.url + '/cp/wilayah/province/get_province?page=' + this.getprovince.paginate.current_page + '&' + params;
+      if (p !== undefined) url = p + '&' + params;
+      axios({
+        method: 'get',
+        url: url
+      }).then(function (res) {
+        var result = res.data;
+        _this.getprovince.total = result.total;
+        _this.getprovince.results = result.data;
+        _this.getprovince.paginate = {
+          current_page: result.current_page,
+          last_page: result.last_page,
+          next_page_url: result.next_page_url,
+          prev_page_url: result.prev_page_url
+        };
+      })["catch"](function (err) {
+        console.log(err.response.statusText);
+      });
+    },
+    onClickModal: function onClickModal(data) {
+      this.message.errors = {};
+      this.message.errorMessage = '';
+      this.message.iserror = false;
+
+      if (data === undefined) {
+        this.forms.province_name = '';
+        this.forms.province_id = '';
+        this.forms.isedit = false;
+        this.forms.submit = 'Tambah';
+      } else {
+        this.forms.province_name = data.province_name;
+        this.forms.province_id = data.province_id;
+        this.forms.isedit = true;
+        this.forms.submit = 'Simpan';
+      }
+
+      UIkit.modal('#modal-provinsi').show();
+    },
+    addProvince: function addProvince() {
+      var _this2 = this;
+
+      this.message.errors = {};
+      this.message.errorMessage = '';
+      this.message.iserror = false;
+
+      if (this.forms.province_name === '') {
+        this.message.errors.province_name = 'Nama provinsi tidak boleh kosong';
+        this.message.iserror = true;
+      }
+
+      if (this.message.iserror === true) return false;
+      this.forms.submit = '<span uk-spinner></span>';
+      axios({
+        method: 'post',
+        url: this.$root.url + '/cp/wilayah/province/store',
+        params: {
+          province_name: this.forms.province_name
+        }
+      }).then(function (res) {
+        swal({
+          title: 'Berhasil',
+          text: 'Provinsi baru berhasil ditambah',
+          icon: 'success'
+        });
+        setTimeout(function () {
+          _this2.getProvince();
+
+          UIkit.modal('#modal-provinsi').hide();
+        }, 1000);
+      })["catch"](function (err) {
+        _this2.message.errorMessage = err.response.statusText;
+        _this2.forms.submit = 'Tambah';
+      });
+    },
+    saveProvince: function saveProvince() {
+      var _this3 = this;
+
+      this.message.errors = {};
+      this.message.errorMessage = '';
+      this.message.iserror = false;
+
+      if (this.forms.province_name === '') {
+        this.message.errors.province_name = 'Nama provinsi tidak boleh kosong';
+        this.message.iserror = true;
+      }
+
+      if (this.message.iserror === true) return false;
+      this.forms.submit = '<span uk-spinner></span>';
+      axios({
+        method: 'put',
+        url: this.$root.url + '/cp/wilayah/province/save/' + this.forms.province_id,
+        params: {
+          province_name: this.forms.province_name
+        }
+      }).then(function (res) {
+        swal({
+          title: 'Berhasil',
+          text: 'Provinsi berhasil disimpan',
+          icon: 'success'
+        });
+        setTimeout(function () {
+          _this3.getProvince();
+
+          UIkit.modal('#modal-provinsi').hide();
+        }, 1000);
+      })["catch"](function (err) {
+        _this3.message.errorMessage = err.response.statusText;
+        _this3.forms.submit = 'Simpan';
+      });
+    },
+    deleteProvince: function deleteProvince(id) {
+      var _this4 = this;
+
+      swal({
+        title: 'Konfirmasi',
+        text: 'Apakah anda ingin menghapus provinsi ini?',
+        icon: 'warning',
+        dangerMode: true,
+        buttons: {
+          cancel: 'Batal',
+          confirm: {
+            value: true,
+            text: 'Ya'
+          }
+        }
+      }).then(function (val) {
+        if (val) {
+          axios({
+            method: 'delete',
+            url: _this4.$root.url + '/cp/wilayah/province/delete/' + id
+          }).then(function (res) {
+            swal({
+              title: 'Berhasil',
+              text: 'Provinsi berhasil dihapus',
+              icon: 'success'
+            });
+            setTimeout(function () {
+              _this4.getProvince();
+            }, 1000);
+          })["catch"](function (err) {
+            swal({
+              title: 'Whoops',
+              text: 'Terjadi kesalahan',
+              icon: 'error'
+            });
+          });
+        }
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.getProvince();
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/bootstrap/dist/js/bootstrap.js":
 /*!*****************************************************!*\
   !*** ./node_modules/bootstrap/dist/js/bootstrap.js ***!
@@ -56994,6 +57615,730 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ControlPanel/Wilayah/City.vue?vue&type=template&id=6d987ace&scoped=true&":
+/*!****************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ControlPanel/Wilayah/City.vue?vue&type=template&id=6d987ace&scoped=true& ***!
+  \****************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { attrs: { id: "modal-city", "uk-modal": "" } }, [
+      _c("div", { staticClass: "uk-modal-dialog uk-modal-body" }, [
+        _c("div", { staticClass: "uk-modal-title" }, [
+          _vm.forms.isedit
+            ? _c("span", [_vm._v("Edit Kota")])
+            : _c("span", [_vm._v("Tambah Kota")])
+        ]),
+        _vm._v(" "),
+        _c(
+          "form",
+          {
+            staticClass: "uk-form-stacked",
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                _vm.forms.isedit === false ? _vm.addCity() : _vm.saveCity()
+              }
+            }
+          },
+          [
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.message.errors.errorMessage,
+                    expression: "message.errors.errorMessage"
+                  }
+                ],
+                staticClass: "uk-margin uk-alert-danger",
+                attrs: { "uk-alert": "" }
+              },
+              [_vm._v(_vm._s(_vm.message.errors.errorMessage))]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-margin" }, [
+              _c("label", { staticClass: "uk-form-label" }, [
+                _vm._v("Provinsi")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-form-controls" }, [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.forms.province,
+                        expression: "forms.province"
+                      }
+                    ],
+                    staticClass: "uk-select uk-width-1-1",
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.forms,
+                          "province",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { value: "" } }, [
+                      _vm._v("-- Pilih Provinsi --")
+                    ]),
+                    _vm._v(" "),
+                    _vm._l(_vm.getprovince, function(province) {
+                      return _c(
+                        "option",
+                        { domProps: { value: province.province_id } },
+                        [_vm._v(_vm._s(province.province_name))]
+                      )
+                    })
+                  ],
+                  2
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-margin" }, [
+              _c("label", { staticClass: "uk-form-label" }, [
+                _vm._v("Nama Kota")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-form-controls" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.forms.city_name,
+                      expression: "forms.city_name"
+                    }
+                  ],
+                  staticClass: "uk-input uk-width-1-1",
+                  class: { "uk-form-danger": _vm.message.errors.city_name },
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.forms.city_name },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.forms, "city_name", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.message.errors.city_name,
+                      expression: "message.errors.city_name"
+                    }
+                  ],
+                  staticClass: "uk-text-danger"
+                },
+                [_vm._v(_vm._s(_vm.message.errors.city_name))]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-margin" }, [
+              _c("button", {
+                staticClass: "uk-button uk-button-primary",
+                domProps: { innerHTML: _vm._s(_vm.forms.submit) }
+              })
+            ])
+          ]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "uk-container uk-margin-large-top" }, [
+      _c("ul", { staticClass: "uk-breadcrumb" }, [
+        _c("li", [
+          _c("a", { attrs: { href: _vm.$root.url + "/cp/" } }, [
+            _vm._v("Dashboard")
+          ])
+        ]),
+        _vm._v(" "),
+        _vm._m(0),
+        _vm._v(" "),
+        _vm._m(1)
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "uk-card uk-card-body uk-card-default" }, [
+        _c("div", { staticClass: "uk-h3 uk-heading-line" }, [_vm._v("Kota")]),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "uk-grid-small uk-child-width-auto",
+            attrs: { "uk-grid": "" }
+          },
+          [
+            _c("div", [
+              _c("div", { staticClass: "uk-inline" }, [
+                _c("span", {
+                  staticClass: "uk-form-icon",
+                  attrs: { "uk-icon": "search" }
+                }),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.forms.keywords,
+                      expression: "forms.keywords"
+                    }
+                  ],
+                  staticClass: "uk-input",
+                  attrs: { type: "search", placeholder: "Search..." },
+                  domProps: { value: _vm.forms.keywords },
+                  on: {
+                    keyup: function($event) {
+                      if (
+                        !$event.type.indexOf("key") &&
+                        _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                      ) {
+                        return null
+                      }
+                      return _vm.getCity()
+                    },
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.forms, "keywords", $event.target.value)
+                    }
+                  }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", [
+              _c(
+                "a",
+                {
+                  staticClass: "uk-button uk-button-primary",
+                  on: {
+                    click: function($event) {
+                      return _vm.onClickModal()
+                    }
+                  }
+                },
+                [_vm._v("Tambah Kota")]
+              )
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "uk-margin" }, [
+          _vm.getprovince.total === 0
+            ? _c(
+                "div",
+                { staticClass: "uk-alert-warning", attrs: { "uk-alert": "" } },
+                [_vm._v("\n          Belum ada kota\n        ")]
+              )
+            : _c("div", [
+                _c(
+                  "table",
+                  {
+                    staticClass:
+                      "uk-table uk-table-middle uk-table-striped uk-table-divider uk-table-hover uk-table-small"
+                  },
+                  [
+                    _vm._m(2),
+                    _vm._v(" "),
+                    _c(
+                      "tbody",
+                      _vm._l(_vm.getcity.results, function(city) {
+                        return _c("tr", [
+                          _c("td", [
+                            _c("a", {
+                              staticClass: "uk-icon-link uk-margin-small-right",
+                              attrs: { "uk-icon": "file-edit" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.onClickModal(city)
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("a", {
+                              staticClass: "uk-icon-link uk-margin-small-right",
+                              attrs: { href: "#", "uk-icon": "trash" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.deleteCity(city.city_id)
+                                }
+                              }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(city.city_name))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(city.province_name))])
+                        ])
+                      }),
+                      0
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c("ul", { staticClass: "uk-pagination uk-flex-center" }, [
+                  _c("li", [
+                    _vm.getcity.paginate.prev_page_url
+                      ? _c(
+                          "a",
+                          {
+                            on: {
+                              click: function($event) {
+                                return _vm.getCity(
+                                  _vm.getcity.paginate.prev_page_url
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _c("span", {
+                              attrs: { "uk-pagination-previous": "" }
+                            })
+                          ]
+                        )
+                      : _c("a", [
+                          _c("span", {
+                            attrs: { "uk-pagination-previous": "" }
+                          })
+                        ])
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _vm.getcity.paginate.next_page_url
+                      ? _c(
+                          "a",
+                          {
+                            on: {
+                              click: function($event) {
+                                return _vm.getCity(
+                                  _vm.getcity.paginate.next_page_url
+                                )
+                              }
+                            }
+                          },
+                          [_c("span", { attrs: { "uk-pagination-next": "" } })]
+                        )
+                      : _c("a", [
+                          _c("span", { attrs: { "uk-pagination-next": "" } })
+                        ])
+                  ])
+                ])
+              ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", { staticClass: "uk-disabled" }, [
+      _c("span", [_vm._v("Wilayah")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [_c("span", [_vm._v("Kota")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Aksi")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Nama Kota")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Provinsi")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ControlPanel/Wilayah/Province.vue?vue&type=template&id=25eef6da&scoped=true&":
+/*!********************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ControlPanel/Wilayah/Province.vue?vue&type=template&id=25eef6da&scoped=true& ***!
+  \********************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { attrs: { id: "modal-provinsi", "uk-modal": "" } }, [
+      _c("div", { staticClass: "uk-modal-dialog uk-modal-body" }, [
+        _c("div", { staticClass: "uk-modal-title" }, [
+          _vm.forms.isedit
+            ? _c("span", [_vm._v("Edit Provinsi")])
+            : _c("span", [_vm._v("Tambah Provinsi")])
+        ]),
+        _vm._v(" "),
+        _c(
+          "form",
+          {
+            staticClass: "uk-form-stacked",
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                _vm.forms.isedit === false
+                  ? _vm.addProvince()
+                  : _vm.saveProvince()
+              }
+            }
+          },
+          [
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.message.errors.errorMessage,
+                    expression: "message.errors.errorMessage"
+                  }
+                ],
+                staticClass: "uk-margin uk-alert-danger",
+                attrs: { "uk-alert": "" }
+              },
+              [_vm._v(_vm._s(_vm.message.errors.errorMessage))]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-margin" }, [
+              _c("label", { staticClass: "uk-form-label" }, [
+                _vm._v("Nama Provinsi")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-form-controls" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.forms.province_name,
+                      expression: "forms.province_name"
+                    }
+                  ],
+                  staticClass: "uk-input uk-width-1-1",
+                  class: { "uk-form-danger": _vm.message.errors.province_name },
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.forms.province_name },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.forms, "province_name", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.message.errors.province_name,
+                      expression: "message.errors.province_name"
+                    }
+                  ],
+                  staticClass: "uk-text-danger"
+                },
+                [_vm._v(_vm._s(_vm.message.errors.province_name))]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-margin" }, [
+              _c("button", {
+                staticClass: "uk-button uk-button-primary",
+                domProps: { innerHTML: _vm._s(_vm.forms.submit) }
+              })
+            ])
+          ]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "uk-container uk-margin-large-top" }, [
+      _c("ul", { staticClass: "uk-breadcrumb" }, [
+        _c("li", [
+          _c("a", { attrs: { href: _vm.$root.url + "/cp/" } }, [
+            _vm._v("Dashboard")
+          ])
+        ]),
+        _vm._v(" "),
+        _vm._m(0),
+        _vm._v(" "),
+        _vm._m(1)
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "uk-card uk-card-body uk-card-default" }, [
+        _c("div", { staticClass: "uk-h3 uk-heading-line" }, [
+          _vm._v("Provinsi")
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "uk-grid-small uk-child-width-auto",
+            attrs: { "uk-grid": "" }
+          },
+          [
+            _c("div", [
+              _c("div", { staticClass: "uk-inline" }, [
+                _c("span", {
+                  staticClass: "uk-form-icon",
+                  attrs: { "uk-icon": "search" }
+                }),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.forms.keywords,
+                      expression: "forms.keywords"
+                    }
+                  ],
+                  staticClass: "uk-input",
+                  attrs: { type: "search", placeholder: "Search..." },
+                  domProps: { value: _vm.forms.keywords },
+                  on: {
+                    keyup: function($event) {
+                      if (
+                        !$event.type.indexOf("key") &&
+                        _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                      ) {
+                        return null
+                      }
+                      return _vm.getProvince()
+                    },
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.forms, "keywords", $event.target.value)
+                    }
+                  }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", [
+              _c(
+                "a",
+                {
+                  staticClass: "uk-button uk-button-primary",
+                  on: {
+                    click: function($event) {
+                      return _vm.onClickModal()
+                    }
+                  }
+                },
+                [_vm._v("Tambah Provinsi")]
+              )
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "uk-margin" }, [
+          _vm.getprovince.total === 0
+            ? _c(
+                "div",
+                { staticClass: "uk-alert-warning", attrs: { "uk-alert": "" } },
+                [_vm._v("\n          Belum ada provinsi\n        ")]
+              )
+            : _c("div", [
+                _c(
+                  "table",
+                  {
+                    staticClass:
+                      "uk-table uk-table-middle uk-table-striped uk-table-divider uk-table-hover uk-table-small"
+                  },
+                  [
+                    _vm._m(2),
+                    _vm._v(" "),
+                    _c(
+                      "tbody",
+                      _vm._l(_vm.getprovince.results, function(province) {
+                        return _c("tr", [
+                          _c("td", [
+                            _c("a", {
+                              staticClass: "uk-icon-link uk-margin-small-right",
+                              attrs: { "uk-icon": "file-edit" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.onClickModal(province)
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("a", {
+                              staticClass: "uk-icon-link uk-margin-small-right",
+                              attrs: { href: "#", "uk-icon": "trash" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.deleteProvince(
+                                    province.province_id
+                                  )
+                                }
+                              }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(province.province_name))])
+                        ])
+                      }),
+                      0
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c("ul", { staticClass: "uk-pagination uk-flex-center" }, [
+                  _c("li", [
+                    _vm.getprovince.paginate.prev_page_url
+                      ? _c(
+                          "a",
+                          {
+                            on: {
+                              click: function($event) {
+                                return _vm.getProvince(
+                                  _vm.getprovince.paginate.prev_page_url
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _c("span", {
+                              attrs: { "uk-pagination-previous": "" }
+                            })
+                          ]
+                        )
+                      : _c("a", [
+                          _c("span", {
+                            attrs: { "uk-pagination-previous": "" }
+                          })
+                        ])
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _vm.getprovince.paginate.next_page_url
+                      ? _c(
+                          "a",
+                          {
+                            on: {
+                              click: function($event) {
+                                return _vm.getProvince(
+                                  _vm.getprovince.paginate.next_page_url
+                                )
+                              }
+                            }
+                          },
+                          [_c("span", { attrs: { "uk-pagination-next": "" } })]
+                        )
+                      : _c("a", [
+                          _c("span", { attrs: { "uk-pagination-next": "" } })
+                        ])
+                  ])
+                ])
+              ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", { staticClass: "uk-disabled" }, [
+      _c("span", [_vm._v("Wilayah")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [_c("span", [_vm._v("Provinsi")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Aksi")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Nama Provinsi")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js":
 /*!********************************************************************!*\
   !*** ./node_modules/vue-loader/lib/runtime/componentNormalizer.js ***!
@@ -69150,6 +70495,8 @@ window.numeral = __webpack_require__(/*! numeral */ "./node_modules/numeral/nume
 Vue.component('login-component', __webpack_require__(/*! ./components/ControlPanel/Login.vue */ "./resources/js/components/ControlPanel/Login.vue")["default"]);
 Vue.component('dashboard-component', __webpack_require__(/*! ./components/ControlPanel/Dashboard.vue */ "./resources/js/components/ControlPanel/Dashboard.vue")["default"]);
 Vue.component('profile-component', __webpack_require__(/*! ./components/ControlPanel/Profile.vue */ "./resources/js/components/ControlPanel/Profile.vue")["default"]);
+Vue.component('wilayah-province-component', __webpack_require__(/*! ./components/ControlPanel/Wilayah/Province.vue */ "./resources/js/components/ControlPanel/Wilayah/Province.vue")["default"]);
+Vue.component('wilayah-city-component', __webpack_require__(/*! ./components/ControlPanel/Wilayah/City.vue */ "./resources/js/components/ControlPanel/Wilayah/City.vue")["default"]);
 
 Vue.use(vue_currency_filter__WEBPACK_IMPORTED_MODULE_0___default.a);
 var app = new Vue({
@@ -69650,6 +70997,145 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditProfile_vue_vue_type_template_id_89db2dc8_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditProfile_vue_vue_type_template_id_89db2dc8_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/ControlPanel/Wilayah/City.vue":
+/*!***************************************************************!*\
+  !*** ./resources/js/components/ControlPanel/Wilayah/City.vue ***!
+  \***************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _City_vue_vue_type_template_id_6d987ace_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./City.vue?vue&type=template&id=6d987ace&scoped=true& */ "./resources/js/components/ControlPanel/Wilayah/City.vue?vue&type=template&id=6d987ace&scoped=true&");
+/* harmony import */ var _City_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./City.vue?vue&type=script&lang=js& */ "./resources/js/components/ControlPanel/Wilayah/City.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _City_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _City_vue_vue_type_template_id_6d987ace_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _City_vue_vue_type_template_id_6d987ace_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "6d987ace",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/ControlPanel/Wilayah/City.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/ControlPanel/Wilayah/City.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/ControlPanel/Wilayah/City.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_City_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./City.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ControlPanel/Wilayah/City.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_City_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/ControlPanel/Wilayah/City.vue?vue&type=template&id=6d987ace&scoped=true&":
+/*!**********************************************************************************************************!*\
+  !*** ./resources/js/components/ControlPanel/Wilayah/City.vue?vue&type=template&id=6d987ace&scoped=true& ***!
+  \**********************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_City_vue_vue_type_template_id_6d987ace_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./City.vue?vue&type=template&id=6d987ace&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ControlPanel/Wilayah/City.vue?vue&type=template&id=6d987ace&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_City_vue_vue_type_template_id_6d987ace_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_City_vue_vue_type_template_id_6d987ace_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/ControlPanel/Wilayah/Province.vue":
+/*!*******************************************************************!*\
+  !*** ./resources/js/components/ControlPanel/Wilayah/Province.vue ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Province_vue_vue_type_template_id_25eef6da_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Province.vue?vue&type=template&id=25eef6da&scoped=true& */ "./resources/js/components/ControlPanel/Wilayah/Province.vue?vue&type=template&id=25eef6da&scoped=true&");
+/* harmony import */ var _Province_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Province.vue?vue&type=script&lang=js& */ "./resources/js/components/ControlPanel/Wilayah/Province.vue?vue&type=script&lang=js&");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Province_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Province_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Province_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Province_vue_vue_type_template_id_25eef6da_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Province_vue_vue_type_template_id_25eef6da_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "25eef6da",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/ControlPanel/Wilayah/Province.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/ControlPanel/Wilayah/Province.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/ControlPanel/Wilayah/Province.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Province_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Province.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ControlPanel/Wilayah/Province.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Province_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/ControlPanel/Wilayah/Province.vue?vue&type=template&id=25eef6da&scoped=true&":
+/*!**************************************************************************************************************!*\
+  !*** ./resources/js/components/ControlPanel/Wilayah/Province.vue?vue&type=template&id=25eef6da&scoped=true& ***!
+  \**************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Province_vue_vue_type_template_id_25eef6da_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Province.vue?vue&type=template&id=25eef6da&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ControlPanel/Wilayah/Province.vue?vue&type=template&id=25eef6da&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Province_vue_vue_type_template_id_25eef6da_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Province_vue_vue_type_template_id_25eef6da_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

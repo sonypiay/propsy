@@ -9,6 +9,9 @@ Vue.component('login-component', require('./components/ControlPanel/Login.vue').
 Vue.component('dashboard-component', require('./components/ControlPanel/Dashboard.vue').default);
 Vue.component('profile-component', require('./components/ControlPanel/Profile.vue').default);
 
+Vue.component('wilayah-province-component', require('./components/ControlPanel/Wilayah/Province.vue').default);
+Vue.component('wilayah-city-component', require('./components/ControlPanel/Wilayah/City.vue').default);
+
 import VueCurrencyFilter from 'vue-currency-filter';
 Vue.use(VueCurrencyFilter);
 

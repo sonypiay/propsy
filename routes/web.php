@@ -208,4 +208,20 @@ Route::group(['prefix' => 'cp'], function() {
       Route::delete('/delete/{id}', 'ControlPanel\Pages\CityController@destroy');
     });
   });
+
+  Route::group(['prefix' => 'customer'], function() {
+    Route::get('/get_customer', 'ControlPanel\Pages\CustomerController@get_customer');
+    Route::get('/save_report', 'ControlPanel\Pages\CustomerController@save_report');
+
+    Route::group(['prefix' => 'request_unit'], function() {
+      Route::get('/get_request', 'ControlPanel\Pages\ProjectRequestController@get_request');
+      Route::get('/save_report', 'ControlPanel\Pages\ProjectRequestController@save_report');
+      Route::get('/get_detail_request/{request_id}', 'ControlPanel\Pages\ProjectRequestController@get_detail_request');
+    });
+  });
+
+  Route::group(['prefix' => 'developer'], function() {
+    Route::get('/get_developer', 'ControlPanel\Pages\DeveloperController@get_developer');
+    Route::get('/save_report', 'ControlPanel\Pages\DeveloperController@save_report');
+  });
 });

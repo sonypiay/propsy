@@ -184,6 +184,14 @@ Route::group(['prefix' => 'cp'], function() {
   Route::post('/login', 'ControlPanel\LoginController@do_login');
   Route::get('/logout', 'ControlPanel\LoginController@do_logout')->name('cp_logout');
 
+  Route::group(['prefix' => 'manajemen'], function() {
+    Route::get('/user_admin', 'ControlPanel\Pages\AdminOwnerController@admin_page')->name('cp_admin_page');
+    Route::get('/get_user_admin', 'ControlPanel\Pages\AdminOwnerController@get_admin_owner');
+    Route::post('/user_admin/store', 'ControlPanel\Pages\AdminOwnerController@store');
+    Route::put('/user_admin/save/{id}', 'ControlPanel\Pages\AdminOwnerController@save');
+    Route::delete('/user_admin/delete/{id}', 'ControlPanel\Pages\AdminOwnerController@destroy');
+  });
+
   Route::group(['prefix' => 'account'], function() {
     Route::get('/profile/{pagenav?}', 'ControlPanel\Pages\AdminOwnerController@index')->name('cp_account_profile_page');
     Route::put('/edit_profile/password', 'ControlPanel\Pages\AdminOwnerController@change_password');
@@ -209,15 +217,18 @@ Route::group(['prefix' => 'cp'], function() {
     });
   });
 
-  Route::group(['prefix' => 'facility'], function() {
-    Route::get('/', 'ControlPanel\Pages\FacilityController@index')->name('cp_province_page');
-    Route::get('/get_facility', 'ControlPanel\Pages\FacilityController@get_facility');
-    Route::post('/store', 'ControlPanel\Pages\FacilityController@store');
-    Route::put('/save/{id}', 'ControlPanel\Pages\FacilityController@save');
-    Route::delete('/delete/{id}', 'ControlPanel\Pages\FacilityController@destroy');
+  Route::group(['prefix' => 'property'], function() {
+    Route::group(['prefix' => 'facility'], function() {
+      Route::get('/', 'ControlPanel\Pages\FacilityController@index')->name('cp_facility_page');
+      Route::get('/get_facility', 'ControlPanel\Pages\FacilityController@get_facility');
+      Route::post('/store', 'ControlPanel\Pages\FacilityController@store');
+      Route::put('/save/{id}', 'ControlPanel\Pages\FacilityController@save');
+      Route::delete('/delete/{id}', 'ControlPanel\Pages\FacilityController@destroy');
+    });
   });
 
   Route::group(['prefix' => 'customer'], function() {
+    Route::get('/', 'ControlPanel\Pages\CustomerController@index')->name('cp_customer_page');
     Route::get('/get_customer', 'ControlPanel\Pages\CustomerController@get_customer');
     Route::get('/save_report', 'ControlPanel\Pages\CustomerController@save_report');
 

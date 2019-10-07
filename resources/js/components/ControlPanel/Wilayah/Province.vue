@@ -46,6 +46,7 @@
             Belum ada provinsi
           </div>
           <div v-else>
+            <label class="uk-label">{{ getprovince.total }} Provinsi</label>
             <table class="uk-table uk-table-middle uk-table-striped uk-table-divider uk-table-hover uk-table-small">
               <thead>
                 <tr>

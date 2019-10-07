@@ -9,6 +9,22 @@ use App\Http\Controllers\Controller;
 
 class FacilityController extends Controller
 {
+  public function index( Request $request, AdminOwner $owner )
+  {
+    if( session()->has('isControlPanel') )
+    {
+      $data = [
+        'request' => $request,
+        'session_user' => $owner->getinfo()
+      ];
+      return response()->view('controlpanel.pages.property.facility', $data);
+    }
+    else
+    {
+      return redirect()->route('cp_login_page');
+    }
+  }
+
   public function get_facility( Request $request, UnitFacility $unit_facility )
   {
     $keywords = $request->keywords;
@@ -22,7 +38,7 @@ class FacilityController extends Controller
     $result = $getfacility->paginate( $limit );
     return response()->json( $result, 200 );
   }
-  
+
   public function store( Request $request, UnitFacility $unit_facility )
   {
     $facility_name = $request->facility_name;
@@ -37,8 +53,8 @@ class FacilityController extends Controller
   {
     $facility_name = $request->facility_name;
     $getfacility = $unit_facility->where('id_facility', $id)->first();
-    $unit_facility->facility_name = $facility_name;
-    $unit_facility->save();
+    $getfacility->facility_name = $facility_name;
+    $getfacility->save();
 
     $res = ['status' => 200, 'statusText' => 'success'];
     return response()->json( $res, $res['status'] );

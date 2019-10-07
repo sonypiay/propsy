@@ -1,28 +1,19 @@
 <template>
   <div>
-    <div id="modal-city" uk-modal>
+    <div id="modal-fasilitas" uk-modal>
       <div class="uk-modal-dialog uk-modal-body">
         <div class="uk-modal-title">
-          <span v-if="forms.isedit">Edit Kota</span>
-          <span v-else>Tambah Kota</span>
+          <span v-if="forms.isedit">Edit Fasilitas</span>
+          <span v-else>Tambah Fasilitas</span>
         </div>
-        <form class="uk-form-stacked" @submit.prevent="forms.isedit === false ? addCity() : saveCity()">
+        <form class="uk-form-stacked" @submit.prevent="forms.isedit === false ? addFacility() : saveFacility()">
           <div v-show="message.errors.errorMessage" class="uk-margin uk-alert-danger" uk-alert>{{ message.errors.errorMessage }}</div>
           <div class="uk-margin">
-            <label class="uk-form-label">Provinsi</label>
+            <label class="uk-form-label">Nama Fasilitas</label>
             <div class="uk-form-controls">
-              <select class="uk-select uk-width-1-1" v-model="forms.province">
-                <option value="">-- Pilih Provinsi --</option>
-                <option v-for="province in getprovince" :value="province.province_id">{{ province.province_name }}</option>
-              </select>
+              <input type="text" :class="{'uk-form-danger': message.errors.facility_name}" class="uk-input uk-width-1-1" v-model="forms.facility_name" />
             </div>
-          </div>
-          <div class="uk-margin">
-            <label class="uk-form-label">Nama Kota</label>
-            <div class="uk-form-controls">
-              <input type="text" :class="{'uk-form-danger': message.errors.city_name}" class="uk-input uk-width-1-1" v-model="forms.city_name" />
-            </div>
-            <div v-show="message.errors.city_name" class="uk-text-danger">{{ message.errors.city_name }}</div>
+            <div v-show="message.errors.facility_name" class="uk-text-danger">{{ message.errors.facility_name }}</div>
           </div>
           <div class="uk-margin">
             <button class="uk-button uk-button-primary" v-html="forms.submit"></button>
@@ -33,51 +24,49 @@
     <div class="uk-container uk-margin-large-top">
       <ul class="uk-breadcrumb">
         <li><a :href="$root.url + '/cp/'">Dashboard</a></li>
-        <li class="uk-disabled"><span>Wilayah</span></li>
-        <li><span>Kota</span></li>
+        <li class="uk-disabled"><span>Properti</span></li>
+        <li><span>Fasilitas</span></li>
       </ul>
       <div class="uk-card uk-card-body uk-card-default">
-        <div class="uk-h3 uk-heading-line">Kota</div>
+        <div class="uk-h3 uk-heading-line">Fasilitas</div>
         <div class="uk-grid-small uk-child-width-auto" uk-grid>
           <div>
             <div class="uk-inline">
               <span class="uk-form-icon" uk-icon="search"></span>
-              <input type="search" class="uk-input" v-model="forms.keywords" placeholder="Search..." @keyup.enter="getCity()" />
+              <input type="search" class="uk-input" v-model="forms.keywords" placeholder="Search..." @keyup.enter="getFacility()" />
             </div>
           </div>
           <div>
-            <a @click="onClickModal()" class="uk-button uk-button-primary">Tambah Kota</a>
+            <a @click="onClickModal()" class="uk-button uk-button-primary">Tambah Fasilitas</a>
           </div>
         </div>
 
         <div class="uk-margin">
-          <div v-if="getcity.total === 0" class="uk-alert-warning" uk-alert>
-            Belum ada kota
+          <div v-if="getfacility.total === 0" class="uk-alert-warning" uk-alert>
+            Belum ada Fasilitas
           </div>
           <div v-else>
-            <label class="uk-label">{{ getcity.total }} kota</label>
+            <label class="uk-label">{{ getfacility.total }} fasilitas</label>
             <table class="uk-table uk-table-middle uk-table-striped uk-table-divider uk-table-hover uk-table-small">
               <thead>
                 <tr>
                   <th>Aksi</th>
-                  <th>Nama Kota</th>
-                  <th>Provinsi</th>
+                  <th>Nama Fasilitas</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="city in getcity.results">
+                <tr v-for="facility in getfacility.results">
                   <td>
-                    <a @click="onClickModal( city )" class="uk-icon-link uk-margin-small-right" uk-icon="file-edit"></a>
-                    <a @click="deleteCity( city.city_id )" href="#" class="uk-icon-link uk-margin-small-right" uk-icon="trash"></a>
+                    <a @click="onClickModal( facility )" class="uk-icon-link uk-margin-small-right" uk-icon="file-edit"></a>
+                    <a @click="deleteFacility( facility.id_facility )" href="#" class="uk-icon-link uk-margin-small-right" uk-icon="trash"></a>
                   </td>
-                  <td>{{ city.city_name }}</td>
-                  <td>{{ city.province_name }}</td>
+                  <td>{{ facility.facility_name }}</td>
                 </tr>
               </tbody>
             </table>
             <ul class="uk-pagination uk-flex-center">
               <li>
-                <a v-if="getcity.paginate.prev_page_url" @click="getCity( getcity.paginate.prev_page_url )">
+                <a v-if="getfacility.paginate.prev_page_url" @click="getFacility( getfacility.paginate.prev_page_url )">
                   <span uk-pagination-previous></span>
                 </a>
                 <a v-else>
@@ -86,7 +75,7 @@
               </li>
 
               <li>
-                <a v-if="getcity.paginate.next_page_url" @click="getCity( getcity.paginate.next_page_url )">
+                <a v-if="getfacility.paginate.next_page_url" @click="getFacility( getfacility.paginate.next_page_url )">
                   <span uk-pagination-next></span>
                 </a>
                 <a v-else>
@@ -108,9 +97,9 @@ export default {
     return {
       forms: {
         keywords: '',
-        city_name: '',
-        city_id: '',
-        province: '',
+        limit: 10,
+        facility_name: '',
+        id_facility: '',
         isedit: false,
         submit: 'Tambah'
       },
@@ -119,7 +108,7 @@ export default {
         errorMessage: '',
         iserror: false
       },
-      getcity: {
+      getfacility: {
         total: 0,
         results: [],
         paginate: {
@@ -128,26 +117,14 @@ export default {
           next_page_url: '',
           prev_page_url: ''
         }
-      },
-      getprovince: []
+      }
     }
   },
   methods: {
-    getProvince() {
-      axios({
-        method: 'get',
-        url: this.$root.url + '/api/region/provinsi/all'
-      }).then( res => {
-        let results = res.data;
-        this.getprovince = results.results.data
-      }).catch( err => {
-        console.log( err.response.statusText );
-      });
-    },
-    getCity( p )
+    getFacility( p )
     {
-      var params = 'keywords=' + this.forms.keywords;
-      var url = this.$root.url + '/cp/wilayah/city/get_city?page=' + this.getcity.paginate.current_page + '&' + params;
+      var params = 'keywords=' + this.forms.keywords + '&limit=' + this.forms.limit;
+      var url = this.$root.url + '/cp/property/facility/get_facility?page=' + this.getfacility.paginate.current_page + '&' + params;
       if( p !== undefined ) url = p + '&' + params;
 
       axios({
@@ -155,10 +132,10 @@ export default {
         url: url
       }).then( res => {
         let result = res.data;
-        this.getcity.total = result.total;
-        this.getcity.results = result.data;
+        this.getfacility.total = result.total;
+        this.getfacility.results = result.data;
 
-        this.getcity.paginate = {
+        this.getfacility.paginate = {
           current_page: result.current_page,
           last_page: result.last_page,
           next_page_url: result.next_page_url,
@@ -176,39 +153,30 @@ export default {
 
       if( data === undefined )
       {
-        this.forms.city_name = '';
-        this.forms.city_id = '';
-        this.forms.province = '';
+        this.forms.facility_name = '';
+        this.forms.id_facility = '';
         this.forms.isedit = false;
         this.forms.submit = 'Tambah';
       }
       else
       {
-        this.forms.city_name = data.city_name;
-        this.forms.city_id = data.city_id;
-        this.forms.province = data.province_id;
+        this.forms.facility_name = data.facility_name;
+        this.forms.id_facility = data.id_facility;
         this.forms.isedit = true;
         this.forms.submit = 'Simpan';
       }
 
-      this.getProvince();
-      UIkit.modal('#modal-city').show();
+      UIkit.modal('#modal-fasilitas').show();
     },
-    addCity()
+    addFacility()
     {
       this.message.errors = {};
       this.message.errorMessage = '';
       this.message.iserror = false;
 
-      if( this.forms.province === '' )
+      if( this.forms.facility_name === '' )
       {
-        this.message.errors.province = 'Provinsi tidak boleh kosong';
-        this.message.iserror = true;
-      }
-
-      if( this.forms.city_name === '' )
-      {
-        this.message.errors.city_name = 'Nama kota tidak boleh kosong';
+        this.message.errors.facility_name = 'Nama Fasilitas tidak boleh kosong';
         this.message.iserror = true;
       }
 
@@ -217,41 +185,34 @@ export default {
       this.forms.submit = '<span uk-spinner></span>';
       axios({
         method: 'post',
-        url: this.$root.url + '/cp/wilayah/city/store',
+        url: this.$root.url + '/cp/property/facility/store',
         params: {
-          city_name: this.forms.city_name,
-          province: this.forms.province
+          facility_name: this.forms.facility_name
         }
       }).then( res => {
         swal({
           title: 'Berhasil',
-          text: 'Kota baru berhasil ditambah',
+          text: 'Fasilitas baru berhasil ditambah',
           icon: 'success'
         });
         setTimeout(() => {
-          this.getCity();
-          UIkit.modal('#modal-city').hide();
+          this.getFacility();
+          UIkit.modal('#modal-fasilitas').hide();
         }, 1000);
       }).catch( err => {
         this.message.errorMessage = err.response.statusText;
         this.forms.submit = 'Tambah';
       });
     },
-    saveCity()
+    saveFacility()
     {
       this.message.errors = {};
       this.message.errorMessage = '';
       this.message.iserror = false;
 
-      if( this.forms.province === '' )
+      if( this.forms.facility_name === '' )
       {
-        this.message.errors.province = 'Provinsi tidak boleh kosong';
-        this.message.iserror = true;
-      }
-
-      if( this.forms.city_name === '' )
-      {
-        this.message.errors.city_name = 'Nama kota tidak boleh kosong';
+        this.message.errors.facility_name = 'Nama Fasilitas tidak boleh kosong';
         this.message.iserror = true;
       }
 
@@ -260,31 +221,30 @@ export default {
       this.forms.submit = '<span uk-spinner></span>';
       axios({
         method: 'put',
-        url: this.$root.url + '/cp/wilayah/city/save/' + this.forms.city_id,
+        url: this.$root.url + '/cp/property/facility/save/' + this.forms.id_facility,
         params: {
-          city_name: this.forms.city_name,
-          province: this.forms.province
+          facility_name: this.forms.facility_name
         }
       }).then( res => {
         swal({
           title: 'Berhasil',
-          text: 'Kota berhasil disimpan',
+          text: 'Fasilitas berhasil disimpan',
           icon: 'success'
         });
         setTimeout(() => {
-          this.getCity();
-          UIkit.modal('#modal-city').hide();
+          this.getFacility();
+          UIkit.modal('#modal-fasilitas').hide();
         }, 1000);
       }).catch( err => {
         this.message.errorMessage = err.response.statusText;
         this.forms.submit = 'Simpan';
       });
     },
-    deleteCity( id )
+    deleteFacility( id )
     {
       swal({
         title: 'Konfirmasi',
-        text: 'Apakah anda ingin menghapus kota ini?',
+        text: 'Apakah anda ingin menghapus fasilitas ini?',
         icon: 'warning',
         dangerMode: true,
         buttons: {
@@ -296,15 +256,15 @@ export default {
         {
           axios({
             method: 'delete',
-            url: this.$root.url + '/cp/wilayah/city/delete/' + id
+            url: this.$root.url + '/cp/property/facility/delete/' + id
           }).then( res => {
             swal({
               title: 'Berhasil',
-              text: 'Kota berhasil dihapus',
+              text: 'Fasilitas berhasil dihapus',
               icon: 'success'
             });
             setTimeout(() => {
-              this.getCity();
+              this.getFacility();
             }, 1000);
           }).catch( err => {
             swal({
@@ -318,10 +278,7 @@ export default {
     }
   },
   mounted() {
-    this.getCity();
+    this.getFacility();
   }
 }
 </script>
-
-<style lang="css" scoped>
-</style>

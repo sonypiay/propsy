@@ -4,12 +4,31 @@ namespace App\Http\Controllers\ControlPanel\Pages;
 
 use Illuminate\Http\Request;
 use App\Database\Customer;
+use App\Database\CityDB;
 use App\Database\AdminOwner;
 use App\Http\Controllers\Controller;
 use PDF;
 
 class CustomerController extends Controller
 {
+  public function index( Request $request, AdminOwner $owner, CityDB $city )
+  {
+    if( session()->has('isControlPanel') )
+    {
+      $getcity = $city->orderBy('city_name', 'asc')->get();
+      $data = [
+        'request' => $request,
+        'session_user' => $owner->getinfo(),
+        'getcity' => $getcity
+      ];
+      return response()->view('controlpanel.pages.customer.customer', $data);
+    }
+    else
+    {
+      return redirect()->route('cp_login_page');
+    }
+  }
+
   public function get_customer( Request $request, Customer $customer )
   {
     $keywords = $request->keywords;

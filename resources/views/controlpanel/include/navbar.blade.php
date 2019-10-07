@@ -1,4 +1,4 @@
-<header class="header">
+<header class="uk-box-shadow-small header">
   <div class="uk-container">
     <div class="uk-navbar navbar" uk-navbar>
       <div class="uk-navbar-left">
@@ -18,7 +18,7 @@
             <a href="#">Pelanggan <span uk-icon="chevron-down"></span></a>
             <div class="uk-navbar-dropdown">
               <ul class="uk-nav uk-navbar-dropdown-nav">
-                <li><a href="#">Pelanggan</a></li>
+                <li><a href="{{ route('cp_customer_page') }}">Pelanggan</a></li>
                 <li><a href="#">Riwayat Pengajuan Unit</a></li>
               </ul>
             </div>
@@ -29,6 +29,23 @@
               <ul class="uk-nav uk-navbar-dropdown-nav">
                 <li><a href="{{ route('cp_province_page') }}">Provinsi</a></li>
                 <li><a href="{{ route('cp_city_page') }}">Kota</a></li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <a href="#">Properti <span uk-icon="chevron-down"></span></a>
+            <div class="uk-navbar-dropdown">
+              <ul class="uk-nav uk-navbar-dropdown-nav">
+                <li><a href="#">Tipe Unit</a></li>
+                <li><a href="{{ route('cp_facility_page') }}">Fasilitas</a></li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <a href="#">Manajemen Admin <span uk-icon="chevron-down"></span></a>
+            <div class="uk-navbar-dropdown">
+              <ul class="uk-nav uk-navbar-dropdown-nav">
+                <li><a href="{{ route('cp_admin_page') }}">User Admin</a></li>
               </ul>
             </div>
           </li>

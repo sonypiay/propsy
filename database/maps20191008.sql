@@ -26,17 +26,18 @@ CREATE TABLE `admin_owner` (
   `admin_username` varchar(64) NOT NULL,
   `admin_password` varchar(64) NOT NULL,
   `admin_email` varchar(64) NOT NULL,
+  `admin_gender` enum('L','P') NOT NULL DEFAULT 'L',
   `created_by` varchar(64) DEFAULT NULL,
-  `create_at` datetime NOT NULL,
+  `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`admin_id`),
   UNIQUE KEY `admin_username` (`admin_username`),
   UNIQUE KEY `admin_email` (`admin_email`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `admin_owner` */
 
-insert  into `admin_owner`(`admin_id`,`admin_fullname`,`admin_username`,`admin_password`,`admin_email`,`created_by`,`create_at`,`updated_at`) values (1,'Sony Darmawan','sonypiay','d5f3b4c238382e41fbe4b404e882cc73','pyscho30@gmail.com',NULL,'0000-00-00 00:00:00','2019-10-05 12:46:50'),(2,'Administrator','admin','21232f297a57a5a743894a0e4a801fc3','admin@mail.com',NULL,'0000-00-00 00:00:00','0000-00-00 00:00:00');
+insert  into `admin_owner`(`admin_id`,`admin_fullname`,`admin_username`,`admin_password`,`admin_email`,`admin_gender`,`created_by`,`created_at`,`updated_at`) values (1,'Sony Darmawan','sonypiay','d5f3b4c238382e41fbe4b404e882cc73','pyscho30@gmail.com','L',NULL,'0000-00-00 00:00:00','2019-10-05 12:46:50'),(2,'Administrator','admin','21232f297a57a5a743894a0e4a801fc3','admin@mail.com','L',NULL,'0000-00-00 00:00:00','0000-00-00 00:00:00');
 
 /*Table structure for table `city` */
 
@@ -336,11 +337,11 @@ CREATE TABLE `unit_facility` (
   `id_facility` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `facility_name` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`id_facility`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 /*Data for the table `unit_facility` */
 
-insert  into `unit_facility`(`id_facility`,`facility_name`) values (1,'Pendingin Ruangan (AC)'),(2,'Keamanan 24 Jam'),(3,'Air Panas'),(4,'Kolam Renang'),(5,'Telepon'),(6,'Balkon'),(7,'Taman'),(8,'Taman Bermain Anak'),(9,'Garasi'),(10,'Secure Parking'),(11,'Gym'),(12,'Halaman Terbuka');
+insert  into `unit_facility`(`id_facility`,`facility_name`) values (1,'Pendingin Ruangan (AC)'),(2,'Keamanan 24 Jam'),(3,'Air Panas'),(4,'Kolam Renang'),(5,'Telepon'),(6,'Balkon'),(7,'Taman'),(8,'Taman Bermain Anak'),(9,'Garasi'),(10,'Secure Parking'),(11,'Gym'),(12,'Halaman Terbuka'),(15,'Akses Internet / Wifi');
 
 /*Table structure for table `verification_customer` */
 

@@ -209,6 +209,14 @@ Route::group(['prefix' => 'cp'], function() {
     });
   });
 
+  Route::group(['prefix' => 'facility'], function() {
+    Route::get('/', 'ControlPanel\Pages\FacilityController@index')->name('cp_province_page');
+    Route::get('/get_facility', 'ControlPanel\Pages\FacilityController@get_facility');
+    Route::post('/store', 'ControlPanel\Pages\FacilityController@store');
+    Route::put('/save/{id}', 'ControlPanel\Pages\FacilityController@save');
+    Route::delete('/delete/{id}', 'ControlPanel\Pages\FacilityController@destroy');
+  });
+
   Route::group(['prefix' => 'customer'], function() {
     Route::get('/get_customer', 'ControlPanel\Pages\CustomerController@get_customer');
     Route::get('/save_report', 'ControlPanel\Pages\CustomerController@save_report');
@@ -223,5 +231,11 @@ Route::group(['prefix' => 'cp'], function() {
   Route::group(['prefix' => 'developer'], function() {
     Route::get('/get_developer', 'ControlPanel\Pages\DeveloperController@get_developer');
     Route::get('/save_report', 'ControlPanel\Pages\DeveloperController@save_report');
+
+    Route::group(['prefix' => 'project'], function() {
+      Route::get('/get_project', 'ControlPanel\Pages\ProjectController@get_project');
+      Route::get('/get_unit/{project_id}', 'ControlPanel\Pages\ProjectController@get_unit_type');
+      Route::get('/save_report', 'ControlPanel\Pages\ProjectController@save_report');
+    });
   });
 });

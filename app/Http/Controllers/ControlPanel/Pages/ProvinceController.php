@@ -18,7 +18,7 @@ class ProvinceController extends Controller
         'session_user' => $owner->getinfo()
       ];
 
-      return respose()->view('controlpanel.pages.province', $data);
+      return response()->view('controlpanel.pages.wilayah.provinsi', $data);
     }
     else
     {
@@ -29,7 +29,7 @@ class ProvinceController extends Controller
   public function get_province( Request $request, ProvinceDB $province )
   {
     $keywords = $request->keywords;
-    $limit = $request->limit;
+    $limit = 10;
     $whereClause = [];
 
     if( ! empty( $keywords ) )
@@ -61,6 +61,7 @@ class ProvinceController extends Controller
   public function save( Request $request, ProvinceDB $province, $id )
   {
     $province_name = $request->province_name;
+    $slug_name = str_slug( $province_name );
 
     $getprovince = $province->where('province_id', $id)->first();
     $getprovince->province_name = $province_name;

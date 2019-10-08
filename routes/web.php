@@ -182,11 +182,72 @@ Route::group(['prefix' => 'cp'], function() {
   Route::get('/dashboard', 'ControlPanel\Pages\DashboardController@index')->name('cp_dashboard_page');
   Route::get('/login', 'ControlPanel\LoginController@index')->name('cp_login_page');
   Route::post('/login', 'ControlPanel\LoginController@do_login');
+  Route::get('/logout', 'ControlPanel\LoginController@do_logout')->name('cp_logout');
+
+  Route::group(['prefix' => 'manajemen'], function() {
+    Route::get('/user_admin', 'ControlPanel\Pages\AdminOwnerController@admin_page')->name('cp_admin_page');
+    Route::get('/get_user_admin', 'ControlPanel\Pages\AdminOwnerController@get_admin_owner');
+    Route::post('/user_admin/store', 'ControlPanel\Pages\AdminOwnerController@store');
+    Route::put('/user_admin/save/{id}', 'ControlPanel\Pages\AdminOwnerController@save');
+    Route::delete('/user_admin/delete/{id}', 'ControlPanel\Pages\AdminOwnerController@destroy');
+  });
 
   Route::group(['prefix' => 'account'], function() {
     Route::get('/profile/{pagenav?}', 'ControlPanel\Pages\AdminOwnerController@index')->name('cp_account_profile_page');
     Route::put('/edit_profile/password', 'ControlPanel\Pages\AdminOwnerController@change_password');
     Route::put('/edit_profile/email', 'ControlPanel\Pages\AdminOwnerController@change_email');
     Route::put('/edit_profile/profile', 'ControlPanel\Pages\AdminOwnerController@change_profile');
+  });
+
+  Route::group(['prefix' => 'wilayah'], function() {
+    Route::group(['prefix' => 'province'], function() {
+      Route::get('/', 'ControlPanel\Pages\ProvinceController@index')->name('cp_province_page');
+      Route::get('/get_province', 'ControlPanel\Pages\ProvinceController@get_province');
+      Route::post('/store', 'ControlPanel\Pages\ProvinceController@store');
+      Route::put('/save/{id}', 'ControlPanel\Pages\ProvinceController@save');
+      Route::delete('/delete/{id}', 'ControlPanel\Pages\ProvinceController@destroy');
+    });
+
+    Route::group(['prefix' => 'city'], function() {
+      Route::get('/', 'ControlPanel\Pages\CityController@index')->name('cp_city_page');
+      Route::get('/get_city', 'ControlPanel\Pages\CityController@get_city');
+      Route::post('/store', 'ControlPanel\Pages\CityController@store');
+      Route::put('/save/{id}', 'ControlPanel\Pages\CityController@save');
+      Route::delete('/delete/{id}', 'ControlPanel\Pages\CityController@destroy');
+    });
+  });
+
+  Route::group(['prefix' => 'property'], function() {
+    Route::group(['prefix' => 'facility'], function() {
+      Route::get('/', 'ControlPanel\Pages\FacilityController@index')->name('cp_facility_page');
+      Route::get('/get_facility', 'ControlPanel\Pages\FacilityController@get_facility');
+      Route::post('/store', 'ControlPanel\Pages\FacilityController@store');
+      Route::put('/save/{id}', 'ControlPanel\Pages\FacilityController@save');
+      Route::delete('/delete/{id}', 'ControlPanel\Pages\FacilityController@destroy');
+    });
+  });
+
+  Route::group(['prefix' => 'customer'], function() {
+    Route::get('/', 'ControlPanel\Pages\CustomerController@index')->name('cp_customer_page');
+    Route::get('/get_customer', 'ControlPanel\Pages\CustomerController@get_customer');
+    Route::get('/save_report', 'ControlPanel\Pages\CustomerController@save_report');
+
+    Route::group(['prefix' => 'request_unit'], function() {
+      Route::get('/get_request', 'ControlPanel\Pages\ProjectRequestController@get_request');
+      Route::get('/save_report', 'ControlPanel\Pages\ProjectRequestController@save_report');
+      Route::get('/get_detail_request/{request_id}', 'ControlPanel\Pages\ProjectRequestController@get_detail_request');
+    });
+  });
+
+  Route::group(['prefix' => 'developer'], function() {
+    Route::get('/', 'ControlPanel\Pages\DeveloperController@index')->name('cp_developer_page');
+    Route::get('/get_developer', 'ControlPanel\Pages\DeveloperController@get_developer');
+    Route::get('/save_report', 'ControlPanel\Pages\DeveloperController@save_report');
+
+    Route::group(['prefix' => 'project'], function() {
+      Route::get('/get_project', 'ControlPanel\Pages\ProjectController@get_project');
+      Route::get('/get_unit/{project_id}', 'ControlPanel\Pages\ProjectController@get_unit_type');
+      Route::get('/save_report', 'ControlPanel\Pages\ProjectController@save_report');
+    });
   });
 });

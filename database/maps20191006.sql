@@ -16,6 +16,28 @@ USE `maps`;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
+/*Table structure for table `admin_owner` */
+
+DROP TABLE IF EXISTS `admin_owner`;
+
+CREATE TABLE `admin_owner` (
+  `admin_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `admin_fullname` varchar(64) NOT NULL,
+  `admin_username` varchar(64) NOT NULL,
+  `admin_password` varchar(64) NOT NULL,
+  `admin_email` varchar(64) NOT NULL,
+  `created_by` varchar(64) DEFAULT NULL,
+  `create_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`admin_id`),
+  UNIQUE KEY `admin_username` (`admin_username`),
+  UNIQUE KEY `admin_email` (`admin_email`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+/*Data for the table `admin_owner` */
+
+insert  into `admin_owner`(`admin_id`,`admin_fullname`,`admin_username`,`admin_password`,`admin_email`,`created_by`,`create_at`,`updated_at`) values (1,'Sony Darmawan','sonypiay','d5f3b4c238382e41fbe4b404e882cc73','pyscho30@gmail.com',NULL,'0000-00-00 00:00:00','2019-10-05 12:46:50'),(2,'Administrator','admin','21232f297a57a5a743894a0e4a801fc3','admin@mail.com',NULL,'0000-00-00 00:00:00','0000-00-00 00:00:00');
+
 /*Table structure for table `city` */
 
 DROP TABLE IF EXISTS `city`;
@@ -353,9 +375,8 @@ DROP TABLE IF EXISTS `verification_developer`;
 CREATE TABLE `verification_developer` (
   `verify_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `dev_user_id` int(10) unsigned NOT NULL,
-  `id_card` varchar(16) NOT NULL,
-  `id_npwp` varchar(16) NOT NULL,
-  `document_file` varchar(64) NOT NULL,
+  `npwp_id` varchar(17) NOT NULL,
+  `sertifikat` varchar(64) NOT NULL,
   `status_verification` enum('Y','N','R') DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,

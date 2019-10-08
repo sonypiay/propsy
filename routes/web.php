@@ -240,6 +240,7 @@ Route::group(['prefix' => 'cp'], function() {
   });
 
   Route::group(['prefix' => 'developer'], function() {
+    Route::get('/', 'ControlPanel\Pages\DeveloperController@index')->name('cp_developer_page');
     Route::get('/get_developer', 'ControlPanel\Pages\DeveloperController@get_developer');
     Route::get('/save_report', 'ControlPanel\Pages\DeveloperController@save_report');
 

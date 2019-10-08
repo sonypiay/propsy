@@ -7,7 +7,6 @@
         <div class="uk-grid-small" uk-grid>
           <div class="uk-width-1-3@xl uk-width-1-3@l uk-width-1-3@m uk-width-1-1@s">
             <div class="uk-panel uk-margin">
-              <h4 class="uk-h5 uk-margin-remove-bottom">Foto</h4>
               <img v-if="getcustomer.detail.customer_photo" :src="this.$root.url + '/images/avatar/' + getcustomer.detail.customer_photo" />
               <img v-else :src="this.$root.url + '/images/avatar/avatar.jpg'" alt="" />
             </div>
@@ -94,6 +93,7 @@
                   <th>Nama Pelanggan</th>
                   <th>Email</th>
                   <th>Kota</th>
+                  <th>Status Verifikasi</th>
                 </tr>
               </thead>
               <tbody>
@@ -104,6 +104,10 @@
                   <td>{{ customer.customer_name }}</td>
                   <td>{{ customer.customer_email }}</td>
                   <td>{{ customer.city_name }}</td>
+                  <td>
+                    <label v-if="customer.status_verification === 'Y'" class="uk-label uk-label-success">Terverifikasi</label>
+                    <label v-else class="uk-label uk-label-warning">Belum Verifikasi</label>
+                  </td>
                 </tr>
               </tbody>
             </table>

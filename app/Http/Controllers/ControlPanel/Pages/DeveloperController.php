@@ -5,11 +5,30 @@ namespace App\Http\Controllers\ControlPanel\Pages;
 use Illuminate\Http\Request;
 use App\Database\DeveloperUser;
 use App\Database\AdminOwner;
+use App\Database\CityDB;
 use App\Http\Controllers\Controller;
 use PDF;
 
 class DeveloperController extends Controller
 {
+  public function index( Request $request, AdminOwner $owner, CityDB $city )
+  {
+    if( session()->has('isControlPanel') )
+    {
+      $getcity = $city->orderBy('city_name', 'asc')->get();
+      $data = [
+        'request' => $request,
+        'session_user' => $owner->getinfo(),
+        'getcity' => $getcity
+      ];
+      return response()->view('controlpanel.pages.developer.developer', $data);
+    }
+    else
+    {
+      return redirect()->route('cp_login_page');
+    }
+  }
+
   public function get_developer( Request $request, DeveloperUser $developeruser )
   {
     $keywords = $request->keywords;

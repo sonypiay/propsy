@@ -1,83 +1,133 @@
 <template>
   <div>
-    <div id="modal-city" uk-modal>
+    <div id="modal-developer" class="uk-modal-container" uk-modal>
       <div class="uk-modal-dialog uk-modal-body">
-        <div class="uk-modal-title">
-          <span v-if="forms.isedit">Edit Kota</span>
-          <span v-else>Tambah Kota</span>
+        <a class="uk-modal-close uk-modal-close-default" uk-close></a>
+        <h3 class="uk-h3">Detail Pengembang</h3>
+        <div class="uk-grid-small" uk-grid>
+          <div class="uk-width-1-3@xl uk-width-1-3@l uk-width-1-3@m uk-width-1-1@s">
+            <div class="uk-panel uk-margin">
+              <img v-if="getdeveloper.detail.dev_logo" :src="this.$root.url + '/images/devlogo/' + getdeveloper.detail.dev_logo" />
+              <img v-else :src="this.$root.url + '/images/avatar/avatar.jpg'" alt="" />
+            </div>
+          </div>
+          <div class="uk-width-expand">
+            <div class="uk-panel uk-margin">
+              <h4 class="uk-h5 uk-margin-remove-bottom">{{ getdeveloper.detail.dev_name }}</h4>
+              <p class="uk-text-meta uk-margin-remove-top">
+                Bergabung pada
+                <span v-show="getdeveloper.detail.created_at">
+                  {{ $root.formatDate( getdeveloper.detail.created_at, 'DD MMMM YYYY' ) }}
+                </span>
+              </p>
+            </div>
+            <div class="uk-panel uk-margin">
+              <h4 class="uk-h5 uk-margin-remove-bottom">Nama Pemilik</h4>
+              <p class="uk-text-meta uk-margin-remove-top">
+                {{ getdeveloper.detail.dev_ownername }}
+              </p>
+            </div>
+            <div class="uk-panel uk-margin">
+              <h4 class="uk-h5 uk-margin-remove-bottom">Jenis Pengembang</h4>
+              <p class="uk-text-meta uk-margin-remove-top">
+                <span v-if="getdeveloper.detail.dev_ownership === 'perusahaan'">Perusahaan</span>
+                <span v-else>Individu</span>
+              </p>
+            </div>
+            <div class="uk-panel uk-margin">
+              <h4 class="uk-h5 uk-margin-remove-bottom">Alamat Email</h4>
+              <p class="uk-text-meta uk-margin-remove-top">
+                {{ getdeveloper.detail.dev_email }}
+              </p>
+            </div>
+            <div class="uk-panel uk-margin">
+              <h4 class="uk-h5 uk-margin-remove-bottom">Telepon</h4>
+              <p class="uk-text-meta uk-margin-remove-top">
+                Kantor: {{ getdeveloper.detail.customer_phone_number }} <br />
+                Whatsapp: {{ getdeveloper.detail.dev_mobile_phone }}
+              </p>
+            </div>
+            <div class="uk-panel uk-margin">
+              <h4 class="uk-h5 uk-margin-remove-bottom">Alamat</h4>
+              <p class="uk-text-meta uk-margin-remove-top">
+                {{ getdeveloper.detail.dev_address }} <br>
+                {{ getdeveloper.detail.city_name }}
+              </p>
+            </div>
+            <div class="uk-panel uk-margin">
+              <h4 class="uk-h5 uk-margin-remove-bottom">Status Verifikasi</h4>
+              <label v-if="getdeveloper.detail.status_verification === 'Y'" class="uk-label uk-label-success">Terverifikasi</label>
+              <label v-else class="uk-label uk-label-warning">Belum Verifikasi</label>
+            </div>
+          </div>
         </div>
-        <form class="uk-form-stacked" @submit.prevent="forms.isedit === false ? addCity() : saveCity()">
-          <div v-show="message.errors.errorMessage" class="uk-margin uk-alert-danger" uk-alert>{{ message.errors.errorMessage }}</div>
-          <div class="uk-margin">
-            <label class="uk-form-label">Provinsi</label>
-            <div class="uk-form-controls">
-              <select class="uk-select uk-width-1-1" v-model="forms.province">
-                <option value="">-- Pilih Provinsi --</option>
-                <option v-for="province in getprovince" :value="province.province_id">{{ province.province_name }}</option>
-              </select>
-            </div>
-          </div>
-          <div class="uk-margin">
-            <label class="uk-form-label">Nama Kota</label>
-            <div class="uk-form-controls">
-              <input type="text" :class="{'uk-form-danger': message.errors.city_name}" class="uk-input uk-width-1-1" v-model="forms.city_name" />
-            </div>
-            <div v-show="message.errors.city_name" class="uk-text-danger">{{ message.errors.city_name }}</div>
-          </div>
-          <div class="uk-margin">
-            <button class="uk-button uk-button-primary" v-html="forms.submit"></button>
-          </div>
-        </form>
       </div>
     </div>
     <div class="uk-container uk-margin-large-top">
       <ul class="uk-breadcrumb">
         <li><a :href="$root.url + '/cp/'">Dashboard</a></li>
-        <li class="uk-disabled"><span>Wilayah</span></li>
-        <li><span>Kota</span></li>
+        <li class="uk-disabled"><span>Developer</span></li>
+        <li><span>Developer</span></li>
       </ul>
       <div class="uk-card uk-card-body uk-card-default">
-        <div class="uk-h3 uk-heading-line">Kota</div>
+        <div class="uk-h3 uk-heading-line">Pengembang</div>
         <div class="uk-grid-small uk-child-width-auto" uk-grid>
+          <div>
+            <select class="uk-select" v-model="forms.limit" @change="getDeveloperList()">
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+          <div>
+            <select class="uk-select" v-model="forms.city" @change="getDeveloperList()">
+              <option value="all">Semua kota</option>
+              <option v-for="city in getcity" :value="city.city_id">{{ city.city_name }}</option>
+            </select>
+          </div>
           <div>
             <div class="uk-inline">
               <span class="uk-form-icon" uk-icon="search"></span>
-              <input type="search" class="uk-input" v-model="forms.keywords" placeholder="Search..." @keyup.enter="getCity()" />
+              <input type="search" class="uk-input" v-model="forms.keywords" placeholder="Search..." @keyup.enter="getDeveloperList()" />
             </div>
-          </div>
-          <div>
-            <a @click="onClickModal()" class="uk-button uk-button-primary">Tambah Kota</a>
           </div>
         </div>
 
         <div class="uk-margin">
-          <div v-if="getcity.total === 0" class="uk-alert-warning" uk-alert>
-            Belum ada kota
+          <div v-if="getdeveloper.total === 0" class="uk-alert-warning" uk-alert>
+            Belum ada Pengembang
           </div>
           <div v-else>
-            <label class="uk-label">{{ getcity.total }} kota</label>
+            <label class="uk-label">{{ getdeveloper.total }} Pengembang</label>
             <table class="uk-table uk-table-middle uk-table-striped uk-table-divider uk-table-hover uk-table-small">
               <thead>
                 <tr>
                   <th>Aksi</th>
-                  <th>Nama Kota</th>
-                  <th>Provinsi</th>
+                  <th>Nama Pengembang</th>
+                  <th>Email</th>
+                  <th>Kota</th>
+                  <th>Status Verifikasi</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="city in getcity.results">
+                <tr v-for="dev in getdeveloper.results">
                   <td>
-                    <a @click="onClickModal( city )" class="uk-icon-link uk-margin-small-right" uk-icon="file-edit"></a>
-                    <a @click="deleteCity( city.city_id )" href="#" class="uk-icon-link uk-margin-small-right" uk-icon="trash"></a>
+                    <a uk-tooltip="Lihat Detail" @click="onDetailDeveloper( dev )" class="uk-icon-link" uk-icon="forward"></a>
                   </td>
-                  <td>{{ city.city_name }}</td>
-                  <td>{{ city.province_name }}</td>
+                  <td>{{ dev.dev_name }}</td>
+                  <td>{{ dev.dev_email }}</td>
+                  <td>{{ dev.city_name }}</td>
+                  <td>
+                    <label v-if="dev.status_verification === 'Y'" class="uk-label uk-label-success">Terverifikasi</label>
+                    <label v-else class="uk-label uk-label-warning">Belum Verifikasi</label>
+                  </td>
                 </tr>
               </tbody>
             </table>
             <ul class="uk-pagination uk-flex-center">
               <li>
-                <a v-if="getcity.paginate.prev_page_url" @click="getCity( getcity.paginate.prev_page_url )">
+                <a v-if="getdeveloper.paginate.prev_page_url" @click="getDeveloperList( getdeveloper.paginate.prev_page_url )">
                   <span uk-pagination-previous></span>
                 </a>
                 <a v-else>
@@ -86,7 +136,7 @@
               </li>
 
               <li>
-                <a v-if="getcity.paginate.next_page_url" @click="getCity( getcity.paginate.next_page_url )">
+                <a v-if="getdeveloper.paginate.next_page_url" @click="getDeveloperList( getdeveloper.paginate.next_page_url )">
                   <span uk-pagination-next></span>
                 </a>
                 <a v-else>
@@ -103,23 +153,20 @@
 
 <script>
 export default {
-  props: [],
+  props: ['getcity'],
   data() {
     return {
       forms: {
         keywords: '',
-        city_name: '',
-        city_id: '',
-        province: '',
-        isedit: false,
-        submit: 'Tambah'
+        limit: 10,
+        city: 'all'
       },
       message: {
         errors: {},
         errorMessage: '',
         iserror: false
       },
-      getcity: {
+      getdeveloper: {
         total: 0,
         results: [],
         paginate: {
@@ -127,38 +174,26 @@ export default {
           last_page: 1,
           next_page_url: '',
           prev_page_url: ''
-        }
-      },
-      getprovince: []
+        },
+        detail: {}
+      }
     }
   },
   methods: {
-    getProvince() {
-      axios({
-        method: 'get',
-        url: this.$root.url + '/api/region/provinsi/all'
-      }).then( res => {
-        let results = res.data;
-        this.getprovince = results.results.data
-      }).catch( err => {
-        console.log( err.response.statusText );
-      });
-    },
-    getCity( p )
+    getDeveloperList( p )
     {
-      var params = 'keywords=' + this.forms.keywords;
-      var url = this.$root.url + '/cp/wilayah/city/get_city?page=' + this.getcity.paginate.current_page + '&' + params;
-      if( p !== undefined ) url = p + '&' + params;
+      var param = 'keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&city=' + this.forms.city;
+      var url = this.$root.url + '/cp/developer/get_developer?page=' + this.getdeveloper.paginate.current_page + '&' + param;
+      if( p !== undefined ) url = p + '&' + param;
 
       axios({
         method: 'get',
         url: url
       }).then( res => {
         let result = res.data;
-        this.getcity.total = result.total;
-        this.getcity.results = result.data;
-
-        this.getcity.paginate = {
+        this.getdeveloper.total = result.total;
+        this.getdeveloper.results = result.data;
+        this.getdeveloper.paginate = {
           current_page: result.current_page,
           last_page: result.last_page,
           next_page_url: result.next_page_url,
@@ -168,157 +203,14 @@ export default {
         console.log( err.response.statusText );
       });
     },
-    onClickModal( data )
+    onDetailDeveloper( data )
     {
-      this.message.errors = {};
-      this.message.errorMessage = '';
-      this.message.iserror = false;
-
-      if( data === undefined )
-      {
-        this.forms.city_name = '';
-        this.forms.city_id = '';
-        this.forms.province = '';
-        this.forms.isedit = false;
-        this.forms.submit = 'Tambah';
-      }
-      else
-      {
-        this.forms.city_name = data.city_name;
-        this.forms.city_id = data.city_id;
-        this.forms.province = data.province_id;
-        this.forms.isedit = true;
-        this.forms.submit = 'Simpan';
-      }
-
-      this.getProvince();
-      UIkit.modal('#modal-city').show();
-    },
-    addCity()
-    {
-      this.message.errors = {};
-      this.message.errorMessage = '';
-      this.message.iserror = false;
-
-      if( this.forms.province === '' )
-      {
-        this.message.errors.province = 'Provinsi tidak boleh kosong';
-        this.message.iserror = true;
-      }
-
-      if( this.forms.city_name === '' )
-      {
-        this.message.errors.city_name = 'Nama kota tidak boleh kosong';
-        this.message.iserror = true;
-      }
-
-      if( this.message.iserror === true ) return false;
-
-      this.forms.submit = '<span uk-spinner></span>';
-      axios({
-        method: 'post',
-        url: this.$root.url + '/cp/wilayah/city/store',
-        params: {
-          city_name: this.forms.city_name,
-          province: this.forms.province
-        }
-      }).then( res => {
-        swal({
-          title: 'Berhasil',
-          text: 'Kota baru berhasil ditambah',
-          icon: 'success'
-        });
-        setTimeout(() => {
-          this.getCity();
-          UIkit.modal('#modal-city').hide();
-        }, 1000);
-      }).catch( err => {
-        this.message.errorMessage = err.response.statusText;
-        this.forms.submit = 'Tambah';
-      });
-    },
-    saveCity()
-    {
-      this.message.errors = {};
-      this.message.errorMessage = '';
-      this.message.iserror = false;
-
-      if( this.forms.province === '' )
-      {
-        this.message.errors.province = 'Provinsi tidak boleh kosong';
-        this.message.iserror = true;
-      }
-
-      if( this.forms.city_name === '' )
-      {
-        this.message.errors.city_name = 'Nama kota tidak boleh kosong';
-        this.message.iserror = true;
-      }
-
-      if( this.message.iserror === true ) return false;
-
-      this.forms.submit = '<span uk-spinner></span>';
-      axios({
-        method: 'put',
-        url: this.$root.url + '/cp/wilayah/city/save/' + this.forms.city_id,
-        params: {
-          city_name: this.forms.city_name,
-          province: this.forms.province
-        }
-      }).then( res => {
-        swal({
-          title: 'Berhasil',
-          text: 'Kota berhasil disimpan',
-          icon: 'success'
-        });
-        setTimeout(() => {
-          this.getCity();
-          UIkit.modal('#modal-city').hide();
-        }, 1000);
-      }).catch( err => {
-        this.message.errorMessage = err.response.statusText;
-        this.forms.submit = 'Simpan';
-      });
-    },
-    deleteCity( id )
-    {
-      swal({
-        title: 'Konfirmasi',
-        text: 'Apakah anda ingin menghapus kota ini?',
-        icon: 'warning',
-        dangerMode: true,
-        buttons: {
-          cancel: 'Batal',
-          confirm: { value: true, text: 'Ya' }
-        }
-      }).then( val => {
-        if( val )
-        {
-          axios({
-            method: 'delete',
-            url: this.$root.url + '/cp/wilayah/city/delete/' + id
-          }).then( res => {
-            swal({
-              title: 'Berhasil',
-              text: 'Kota berhasil dihapus',
-              icon: 'success'
-            });
-            setTimeout(() => {
-              this.getCity();
-            }, 1000);
-          }).catch( err => {
-            swal({
-              title: 'Whoops',
-              text: 'Terjadi kesalahan',
-              icon: 'error'
-            });
-          });
-        }
-      });
+      this.getdeveloper.detail = data;
+      UIkit.modal('#modal-developer').show();
     }
   },
   mounted() {
-    this.getCity();
+    this.getDeveloperList();
   }
 }
 </script>

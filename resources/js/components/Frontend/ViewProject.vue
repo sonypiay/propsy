@@ -6,9 +6,9 @@
         <div class="uk-height-viewport">
           <div class="uk-grid-small" uk-grid uk-lightbox>
             <div v-for="galeri in getgallery" class="uk-width-1-3">
-              <a :href="$root.url + '/images/project/gallery/' + galeri.gallery_filename">
+              <a :href="$root.url + '/storage/assets/images/project/gallery/' + galeri.gallery_filename">
                 <div class="uk-cover-container uk-height-medium">
-                  <img :src="$root.url + '/images/project/gallery/' + galeri.gallery_filename" alt="" uk-cover>
+                  <img :src="$root.url + '/storage/assets/images/project/gallery/' + galeri.gallery_filename" alt="" uk-cover>
                 </div>
               </a>
             </div>
@@ -17,8 +17,8 @@
       </div>
     </div>
     <div class="uk-cover-container uk-height-large">
-      <img v-if="getproject.project_thumbnail" :src="$root.url + '/images/project/gallery/' + getproject.project_thumbnail" uk-cover />
-      <img v-else :src="$root.url + '/images/banner/homepage2.jpg'" uk-cover />
+      <img v-if="getproject.project_thumbnail" :src="$root.url + '/storage/assets/images/project/gallery/' + getproject.project_thumbnail" uk-cover />
+      <img v-else :src="$root.url + '/images/banner/homepage3.jpg'" uk-cover />
       <div class="uk-position-right uk-position-large">
         <div class="uk-card uk-card-body uk-card-default card-projectinfo">
           <div class="uk-clearfix">
@@ -71,8 +71,8 @@
                   </div>
                   <div class="uk-margin-small content-projectlead">
                     {{ getproject.project_address }} <br>
-                    <strong>{{ projectcity.city_name }},</strong>
-                    <strong>{{ projectcity.province_name }}</strong>
+                    <strong>{{ getproject.city_name }},</strong>
+                    <strong>{{ getproject.province_name }}</strong>
                     <div v-show="getproject.project_map_embed" v-html="getproject.project_map_embed"></div>
                   </div>
                 </div>
@@ -84,7 +84,7 @@
                     <div class="uk-position-relative uk-visible-toggle uk-light" tabindex="-1" uk-slideshow="animation: push; ratio: 16:9">
                       <ul class="uk-slideshow-items">
                         <li v-for="galeri in getgallery">
-                          <img :src="$root.url + '/images/project/gallery/' + galeri.gallery_filename" uk-cover>
+                          <img :src="$root.url + '/storage/assets/images/project/gallery/' + galeri.gallery_filename" uk-cover>
                         </li>
                       </ul>
                       <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slideshow-item="previous"></a>
@@ -99,9 +99,9 @@
                       <div uk-tooltip :title="unit.unit_name" class="uk-card card-unit-project uk-grid-collapse uk-grid-match uk-margin" uk-grid>
                         <div class="uk-width-1-3@xl uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s">
                           <div class="uk-card-media-left">
-                            <div v-if="unit.unit_thumbnail" class="uk-background-cover unit-thumbnail" :style="{'background-image': 'url(' + $root.url + '/images/project/gallery/' + unit.unit_thumbnail + ')'}">
+                            <div v-if="unit.unit_thumbnail" class="uk-background-cover unit-thumbnail" :style="{'background-image': 'url(' + $root.url + '/storage/assets/images/project/gallery/' + unit.unit_thumbnail + ')'}">
                             </div>
-                            <div v-else class="uk-background-cover unit-thumbnail" :style="{'background-image': 'url(' + $root.url + '/images/banner/homepage2.jpg)'}">
+                            <div v-else class="uk-background-cover unit-thumbnail" :style="{'background-image': 'url(' + $root.url + '/images/banner/homepage3.jpg)'}">
                             </div>
                           </div>
                         </div>
@@ -120,8 +120,8 @@
                             <div class="unit-location">
                               <span uk-icon="icon: location; ratio: 0.8"></span>
                               {{ getproject.project_address }},
-                              {{ projectcity.city_name }},
-                              {{ projectcity.province_name }}
+                              {{ getproject.city_name }},
+                              {{ getproject.province_name }}
                             </div>
                             <div class="unit-price">
                               Rp. {{ unit.unit_price | currency }}
@@ -180,11 +180,10 @@
                 <span uk-icon="icon: users; ratio: 4"></span>
               </div>
               <div v-else class="dev-withlogo">
-                <img class="uk-align-center" :src="$root.url + '/images/devlogo/' + getproject.dev_logo" :alt="getproject.dev_name">
+                <img class="uk-align-center" :src="$root.url + '/storage/assets/images/devlogo/' + getproject.dev_logo" :alt="getproject.dev_name">
               </div>
               <div class="uk-margin sidebar-dev-profile">
                 <a class="dev-profile-name" href="#">{{ getproject.dev_name }}</a>
-                <div class="dev-profile-region">{{ devcity.province_name + ', ' + devcity.city_name }}</div>
               </div>
               <div class="uk-margin uk-text-center">
                 <a class="uk-width-1-1 uk-button uk-button-primary sidebar-viewproject" href="#">Lihat Pengembang</a>
@@ -224,8 +223,6 @@ export default {
     'getproject',
     'getgallery',
     'getunit_price',
-    'projectcity',
-    'devcity',
     'session_active'
   ],
   data() {
@@ -253,7 +250,7 @@ export default {
   methods: {
     getProjectUnit( p )
     {
-      var url = this.$root.url + '/project/unit/' + this.getproject.project_unique_id + '?page=' + this.projectunit.pagination.current_page;
+      var url = this.$root.url + '/project/unit/' + this.getproject.project_id + '?page=' + this.projectunit.pagination.current_page;
       if( p !== undefined ) url = p;
 
       axios({

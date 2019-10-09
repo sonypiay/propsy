@@ -1,21 +1,22 @@
 <template>
   <div>
     <ul class="uk-breadcrumb">
-      <li><a :href="$root.url + '/developer/project/dashboard'">Dashboard</a></li>
-      <li><a :href="$root.url + '/developer/project/manage_project'">Kelola Proyek</a></li>
+      <li><a :href="$root.url + '/developer/dashboard'">Dashboard</a></li>
+      <li><a :href="$root.url + '/developer/project/manage_project'">Proyek</a></li>
       <li><span>{{ getproject.project_name }}</span></li>
     </ul>
     <div class="uk-card dashboard-content">
       <div class="uk-card-title uk-margin dashboard-content-heading">
         {{ getproject.project_name }}
-        <a uk-tooltip="Edit Proyek" :href="$root.url + '/developer/project/edit_project/' + getproject.project_unique_id" class="uk-float-right uk-button uk-button-primary uk-button-small dash-btn dash-btn-action" uk-icon="pencil"></a>
+        <a uk-tooltip="Edit Proyek" :href="$root.url + '/developer/project/edit_project/' + getproject.project_id" class="uk-float-right uk-button uk-button-primary uk-button-small dash-btn dash-btn-action" uk-icon="pencil"></a>
       </div>
       <div class="uk-margin dashboard-content-subheading">
         {{ getproject.province_name }},
         {{ getproject.city_name }}<br>
         {{ getproject.project_address }}
       </div>
-      <div v-show="getproject.project_thumbnail" class="uk-background-cover uk-height-large uk-panel" :style="{'background-image': 'url(' + $root.url + '/images/project/gallery/' + getproject.project_thumbnail + ')'}"></div>
+      <div v-if="getproject.project_thumbnail" class="uk-background-cover uk-height-large uk-panel" :style="{'background-image': 'url(' + $root.url + '/storage/assets/images/project/gallery/' + getproject.project_thumbnail + ')'}"></div>
+      <div v-else class="uk-background-cover uk-height-large uk-panel" :style="{'background-image': 'url(' + $root.url + '/images/banner/homepage3.jpg)'}"></div>
       <div v-show="getproject.project_map_embed" v-html="getproject.project_map_embed" class="uk-margin"></div>
       <!-- gallery -->
       <div id="modal-view-gallery" class="uk-modal-full" uk-modal>
@@ -24,8 +25,8 @@
           <h3>Galeri Proyek</h3>
           <div class="uk-grid-small uk-margin" uk-grid="masonry: true" uk-lightbox>
             <div v-for="gallery in galleries.results" class="uk-width-1-3@xl uk-width-1-3@l uk-width-1-2@m uk-width-1-2@s">
-              <a class="uk-display-block" :href="$root.url + '/images/project/gallery/' + gallery.gallery_filename">
-                <img :src="$root.url + '/images/project/gallery/' + gallery.gallery_filename">
+              <a class="uk-display-block" :href="$root.url + '/storage/assets/images/project/gallery/' + gallery.gallery_filename">
+                <img :src="$root.url + '/storage/assets/images/project/gallery/' + gallery.gallery_filename">
               </a>
             </div>
           </div>
@@ -39,9 +40,9 @@
           <a class="uk-modal-close-large uk-modal-close" uk-close></a>
           <div class="uk-grid-collapse uk-grid-match" uk-grid>
             <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
-              <div class="uk-background-cover" v-if="unit_tipe.detail.unit_thumbnail === null" uk-height-viewport  :style="{'background-image': 'url(' + $root.url + '/images/banner/homepage2.jpg)'}">
+              <div class="uk-background-cover" v-if="unit_tipe.detail.unit_thumbnail === null" uk-height-viewport  :style="{'background-image': 'url(' + $root.url + '/images/banner/homepage3.jpg)'}">
               </div>
-              <div v-else class="uk-background-cover" uk-height-viewport :style="{'background-image': 'url(' + $root.url + '/images/project/gallery/' + unit_tipe.detail.unit_thumbnail + ')'}"></div>
+              <div v-else class="uk-background-cover" uk-height-viewport :style="{'background-image': 'url(' + $root.url + '/storage/assets/images/project/gallery/' + unit_tipe.detail.unit_thumbnail + ')'}"></div>
             </div>
             <div class="uk-width-expand">
               <div class="uk-card uk-card-body uk-overflow-auto" style="height: 620px;">
@@ -62,10 +63,10 @@
                       <td><strong>{{ unit_tipe.detail.unit_watt }}</strong></td>
                     </tr>
                     <tr>
-                      <td>Luas Bangunan (m2)</td>
-                      <td><strong>{{ unit_tipe.detail.unit_lb }}</strong></td>
-                      <td>Luas Lahan (m2)</td>
-                      <td><strong>{{ unit_tipe.detail.unit_lt }}</strong></td>
+                      <td>Luas Bangunan</td>
+                      <td><strong>{{ unit_tipe.detail.unit_lb }} m<sup>2</sup></strong></td>
+                      <td>Luas Lahan </td>
+                      <td><strong>{{ unit_tipe.detail.unit_lt }} m<sup>2</sup></strong></td>
                     </tr>
                   </tbody>
                 </table>
@@ -110,10 +111,10 @@
           <div class="uk-grid-small" uk-grid="masonry: true" uk-lightbox="animation: slide">
             <div v-for="gallery in gallery_unit.results" class="uk-width-1-3@xl uk-width-1-3@l uk-width-1-3@m uk-width-1-1@s">
               <div class="uk-inline-clip uk-transition-toggle">
-                <img class="uk-transition-scale-up uk-transition-opaque" :src="$root.url + '/images/project/gallery/' + gallery.unit_gallery_filename" />
+                <img class="uk-transition-scale-up uk-transition-opaque" :src="$root.url + '/storage/assets/images/project/gallery/' + gallery.unit_gallery_filename" />
                 <div class="uk-transition-fade uk-overlay uk-overlay-default uk-position-cover">
                   <div class="uk-position-center">
-                    <a class="uk-button uk-button-link" :href="$root.url + '/images/project/gallery/' + gallery.unit_gallery_filename">
+                    <a class="uk-button uk-button-link" :href="$root.url + '/storage/assets/images/project/gallery/' + gallery.unit_gallery_filename">
                       <i uk-icon="icon: forward; ratio: 1"></i>
                     </a>
                     <button class="uk-button uk-button-link" uk-tooltip="Jadikan sebagai thumbnail" @click="setAsThumbnail( gallery.unit_gallery_id )">
@@ -150,7 +151,7 @@
             <a class="uk-button uk-button-primary uk-button-small dash-btn">{{ unit_tipe.total }} Unit</a>
           </div>
           <div>
-            <a class="uk-button uk-button-primary uk-button-small dash-btn" :href="$root.url + '/developer/project/add_unit/' + getproject.project_unique_id">Tambah Unit</a>
+            <a class="uk-button uk-button-primary uk-button-small dash-btn" :href="$root.url + '/developer/project/add_unit/' + getproject.project_id">Tambah Unit</a>
           </div>
           <div>
             <div class="uk-inline">
@@ -183,11 +184,12 @@
                     </div>
                   </div>
                   <div v-else class="uk-cover-container grid-image">
-                    <img :src="$root.url + '/images/project/gallery/' + unit.unit_thumbnail" alt="" uk-cover>
+                    <img :src="$root.url + '/storage/assets/images/project/gallery/' + unit.unit_thumbnail" alt="" uk-cover>
                     <div class="uk-overlay uk-position-cover">
                       <div class="uk-position-top-right">
                         <div class="grid-badge">
                           <label v-if="unit.unit_status === 'available'" class="uk-label uk-label-success">Tersedia</label>
+                          <label v-else-if="unit.unit_status === 'booked'" class="uk-label uk-label-warning">Dipesan</label>
                           <label v-else class="uk-label uk-label-danger">Terjual</label>
                         </div>
                       </div>
@@ -197,7 +199,7 @@
                 <div class="uk-card-body uk-card-small">
                   <div class="uk-margin-small uk-card-title grid-box-title">{{ unit.unit_name }}</div>
                   <div class="uk-margin-small grid-box-lead">
-                    Terakhir diubah: {{ $root.formatDate( unit.updated_at, 'DD MMM YYYY', 'id' ) }} <br>
+                    Terakhir diubah: {{ $root.formatDate( unit.updated_at, 'DD MMM YYYY' ) }} <br>
                     Rp. {{ unit.unit_price | currency }}
                   </div>
                   <!--<div class="uk-text-truncate uk-margin-small grid-box-content">{{ project.project_description }}</div>-->
@@ -272,7 +274,7 @@ export default {
           last_page: 1,
           prev_page_url: null,
           next_page_url: null,
-          path: this.$root.url + '/developer/project/get_unit/' + this.getproject.project_unique_id
+          path: this.$root.url + '/developer/project/get_unit/' + this.getproject.project_id
         },
         detail: {}
       },
@@ -299,7 +301,7 @@ export default {
       this.galleries.isLoading = true;
       axios({
         method: 'get',
-        url: this.$root.url + '/developer/project/data_gallery/' + this.getproject.project_unique_id
+        url: this.$root.url + '/developer/project/data_gallery/' + this.getproject.project_id
       }).then( res => {
         let result = res.data;
         this.galleries.total = result.data.total;
@@ -312,7 +314,7 @@ export default {
     getProjectUnitType( p )
     {
       this.unit_tipe.isLoading = true;
-      var url = this.$root.url + '/developer/project/get_unit/' + this.getproject.project_unique_id + '?page=' + this.unit_tipe.pagination.current_page;
+      var url = this.$root.url + '/developer/project/get_unit/' + this.getproject.project_id + '?page=' + this.unit_tipe.pagination.current_page;
       if( p !== undefined ) url = p;
 
       axios({

@@ -2407,13 +2407,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['getcity'],
   data: function data() {
@@ -59597,22 +59590,6 @@ var render = function() {
                           _vm._s(_vm.getdeveloper.detail.dev_ownername) +
                           "\n            "
                       )
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "uk-panel uk-margin" }, [
-                  _c("h4", { staticClass: "uk-h5 uk-margin-remove-bottom" }, [
-                    _vm._v("Jenis Pengembang")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "p",
-                    { staticClass: "uk-text-meta uk-margin-remove-top" },
-                    [
-                      _vm.getdeveloper.detail.dev_ownership === "perusahaan"
-                        ? _c("span", [_vm._v("Perusahaan")])
-                        : _c("span", [_vm._v("Individu")])
                     ]
                   )
                 ]),

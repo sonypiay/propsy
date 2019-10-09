@@ -47,6 +47,9 @@ class ProjectMarketingController extends Controller
       'marketing_user.mkt_mobile_phone',
       'marketing_user.mkt_username',
       'marketing_user.mkt_password',
+      'marketing_user.mkt_address',
+      'marketing_user.created_at',
+      'marketing_user.updated_at',
       'city.city_id',
       'city.city_name',
       'province.province_id',
@@ -100,6 +103,7 @@ class ProjectMarketingController extends Controller
     $password = $request->mkt_password;
     $hash_password = Hash::make( $password, ['rounds' => 12]);
     $city = $request->mkt_city;
+    $address = $request->mkt_address;
     $phone_number = $request->mkt_phone_number === '' ? null : $request->mkt_phone_number;
     $mobile_phone = $request->mkt_mobile_phone;
     $check_username = $marketinguser->where('mkt_username', $username);
@@ -128,6 +132,7 @@ class ProjectMarketingController extends Controller
       $insert->mkt_username = $username;
       $insert->mkt_password = $hash_password;
       $insert->city_id = $city;
+      $insert->mkt_address = $address;
       $insert->mkt_phone_number = $phone_number;
       $insert->mkt_mobile_phone = $mobile_phone;
       $insert->dev_user_id = session()->get('dev_user_id');
@@ -146,6 +151,7 @@ class ProjectMarketingController extends Controller
     $password = $request->mkt_password;
     $hash_password = Hash::make( $password, ['rounds' => 12]);
     $city = $request->mkt_city;
+    $address = $request->mkt_address;
     $phone_number = $request->mkt_phone_number === '' ? null : $request->mkt_phone_number;
     $mobile_phone = $request->mkt_mobile_phone;
     $getmarketing = $marketinguser->where('mkt_user_id', $userid)->first();
@@ -154,6 +160,7 @@ class ProjectMarketingController extends Controller
     $getmarketing->mkt_fullname = $fullname;
     if( ! empty( $password ) ) $getmarketing->mkt_password = $hash_password;
     $getmarketing->city_id = $city;
+    $getmarketing->mkt_address = $address;
     $getmarketing->mkt_phone_number = $phone_number;
     $getmarketing->mkt_mobile_phone = $mobile_phone;
 

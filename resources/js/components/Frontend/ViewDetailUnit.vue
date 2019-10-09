@@ -27,15 +27,19 @@
         <label class="uk-label uk-label-danger" v-else>Terjual</label>
       </div>
       <div class="uk-margin-bottom container-projectlead">
-        <span uk-icon="location"></span> {{ projectcity.city_name }}, {{ projectcity.province_name }}
+        <span uk-icon="location"></span> {{ getunit.city_name }}, {{ getunit.province_name }}
+        <div v-show="getunit.project_address" class="uk-text-small">
+          {{ getunit.project_address }}
+        </div>
       </div>
       <div class="uk-grid-medium" uk-grid>
         <div class="uk-width-expand">
           <!-- gallery -->
-          <div class="uk-position-relative uk-visible-toggle uk-light" tabindex="-1" uk-slideshow="ratio: 16:9; animation: push">
+          <div class="uk-position-relative uk-visible-toggle uk-light" tabindex="-1" uk-slideshow="animation: push">
             <ul class="uk-slideshow-items">
               <li v-for="gallery in getgallery">
-                <img :src="$root.url + '/images/project/gallery/' + gallery.unit_gallery_filename" uk-cover>
+                <img :src="$root.url + '/storage/assets/images/project/gallery/' + gallery.unit_gallery_filename" uk-cover>
+                <canvas width="600" height="400"></canvas>
               </li>
             </ul>
             <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slideshow-item="previous"></a>
@@ -173,13 +177,12 @@
               </div>
             </div>
             <hr class="uk-divider-icon">
-            <div id="fasilitas" class="uk-card-body uk-card-small container-projectbody">
+            <div id="lokasi" class="uk-card-body uk-card-small container-projectbody">
               <div class="uk-margin content-projectdetail">
                 <div class="uk-margin-small content-projectheading">
                   Google Maps
                 </div>
                 <div class="uk-margin-small content-projectlead" v-html="getunit.project_map_embed">
-
                 </div>
               </div>
             </div>
@@ -192,7 +195,7 @@
                 <div class="uk-margin-small content-projectlead">
                   <div class="uk-card uk-grid-collapse uk-margin" uk-grid>
                     <div class="uk-width-1-3 uk-card-media-left uk-cover-container" v-if="getunit.project_thumbnail">
-                      <img :src="$root.url + '/images/project/gallery/' + getunit.project_thumbnail" uk-cover />
+                      <img :src="$root.url + '/storage/assets/images/project/gallery/' + getunit.project_thumbnail" uk-cover />
                       <canvas width="600" height="400"></canvas>
                     </div>
                     <div class="uk-width-expand">
@@ -217,11 +220,10 @@
               <span uk-icon="icon: users; ratio: 4"></span>
             </div>
             <div v-else class="dev-withlogo">
-              <img class="uk-align-center" :src="$root.url + '/images/devlogo/' + getunit.dev_logo" :alt="getunit.dev_name">
+              <img class="uk-align-center" :src="$root.url + '/storage/assets/images/devlogo/' + getunit.dev_logo" />
             </div>
             <div class="uk-margin sidebar-dev-profile">
               <a class="dev-profile-name" href="#">{{ getunit.dev_name }}</a>
-              <div class="dev-profile-region">{{ devcity.province_name + ', ' + devcity.city_name }}</div>
             </div>
             <div class="uk-margin uk-text-center">
               <a class="uk-width-1-1 uk-button uk-button-primary uk-margin-small sidebar-viewproject" :href="$root.url + '/profile/developer/' + getunit.dev_slug">Lihat Pengembang</a>
@@ -258,8 +260,6 @@ export default {
     'getunit',
     'getgallery',
     'getmarketing',
-    'projectcity',
-    'devcity',
     'session_active'
   ],
   data() {

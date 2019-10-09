@@ -2,7 +2,7 @@
   <div>
     <div class="uk-card dashboard-content">
       <ul class="uk-breadcrumb">
-        <li><a :href="$root.url + '/developer/project/dashboard'">Dashboard</a></li>
+        <li><a :href="$root.url + '/developer/dashboard'">Dashboard</a></li>
         <li><a :href="$root.url + '/developer/project/manage_project'">Kelola Proyek</a></li>
         <li><span>Edit Proyek</span></li>
       </ul>
@@ -144,7 +144,7 @@ export default {
         project_description: this.getproject.project_description,
         project_address: this.getproject.project_address,
         project_region: this.getproject.province_id === null ? '' : this.getproject.province_id,
-        project_city: this.getproject.project_city,
+        project_city: this.getproject.city_id,
         project_link_map: this.getproject.project_link_map === null ? '' : this.getproject.project_link_map,
         project_map_embed: this.getproject.project_map_embed === null ? '' : this.getproject.project_map_embed,
         project_status: this.getproject.project_status,

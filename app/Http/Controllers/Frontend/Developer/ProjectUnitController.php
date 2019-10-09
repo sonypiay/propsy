@@ -43,7 +43,8 @@ class ProjectUnitController extends Controller
     {
       $getproject = $project_list->select(
         'project_id',
-        'project_name'
+        'project_name',
+        'project_type'
       )
       ->where('project_id', $project_id)->first();
 
@@ -113,7 +114,8 @@ class ProjectUnitController extends Controller
 
       $getproject = $project_list->select(
         'project_id',
-        'project_name'
+        'project_name',
+        'project_type'
       )
       ->where('project_id', $getunit->project_id)->first();
 
@@ -203,7 +205,6 @@ class ProjectUnitController extends Controller
     $images = $request->images;
     $gallery = new $unit_gallery;
     $data_images = [];
-    $date = date('Y-m-d H:i:s');
     $storage = Storage::disk('assets');
     $imagepath = 'images/project/gallery';
 
@@ -218,7 +219,7 @@ class ProjectUnitController extends Controller
     }
 
     $gallery->insert( $data_images );
-    
+
     $res = ['status' => 200, 'statusText' => 'success'];
     return response()->json( $res, $res['status'] );
   }
@@ -226,7 +227,7 @@ class ProjectUnitController extends Controller
   public function get_gallery_unit( Request $request, ProjectUnitGallery $unit_gallery, $id )
   {
     $gallery = $unit_gallery->where('unit_type_id', $id)
-    ->orderBy('created_at', 'desc')->get();
+    ->orderBy('unit_gallery_id', 'desc')->get();
 
     $res = [
       'results' => [

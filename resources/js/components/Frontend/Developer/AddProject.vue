@@ -2,7 +2,7 @@
   <div>
     <div class="uk-card dashboard-content">
       <ul class="uk-breadcrumb">
-        <li><a :href="$root.url + '/developer/project/dashboard'">Dashboard</a></li>
+        <li><a :href="$root.url + '/developer/dashboard'">Dashboard</a></li>
         <li><a :href="$root.url + '/developer/project/manage_project'">Kelola Proyek</a></li>
         <li><span>Tambah Proyek</span></li>
       </ul>

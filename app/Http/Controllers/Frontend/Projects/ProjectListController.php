@@ -80,9 +80,11 @@ class ProjectListController extends Controller
       'project_list.project_estimate_launch',
       'project_list.created_at',
       'project_list.updated_at',
+      'city.city_id',
+      'city.city_name',
       'developer_user.dev_name',
       'developer_user.dev_slug',
-      'developer_user.dev_logo',
+      'developer_user.dev_logo'
     )
     ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
     ->join('city', 'project_list.city_id', '=', 'city.city_id')
@@ -93,7 +95,7 @@ class ProjectListController extends Controller
     if( ! $getproject ) abort(404);
 
     $getgallery = $project_gallery->where('project_id', $getproject->project_id)
-    ->orderBy('created_at', 'desc')
+    ->orderBy('gallery_id', 'desc')
     ->get();
 
     $getunit_price = $unit_type->where('project_id', $getproject->project_id)
@@ -152,10 +154,14 @@ class ProjectListController extends Controller
       'project_list.project_description',
       'project_list.project_address',
       'project_list.project_map_embed',
+      'developer_user.dev_user_id',
       'developer_user.dev_name',
       'developer_user.dev_slug',
       'developer_user.dev_logo',
-      'developer_user.dev_biography'
+      'developer_user.dev_biography',
+      'city.city_id',
+      'city.city_name',
+      'province.province_name'
     )
     ->join('project_list', 'project_unit_type.project_id', '=', 'project_list.project_id')
     ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
@@ -167,7 +173,7 @@ class ProjectListController extends Controller
     if( ! $getunit ) abort(404);
 
     $getgallery = $project_gallery->where('unit_type_id', $getunit->unit_type_id)
-    ->orderBy('created_at', 'desc')
+    ->orderBy('unit_gallery_id', 'desc')
     ->get();
 
     $getmarketing = $marketing->where('dev_user_id', $getunit->dev_user_id)->get();

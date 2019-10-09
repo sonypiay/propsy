@@ -2,9 +2,9 @@
   <div>
     <div class="uk-card dashboard-content">
       <ul class="uk-breadcrumb">
-        <li><a :href="$root.url + '/developer/project/dashboard'">Dashboard</a></li>
+        <li><a :href="$root.url + '/developer/dashboard'">Dashboard</a></li>
         <li><a :href="$root.url + '/developer/project/manage_project'">Kelola Proyek</a></li>
-        <li><a :href="$root.url + '/developer/project/detail/' + getproject.project_unique_id">{{ getproject.project_name }}</a></li>
+        <li><a :href="$root.url + '/developer/project/detail/' + getproject.project_id">{{ getproject.project_name }}</a></li>
         <li><span>Edit Unit</span></li>
       </ul>
       <div class="uk-card-title uk-margin dashboard-content-heading">Edit Unit - {{ getproject.project_name }}</div>
@@ -18,7 +18,7 @@
           <div v-show="errors.name.unit_name" class="uk-text-danger uk-text-small">{{ errors.name.unit_name }}</div>
         </div>
         <div class="uk-width-1-3">
-          <label class="uk-form-label dash-form-label">Jumlah Lantai <span v-html="forms.formrequired"></span></label>
+          <label class="uk-form-label dash-form-label">Jumlah Lantai <span v-show="getproject.project_type === 'residensial'" v-html="forms.formrequired"></span></label>
           <div class="uk-form-controls">
             <input type="number" class="uk-input dash-form-input" v-model="forms.unit_floor">
           </div>
@@ -39,14 +39,14 @@
           <div v-show="errors.name.unit_km" class="uk-text-danger uk-text-small">{{ errors.name.unit_km }}</div>
         </div>
         <div class="uk-width-1-3">
-          <label class="uk-form-label dash-form-label">Luas Lahan <span v-html="forms.formrequired"></span></label>
+          <label class="uk-form-label dash-form-label">Luas Lahan <span v-show="getproject.project_type === 'residensial'" v-html="forms.formrequired"></span></label>
           <div class="uk-form-controls">
             <input type="number" class="uk-input dash-form-input" v-model="forms.unit_lt" uk-tooltip="m2">
           </div>
           <div v-show="errors.name.unit_lt" class="uk-text-danger uk-text-small">{{ errors.name.unit_lt }}</div>
         </div>
         <div class="uk-width-1-3">
-          <label class="uk-form-label dash-form-label">Luas Bangunan <span v-html="forms.formrequired"></span></label>
+          <label class="uk-form-label dash-form-label">Luas Bangunan <span v-show="getproject.project_type === 'residensial'" v-html="forms.formrequired"></span></label>
           <div class="uk-form-controls">
             <input type="number" class="uk-input dash-form-input" v-model="forms.unit_lb" uk-tooltip="m2">
           </div>
@@ -60,7 +60,7 @@
           <div v-show="errors.name.unit_price" class="uk-text-danger uk-text-small">{{ errors.name.unit_price }}</div>
         </div>
         <div class="uk-width-1-3">
-          <label class="uk-form-label dash-form-label">Kapasitas Watt <span v-html="forms.formrequired"></span></label>
+          <label class="uk-form-label dash-form-label">Kapasitas Watt <span v-show="getproject.project_type === 'residensial'" v-html="forms.formrequired"></span></label>
           <div class="uk-form-controls">
             <input type="number" class="uk-input dash-form-input" v-model="forms.unit_watt">
           </div>
@@ -101,7 +101,7 @@
         </div>
         <div class="uk-width-1-1">
           <button class="uk-button uk-button-primary dash-btn" v-html="forms.submit"></button>
-          <a :href="$root.url + '/developer/project/detail/' + getproject.project_unique_id" class="uk-button uk-button-primary dash-btn dash-btn-cancel">Batal</a>
+          <a :href="$root.url + '/developer/project/detail/' + getproject.project_id" class="uk-button uk-button-primary dash-btn dash-btn-cancel">Batal</a>
         </div>
       </form>
     </div>
@@ -175,11 +175,6 @@ export default {
         this.errors.name.unit_name = 'Nama unit harap diisi';
         this.errors.iserror = true;
       }
-      if( this.forms.unit_floor < 1 || this.forms.unit_floor === '' )
-      {
-        this.errors.name.unit_floor = 'Jumlah lantai harap diisi';
-        this.errors.iserror = true;
-      }
       if( this.forms.unit_kt < 1 || this.forms.unit_kt === '' )
       {
         this.errors.name.unit_kt = 'Jumlah kamar tidur harap diisi';
@@ -190,24 +185,9 @@ export default {
         this.errors.name.unit_km = 'Jumlah kamar mandi harap diisi';
         this.errors.iserror = true;
       }
-      if( this.forms.unit_lt < 1 || this.forms.unit_lt === '' )
-      {
-        this.errors.name.unit_lt = 'Luas lahan harap diisi';
-        this.errors.iserror = true;
-      }
-      if( this.forms.unit_lb < 1 || this.forms.unit_lb === '' )
-      {
-        this.errors.name.unit_lb = 'Luas bangunan harap diisi';
-        this.errors.iserror = true;
-      }
       if( this.forms.unit_price < 1 || this.forms.unit_price === '' )
       {
         this.errors.name.unit_price = 'Harga harap diisi';
-        this.errors.iserror = true;
-      }
-      if( this.forms.unit_watt < 1 || this.forms.unit_watt === '' )
-      {
-        this.errors.name.unit_watt = 'Watt harap diisi';
         this.errors.iserror = true;
       }
       if( this.forms.unit_facility.length === 0 )
@@ -219,6 +199,30 @@ export default {
       {
         this.errors.name.unit_description = 'Deskripsi unit harap diisi';
         this.errors.iserror = true;
+      }
+
+      if( this.getproject.project_type === 'residensial' )
+      {
+        if( this.forms.unit_floor < 1 || this.forms.unit_floor === '' )
+        {
+          this.errors.name.unit_floor = 'Jumlah lantai harap diisi';
+          this.errors.iserror = true;
+        }
+        if( this.forms.unit_lt < 1 || this.forms.unit_lt === '' )
+        {
+          this.errors.name.unit_lt = 'Luas lahan harap diisi';
+          this.errors.iserror = true;
+        }
+        if( this.forms.unit_lb < 1 || this.forms.unit_lb === '' )
+        {
+          this.errors.name.unit_lb = 'Luas bangunan harap diisi';
+          this.errors.iserror = true;
+        }
+        if( this.forms.unit_watt < 1 || this.forms.unit_watt === '' )
+        {
+          this.errors.name.unit_watt = 'Watt harap diisi';
+          this.errors.iserror = true;
+        }
       }
 
       if( this.errors.iserror === true ) return false;
@@ -248,7 +252,7 @@ export default {
           icon: 'success'
         });
         setTimeout(() => {
-          document.location = this.$root.url + '/developer/project/detail/' + this.getproject.project_unique_id;
+          document.location = this.$root.url + '/developer/project/detail/' + this.getproject.project_id;
         }, 2000);
       }).catch( err => {
         this.errors.errorMessage = err.response.statusText;

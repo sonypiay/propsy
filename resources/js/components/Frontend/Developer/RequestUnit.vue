@@ -105,7 +105,7 @@
         <div>
           <select class="uk-select uk-select dash-form-input" v-model="forms.status_request" @change="getRequestUnit()">
             <option value="all">Semua Status</option>
-            <option value="waiting_response">Meunggu Tanggapan</option>
+            <option value="waiting_response">Menunggu Tanggapan</option>
             <option value="cancel">Dibatalkan</option>
             <option value="meeting">Dijadwalkan Meeting</option>
             <option value="reject">Ditolak</option>

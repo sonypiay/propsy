@@ -37,7 +37,7 @@
       <a href="{{ route('developer_request_unit') }}"><span class="uk-margin-small-right" uk-icon="icon: cart; ratio: 1"></span> Pemesanan</a>
     </li>
     <li>
-      <a href="{{ route('developer_meeting_list') }}"><span class="uk-margin-small-right" uk-icon="icon: users; ratio: 1"></span> Marketing</a>
+      <a href="{{ route('developer_manage_marketing') }}"><span class="uk-margin-small-right" uk-icon="icon: users; ratio: 1"></span> Marketing</a>
     </li>
     <li class="uk-parent">
       <a href="#"><span class="uk-margin-small-right" uk-icon="icon: file-text; ratio: 1"></span> Laporan <span class="uk-float-right" uk-icon="icon: chevron-down; ratio: 1"></span></a>

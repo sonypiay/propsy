@@ -9,6 +9,7 @@ use App\Database\DeveloperUser;
 use App\Database\ProjectList;
 use App\Database\ProjectUnitType;
 use App\Database\ProjectGallery;
+use App\Database\ProjectUnitGallery;
 use App\Database\UnitFacility;
 use App\Database\ProvinceDB;
 use App\Database\CityDB;
@@ -267,7 +268,7 @@ class ProjectListController extends Controller
     return response()->json( $data, $data['status'] );
   }
 
-  public function delete_project( Request $request, ProjectList $project_list, ProjectGallery $gallery, $project_id )
+  public function delete_project( Request $request, ProjectList $project_list, ProjectGallery $gallery, ProjectUnitGallery $unit_gallery, $project_id )
   {
     $path_img = 'images/project/gallery';
     $storage = Storage::disk('assets');
@@ -276,7 +277,16 @@ class ProjectListController extends Controller
     {
       $result_project = $getproject->first();
       $getgallery = $gallery->where('project_id', $result_project->project_id);
-      if( $getgallery->count() !== 0 )
+      $getunitgallery = $unit_gallery->select(
+        'project_unit_gallery.unit_gallery_filename',
+        'project_unit_gallery.unit_type_id'
+      )
+      ->join('project_unit_type', 'project_unit_gallery.unit_type_id', '=', 'project_unit_type.unit_type_id')
+      ->where('project_unit_type.project_id', $project_id)
+      ->groupBy('project_unit_type.unit_type_id')
+      ->get();
+
+      if( $getgallery->count() > 0 )
       {
         foreach( $getgallery->get() as $g ):
           if( $storage->exists( $path_img . '/' . $g->gallery_filename ) )
@@ -284,7 +294,16 @@ class ProjectListController extends Controller
             $storage->delete( $path_img . '/' . $g->gallery_filename );
           }
         endforeach;
-        $getgallery->delete();
+      }
+
+      if( $getunitgallery->count() > 0 )
+      {
+        foreach( $getunitgallery as $g ):
+          if( $storage->exists( $path_img . '/' . $g->unit_gallery_filename ) )
+          {
+            $storage->delete( $path_img . '/' . $g->unit_gallery_filename );
+          }
+        endforeach;
       }
       $getproject->delete();
     }

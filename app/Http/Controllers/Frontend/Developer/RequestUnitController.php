@@ -198,7 +198,7 @@ class RequestUnitController extends Controller
         'message' => 'Developer telah me-review pengajuan pemesanan unit.'
       ]);
 
-      $log_message = $status_review === 'reject' ? 'Developer menolak pesanan pelanggan.' : 'Developer menyetujui pesanan pelanggan. <br /> Unit telah terjual.'
+      $log_message = $status_review === 'reject' ? 'Developer menolak pesanan pelanggan.' : 'Developer menyetujui pesanan pelanggan. <br /> Unit telah terjual.';
       $log_request->insert_log([
         'request_id' => $request_id,
         'message' => $log_message

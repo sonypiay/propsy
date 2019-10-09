@@ -194,12 +194,6 @@
                       </a>
                     </div>
                     <div>
-                      <a target="_blank" :href="$root.url + '/developer/project/detail/' + project.project_unique_id" class="uk-button uk-button-text">
-                        <span uk-icon="icon: forward; ratio: 1"></span>
-                        Lihat Rincian
-                      </a>
-                    </div>
-                    <div>
                       <a target="_blank" :href="$root.url + '/project/view/' + project.project_slug" class="uk-button uk-button-text">
                         <span uk-icon="icon: file-text; ratio: 1"></span>
                         Ke Laman Proyek
@@ -226,9 +220,9 @@
                   </div>
                   <div class="uk-grid-small uk-child-width-auto uk-margin" uk-grid>
                     <div>
-                      <a target="_blank" :href="$root.url + '/developer/project/detail/' + unit.project_unique_id" class="uk-button uk-button-text">
-                        <span uk-icon="icon: forward; ratio: 1"></span>
-                        Lihat Rincian
+                      <a target="_blank" :href="$root.url + '/developer/project/edit_unit/' + unit.unit_type_id" class="uk-button uk-button-text">
+                        <span uk-icon="icon: pencil; ratio: 1"></span>
+                        Edit Unit
                       </a>
                     </div>
                     <div>

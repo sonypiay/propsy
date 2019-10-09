@@ -69,7 +69,6 @@ class AuthController extends Controller
     $ownername = $request->dev_ownername;
     $biography = $request->dev_biography;
     $name = $request->dev_name;
-    $ownership = $request->dev_ownership;
     $hash_password = Hash::make( $password, ['rounds' => 12]);
     $check_username = $developeruser->where('dev_username', $username);
     $check_email = $developeruser->where('dev_email', $email);

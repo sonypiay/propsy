@@ -11,7 +11,7 @@
                 </div>
               </div>
               <div v-else class="uk-margin side-profile-photo">
-                <img class="uk-width-1-1" :src="$root.url + '/images/devlogo/' + session_user.dev_logo" alt="">
+                <img class="uk-width-1-1" :src="$root.url + '/storage/assets/images/devlogo/' + session_user.dev_logo" alt="">
               </div>
               <div class="uk-margin side-profile-joined">
                 Bergabung pada <br>

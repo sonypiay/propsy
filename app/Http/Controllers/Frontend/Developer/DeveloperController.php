@@ -98,7 +98,6 @@ class DeveloperController extends Controller
     $getinfo->city_id = $city;
     $getinfo->dev_biography = $biography;
     $getinfo->dev_address = $address;
-    $getinfo->dev_ownership = $ownership;
 
     if( $getinfo->dev_username === $username )
     {

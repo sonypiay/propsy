@@ -71,7 +71,7 @@ class CityController extends Controller
       $res = ['status' => 200, 'statusText' => 'success'];
     }
 
-    return response()->json( $res, 200 );
+    return response()->json( $res, $res['status'] );
   }
 
   public function save( Request $request, CityDB $city, $id )
@@ -102,8 +102,8 @@ class CityController extends Controller
       $getcity->save();
       $res = ['status' => 200, 'statusText' => 'success'];
     }
-    
-    return response()->json( $res, 200 );
+
+    return response()->json( $res, $res['status'] );
   }
 
   public function destroy( Request $request, CityDB $city, $id )

@@ -47,7 +47,7 @@ class Customer extends Model
 
     $key = 'CUST';
     $pad = str_pad( $id, 4, '0', STR_PAD_LEFT );
-    $generate_id = $key . date('ymd') . $pad;
+    $generate_id = $key . $pad;
     return $generate_id;
   }
 }

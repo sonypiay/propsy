@@ -197,7 +197,7 @@ class AdminOwnerController extends Controller
     $admin_username = $request->admin_username;
     $admin_password = $request->admin_password;
     $admin_gender = $request->admin_gender;
-    $hash_password = Hash::make( $password, ['rounds' => 12]);
+    $hash_password = Hash::make( $admin_password, ['rounds' => 12]);
 
     $check_email = $owner->where('admin_email', $admin_email);
     $check_username = $owner->where('admin_username', $admin_username);

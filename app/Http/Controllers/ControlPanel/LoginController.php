@@ -37,7 +37,7 @@ class LoginController extends Controller
     else
     {
       $getresult = $check_username->first();
-      if( Hash::check( $getresult->admin_password, $password ) )
+      if( Hash::check( $password, $getresult->admin_password ) )
       {
         session()->put('isControlPanel', true);
         session()->put('cp_admin_id', $getresult->admin_id);

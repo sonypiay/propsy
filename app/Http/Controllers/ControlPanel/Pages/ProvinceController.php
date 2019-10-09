@@ -65,7 +65,7 @@ class ProvinceController extends Controller
       $res = ['status' => 200, 'statusText' => 'success'];
     }
 
-    return response()->json( $res, 200 );
+    return response()->json( $res, $res['status'] );
   }
 
   public function save( Request $request, ProvinceDB $province, $id )
@@ -94,8 +94,8 @@ class ProvinceController extends Controller
       $getprovince->save();
       $res = ['status' => 200, 'statusText' => 'success'];
     }
-    
-    return response()->json( $res, 200 );
+
+    return response()->json( $res, $res['status'] );
   }
 
   public function destroy( Request $request, ProvinceDB $province, $id )

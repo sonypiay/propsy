@@ -1,17 +1,16 @@
 <template>
   <div>
     <div class="uk-container uk-margin-large-top uk-margin-large-bottom">
+      <div v-show="session_user.status_verification === 'N'" class="uk-alert-warning uk-margin" uk-alert>
+        Akun anda belum terverifikasi. Silakan cek inbox / spam email atau <a @click="isMenuActive = 'email'"><strong>klik disini</strong></a>
+      </div>
       <div class="uk-grid-small uk-grid-match" uk-grid>
         <div class="uk-width-1-4">
           <div class="uk-card uk-card-body uk-card-default side-navbar-profile">
             <div class="uk-margin side-profile-info">
-              <div v-if="session_user.customer_photo === null" class="uk-tile uk-tile-default uk-margin side-profile-photo">
-                <div class="uk-position-center">
-                  <span uk-icon="icon: user; ratio: 3"></span>
-                </div>
-              </div>
-              <div v-else class="uk-margin side-profile-photo">
-                <img class="uk-width-1-1" :src="$root.url + '/images/avatar/' + session_user.customer_photo" alt="">
+              <div class="uk-margin side-profile-photo">
+                <img v-if="session_user.customer_photo" class="uk-width-1-1" :src="$root.url + '/storage/assets/images/avatar/' + session_user.customer_photo" alt="">
+                <img v-else class="uk-width-1-1" :src="$root.url + '/images/avatar/avatar.jpg'" alt="">
               </div>
               <div class="uk-margin side-profile-joined">
                 Bergabung pada <br>

@@ -28,7 +28,6 @@
                       <a :href="$root.url + '/project/view/' + p.project_slug" class="uk-card-title hmpg-card-title">{{ p.project_name }}</a>
                       <div class="hmpg-card-meta">{{ $root.formatDate( p.created_at, 'DD MMMM YYYY' ) }}</div>
                       <div class="uk-text-truncate uk-margin-top hmpg-card-content" v-html="$root.htmlStripTags( p.project_description, 300 )">
-
                       </div>
                     </div>
                   </div>

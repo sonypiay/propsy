@@ -212,7 +212,7 @@ class CustomerController extends Controller
     if( $getcustomer->status_verification === 'N' )
     {
       $expire_date = time() + 60 * 30;
-      $hash_id = sha1( Hash::make($email.$getinfo->customer_password) );
+      $hash_id = sha1( Hash::make($getcustomer->customer_email.$getcustomer->customer_password) );
       $data_verify = [
         'customer_id' => $getcustomer->customer_id,
         'hash_id' => $hash_id,

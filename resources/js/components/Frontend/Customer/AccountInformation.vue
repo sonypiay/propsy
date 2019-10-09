@@ -62,7 +62,7 @@ export default {
       forms: {
         fullname: this.session_user.customer_name,
         phone_number: this.session_user.customer_phone_number,
-        city: this.session_user.customer_city === null ? '' : this.session_user.customer_city,
+        city: this.session_user.city_id === null ? '' : this.session_user.city_id,
         region: this.session_user.province_id === null ? '' : this.session_user.province_id,
         address: this.session_user.customer_address,
         username: this.session_user.customer_username,

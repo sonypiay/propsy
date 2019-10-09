@@ -17,7 +17,7 @@ class ProjectRequestController extends Controller
     $limit = isset( $request->limit ) ? $request->limit : 10;
 
     $getrequest = $project_request->select(
-      'project_request.request_unique_id',
+      'project_request.request_id',
       'project_request.request_message',
       'project_request.status_request',
       'project_request.isReviewed',
@@ -36,7 +36,7 @@ class ProjectRequestController extends Controller
 
     if( ! empty( $keywords ) )
     {
-      $getrequest = $getrequest->where('project_request.request_unique_id', 'like', '%' . $keywords . '%');
+      $getrequest = $getrequest->where('project_request.request_id', 'like', '%' . $keywords . '%');
     }
 
     $result = $getrequest->paginate( $limit );
@@ -49,7 +49,7 @@ class ProjectRequestController extends Controller
     $limit = isset( $request->limit ) ? $request->limit : 10;
 
     $getrequest = $project_request->select(
-      'project_request.request_unique_id',
+      'project_request.request_id',
       'project_request.request_message',
       'project_request.status_request',
       'project_request.isReviewed',
@@ -68,7 +68,7 @@ class ProjectRequestController extends Controller
 
     if( ! empty( $keywords ) )
     {
-      $getrequest = $getrequest->where('project_request.request_unique_id', 'like', '%' . $keywords . '%');
+      $getrequest = $getrequest->where('project_request.request_id', 'like', '%' . $keywords . '%');
     }
 
     $result = $getrequest->paginate( $limit );
@@ -78,7 +78,7 @@ class ProjectRequestController extends Controller
   public function get_detail_request( ProjectRequest $project_request, LogProjectRequest $log_request, $request_id )
   {
     $getrequest = $project_request->select(
-      'project_request.request_unique_id',
+      'project_request.request_id',
       'project_request.request_message',
       'project_request.status_request',
       'project_request.isReviewed',
@@ -98,12 +98,12 @@ class ProjectRequestController extends Controller
     ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
     ->join('developer_user', 'project_request.dev_user_id', '=', 'developer_user.dev_user_id')
     ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
-    ->leftJoin('meeting_appointment', 'project_request.request_unique_id', '=', 'meeting_appointment.request_unique_id')
+    ->leftJoin('meeting_appointment', 'project_request.request_id', '=', 'meeting_appointment.request_id')
     ->orderBy('project_request.created_at', 'desc')
-    ->where('project_request.request_unique_id', '=', $request_id)
+    ->where('project_request.request_id', '=', $request_id)
     ->first();
 
-    $getlog = $log_request->where('request_unique_id', $request_id)
+    $getlog = $log_request->where('request_id', $request_id)
     ->orderBy('created_at', 'desc')
     ->get();
 

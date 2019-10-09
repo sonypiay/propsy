@@ -32,7 +32,7 @@ class ProjectApi extends Controller
       DB::raw('count(if(project_unit_type.unit_status="booked",1,NULL)) as booked'),
       DB::raw('count(if(project_unit_type.unit_status="sold",1,NULL)) as sold')
     )
-    ->leftJoin('project_list', 'project_unit_type.project_unique_id', '=', 'project_list.project_unique_id')
+    ->leftJoin('project_list', 'project_unit_type.project_id', '=', 'project_list.project_id')
     ->where('project_list.dev_user_id', $developer->dev_user_id)
     ->first();
 
@@ -92,7 +92,6 @@ class ProjectApi extends Controller
     $developer = $developeruser->getinfo();
     $getproject = $project_list->select(
       'project_id',
-      'project_unique_id',
       'project_slug',
       'project_name',
       'project_thumbnail',
@@ -112,9 +111,9 @@ class ProjectApi extends Controller
       'project_unit_type.unit_thumbnail',
       'project_unit_type.unit_status',
       'project_unit_type.unit_price',
-      'project_unit_type.project_unique_id'
+      'project_unit_type.project_id'
     )
-    ->join('project_list', 'project_unit_type.project_unique_id', '=', 'project_list.project_unique_id')
+    ->join('project_list', 'project_unit_type.project_id', '=', 'project_list.project_id')
     ->where('project_list.dev_user_id', $developer->dev_user_id)
     ->orderBy('project_unit_type.created_at', 'desc')
     ->take(5)
@@ -137,11 +136,11 @@ class ProjectApi extends Controller
     $developer = $developeruser->getinfo();
 
     $latest_log = $log_request->select(
-      'log_project_request.request_unique_id',
+      'log_project_request.request_id',
       'log_project_request.log_message',
       'log_project_request.created_at'
     )
-    ->join('project_request', 'log_project_request.request_unique_id', '=', 'project_request.request_unique_id')
+    ->join('project_request', 'log_project_request.request_id', '=', 'project_request.request_id')
     ->where('project_request.dev_user_id', $developer->dev_user_id)
     ->orderBy('log_project_request.created_at', 'desc')
     ->take(10)

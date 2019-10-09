@@ -41,9 +41,7 @@ class RegionCityApi extends Controller
     $getcity = $city->select(
       'city.city_id',
       'city.city_name',
-      'city.city_slug',
-      'province.province_name',
-      'province.province_slug'
+      'province.province_name'
     )
     ->join('province', 'city.province_id', '=', 'province.province_id')
     ->where('city.province_id', $provinsi)
@@ -63,9 +61,7 @@ class RegionCityApi extends Controller
     $getcity = $city->select(
       'city.city_id',
       'city.city_name',
-      'city.city_slug',
-      'province.province_name',
-      'province.province_slug'
+      'province.province_name'
     )
     ->join('province', 'city.province_id', '=', 'province.province_id')
     ->where([

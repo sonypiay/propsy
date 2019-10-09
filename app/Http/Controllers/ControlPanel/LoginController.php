@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ControlPanel;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Database\AdminOwner;
 use App\Http\Controllers\Controller;
 
@@ -25,7 +26,6 @@ class LoginController extends Controller
   {
     $username = $request->username;
     $password = $request->password;
-    $hash_password = md5( $password );
     $check_username = $owner->where('admin_username', $username);
     if( $check_username->count() === 0 )
     {
@@ -37,7 +37,7 @@ class LoginController extends Controller
     else
     {
       $getresult = $check_username->first();
-      if( $getresult->admin_password === $hash_password )
+      if( Hash::check( $getresult->admin_password, $password ) )
       {
         session()->put('isControlPanel', true);
         session()->put('cp_admin_id', $getresult->admin_id);

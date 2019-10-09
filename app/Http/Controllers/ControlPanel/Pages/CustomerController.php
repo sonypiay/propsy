@@ -40,7 +40,6 @@ class CustomerController extends Controller
       'customer.customer_name',
       'customer.customer_email',
       'customer.customer_address',
-      'customer.customer_city',
       'customer.customer_phone_number',
       'customer.customer_username',
       'customer.customer_password',
@@ -48,16 +47,17 @@ class CustomerController extends Controller
       'customer.status_verification',
       'customer.created_at',
       'customer.updated_at',
+      'city.city_id',
       'city.city_name',
       'province.province_name'
     )
-    ->leftJoin('city', 'customer.customer_city', '=', 'city.city_id')
+    ->leftJoin('city', 'customer.city_id', '=', 'city.city_id')
     ->leftJoin('province', 'city.province_id', '=', 'province.province_id')
     ->orderBy('customer.created_at', 'desc');
 
     if( $city !== 'all' )
     {
-      $getcustomer = $getcustomer->where('customer.customer_city', '=', $city);
+      $getcustomer = $getcustomer->where('city.city_id', '=', $city);
     }
 
     if( ! empty( $keywords ) )
@@ -82,7 +82,6 @@ class CustomerController extends Controller
       'customer.customer_name',
       'customer.customer_email',
       'customer.customer_address',
-      'customer.customer_city',
       'customer.customer_phone_number',
       'customer.customer_username',
       'customer.customer_password',
@@ -90,16 +89,17 @@ class CustomerController extends Controller
       'customer.status_verification',
       'customer.created_at',
       'customer.updated_at',
+      'city.city_id',
       'city.city_name',
       'province.province_name'
     )
-    ->leftJoin('city', 'customer.customer_city', '=', 'city.city_id')
+    ->leftJoin('city', 'customer.city_id', '=', 'city.city_id')
     ->leftJoin('province', 'city.province_id', '=', 'province.province_id')
     ->orderBy('customer.created_at', 'desc');
 
     if( $city !== 'all' )
     {
-      $getcustomer = $getcustomer->where('customer.customer_city', '=', $city);
+      $getcustomer = $getcustomer->where('city.city_id', '=', $city);
     }
 
     if( ! empty( $keywords ) )

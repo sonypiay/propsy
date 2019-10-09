@@ -22,11 +22,9 @@ class ProjectController extends Controller
 
     $getproject = $project_list->select(
       'project_list.project_id',
-      'project_list.project_unique_id',
       'project_list.project_name',
       'project_list.project_thumbnail',
       'project_list.project_address',
-      'project_list.project_city',
       'project_list.project_type',
       'project_list.project_status',
       'project_list.project_estimate_launch',
@@ -34,25 +32,26 @@ class ProjectController extends Controller
       'project_list.created_at',
       'project_list.updated_at',
       'developer_user.dev_name',
+      'city.city_id',
       'city.city_name',
       'province.province_name',
       DB::raw('count(project_unit_type.unit_type_id) as total_unit')
     )
     ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
-    ->join('city', 'project_list.project_city', '=', 'city.city_id')
+    ->join('city', 'project_list.city_id', '=', 'city.city_id')
     ->join('province', 'city.province_id', '=', 'province.province_id')
-    ->leftJoin('project_unit_type', 'project_list.project_unique_id', '=', 'project_unit_type.project_unique_id')
+    ->leftJoin('project_unit_type', 'project_list.project_id', '=', 'project_unit_type.project_id')
     ->orderBy('project_list.created_at', 'desc')
-    ->groupBy('project_list.project_unique_id');
+    ->groupBy('project_list.project_id');
 
     if( $city !== 'all' )
     {
-      $getproject = $getproject->where('project_list.project_city', '=', $city);
+      $getproject = $getproject->where('project_list.city_id', '=', $city);
     }
     if( ! empty( $keywords ) )
     {
       $getproject = $getproject->where('project_list.project_name', 'like', '%' . $keywords . '%')
-      ->orWhere('project_list.project_unique_id', 'like', '%' . $keywords . '%');
+      ->orWhere('project_list.project_id', 'like', '%' . $keywords . '%');
     }
 
     $result = $getproject->paginate( $limit );
@@ -67,11 +66,9 @@ class ProjectController extends Controller
 
     $getproject = $project_list->select(
       'project_list.project_id',
-      'project_list.project_unique_id',
       'project_list.project_name',
       'project_list.project_thumbnail',
       'project_list.project_address',
-      'project_list.project_city',
       'project_list.project_type',
       'project_list.project_status',
       'project_list.project_estimate_launch',
@@ -79,25 +76,26 @@ class ProjectController extends Controller
       'project_list.created_at',
       'project_list.updated_at',
       'developer_user.dev_name',
+      'city.city_id',
       'city.city_name',
       'province.province_name',
       DB::raw('count(project_unit_type.unit_type_id) as total_unit')
     )
     ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
-    ->join('city', 'project_list.project_city', '=', 'city.city_id')
+    ->join('city', 'project_list.city_id', '=', 'city.city_id')
     ->join('province', 'city.province_id', '=', 'province.province_id')
-    ->leftJoin('project_unit_type', 'project_list.project_unique_id', '=', 'project_unit_type.project_unique_id')
+    ->leftJoin('project_unit_type', 'project_list.project_id', '=', 'project_unit_type.project_id')
     ->orderBy('project_list.created_at', 'desc')
-    ->groupBy('project_list.project_unique_id');
+    ->groupBy('project_list.project_id');
 
     if( $city !== 'all' )
     {
-      $getproject = $getproject->where('project_list.project_city', '=', $city);
+      $getproject = $getproject->where('project_list.city_id', '=', $city);
     }
     if( ! empty( $keywords ) )
     {
       $getproject = $getproject->where('project_list.project_name', 'like', '%' . $keywords . '%')
-      ->orWhere('project_list.project_unique_id', 'like', '%' . $keywords . '%');
+      ->orWhere('project_list.project_id', 'like', '%' . $keywords . '%');
     }
 
     $result = $getproject->paginate( $limit );
@@ -107,7 +105,7 @@ class ProjectController extends Controller
   public function get_unit_type( ProjectUnitType $unit_type, $project_id )
   {
     $getunit = $unit_type
-    ->where('project_unique_id', $project_id)
+    ->where('project_id', $project_id)
     ->get();
 
     $result = [

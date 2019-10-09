@@ -46,29 +46,55 @@ class ProvinceController extends Controller
 
   public function store( Request $request, ProvinceDB $province )
   {
+    $province_id = $request->province_id;
     $province_name = $request->province_name;
-    $slug_name = str_slug( $province_name );
+    $check_province = $province->where('province_id', $province_id)->count();
 
-    $province->province_name = $province_name;
-    $province->province_slug = $slug_name;
-    $province->save();
-
-    $res = ['status' => 200, 'statusText' => 'success'];
+    if( $check_province > 0 )
+    {
+      $res = [
+        'status' => 409,
+        'statusText' => $province_id . ' sudah digunakan'
+      ];
+    }
+    else
+    {
+      $province->province_id = $province_id;
+      $province->province_name = $province_name;
+      $province->save();
+      $res = ['status' => 200, 'statusText' => 'success'];
+    }
 
     return response()->json( $res, 200 );
   }
 
   public function save( Request $request, ProvinceDB $province, $id )
   {
+    $province_id = $request->province_id;
     $province_name = $request->province_name;
-    $slug_name = str_slug( $province_name );
 
     $getprovince = $province->where('province_id', $id)->first();
     $getprovince->province_name = $province_name;
-    $getprovince->province_slug = $slug_name;
-    $getprovince->save();
-
-    $res = ['status' => 200, 'statusText' => 'success'];
+    if( $getprovince->province_id !== $province_id )
+    {
+      $check_province = $province->where('province_id', $province_id)->count();
+      if( $check_province > 0 )
+      {
+        $res = ['status' => 409, 'statusText' => $city_id . ' sudah digunakan.'];
+      }
+      else
+      {
+        $getprovince->province_id = $province_id;
+        $getprovince->save();
+        $res = ['status' => 200, 'statusText' => 'success'];
+      }
+    }
+    else
+    {
+      $getprovince->save();
+      $res = ['status' => 200, 'statusText' => 'success'];
+    }
+    
     return response()->json( $res, 200 );
   }
 

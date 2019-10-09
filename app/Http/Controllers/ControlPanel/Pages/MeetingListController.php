@@ -23,11 +23,11 @@ class MeetingListController extends Controller
       'meeting_appointment.document_file',
       'meeting_appointment.created_at',
       'meeting_appointment.updated_at',
-      'project_request.request_unique_id',
+      'project_request.request_id',
       'customer.customer_name',
       'developer_user.dev_name'
     )
-    ->join('project_request', 'meeting_appointment.request_unique_id', '=', 'project_request.request_unique_id')
+    ->join('project_request', 'meeting_appointment.request_id', '=', 'project_request.request_id')
     ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
     ->join('developer_user', 'project_request.dev_user_id', '=', 'developer_user.dev_user_id')
     ->orderBy('meeting_appointment.created_at', 'desc');

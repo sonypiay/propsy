@@ -40,7 +40,7 @@ class RequestUnitController extends Controller
     $mktuser = $marketinguser->getinfo();
 
     $query = $project_request->select(
-      'project_request.request_unique_id',
+      'project_request.request_id',
       'project_request.request_message',
       'project_request.status_request',
       'project_request.request_note',
@@ -61,10 +61,10 @@ class RequestUnitController extends Controller
       'meeting_appointment.meeting_note'
     )
     ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
-    ->join('city', 'customer.customer_city', '=', 'city.city_id')
+    ->join('city', 'customer.city_id', '=', 'city.city_id')
     ->join('province', 'city.province_id', '=', 'province.province_id')
     ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
-    ->leftJoin('meeting_appointment', 'project_request.request_unique_id', '=', 'meeting_appointment.request_unique_id');
+    ->leftJoin('meeting_appointment', 'project_request.request_id', '=', 'meeting_appointment.request_id');
 
     if( empty( $keywords ) )
     {
@@ -87,7 +87,7 @@ class RequestUnitController extends Controller
     {
       $result = $query->where([
         ['project_request.dev_user_id', $mktuser->dev_user_id],
-        ['project_request.request_unique_id', 'like', '%' . $keywords . '%'],
+        ['project_request.request_id', 'like', '%' . $keywords . '%'],
         ['project_request.status_request', '!=', 'done']
       ])
       ->orWhere([
@@ -128,12 +128,19 @@ class RequestUnitController extends Controller
   public function detail_request( ProjectRequest $project_request, LogProjectRequest $log_request, $request_id )
   {
     $getrequest = $project_request->select(
-      'project_request.request_unique_id',
+      'project_request.request_id',
       'project_request.request_message',
       'project_request.status_request',
       'project_request.request_note',
       'project_request.created_at',
       'project_request.updated_at',
+      'meeting_appointment.meeting_time',
+      'meeting_appointment.meeting_status',
+      'meeting_appointment.meeting_note',
+      'meeting_appointment.meeting_result',
+      'meeting_appointment.document_file',
+      'meeting_appointment.created_by',
+      'meeting_appointment.updated_by',
       'customer.customer_id',
       'customer.customer_name',
       'customer.customer_email',
@@ -141,25 +148,17 @@ class RequestUnitController extends Controller
       'project_unit_type.unit_type_id',
       'project_unit_type.unit_name',
       'city.city_name',
-      'province.province_name',
-      'meeting_appointment.meeting_time',
-      'meeting_appointment.meeting_status',
-      'meeting_appointment.meeting_note',
-      'meeting_appointment.meeting_result',
-      'meeting_appointment.document_file',
-      'meeting_appointment.last_updated_by',
-      'meeting_appointment.created_at',
-      'meeting_appointment.updated_at'
+      'province.province_name'
     )
     ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
-    ->join('city', 'customer.customer_city', '=', 'city.city_id')
+    ->join('city', 'customer.city_id', '=', 'city.city_id')
     ->join('province', 'city.province_id', '=', 'province.province_id')
     ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
-    ->leftJoin('meeting_appointment', 'project_request.request_unique_id', '=', 'meeting_appointment.request_unique_id')
-    ->where('project_request.request_unique_id', '=', $request_id)
+    ->leftJoin('meeting_appointment', 'project_request.request_id', '=', 'meeting_appointment.request_id')
+    ->where('project_request.request_id', '=', $request_id)
     ->first();
 
-    $getlog = $log_request->where('request_unique_id', '=', $request_id)
+    $getlog = $log_request->where('request_id', '=', $request_id)
     ->orderBy('created_at', 'desc')
     ->get();
 

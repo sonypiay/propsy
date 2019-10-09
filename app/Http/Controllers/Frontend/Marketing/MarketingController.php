@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend\Marketing;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Database\MarketingUser;
@@ -81,7 +82,7 @@ class MarketingController extends Controller
   public function change_password( Request $request, MarketingUser $marketinguser )
   {
     $password = $request->password;
-    $hash_password = md5( $password );
+    $hash_password = Hash::make( $password, ['rounds' => 12]);
     $getinfo = $marketinguser->getinfo();
     $getinfo->mkt_password = $hash_password;
     $getinfo->save();
@@ -122,7 +123,6 @@ class MarketingController extends Controller
     $phone_number = $request->phone_number;
     $mobile_phone = $request->mobile_phone;
     $city = $request->city;
-    $biography = $request->biography;
     $username = $request->username;
     $address = $request->address;
     $getinfo = $marketinguser->getinfo();
@@ -131,7 +131,6 @@ class MarketingController extends Controller
     $getinfo->mkt_phone_number = $phone_number;
     $getinfo->mkt_mobile_phone = $mobile_phone;
     $getinfo->mkt_city = $city;
-    $getinfo->mkt_biography = $biography;
     $getinfo->mkt_address = $address;
 
     if( $getinfo->mkt_username == $username )
@@ -163,7 +162,7 @@ class MarketingController extends Controller
     $filename = $photo_profile->hashName();
     $storage = Storage::disk('assets');
     $getinfo = $marketinguser->getinfo();
-    $path_img = 'images/avatar';
+    $path_img = 'images/avatar/marketing';
     if( ! empty( $getinfo->mkt_profile_photo ) )
     {
       if( $storage->exists( $path_img . '/' . $getinfo->mkt_profile_photo ) )

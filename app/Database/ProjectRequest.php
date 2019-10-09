@@ -36,9 +36,9 @@ class ProjectRequest extends Model
     if( $getlastid !== null )
       $id = $getlastid->seqid + 1;
 
-    $key = 'DEV';
+    $key = 'REQ';
     $pad = str_pad( $id, 4, '0', STR_PAD_LEFT );
-    $generate_id = $key . date('ymd') . $pad;
+    $generate_id = $key . date('Ymd') . $pad;
     return $generate_id;
   }
 }

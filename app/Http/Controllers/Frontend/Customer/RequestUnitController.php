@@ -16,7 +16,7 @@ class RequestUnitController extends Controller
   {
     $session_user = session()->get('customer_id');
     $getrequest = $project_request->select(
-      'project_request.request_unique_id',
+      'project_request.request_id',
       'project_request.status_request',
       'project_unit_type.unit_type_id',
       'project_unit_type.unit_name',
@@ -26,25 +26,26 @@ class RequestUnitController extends Controller
       'project_unit_type.unit_lb',
       'project_unit_type.unit_kt',
       'project_unit_type.unit_km',
-      'project_list.project_unique_id',
+      'project_list.project_id',
       'project_list.project_name',
       'project_list.project_address',
+      'city.city_id',
       'city.city_name',
       'province.province_name',
       'meeting_appointment.meeting_status',
       'meeting_appointment.meeting_time'
     )
     ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
-    ->join('project_list', 'project_unit_type.project_unique_id', '=', 'project_unit_type.project_unique_id')
-    ->join('city', 'project_list.project_city', '=', 'city.city_id')
+    ->join('project_list', 'project_unit_type.project_id', '=', 'project_unit_type.project_id')
+    ->join('city', 'project_list.city_id', '=', 'city.city_id')
     ->join('province', 'city.province_id', '=', 'province.province_id')
-    ->leftJoin('meeting_appointment', 'project_request.request_unique_id', '=', 'meeting_appointment.request_unique_id')
+    ->leftJoin('meeting_appointment', 'project_request.request_id', '=', 'meeting_appointment.request_id')
     ->where([
       ['project_request.status_request', '=', $status_request],
       ['project_request.customer_id', '=', $session_user]
     ])
     ->orderBy('project_request.created_at', 'desc')
-    ->groupBy('project_request.request_unique_id')
+    ->groupBy('project_request.request_id')
     ->paginate( 10 );
 
     $res = [
@@ -57,7 +58,7 @@ class RequestUnitController extends Controller
 
   public function cancel_request( ProjectRequest $project_request, Customer $customer, LogProjectRequest $log_request, ProjectUnitType $unit_type, $request_id )
   {
-    $getrequest = $project_request->where('request_unique_id', $request_id)->first();
+    $getrequest = $project_request->where('request_id', $request_id)->first();
     $getcustomer = $customer->getinfo();
     $data_log = [
       'message' => $getcustomer->customer_name . ' membatalkan pengajuan pemesanan unit',
@@ -88,7 +89,7 @@ class RequestUnitController extends Controller
       'message' => $getcustomer->customer_name . ' telah ' . $statusMessage . ' undangan meeting.'
     ];
 
-    $getmeeting = $meeting_appointment->where('request_unique_id', $request_id)->first();
+    $getmeeting = $meeting_appointment->where('request_id', $request_id)->first();
     $getmeeting->meeting_status = $status_request;
     $getmeeting->save();
     $log_request->insert_log( $data_log );

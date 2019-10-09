@@ -26,7 +26,6 @@ class DeveloperUser extends Model
       'developer_user.dev_biography',
       'developer_user.dev_phone_office',
       'developer_user.dev_mobile_phone',
-      'developer_user.dev_ownership',
       'developer_user.created_at',
       'developer_user.updated_at',
       'city.city_name',
@@ -35,7 +34,7 @@ class DeveloperUser extends Model
       'province.province_name'
     )
     ->where('developer_user.dev_user_id', session()->get('dev_user_id'))
-    ->leftJoin('city', 'developer_user.dev_city', '=', 'city.city_id')
+    ->leftJoin('city', 'developer_user.city_id', '=', 'city.city_id')
     ->leftJoin('province', 'city.province_id', '=', 'province.province_id')
     ->first();
     return $developeruser;

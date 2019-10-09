@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend\Customer;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Database\Customer;
@@ -81,7 +82,7 @@ class CustomerController extends Controller
   public function change_password( Request $request, Customer $customer )
   {
     $password = $request->password;
-    $hash_password = md5( $password );
+    $hash_password = Hash::make( $password, ['rounds' => 12]);
     $getinfo = $customer->getinfo();
     $getinfo->customer_password = $hash_password;
     $getinfo->save();
@@ -104,7 +105,7 @@ class CustomerController extends Controller
       else
       {
         $expire_date = time() + 60 * 30;
-        $hash_id = base64_encode( uniqid() );
+        $hash_id = sha1( Hash::make($email.$getinfo->customer_password) );
         $data_verify = [
           'customer_id' => $getinfo->customer_id,
           'hash_id' => $hash_id,
@@ -140,7 +141,7 @@ class CustomerController extends Controller
 
     $getinfo->customer_name = $fullname;
     $getinfo->customer_phone_number = $phone_number;
-    $getinfo->customer_city = $city;
+    $getinfo->city_id = $city;
     $getinfo->customer_address = $address;
 
     if( $getinfo->customer_username == $username )
@@ -211,7 +212,7 @@ class CustomerController extends Controller
     if( $getcustomer->status_verification === 'N' )
     {
       $expire_date = time() + 60 * 30;
-      $hash_id = base64_encode( uniqid() );
+      $hash_id = sha1( Hash::make($email.$getinfo->customer_password) );
       $data_verify = [
         'customer_id' => $getcustomer->customer_id,
         'hash_id' => $hash_id,

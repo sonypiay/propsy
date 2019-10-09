@@ -34,7 +34,7 @@ class MarketingUser extends Model
       'province.province_name',
       'province.province_slug'
     )
-    ->leftJoin('city', 'marketing_user.mkt_city', '=', 'city.city_id')
+    ->leftJoin('city', 'marketing_user.city_id', '=', 'city.city_id')
     ->leftJoin('province', 'city.province_id', '=', 'province.province_id')
     ->first();
 
@@ -49,7 +49,7 @@ class MarketingUser extends Model
     if( $getlastid !== null )
       $id = $getlastid->seqid + 1;
 
-    $key = 'DEV';
+    $key = 'MKT';
     $pad = str_pad( $id, 4, '0', STR_PAD_LEFT );
     $generate_id = $key . date('ymd') . $pad;
     return $generate_id;

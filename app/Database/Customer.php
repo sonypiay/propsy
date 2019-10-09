@@ -45,7 +45,7 @@ class Customer extends Model
     if( $getlastid !== null )
       $id = $getlastid->seqid + 1;
 
-    $key = 'DEV';
+    $key = 'CUST';
     $pad = str_pad( $id, 4, '0', STR_PAD_LEFT );
     $generate_id = $key . date('ymd') . $pad;
     return $generate_id;

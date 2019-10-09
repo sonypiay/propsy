@@ -67,7 +67,6 @@ class ProjectListController extends Controller
 
     $getproject  = $project_list->select(
       'project_list.project_id',
-      'project_list.project_unique_id',
       'project_list.project_name',
       'project_list.project_slug',
       'project_list.project_thumbnail',
@@ -76,44 +75,33 @@ class ProjectListController extends Controller
       'project_list.project_address',
       'project_list.project_link_map',
       'project_list.project_map_embed',
-      'project_list.project_city',
       'project_list.project_type',
       'project_list.project_status',
       'project_list.project_estimate_launch',
       'project_list.created_at',
       'project_list.updated_at',
-      'developer_user.dev_user_id',
       'developer_user.dev_name',
       'developer_user.dev_slug',
       'developer_user.dev_logo',
-      'developer_user.dev_city',
-      'developer_user.dev_biography'
     )
     ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
+    ->join('city', 'project_list.city_id', '=', 'city.city_id')
+    ->join('province', 'city.province_id', '=', 'province.province_id')
     ->where('project_list.project_slug', $slug)
     ->first();
 
     if( ! $getproject ) abort(404);
 
-    $city = new CityDB;
-    $project_city = $city->join( 'province', 'city.province_id', '=', 'province.province_id' )
-    ->where('city.city_id', $getproject->project_city)->first();
-
-    $dev_city = $city->join( 'province', 'city.province_id', '=', 'province.province_id' )
-    ->where('city.city_id', $getproject->dev_city)->first();
-
-    $getgallery = $project_gallery->where('project_unique_id', $getproject->project_unique_id)
+    $getgallery = $project_gallery->where('project_id', $getproject->project_id)
     ->orderBy('created_at', 'desc')
     ->get();
 
-    $getunit_price = $unit_type->where('project_unique_id', $getproject->project_unique_id)
+    $getunit_price = $unit_type->where('project_id', $getproject->project_id)
     ->orderBy('unit_price', 'asc')
     ->first();
 
     $data['getproject'] = $getproject;
     $data['getgallery'] = $getgallery;
-    $data['project_city'] = $project_city;
-    $data['dev_city'] = $dev_city;
     $data['getunit_price'] = $getunit_price;
 
     return response()->view('frontend.pages.view_project', $data);
@@ -163,28 +151,20 @@ class ProjectListController extends Controller
       'project_list.project_thumbnail',
       'project_list.project_description',
       'project_list.project_address',
-      'project_list.project_city',
       'project_list.project_map_embed',
-      'developer_user.dev_user_id',
       'developer_user.dev_name',
       'developer_user.dev_slug',
       'developer_user.dev_logo',
-      'developer_user.dev_city',
       'developer_user.dev_biography'
     )
-    ->join('project_list', 'project_unit_type.project_unique_id', '=', 'project_list.project_unique_id')
+    ->join('project_list', 'project_unit_type.project_id', '=', 'project_list.project_id')
     ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
+    ->join('city', 'project_list.city_id', '=', 'city.city_id')
+    ->join('province', 'city.province_id', '=', 'province.province_id')
     ->where('project_unit_type.unit_slug', $slug)
     ->first();
 
     if( ! $getunit ) abort(404);
-
-    $city = new CityDB;
-    $project_city = $city->join( 'province', 'city.province_id', '=', 'province.province_id' )
-    ->where('city.city_id', $getunit->project_city)->first();
-
-    $dev_city = $city->join( 'province', 'city.province_id', '=', 'province.province_id' )
-    ->where('city.city_id', $getunit->dev_city)->first();
 
     $getgallery = $project_gallery->where('unit_type_id', $getunit->unit_type_id)
     ->orderBy('created_at', 'desc')
@@ -194,8 +174,6 @@ class ProjectListController extends Controller
 
     $data['getunit'] = $getunit;
     $data['getgallery'] = $getgallery;
-    $data['project_city'] = $project_city;
-    $data['dev_city'] = $dev_city;
     $data['getmarketing'] = $getmarketing;
 
     return response()->view('frontend.pages.detail_unit', $data);
@@ -203,7 +181,7 @@ class ProjectListController extends Controller
 
   public function list_project_unit( Request $request, ProjectUnitType $project_unit, $project_id )
   {
-    $getunit = $project_unit->where('project_unit_type.project_unique_id', $project_id)
+    $getunit = $project_unit->where('project_unit_type.project_id', $project_id)
     ->orderBy('project_unit_type.created_at', 'desc')
     ->paginate( 10 );
 
@@ -218,7 +196,6 @@ class ProjectListController extends Controller
   {
     $message = $request->message;
     $dev_user = $request->dev_user;
-    $date = date('Ymd');
     $getcustomer = $customer->getinfo();
     $getunit = $unit_type->where('unit_type_id', $unit_id)->first();
 
@@ -245,7 +222,7 @@ class ProjectListController extends Controller
         $request_id = $get_last_id->request_id + 1;
       }
 
-      $generate_request_id = 'REQ' . str_pad( $request_id, 5, '0', STR_PAD_LEFT ) . '-' . $date;
+      $generate_request_id = $project_request->generateId();
       $data_log = [
         'message' => $getcustomer->customer_name . ' mengajukan pemesanan unit ' . $getunit->unit_name,
         'request_id' => $generate_request_id
@@ -255,7 +232,7 @@ class ProjectListController extends Controller
       $getunit->save();
 
       $insert_request = new $project_request;
-      $insert_request->request_unique_id = $generate_request_id;
+      $insert_request->request_id = $generate_request_id;
       $insert_request->dev_user_id = $dev_user;
       $insert_request->customer_id = $getcustomer->customer_id;
       $insert_request->unit_type_id = $unit_id;
@@ -300,7 +277,7 @@ class ProjectListController extends Controller
     }
 
     $city = new CityDB;
-    $getcity = $city->orderBy('city_name', 'asc')->get();
+    $getcity = $city->getcity();
 
     $data['getcity'] = $getcity;
 
@@ -315,7 +292,6 @@ class ProjectListController extends Controller
 
     $getproject  = $project_list->select(
       'project_list.project_id',
-      'project_list.project_unique_id',
       'project_list.project_name',
       'project_list.project_slug',
       'project_list.project_thumbnail',
@@ -331,9 +307,9 @@ class ProjectListController extends Controller
       'project_unit_type.unit_lb'
     )
     ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
-    ->join('city', 'project_list.project_city', '=', 'city.city_id')
+    ->join('city', 'project_list.city_id', '=', 'city.city_id')
     ->join('province', 'city.province_id', '=', 'province.province_id')
-    ->leftJoin('project_unit_type', 'project_list.project_unique_id', '=', 'project_unit_type.project_unique_id');
+    ->leftJoin('project_unit_type', 'project_list.project_id', '=', 'project_unit_type.project_id');
 
     if( empty( $keywords ) )
     {
@@ -348,14 +324,14 @@ class ProjectListController extends Controller
       }
       else if( $project_type === 'all' && $filtercity !== 'all' )
       {
-        $query = $getproject->where('project_list.project_city', '=', $filtercity)
+        $query = $getproject->where('project_list.city_id', '=', $filtercity)
         ->orderBy('project_list.created_at', 'desc');
       }
       else
       {
         $query = $getproject->where([
           ['project_list.project_type', '=', $project_type],
-          ['project_list.project_city', '=', $filtercity]
+          ['project_list.city_id', '=', $filtercity]
         ])
         ->orderBy('project_list.created_at', 'desc');
       }
@@ -383,11 +359,11 @@ class ProjectListController extends Controller
       else if( $project_type === 'all' && $filtercity !== 'all' )
       {
         $query = $getproject->where([
-          ['project_list.project_city', '=', $filtercity],
+          ['project_list.city_id', '=', $filtercity],
           ['project_list.project_name', 'like', '%' . $keywords . '%']
         ])
         ->orWhere([
-          ['project_list.project_city', '=', $filtercity],
+          ['project_list.city_id', '=', $filtercity],
           ['developer_user.dev_name', 'like', '%' . $keywords . '%']
         ])
         ->orderBy('project_list.created_at', 'desc');
@@ -395,12 +371,12 @@ class ProjectListController extends Controller
       else
       {
         $query = $getproject->where([
-          ['project_list.project_city', '=', $filtercity],
+          ['project_list.city_id', '=', $filtercity],
           ['project_list.project_type', '=', $project_type],
           ['project_list.project_name', 'like', '%' . $keywords . '%']
         ])
         ->orWhere([
-          ['project_list.project_city', '=', $filtercity],
+          ['project_list.city_id', '=', $filtercity],
           ['project_list.project_type', '=', $project_type],
           ['developer_user.dev_name', 'like', '%' . $keywords . '%']
         ])
@@ -410,7 +386,7 @@ class ProjectListController extends Controller
 
     $result = $query->orderBy('project_unit_type.unit_price', 'asc')
     ->orderBy('project_unit_type.unit_lb', 'asc')
-    ->groupBy('project_list.project_unique_id')
+    ->groupBy('project_list.project_id')
     ->paginate( 10 );
 
     $results = [
@@ -484,9 +460,9 @@ class ProjectListController extends Controller
       'city.city_name',
       'province.province_name'
     )
-    ->join('project_list', 'project_unit_type.project_unique_id', '=', 'project_list.project_unique_id')
+    ->join('project_list', 'project_unit_type.project_id', '=', 'project_list.project_id')
     ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
-    ->join('city', 'project_list.project_city', '=', 'city.city_id')
+    ->join('city', 'project_list.city_id', '=', 'city.city_id')
     ->join('province', 'city.province_id', '=', 'province.province_id');
 
     $whereClause = [];
@@ -501,7 +477,7 @@ class ProjectListController extends Controller
     }
     if( $filtercity !== 'all' )
     {
-      array_push( $whereClause, [ 'project_list.project_city', '=', $filtercity ]);
+      array_push( $whereClause, [ 'project_list.city_id', '=', $filtercity ]);
       $hasFilter = true;
     }
 

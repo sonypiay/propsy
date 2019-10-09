@@ -39,17 +39,17 @@ class MeetingListController extends Controller
       $has_request = $project_request->hasNewRequest( $getmarketing->dev_user_id );
 
       $getrequest = [
-        'request_unique_id' => '',
+        'request_id' => '',
         'unit_name' => 'Properti Anda'
       ];
 
       if( $request_id !== null || ! empty( $request_id ) )
       {
         $getrequest = $project_request->select(
-          'project_request.request_unique_id',
+          'project_request.request_id',
           'project_unit_type.unit_name'
         )
-        ->where('project_request.request_unique_id', $request_id)
+        ->where('project_request.request_id', $request_id)
         ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
         ->first();
       }
@@ -75,9 +75,9 @@ class MeetingListController extends Controller
     $note = $request->note;
     $meeting_time = $tanggal_meeting . ' ' . $jam_meeting;
     $mktuser = $marketinguser->getinfo();
-    $getrequest = $project_request->where('request_unique_id', $request_id)->first();
+    $getrequest = $project_request->where('request_id', $request_id)->first();
     $getcustomer = $customer->where('customer_id', $getrequest->customer_id)->first();
-    $check_meeting = $meeting_appointment->where('request_unique_id', $request_id)->count();
+    $check_meeting = $meeting_appointment->where('request_id', $request_id)->count();
 
     if( $check_meeting === 1 )
     {
@@ -91,14 +91,16 @@ class MeetingListController extends Controller
       $message_log = '';
       $data_log = [
         'request_id' => $request_id,
-        'message' => $mktuser->mkt_fullname . ' mengundang ' . $getcustomer->customer_name . ' untuk meeting bersama.'
+        'message' => $mktuser->mkt_fullname . ' mengundang ' . $getcustomer->customer_name . ' untuk meeting & survey lokasi bersama.'
       ];
 
       $insert = new $meeting_appointment;
-      $insert->request_unique_id = $request_id;
+      $insert->meeting_id = $meeting_appointment->generateId();
+      $insert->request_id = $request_id;
       $insert->meeting_time = $meeting_time;
       $insert->meeting_note = $note;
-      $insert->last_updated_by = $mktuser->mkt_fullname;
+      $insert->created_by = $mktuser->mkt_fullname;
+      $insert->updated_by = $mktuser->mkt_fullname;
       $insert->save();
 
       $getrequest->status_request = 'meeting';
@@ -118,15 +120,15 @@ class MeetingListController extends Controller
       $getmarketing = $marketinguser->getinfo();
       $has_request = $project_request->hasNewRequest( $getmarketing->dev_user_id );
 
-      $getmeeting = $meeting_appointment->where('request_unique_id', $request_id)
+      $getmeeting = $meeting_appointment->where('request_id', $request_id)
       ->first();
       if( ! $getmeeting ) abort(404);
 
       $getrequest = $project_request->select(
-        'project_request.request_unique_id',
+        'project_request.request_id',
         'project_unit_type.unit_name'
       )
-      ->where('project_request.request_unique_id', $request_id)
+      ->where('project_request.request_id', $request_id)
       ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
       ->first();
 
@@ -149,9 +151,9 @@ class MeetingListController extends Controller
   {
     $mktuser = $marketinguser->getinfo();
     $status_meeting = $request->status_meeting;
-    $getrequest = $project_request->select('customer_id', 'request_unique_id')->where('request_unique_id', $request_id)->first();
+    $getrequest = $project_request->select('customer_id', 'request_id')->where('request_id', $request_id)->first();
     $getcustomer = $customer->where('customer_id', $getrequest->customer_id)->first();
-    $update = $meeting_appointment->where('request_unique_id', $request_id)->first();
+    $update = $meeting_appointment->where('request_id', $request_id)->first();
 
     if( $status_meeting === 'revision' )
     {
@@ -161,14 +163,12 @@ class MeetingListController extends Controller
       $meeting_time = $tanggal_meeting . ' ' . $jam_meeting;
       $data_log = [
         'request_id' => $request_id,
-        'message' => $mktuser->mkt_fullname . ' me-revisi jadwal undangan meeting.'
+        'message' => $mktuser->mkt_fullname . ' me-revisi jadwal meeting.'
       ];
 
       $update->meeting_time = $meeting_time;
       $update->meeting_note = $note;
       $update->meeting_status = $status_meeting;
-      $update->last_updated_by = $mktuser->mkt_fullname;
-      $update->save();
     }
     else
     {
@@ -206,8 +206,10 @@ class MeetingListController extends Controller
           $update->document_file = $filename;
         }
       }
-      $update->save();
     }
+
+    $update->updated_by = $mktuser->mkt_fullname;
+    $update->save();
 
     if( count( $data_log ) != 0 ) $log_request->insert_log( $data_log );
 
@@ -228,12 +230,12 @@ class MeetingListController extends Controller
       'meeting_appointment.meeting_id',
       'meeting_appointment.meeting_time',
       'meeting_appointment.meeting_status',
-      'meeting_appointment.request_unique_id',
+      'meeting_appointment.request_id',
       'customer.customer_id',
       'customer.customer_name',
       'customer.customer_phone_number'
     )
-    ->join('project_request', 'meeting_appointment.request_unique_id', '=', 'project_request.request_unique_id')
+    ->join('project_request', 'meeting_appointment.request_id', '=', 'project_request.request_id')
     ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id');
 
     if( empty( $keywords ) )
@@ -271,14 +273,14 @@ class MeetingListController extends Controller
       {
         $query = $getmeeting->where([
           ['project_request.dev_user_id', $mktuser->dev_user_id],
-          ['meeting_appointment.request_unique_id', 'like', '%' . $keywords . '%']
+          ['meeting_appointment.request_id', 'like', '%' . $keywords . '%']
         ]);
       }
       else if( ! empty( $filterdate ) AND $status_meeting === 'all' )
       {
         $query = $getmeeting->where([
           ['project_request.dev_user_id', $mktuser->dev_user_id],
-          ['meeting_appointment.request_unique_id', 'like', '%' . $keywords . '%'],
+          ['meeting_appointment.request_id', 'like', '%' . $keywords . '%'],
           [DB::raw('date_format(meeting_appointment.meeting_time, "%Y-%m-%d")'), '=', $filterdate]
         ]);
       }
@@ -287,7 +289,7 @@ class MeetingListController extends Controller
         $query = $getmeeting->where([
           ['project_request.dev_user_id', $mktuser->dev_user_id],
           ['meeting_appointment.meeting_status', '=', $status_meeting],
-          ['meeting_appointment.request_unique_id', 'like', '%' . $keywords . '%']
+          ['meeting_appointment.request_id', 'like', '%' . $keywords . '%']
         ]);
       }
       else
@@ -295,7 +297,7 @@ class MeetingListController extends Controller
         $query = $getmeeting->where([
           ['project_request.dev_user_id', $mktuser->dev_user_id],
           ['meeting_appointment.meeting_status', '=', $status_meeting],
-          ['meeting_appointment.request_unique_id', 'like', '%' . $keywords . '%'],
+          ['meeting_appointment.request_id', 'like', '%' . $keywords . '%'],
           [DB::raw('date_format(meeting_appointment.meeting_time, "%Y-%m-%d")'), '=', $filterdate]
         ]);
       }
@@ -321,15 +323,14 @@ class MeetingListController extends Controller
       'meeting_appointment.meeting_note',
       'meeting_appointment.meeting_result',
       'meeting_appointment.document_file',
-      'meeting_appointment.last_updated_by',
+      'meeting_appointment.created_by',
+      'meeting_appointment.updated_by',
       'meeting_appointment.created_at',
       'meeting_appointment.updated_at',
-      'project_request.request_unique_id',
+      'project_request.request_id',
       'project_request.request_message',
       'project_request.status_request',
       'project_request.request_note',
-      'project_request.created_at',
-      'project_request.updated_at',
       'customer.customer_id',
       'customer.customer_name',
       'customer.customer_email',
@@ -339,15 +340,15 @@ class MeetingListController extends Controller
       'city.city_name',
       'province.province_name'
     )
-    ->join('project_request', 'meeting_appointment.request_unique_id', '=', 'project_request.request_unique_id')
+    ->join('project_request', 'meeting_appointment.request_id', '=', 'project_request.request_id')
     ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
     ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
-    ->join('city', 'customer.customer_city', '=', 'city.city_id')
+    ->join('city', 'customer.city_id', '=', 'city.city_id')
     ->join('province', 'city.province_id', '=', 'province.province_id')
-    ->where('project_request.request_unique_id', '=', $request_id)
+    ->where('project_request.request_id', '=', $request_id)
     ->first();
 
-    $getlog = $log_request->where('request_unique_id', '=', $request_id)
+    $getlog = $log_request->where('request_id', '=', $request_id)
     ->orderBy('created_at', 'desc')
     ->get();
 
@@ -363,7 +364,7 @@ class MeetingListController extends Controller
 
   public function cancel_request( MeetingAppointment $meeting_appointment, MarketingUser $marketinguser, LogProjectRequest $log_request, $request_id )
   {
-    $getmeeting = $meeting_appointment->where('request_unique_id', $request_id)->first();
+    $getmeeting = $meeting_appointment->where('request_id', $request_id)->first();
     $mktuser = $marketinguser->getinfo();
 
     if( $getmeeting->meeting_status !== 'cancel' )
@@ -373,7 +374,7 @@ class MeetingListController extends Controller
 
       $log_request->insert_log([
         'request_id' => $request_id,
-        'message' => $mktuser->mkt_fullname . ' telah membatalkan undangan meeting.'
+        'message' => $mktuser->mkt_fullname . ' telah membatalkan jadwal meeting.'
       ]);
     }
 

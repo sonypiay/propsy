@@ -66,11 +66,12 @@ class ProjectListController extends Controller
     $data_site_plan = [];
     $storage = Storage::disk('assets');
     $thumbnail = ! empty( $project_thumbnail ) ? $project_thumbnail->hashName() : null;
+    $project_id = $project_list->generateId();
 
     $insert_project = new $project_list;
     $insert_gallery = new $project_gallery;
     $insert_project->project_name = $project_name;
-    $insert_project->project_id = $project_list->generateId();
+    $insert_project->project_id = $project_id;
     $insert_project->project_slug = $project_slug;
     $insert_project->city_id = $project_city;
     $insert_project->project_address = $project_address;
@@ -91,7 +92,7 @@ class ProjectListController extends Controller
     {
 
       $insert_gallery->gallery_filename = $thumbnail;
-      $insert_gallery->project_id = $unique_id;
+      $insert_gallery->project_id = $project_id;
       $insert_gallery->save();
       $storage->putFileAs( 'images/project/gallery', $project_thumbnail, $thumbnail );
     }

@@ -39,10 +39,10 @@
           </div>
           <div v-for="gallery in galleries.results" class="uk-width-1-3@xl uk-width-1-3@l uk-width-1-3@m uk-width-1-1@s">
             <div class="uk-inline-clip uk-transition-toggle">
-              <img class="uk-transition-scale-up uk-transition-opaque" :src="$root.url + '/images/project/gallery/' + gallery.gallery_filename" :alt="$root.url + '/images/project/gallery/' + gallery.gallery_name">
+              <img class="uk-transition-scale-up uk-transition-opaque" :src="$root.url + '/storage/assets/images/project/gallery/' + gallery.gallery_filename" :alt="$root.url + '/images/project/gallery/' + gallery.gallery_name">
               <div class="uk-transition-fade uk-overlay uk-overlay-primary uk-position-cover">
                 <div class="uk-position-center">
-                  <a class="uk-button uk-button-primary uk-button-small grid-overlay-icon" :href="$root.url + '/images/project/gallery/' + gallery.gallery_filename">
+                  <a class="uk-button uk-button-primary uk-button-small grid-overlay-icon" :href="$root.url + '/storage/assets/images/project/gallery/' + gallery.gallery_filename">
                     <i class="icon ion-ios-eye"></i>
                   </a>
                   <button uk-tooltip="Jadikan sebagai thumbnail" @click="setAsThumbnail( gallery.gallery_id )" class="uk-button uk-button-primary uk-button-small grid-overlay-icon">
@@ -87,7 +87,7 @@ export default {
       this.galleries.isLoading = true;
       axios({
         method: 'get',
-        url: this.$root.url + '/developer/project/data_gallery/' + this.projects.project_unique_id
+        url: this.$root.url + '/developer/project/data_gallery/' + this.projects.project_id
       }).then( res => {
         let result = res.data;
         this.galleries.total = result.data.total;
@@ -112,7 +112,7 @@ export default {
     {
       if( this.files.data === null ) return false;
       this.files.uploadProgress = 0;
-      let url = this.$root.url + '/developer/project/upload_gallery/' + this.projects.project_unique_id;
+      let url = this.$root.url + '/developer/project/upload_gallery/' + this.projects.project_id;
 
       var formdata = new FormData();
       formdata.append('image', this.files.data);

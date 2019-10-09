@@ -41,15 +41,12 @@ class ProjectGalleryController extends Controller
     $query = $gallery->select(
       'project_gallery.gallery_id',
       'project_gallery.gallery_filename',
-      'project_gallery.gallery_description',
-      'project_gallery.created_at',
-      'project_gallery.updated_at',
       'project_list.project_id',
       'project_list.project_name'
     )
     ->join('project_list', 'project_gallery.project_id', '=', 'project_list.project_id')
     ->where('project_gallery.project_id', $project_id)
-    ->orderBy('project_gallery.created_at', 'desc');
+    ->orderBy('project_gallery.gallery_id', 'desc');
 
     $data = [
       'data' => [

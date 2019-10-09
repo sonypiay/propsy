@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProjectRequest extends Model
 {
   public $timestamps = true;
+  public $incrementing = false;
   protected $table = 'project_request';
   protected $primaryKey = 'request_id';
 

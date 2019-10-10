@@ -109,7 +109,7 @@
       <tr>
         <th>Hasil Meeting</th>
         <td colspan="2">
-          {{ $result->meeting_result }}
+          {!! $result->meeting_result !!}
         </td>
       </tr>
     </tbody>
@@ -126,7 +126,7 @@
           @php $log_date = new DateTime( $log->log_date ) @endphp
           {{ $log_date->format('d/m/Y H:i') }}
         </div>
-        {{ $log->log_message }}
+        {!! $log->log_message !!}
       </li>
       @endforeach
     </ul>

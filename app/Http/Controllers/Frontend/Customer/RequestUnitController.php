@@ -40,16 +40,17 @@ class RequestUnitController extends Controller
     ->join('city', 'project_list.city_id', '=', 'city.city_id')
     ->join('province', 'city.province_id', '=', 'province.province_id')
     ->leftJoin('meeting_appointment', 'project_request.request_id', '=', 'meeting_appointment.request_id')
-    ->where([
-      ['project_request.status_request', '=', $status_request],
-      ['project_request.customer_id', '=', $session_user]
-    ])
-    ->orderBy('project_request.created_at', 'desc')
+    ->where('project_request.customer_id', '=', $session_user);
+    if( $status_request !== 'all' )
+    {
+      $getrequest = $getrequest->where('project_request.status_request', '=', $status_request);
+    }
+    $result = $getrequest->orderBy('project_request.created_at', 'desc')
     ->groupBy('project_request.request_id')
     ->paginate( 10 );
 
     $res = [
-      'results' => $getrequest,
+      'results' => $result,
       'status' => 200,
       'statusText' => 'success'
     ];
@@ -100,5 +101,5 @@ class RequestUnitController extends Controller
     ];
 
     return response()->json( $res, $res['status'] );
-  }  
+  }
 }

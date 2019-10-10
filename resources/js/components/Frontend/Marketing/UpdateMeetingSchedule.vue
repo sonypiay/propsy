@@ -251,7 +251,7 @@ export default {
       ax.then( res => {
         swal({
           title: 'Sukses',
-          text: 'Jadwal meeting berhasil dibuat',
+          text: 'Jadwal meeting berhasil diubah',
           icon: 'success',
           timer: 3000
         });

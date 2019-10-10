@@ -63,7 +63,7 @@
                     <label class="uk-label uk-label-success" v-else>Selesai</label>
                   </td>
                   <td>
-                    <a v-if="request_list.details.data.document_file" target="_blank" class="uk-button uk-button-primary" :href="$root.url + '/document/meeting/' + request_list.details.data.document_file"><span uk-icon="download"></span> Unduh Dokumen</a>
+                    <a v-if="request_list.details.data.document_file" target="_blank" class="uk-button uk-button-primary" :href="$root.url + '/storage/assets/document/meeting/' + request_list.details.data.document_file"><span uk-icon="download"></span> Unduh Dokumen</a>
                     <a v-else class="uk-button uk-button-primary" href="#"><span uk-icon="download"></span> Unduh Dokumen</a>
                   </td>
                 </tr>

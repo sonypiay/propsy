@@ -246,10 +246,10 @@
             <div v-for="log in overviewData.latest_data.log_request.results" class="uk-width-1-2">
               <article class="uk-article card-latest-data">
                 <div class="uk-article-meta">
-                  <strong>#{{ log.request_unique_id }}</strong>
+                  <strong>#{{ log.request_id }}</strong>
                 </div>
                 <div class="uk-article-meta grid-latest-date">
-                  {{ $root.formatDate( log.created_at, 'dddd, DD MMMM YYYY HH:mm' ) }}
+                  {{ $root.formatDate( log.log_date, 'dddd, DD MMMM YYYY HH:mm' ) }}
                 </div>
                 <div>
                   {{ log.log_message }}

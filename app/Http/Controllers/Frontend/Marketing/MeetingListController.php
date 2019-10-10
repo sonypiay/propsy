@@ -231,6 +231,7 @@ class MeetingListController extends Controller
       'meeting_appointment.meeting_time',
       'meeting_appointment.meeting_status',
       'meeting_appointment.request_id',
+      'meeting_appointment.updated_at',
       'customer.customer_id',
       'customer.customer_name',
       'customer.customer_phone_number'

@@ -62,7 +62,7 @@ class ProjectApi extends Controller
     $developer = $developeruser->getinfo();
 
     $getrequest = $project_request->select(
-      DB::raw('count(project_request.request_unique_id) as total_request'),
+      DB::raw('count(project_request.request_id) as total_request'),
       DB::raw('count(if(status_request="accept",1,NULL)) as accept'),
       DB::raw('count(if(status_request="waiting_response",1,NULL)) as waiting_response'),
       DB::raw('count(if(status_request="cancel",1,NULL)) as cancel'),
@@ -138,11 +138,11 @@ class ProjectApi extends Controller
     $latest_log = $log_request->select(
       'log_project_request.request_id',
       'log_project_request.log_message',
-      'log_project_request.created_at'
+      'log_project_request.log_date'
     )
     ->join('project_request', 'log_project_request.request_id', '=', 'project_request.request_id')
     ->where('project_request.dev_user_id', $developer->dev_user_id)
-    ->orderBy('log_project_request.created_at', 'desc')
+    ->orderBy('log_project_request.log_date', 'desc')
     ->take(10)
     ->get();
 

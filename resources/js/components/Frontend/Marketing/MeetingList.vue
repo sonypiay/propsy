@@ -191,7 +191,7 @@
                       </div>
                     </div>
                   </td>
-                  <td>{{ meet.request_id }}</td>
+                  <td>{{ meet.meeting_id }}</td>
                   <td>{{ meet.customer_name }}</td>
                   <td>{{ $root.formatDate( meet.meeting_time, 'DD MMM YYYY, HH:mm' ) }}</td>
                   <td>

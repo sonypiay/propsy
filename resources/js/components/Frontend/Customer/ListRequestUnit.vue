@@ -37,9 +37,9 @@
               <div class="uk-card card-unit-project uk-grid-collapse uk-grid-match uk-margin" uk-grid>
                 <div class="uk-width-1-3@xl uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s">
                   <div class="uk-card-media-left">
-                    <div v-if="unit.unit_thumbnail" class="uk-background-cover unit-thumbnail" :style="{'background-image': 'url(' + $root.url + '/images/project/gallery/' + unit.unit_thumbnail + ')'}">
+                    <div v-if="unit.unit_thumbnail" class="uk-background-cover unit-thumbnail" :style="{'background-image': 'url(' + $root.url + '/storage/assets/images/project/gallery/' + unit.unit_thumbnail + ')'}">
                     </div>
-                    <div v-else class="uk-background-cover unit-thumbnail" :style="{'background-image': 'url(' + $root.url + '/images/banner/homepage2.jpg)'}">
+                    <div v-else class="uk-background-cover unit-thumbnail" :style="{'background-image': 'url(' + $root.url + '/images/banner/homepage3.jpg)'}">
                     </div>
                   </div>
                 </div>
@@ -63,8 +63,8 @@
                             {{ $root.formatDate( unit.meeting_time, 'dddd, DD MMMM YYYY HH:mm' ) }}
                           </strong>
                         </div>
-                        <button @click="onResponseMeeting( unit.request_unique_id, 'accept' )" class="uk-button uk-button-small btn-approve">Terima</button>
-                        <button @click="onResponseMeeting( unit.request_unique_id, 'reject' )" class="uk-button uk-button-small btn-reject">Tolak</button>
+                        <button @click="onResponseMeeting( unit.request_id, 'accept' )" class="uk-button uk-button-small btn-approve">Terima</button>
+                        <button @click="onResponseMeeting( unit.request_id, 'reject' )" class="uk-button uk-button-small btn-reject">Tolak</button>
                       </div>
                       <div v-else>
                         <div class="uk-text-small uk-margin-small-bottom">
@@ -92,7 +92,7 @@
                     <div class="uk-grid-small uk-child-width-auto" uk-grid>
                       <div>
                         <div class="unit-specification">
-                          {{ unit.request_unique_id }}
+                          {{ unit.request_id }}
                           <span>Request ID</span>
                         </div>
                       </div>
@@ -114,7 +114,7 @@
                         </a>
                       </div>
                       <div v-if="unit.status_request === 'waiting_response' || unit.status_request === 'meeting'">
-                        <button @click="onCancelRequest( unit.request_unique_id )" class="uk-button uk-button-small btn-cancel-request">Batalkan Pengajuan</button>
+                        <button @click="onCancelRequest( unit.request_id )" class="uk-button uk-button-small btn-cancel-request">Batalkan Pengajuan</button>
                       </div>
                     </div>
                   </div>

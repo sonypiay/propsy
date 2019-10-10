@@ -5,7 +5,10 @@
         <a class="uk-modal-close-full uk-close-large" type="button" uk-close></a>
         <div class="uk-card uk-card-body container-viewschedule">
           <div class="uk-card-title container-viewschedule-heading">
-            Rincian Jadwal Meeting {{ meeting_list.details.data.request_unique_id }}
+            {{ meeting_list.details.data.meeting_id }}
+            <p class="uk-text-muted uk-text-small uk-margin-remove-top">
+              Dibuat oleh {{ meeting_list.details.data.created_by }} tanggal {{ $root.formatDate( meeting_list.details.data.created_at, 'dddd, DD MMMM YYYY') }}
+            </p>
           </div>
           <div class="uk-margin container-viewschedule-body">
             <table class="uk-table uk-table-divider uk-table-hover uk-table-middle uk-table-striped uk-table-small">
@@ -48,6 +51,7 @@
                   <th>Jam</th>
                   <th>Status</th>
                   <th>Dokumen</th>
+                  <th>Terakhir diubah</th>
                 </tr>
               </thead>
               <tbody>
@@ -63,13 +67,16 @@
                     <label class="uk-label uk-label-success" v-else>Selesai</label>
                   </td>
                   <td>
-                    <a v-if="meeting_list.details.data.document_file" target="_blank" class="uk-button uk-button-primary" :href="$root.url + '/document/meeting/' + meeting_list.details.data.document_file"><span uk-icon="download"></span> Unduh Dokumen</a>
-                    <a v-else class="uk-button uk-button-primary" href="#"><span uk-icon="download"></span> Unduh Dokumen</a>
+                    <a v-if="meeting_list.details.data.document_file" target="_blank" class="uk-icon-link" :href="$root.url + '/storage/assets/document/meeting/' + meeting_list.details.data.document_file"><span uk-icon="download"></span> Unduh Dokumen</a>
+                    <a v-else class="uk-icon-link" href="#"><span uk-icon="download"></span></a>
+                  </td>
+                  <td>
+                    {{ meeting_list.details.data.updated_by }} <br>
                   </td>
                 </tr>
                 <tr>
                   <th>Hasil Meeting</th>
-                  <td colspan="3">
+                  <td colspan="4">
                     {{ meeting_list.details.data.meeting_result }}
                   </td>
                 </tr>
@@ -80,7 +87,7 @@
               <ul class="uk-margin uk-list uk-list-divider">
                 <li v-for="log in meeting_list.details.log_request">
                   <div class="uk-text-small uk-text-bold">
-                    {{ $root.formatDate( log.created_at, 'DD MMMM YYYY, HH:mm' ) }}
+                    {{ $root.formatDate( log.log_date, 'DD MMMM YYYY, HH:mm' ) }}
                   </div>
                   {{ log.log_message }}
                 </li>
@@ -175,16 +182,16 @@
                       <a class="uk-button uk-button-primary uk-button-small dash-btn dash-btn-action" uk-icon="icon: more-vertical; ratio: 0.7"></a>
                       <div uk-dropdown="mode: click">
                         <ul class="uk-nav uk-dropdown-nav">
-                          <li><a @click="getDetailSchedule( meet.request_unique_id )"><span uk-icon="forward"></span> Lihat Jadwal</a></li>
-                          <li><a :href="$root.url + '/marketing/meeting/edit_schedule/' + meet.request_unique_id"><span uk-icon="pencil"></span>
+                          <li><a @click="getDetailSchedule( meet.request_id )"><span uk-icon="forward"></span> Lihat Jadwal</a></li>
+                          <li><a :href="$root.url + '/marketing/meeting/edit_schedule/' + meet.request_id"><span uk-icon="pencil"></span>
                             Edit Jadwal
                           </a></li>
-                          <li><a v-show="meet.meeting_status === 'waiting_confirmation' || meet.meeting_status === 'revision'" @click="onCancelRequest( meet.request_unique_id )"><span uk-icon="close"></span> Batalkan</a></li>
+                          <li><a v-show="meet.meeting_status === 'waiting_confirmation' || meet.meeting_status === 'revision'" @click="onCancelRequest( meet.request_id )"><span uk-icon="close"></span> Batalkan</a></li>
                         </ul>
                       </div>
                     </div>
                   </td>
-                  <td>{{ meet.request_unique_id }}</td>
+                  <td>{{ meet.request_id }}</td>
                   <td>{{ meet.customer_name }}</td>
                   <td>{{ $root.formatDate( meet.meeting_time, 'DD MMM YYYY, HH:mm' ) }}</td>
                   <td>

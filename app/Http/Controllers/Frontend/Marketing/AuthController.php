@@ -31,7 +31,7 @@ class AuthController extends Controller
 
     if( $valid )
     {
-      if( Hash::check( $result->mkt_password, $password ) )
+      if( Hash::check( $password, $result->mkt_password ) )
       {
         $res = [
           'status' => 200,

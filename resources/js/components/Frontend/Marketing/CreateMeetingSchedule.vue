@@ -69,9 +69,9 @@ export default {
   data() {
     return {
       forms: {
-        request_id: this.getrequest.request_unique_id !== '' ? this.getrequest.request_unique_id : '',
+        request_id: this.getrequest.request_id !== '' ? this.getrequest.request_id : '',
         meeting_note: 'Terima kasih atas ketertarikan Anda untuk membeli properti ' + this.getrequest.unit_name +
-        `. Kami mengundang Anda untuk meeting sehingga kita dapat berdiskusi lebih lanjut. Kami tunggu kabar dari Anda. Hormat kami, Marketing`,
+        `. Kami mengundang Anda untuk meeting & survey lokasi sehingga kita dapat berdiskusi lebih lanjut. Kami tunggu kabar dari Anda. Hormat kami, Tim Marketing`,
         submit: 'Buat Jadwal',
         timepicker: {
           selectedTime: {

@@ -5,7 +5,7 @@
         <a class="uk-modal-close-full uk-close-large" type="button" uk-close></a>
         <div class="uk-card uk-card-body container-viewschedule">
           <div class="uk-card-title container-viewschedule-heading">
-            Rincian Pemesanan Unit {{ request_list.details.data.request_unique_id }}
+            Rincian Pemesanan Unit {{ request_list.details.data.request_id }}
           </div>
           <div class="uk-margin container-viewschedule-body">
             <table class="uk-table uk-table-divider uk-table-hover uk-table-middle uk-table-striped uk-table-small">
@@ -156,9 +156,9 @@
                           <a class="card-unit-setting-icon" uk-icon="icon: more"></a>
                           <div uk-dropdown="mode: click" class="card-unit-setting-dropdown">
                             <ul class="uk-nav uk-dropdown-nav">
-                              <li><a @click="onDetailRequest( unit.request_unique_id )">Lihat Rincian</a></li>
-                              <li><a target="_blank" :href="$root.url + '/developer/report/request_unit/save/' + unit.request_unique_id">Cetak</a></li>
-                              <li v-show="unit.status_request !== 'cancel' && unit.status_request !== 'reject' && unit.status_request !== 'accept'"><a @click="onRejectRequest( unit.request_unique_id )">Tolak Pengajuan</a></li>
+                              <li><a @click="onDetailRequest( unit.request_id )">Lihat Rincian</a></li>
+                              <li><a target="_blank" :href="$root.url + '/developer/report/request_unit/save/' + unit.request_id">Cetak</a></li>
+                              <li v-show="unit.status_request !== 'cancel' && unit.status_request !== 'reject' && unit.status_request !== 'accept'"><a @click="onRejectRequest( unit.request_id )">Tolak Pengajuan</a></li>
                             </ul>
                           </div>
                         </div>
@@ -180,7 +180,7 @@
                   <div class="uk-grid-small uk-child-width-auto" uk-grid>
                     <div>
                       <div class="unit-specification">
-                        {{ unit.request_unique_id }}
+                        {{ unit.request_id }}
                         <span>Request ID</span>
                       </div>
                     </div>
@@ -193,8 +193,8 @@
                   </div>
                 </div>
                 <div v-if="unit.meeting_status === 'done' && unit.isReviewed === 'N'" class="uk-margin-small-top card-unit-header">
-                  <a @click="onReviewRequest('accept', unit.request_unique_id)" class="uk-button uk-button-primary uk-button-small status-review status-review-accept">Terima</a>
-                  <a @click="onReviewRequest('reject', unit.request_unique_id)" class="uk-button uk-button-primary uk-button-small status-review status-review-reject">Tolak</a>
+                  <a @click="onReviewRequest('accept', unit.request_id)" class="uk-button uk-button-primary uk-button-small status-review status-review-accept">Terima</a>
+                  <a @click="onReviewRequest('reject', unit.request_id)" class="uk-button uk-button-primary uk-button-small status-review status-review-reject">Tolak</a>
                 </div>
               </div>
             </div>

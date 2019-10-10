@@ -176,11 +176,8 @@ class ProjectListController extends Controller
     ->orderBy('unit_gallery_id', 'desc')
     ->get();
 
-    $getmarketing = $marketing->where('dev_user_id', $getunit->dev_user_id)->get();
-
     $data['getunit'] = $getunit;
     $data['getgallery'] = $getgallery;
-    $data['getmarketing'] = $getmarketing;
 
     return response()->view('frontend.pages.detail_unit', $data);
   }

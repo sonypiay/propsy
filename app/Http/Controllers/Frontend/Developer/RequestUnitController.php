@@ -45,7 +45,6 @@ class RequestUnitController extends Controller
       'project_request.request_id',
       'project_request.request_message',
       'project_request.status_request',
-      'project_request.request_note',
       'project_request.isReviewed',
       'project_request.created_at',
       'project_request.updated_at',
@@ -137,7 +136,6 @@ class RequestUnitController extends Controller
       'project_request.request_id',
       'project_request.request_message',
       'project_request.status_request',
-      'project_request.request_note',
       'project_request.created_at',
       'project_request.updated_at',
       'customer.customer_id',
@@ -153,7 +151,8 @@ class RequestUnitController extends Controller
       'meeting_appointment.meeting_note',
       'meeting_appointment.meeting_result',
       'meeting_appointment.document_file',
-      'meeting_appointment.last_updated_by'
+      'meeting_appointment.created_by',
+      'meeting_appointment.updated_by'
     )
     ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
     ->join('city', 'customer.city_id', '=', 'city.city_id')
@@ -164,7 +163,7 @@ class RequestUnitController extends Controller
     ->first();
 
     $getlog = $log_request->where('request_id', '=', $request_id)
-    ->orderBy('created_at', 'desc')
+    ->orderBy('log_date', 'desc')
     ->get();
 
     $res = [

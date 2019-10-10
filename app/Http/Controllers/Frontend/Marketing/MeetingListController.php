@@ -318,6 +318,7 @@ class MeetingListController extends Controller
   public function get_detail_schedule( Request $request, MeetingAppointment $meeting_appointment, LogProjectRequest $log_request, $request_id )
   {
     $getresult = $meeting_appointment->select(
+      'meeting_appointment.meeting_id',
       'meeting_appointment.meeting_time',
       'meeting_appointment.meeting_status',
       'meeting_appointment.meeting_note',
@@ -330,7 +331,6 @@ class MeetingListController extends Controller
       'project_request.request_id',
       'project_request.request_message',
       'project_request.status_request',
-      'project_request.request_note',
       'customer.customer_id',
       'customer.customer_name',
       'customer.customer_email',
@@ -349,7 +349,7 @@ class MeetingListController extends Controller
     ->first();
 
     $getlog = $log_request->where('request_id', '=', $request_id)
-    ->orderBy('created_at', 'desc')
+    ->orderBy('log_date', 'desc')
     ->get();
 
     $result = [

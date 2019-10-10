@@ -77,7 +77,7 @@
                 <a :href="$root.url + '/project/detail_unit/' + project.unit_slug" class="uk-card uk-card-default uk-display-block grid-project-card">
                   <div class="uk-card-media-left">
                     <div class="uk-cover-container uk-height-medium">
-                      <img v-if="project.unit_thumbnail" :src="$root.url + '/images/project/gallery/' + project.unit_thumbnail" uk-cover />
+                      <img v-if="project.unit_thumbnail" :src="$root.url + '/storage/assets/images/project/gallery/' + project.unit_thumbnail" uk-cover />
                       <img v-else :src="$root.url + '/images/banner/homepage3.jpg'" uk-cover />
                       <div class="uk-overlay uk-overlay-primary uk-position-cover project-card-background">
                         <div class="uk-position-bottom">

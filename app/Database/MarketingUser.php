@@ -22,18 +22,15 @@ class MarketingUser extends Model
       'marketing_user.mkt_email',
       'marketing_user.mkt_phone_number',
       'marketing_user.mkt_mobile_phone',
-      'marketing_user.mkt_city',
       'marketing_user.mkt_address',
-      'marketing_user.mkt_biography',
       'marketing_user.mkt_profile_photo',
       'marketing_user.dev_user_id',
       'marketing_user.created_at',
       'marketing_user.updated_at',
+      'city.city_id',
       'city.city_name',
-      'city.city_slug',
       'province.province_id',
-      'province.province_name',
-      'province.province_slug'
+      'province.province_name'
     )
     ->leftJoin('city', 'marketing_user.city_id', '=', 'city.city_id')
     ->leftJoin('province', 'city.province_id', '=', 'province.province_id')

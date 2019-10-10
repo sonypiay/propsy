@@ -25,7 +25,7 @@
             <div class="uk-align-right card-projectinfo-statusproject">
               <span v-if="getproject.project_status === 'available'" class="available">Tersedia</span>
               <span v-else-if="getproject.project_status === 'sold'" class="sold">Terjual</span>
-              <span v-else class="commingsoon">Segera Launching</span>
+              <span v-else class="commingsoon">Segera Hadir</span>
             </div>
           </div>
           <div class="card-projectinfo-name">{{ getproject.project_name }}</div>
@@ -45,7 +45,7 @@
               <span>Rp. {{ $root.formatNumeral( getunit_price.unit_price ) }}</span>
             </div>
             <div v-show="getproject.project_estimate_launch !== null" class="card-projectinfo-launch">
-              Segera Launching
+              Segera Hadir
               <span>{{ getproject.project_estimate_launch }}</span>
             </div>
           </div>
@@ -186,7 +186,7 @@
                 <a class="dev-profile-name" href="#">{{ getproject.dev_name }}</a>
               </div>
               <div class="uk-margin uk-text-center">
-                <a class="uk-width-1-1 uk-button uk-button-primary sidebar-viewproject" href="#">Lihat Pengembang</a>
+                <a class="uk-width-1-1 uk-button uk-button-primary sidebar-viewproject" :href="$root.url + '/profile/developer/' + getproject.dev_slug">Lihat Pengembang</a>
               </div>
             </div>
 

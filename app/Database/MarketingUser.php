@@ -5,6 +5,7 @@ namespace App\Database;
 use Illuminate\Database\Eloquent\Model;
 use App\Database\ProjectRequest;
 use App\Database\MarketingUser;
+use App\Database\MeetingAppointment;
 
 class MarketingUser extends Model
 {
@@ -64,14 +65,34 @@ class MarketingUser extends Model
     $has_request = 0;
 
     $check_request = ProjectRequest::where([
-      ['project_request.dev_user_id', '=', $getdeveloper->dev_user_id],
-      ['project_request.status_request', '=', 'waiting_response']
-    ])
-    ->orWhere([
+      ['dev_user_id', '=', $getdeveloper->dev_user_id],
+      ['status_request', '=', 'waiting_response']
+    ])->count();
+
+    if( $check_request > 0 )
+    {
+      $has_request = $check_request;
+    }
+    return $has_request;
+  }
+
+  public function hasMeetingResponse()
+  {
+    $session_user = session()->get('mkt_user_id');
+    $getdeveloper = MarketingUser::select('dev_user_id')
+    ->where('mkt_user_id', $session_user)
+    ->first();
+    $has_request = 0;
+
+    $check_request = MeetingAppointment::where([
       ['project_request.dev_user_id', '=', $getdeveloper->dev_user_id],
       ['meeting_appointment.meeting_status', '=', 'accept']
     ])
-    ->join('meeting_appointment', 'project_request.request_id', '=', 'meeting_appointment.request_id')
+    ->orWhere([
+      ['project_request.dev_user_id', '=', $getdeveloper->dev_user_id],
+      ['meeting_appointment.meeting_status', '=', 'reject']
+    ])
+    ->join('project_request')
     ->count();
 
     if( $check_request > 0 )

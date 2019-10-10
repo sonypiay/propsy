@@ -18,12 +18,10 @@ class RequestUnitController extends Controller
     if( session()->has('isMarketing') )
     {
       $getmarketing = $marketinguser->getinfo();
-      $has_request = $project_request->hasNewRequest( $getmarketing->dev_user_id );
 
       $data = [
         'request' => $request,
-        'session_user' => $marketinguser->getinfo(),
-        'hasRequest' => $has_request
+        'session_user' => $marketinguser->getinfo()
       ];
       return response()->view('frontend.pages.marketing.request_unit', $data);
     }

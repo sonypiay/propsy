@@ -82,7 +82,7 @@
                   <div class="uk-text-small uk-text-bold">
                     {{ $root.formatDate( log.created_at, 'DD MMMM YYYY, HH:mm' ) }}
                   </div>
-                  {{ log.log_message }}
+                  <span v-html="log.log_message"></span>
                 </li>
               </ul>
             </div>

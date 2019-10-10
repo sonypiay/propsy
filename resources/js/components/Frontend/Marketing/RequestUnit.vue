@@ -63,7 +63,7 @@
                     <label class="uk-label uk-label-success" v-else>Selesai</label>
                   </td>
                   <td>
-                    <a v-if="request_list.details.data.document_file" target="_blank" class="uk-button uk-button-primary" :href="$root.url + '/document/meeting/' + request_list.details.data.document_file"><span uk-icon="download"></span> Unduh Dokumen</a>
+                    <a v-if="request_list.details.data.document_file" target="_blank" class="uk-button uk-button-primary" :href="$root.url + '/storage/assets/document/meeting/' + request_list.details.data.document_file"><span uk-icon="download"></span> Unduh Dokumen</a>
                     <a v-else class="uk-button uk-button-primary" href="#"><span uk-icon="download"></span> Unduh Dokumen</a>
                   </td>
                 </tr>
@@ -82,7 +82,7 @@
                   <div class="uk-text-small uk-text-bold">
                     {{ $root.formatDate( log.created_at, 'DD MMMM YYYY, HH:mm' ) }}
                   </div>
-                  {{ log.log_message }}
+                  <span v-html="log.log_message"></span>
                 </li>
               </ul>
             </div>
@@ -157,7 +157,7 @@
                           <div uk-dropdown="mode: click" class="card-unit-setting-dropdown">
                             <ul class="uk-nav uk-dropdown-nav">
                               <li v-if="unit.status_request === 'waiting_response'"><a :href="$root.url + '/marketing/meeting/create_schedule/' + unit.request_id">Buat Jadwal Meeting</a></li>
-                              <li v-if="unit.status_request === 'meeting'"><a :href="$root.url + '/marketing/meeting/edit_schedule/' + unit.request_id">Revisi Jadwal Meeting</a></li>
+                              <li v-if="unit.status_request === 'meeting'"><a :href="$root.url + '/marketing/meeting/edit_schedule/' + unit.request_id">Edit Jadwal Meeting</a></li>
                               <li><a @click="onDetailRequest( unit.request_id )">Lihat Rincian</a></li>
                             </ul>
                           </div>

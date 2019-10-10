@@ -14,16 +14,24 @@ use App\Http\Controllers\Controller;
 
 class ProjectApi extends Controller
 {
-  public function overview_project( ProjectList $project_list, ProjectUnitType $project_type, DeveloperUser $developeruser )
+  public function overview_project( ProjectList $project_list, ProjectUnitType $project_type, DeveloperUser $developeruser, MarketingUser $marketinguser )
   {
-    $developer = $developeruser->getinfo();
+    if( session()->has('isMarketing') )
+    {
+      $session_user = $marketinguser->getinfo();
+    }
+    else
+    {
+      $session_user = $developeruser->getinfo();
+    }
+
     $getproject = $project_list->select(
       DB::raw('count(*) as total_project'),
       DB::raw('count(if(project_status="available",1,NULL)) as available'),
       DB::raw('count(if(project_status="soon",1,NULL)) as soon'),
       DB::raw('count(if(project_status="sold",1,NULL)) as sold')
     )
-    ->where('dev_user_id', $developer->dev_user_id)
+    ->where('dev_user_id', $session_user->dev_user_id)
     ->first();
 
     $getunit = $project_type->select(
@@ -33,7 +41,7 @@ class ProjectApi extends Controller
       DB::raw('count(if(project_unit_type.unit_status="sold",1,NULL)) as sold')
     )
     ->leftJoin('project_list', 'project_unit_type.project_id', '=', 'project_list.project_id')
-    ->where('project_list.dev_user_id', $developer->dev_user_id)
+    ->where('project_list.dev_user_id', $session_user->dev_user_id)
     ->first();
 
     $res = [
@@ -57,9 +65,16 @@ class ProjectApi extends Controller
     return response()->json( $res, $res['status'] );
   }
 
-  public function overview_project_request( ProjectRequest $project_request, DeveloperUser $developeruser )
+  public function overview_project_request( ProjectRequest $project_request, DeveloperUser $developeruser, MarketingUser $marketinguser )
   {
-    $developer = $developeruser->getinfo();
+    if( session()->has('isMarketing') )
+    {
+      $session_user = $marketinguser->getinfo();
+    }
+    else
+    {
+      $session_user = $developeruser->getinfo();
+    }
 
     $getrequest = $project_request->select(
       DB::raw('count(project_request.request_id) as total_request'),
@@ -69,7 +84,7 @@ class ProjectApi extends Controller
       DB::raw('count(if(status_request="reject",1,NULL)) as reject'),
       DB::raw('count(if(status_request="meeting",1,NULL)) as meeting')
     )
-    ->where('dev_user_id', $developer->dev_user_id)
+    ->where('dev_user_id', $session_user->dev_user_id)
     ->first();
 
     $res = [
@@ -87,9 +102,17 @@ class ProjectApi extends Controller
     return response()->json( $res, $res['status'] );
   }
 
-  public function overview_latest_project( ProjectList $project_list, ProjectUnitType $project_unit, DeveloperUser $developeruser )
+  public function overview_latest_project( ProjectList $project_list, ProjectUnitType $project_unit, DeveloperUser $developeruser, MarketingUser $marketinguser )
   {
-    $developer = $developeruser->getinfo();
+    if( session()->has('isMarketing') )
+    {
+      $session_user = $marketinguser->getinfo();
+    }
+    else
+    {
+      $session_user = $developeruser->getinfo();
+    }
+
     $getproject = $project_list->select(
       'project_id',
       'project_slug',
@@ -99,7 +122,7 @@ class ProjectApi extends Controller
       'created_at',
       'updated_at'
     )
-    ->where('dev_user_id', $developer->dev_user_id)
+    ->where('dev_user_id', $session_user->dev_user_id)
     ->orderBy('created_at', 'desc')
     ->take(5)
     ->get();
@@ -114,7 +137,7 @@ class ProjectApi extends Controller
       'project_unit_type.project_id'
     )
     ->join('project_list', 'project_unit_type.project_id', '=', 'project_list.project_id')
-    ->where('project_list.dev_user_id', $developer->dev_user_id)
+    ->where('project_list.dev_user_id', $session_user->dev_user_id)
     ->orderBy('project_unit_type.created_at', 'desc')
     ->take(5)
     ->get();
@@ -131,9 +154,16 @@ class ProjectApi extends Controller
     return response()->json( $res, $res['status'] );
   }
 
-  public function latest_log_request( LogProjectRequest $log_request, DeveloperUser $developeruser )
+  public function latest_log_request( LogProjectRequest $log_request, DeveloperUser $developeruser, MarketingUser $marketinguser )
   {
-    $developer = $developeruser->getinfo();
+    if( session()->has('isMarketing') )
+    {
+      $session_user = $marketinguser->getinfo();
+    }
+    else
+    {
+      $session_user = $developeruser->getinfo();
+    }
 
     $latest_log = $log_request->select(
       'log_project_request.request_id',
@@ -141,7 +171,7 @@ class ProjectApi extends Controller
       'log_project_request.log_date'
     )
     ->join('project_request', 'log_project_request.request_id', '=', 'project_request.request_id')
-    ->where('project_request.dev_user_id', $developer->dev_user_id)
+    ->where('project_request.dev_user_id', $session_user->dev_user_id)
     ->orderBy('log_project_request.log_date', 'desc')
     ->take(10)
     ->get();

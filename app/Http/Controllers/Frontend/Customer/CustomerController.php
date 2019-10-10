@@ -21,7 +21,8 @@ class CustomerController extends Controller
     {
       $data = [
         'request' => $request,
-        'session_user' => $customer->getinfo()
+        'session_user' => $customer->getinfo(),
+        'hasrequest' => $customer->hasrequest()
       ];
 
       return response()->view('frontend.pages.customer.profile_page', $data);
@@ -68,7 +69,8 @@ class CustomerController extends Controller
     {
       $data = [
         'request' => $request,
-        'session_user' => $customer->getinfo()
+        'session_user' => $customer->getinfo(),
+        'hasrequest' => $customer->hasrequest()
       ];
 
       return response()->view('frontend.pages.customer.profile_page', $data);
@@ -194,7 +196,8 @@ class CustomerController extends Controller
     {
       $data = [
         'request' => $request,
-        'session_user' => $customer->getinfo()
+        'session_user' => $customer->getinfo(),
+        'hasrequest' => $customer->hasrequest()
       ];
 
       return response()->view('frontend.pages.customer.request_list', $data);

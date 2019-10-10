@@ -19,7 +19,8 @@ class DeveloperController extends Controller
     {
       $data = [
         'request' => $request,
-        'session_user' => $developeruser->getinfo()
+        'session_user' => $developeruser->getinfo(),
+        'hasrequest' => $developeruser->hasrequest()
       ];
 
       return response()->view('frontend.pages.developer.dashboard_page', $data);
@@ -66,7 +67,8 @@ class DeveloperController extends Controller
     {
       $data = [
         'request' => $request,
-        'session_user' => $developeruser->getinfo()
+        'session_user' => $developeruser->getinfo(),
+        'hasrequest' => $developeruser->hasrequest()
       ];
 
       return response()->view('frontend.pages.developer.profile_page', $data);

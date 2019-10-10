@@ -57,7 +57,8 @@ class ProjectUnitController extends Controller
         'session_user' => $developeruser->getinfo(),
         'project_id' => $project_id,
         'getfacility' => $getfacility,
-        'getproject' => $getproject
+        'getproject' => $getproject,
+        'hasrequest' => $developeruser->hasrequest()
       ];
 
       return response()->view('frontend.pages.developer.add_unit', $data);
@@ -128,7 +129,8 @@ class ProjectUnitController extends Controller
         'session_user' => $developeruser->getinfo(),
         'getunit' => $getunit,
         'getfacility' => $getfacility,
-        'getproject' => $getproject
+        'getproject' => $getproject,
+        'hasrequest' => $developeruser->hasrequest()
       ];
 
       return response()->view('frontend.pages.developer.edit_unit', $data);

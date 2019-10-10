@@ -83,7 +83,7 @@ export default {
           text: 'Mengarahkan ke halaman profil ...',
           icon: 'success'
         });
-        setTimeout(() => { document.location = this.$root.url + '/marketing/profile'; }, 2000);
+        setTimeout(() => { document.location = this.$root.url + '/marketing/dashboard'; }, 2000);
       }).catch( err => {
         this.forms.submit = 'Masuk';
         if( err.response.status === 500 )

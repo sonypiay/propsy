@@ -4,6 +4,26 @@ html, body {
 }
 
 @import 'form';
+.btn-reject {
+  background: $color-danger;
+  color: #ffffff;
+  @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+  text-transform: capitalize;
+  &:hover, &:focus {
+    background: $color-danger;
+    color: #ffffff;
+  }
+}
+.btn-accept {
+  background: $color3;
+  color: #ffffff;
+  @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+  text-transform: capitalize;
+  &:hover, &:focus {
+    background: $color3;
+    color: #ffffff;
+  }
+}
 
 .card-verify-email {
   margin-top: 8em;

@@ -14,17 +14,22 @@ class HomepageController extends Controller
   {
     $data['request'] = $request;
     $data['session_user'] = null;
+    $data['hasrequest'] = 0;
+
     if( session()->has('isMarketing') )
     {
       $data['session_user'] = $marketinguser->getinfo();
+      $data['hasrequest'] = $marketinguser->hasrequest();
     }
     else if( session()->has('isDeveloper') )
     {
       $data['session_user'] = $developeruser->getinfo();
+      $data['hasrequest'] = $developeruser->hasrequest();
     }
     else
     {
       $data['session_user'] = $customer->getinfo();
+      $data['hasrequest'] = $customer->hasrequest();
     }
 
     return response()->view('frontend.pages.homepage', $data)
@@ -32,37 +37,53 @@ class HomepageController extends Controller
     ->header('Accepts', 'text/html');
   }
 
-  public function browse_project( Request $request, Customer $customer )
+  public function browse_project( Request $request, DeveloperUser $developeruser, MarketingUser $marketinguser, Customer $customer )
   {
+    $data['request'] = $request;
     $data['session_user'] = null;
-    if( session()->has('isDeveloper') ) { return redirect()->route('developer_dashboard_page'); }
-    else if( session()->has('isMarketing') ) { return redirect()->route('marketing_dashboard_page'); }
+    $data['hasrequest'] = 0;
+
+    if( session()->has('isMarketing') )
+    {
+      $data['session_user'] = $marketinguser->getinfo();
+      $data['hasrequest'] = $marketinguser->hasrequest();
+    }
+    else if( session()->has('isDeveloper') )
+    {
+      $data['session_user'] = $developeruser->getinfo();
+      $data['hasrequest'] = $developeruser->hasrequest();
+    }
     else
     {
-      $data['request'] = $request;
-      if( session()->has('isCustomer') ) $data['session_user'] = $customer->getinfo();
-
-      return response()->view('frontend.pages.homepage', $data)
-      ->header('Content-Type', 'text/html')
-      ->header('Accepts', 'text/html');
+      $data['session_user'] = $customer->getinfo();
+      $data['hasrequest'] = $customer->hasrequest();
     }
+
+    return response()->view('frontend.pages.homepage', $data)
+    ->header('Content-Type', 'text/html')
+    ->header('Accepts', 'text/html');
   }
 
   public function homepage_developer( Request $request, MarketingUser $marketinguser, DeveloperUser $developeruser, Customer $customer, $slug )
   {
     $data['request'] = $request;
-    $data['session_user'] = [];
+    $data['session_user'] = null;
+    $data['hasrequest'] = 0;
+
     if( session()->has('isMarketing') )
     {
       $data['session_user'] = $marketinguser->getinfo();
+      $data['hasrequest'] = $marketinguser->hasrequest();
     }
     else if( session()->has('isDeveloper') )
     {
       $data['session_user'] = $developeruser->getinfo();
+      $data['hasrequest'] = $developeruser->hasrequest();
     }
     else
     {
       $data['session_user'] = $customer->getinfo();
+      $data['hasrequest'] = $customer->hasrequest();
     }
 
     $getdeveloper = $developeruser->select(

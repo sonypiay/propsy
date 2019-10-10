@@ -17,11 +17,10 @@ class MarketingController extends Controller
     if( session()->has('isMarketing') )
     {
       $getmarketing = $marketinguser->getinfo();
-      $has_request = $project_request->hasNewRequest( $getmarketing->dev_user_id );
       $data = [
         'request' => $request,
         'session_user' => $getmarketing,
-        'hasRequest' => $has_request
+        'hasrequest' => $marketinguser->hasrequest()
       ];
 
       return response()->view('frontend.pages.marketing.dashboard_page', $data);
@@ -68,7 +67,8 @@ class MarketingController extends Controller
     {
       $data = [
         'request' => $request,
-        'session_user' => $marketinguser->getinfo()
+        'session_user' => $marketinguser->getinfo(),
+        'hasrequest' => $marketinguser->hasrequest()
       ];
 
       return response()->view('frontend.pages.marketing.profile_page', $data);

@@ -19,12 +19,10 @@ class MeetingListController extends Controller
     if( session()->has('isMarketing') )
     {
       $getmarketing = $marketinguser->getinfo();
-      $has_request = $project_request->hasNewRequest( $getmarketing->dev_user_id );
-
       $data = [
         'request' => $request,
         'session_user' => $marketinguser->getinfo(),
-        'hasRequest' => $has_request
+        'hasrequest' => $marketinguser->hasrequest()
       ];
 
       return response()->view('frontend.pages.marketing.meeting_list', $data);
@@ -36,8 +34,6 @@ class MeetingListController extends Controller
     if( session()->has('isMarketing') )
     {
       $getmarketing = $marketinguser->getinfo();
-      $has_request = $project_request->hasNewRequest( $getmarketing->dev_user_id );
-
       $getrequest = [
         'request_id' => '',
         'unit_name' => 'Properti Anda'
@@ -57,7 +53,7 @@ class MeetingListController extends Controller
       $data = [
         'request' => $request,
         'session_user' => $marketinguser->getinfo(),
-        'hasRequest' => $has_request,
+        'hasrequest' => $marketinguser->hasrequest(),
         'getrequest' => $getrequest
       ];
       return response()->view('frontend.pages.marketing.create_schedule', $data);
@@ -118,8 +114,6 @@ class MeetingListController extends Controller
     if( session()->has('isMarketing') )
     {
       $getmarketing = $marketinguser->getinfo();
-      $has_request = $project_request->hasNewRequest( $getmarketing->dev_user_id );
-
       $getmeeting = $meeting_appointment->where('request_id', $request_id)
       ->first();
       if( ! $getmeeting ) abort(404);
@@ -135,7 +129,7 @@ class MeetingListController extends Controller
       $data = [
         'request' => $request,
         'session_user' => $marketinguser->getinfo(),
-        'hasRequest' => $has_request,
+        'hasrequest' => $marketinguser->hasrequest(),
         'getrequest' => $getrequest,
         'getmeeting' => $getmeeting
       ];

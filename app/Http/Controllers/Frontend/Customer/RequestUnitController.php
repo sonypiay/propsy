@@ -100,5 +100,5 @@ class RequestUnitController extends Controller
     ];
 
     return response()->json( $res, $res['status'] );
-  }
+  }  
 }

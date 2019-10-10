@@ -3,6 +3,7 @@
 namespace App\Database;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Database\MeetingAppointment;
 
 class Customer extends Model
 {
@@ -49,5 +50,24 @@ class Customer extends Model
     $pad = str_pad( $id, 4, '0', STR_PAD_LEFT );
     $generate_id = $key . $pad;
     return $generate_id;
+  }
+
+  public function hasRequest()
+  {
+    $session_user = session()->get('customer_id');
+    $has_request = 0;
+
+    $check_request = MeetingAppointment::where([
+      ['project_request.customer_id', '=', $session_user],
+      ['meeting_appointment.meeting_status', '=', 'waiting_confirmation']
+    ])
+    ->join('project_request', 'meeting_appointment.request_id', '=', 'project_request.request_id')
+    ->count();
+
+    if( $check_request > 0 )
+    {
+      $has_request = $check_request;
+    }
+    return $has_request;
   }
 }

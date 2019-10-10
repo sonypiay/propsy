@@ -45,6 +45,9 @@ Route::group(['prefix' => 'customer'], function() {
   Route::get('/get_request_list/{status_request}', 'Frontend\Customer\RequestUnitController@get_request_list');
   Route::put('/cancel_request/{request_id}', 'Frontend\Customer\RequestUnitController@cancel_request');
   Route::put('/response_meeting_invitation/{request_id}/{status_request}', 'Frontend\Customer\RequestUnitController@response_meeting_invitation');
+
+  Route::get('/meeting_invitation', 'Frontend\Customer\MeetingInvitationController@index')->name('customer_meeting_page');
+  Route::get('/get_meeting_invitation', 'Frontend\Customer\MeetingInvitationController@get_meeting_invitation');
 });
 
 // Marketing
@@ -65,7 +68,7 @@ Route::group(['prefix' => 'marketing'], function() {
   Route::group(['prefix' => 'customer'], function() {
     Route::get('/request_unit', 'Frontend\Marketing\RequestUnitController@customer_request_unit')->name('marketing_request_unit');
     Route::get('/get_request_unit', 'Frontend\Marketing\RequestUnitController@get_request_unit');
-    Route::get('/detail_request/{request_id}', 'Frontend\Developer\RequestUnitController@detail_request');
+    Route::get('/detail_request/{request_id}', 'Frontend\Marketing\RequestUnitController@detail_request');
   });
 
   Route::group(['prefix' => 'meeting'], function() {

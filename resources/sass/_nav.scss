@@ -23,9 +23,28 @@
           &:hover {
             color: $color3;
           }
-          span {
-            transition: all 0.10s linear 0s;
-            border-radius: 4px;
+          .notif {
+            background: $color-danger;
+            padding: 3px;
+            border-radius: 20px;
+            margin-left: 3px;
+            margin-top: -10px;
+          }
+        }
+        .main-nav-dropdown {
+          border-radius: 10px;
+          ul {
+            li {
+              a {
+                .newinvite {
+                  background: $color-danger;
+                  padding: 3px 6px;
+                  border-radius: 20px;
+                  color: #ffffff;
+                  @include fontsetting( $font-primary, 10px, 700, normal, normal, 0.4px );
+                }
+              }
+            }
           }
         }
         .navlogin {

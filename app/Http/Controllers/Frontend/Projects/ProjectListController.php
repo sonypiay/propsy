@@ -43,12 +43,14 @@ class ProjectListController extends Controller
     $data['request'] = $request;
     $data['session_user'] = null;
     $data['session_active'] = null;
+    $data['hasrequest'] = 0;
 
     if( session()->has('isCustomer') )
     {
       $customer = new Customer;
       $data['session_active'] = 'customer';
       $data['session_user'] = $customer->getinfo();
+      $data['hasrequest'] = $customer->hasRequest();
     }
 
     if( session()->has('isDeveloper') )
@@ -56,6 +58,7 @@ class ProjectListController extends Controller
       $developer = new DeveloperUser;
       $data['session_active'] = 'developer';
       $data['session_user'] = $developer->getinfo();
+      $data['hasrequest'] = $developer->hasRequest();
     }
 
     if( session()->has('isMarketing') )
@@ -63,6 +66,7 @@ class ProjectListController extends Controller
       $marketing = new MarketingUser;
       $data['session_active'] = 'marketing';
       $data['session_user'] = $marketing->getinfo();
+      $data['hasrequest'] = $developer->hasRequest();
     }
 
     $getproject  = $project_list->select(
@@ -82,6 +86,7 @@ class ProjectListController extends Controller
       'project_list.updated_at',
       'city.city_id',
       'city.city_name',
+      'developer_user.dev_user_id',
       'developer_user.dev_name',
       'developer_user.dev_slug',
       'developer_user.dev_logo'
@@ -114,23 +119,27 @@ class ProjectListController extends Controller
     $data['request'] = $request;
     $data['session_user'] = null;
     $data['session_active'] = null;
+    $data['hasrequest'] = 0;
 
     if( session()->has('isCustomer') )
     {
       $data['session_active'] = 'customer';
       $data['session_user'] = $customer->getinfo();
+      $data['hasrequest'] = $customer->hasRequest();
     }
 
     if( session()->has('isDeveloper') )
     {
       $data['session_active'] = 'developer';
       $data['session_user'] = $developer->getinfo();
+      $data['hasrequest'] = $developer->hasRequest();
     }
 
     if( session()->has('isMarketing') )
     {
       $marketing = new MarketingUser;
       $data['session_user'] = $marketing->getinfo();
+      $data['hasrequest'] = $marketing->hasRequest();
     }
 
     $getunit  = $unit_type->select(
@@ -219,12 +228,6 @@ class ProjectListController extends Controller
     else
     {
       $get_last_id = $project_request->select('request_id')->orderBy('request_id', 'desc')->first();
-      $request_id = 1;
-      if( $get_last_id !== null )
-      {
-        $request_id = $get_last_id->request_id + 1;
-      }
-
       $generate_request_id = $project_request->generateId();
       $data_log = [
         'message' => $getcustomer->customer_name . ' mengajukan pemesanan unit ' . $getunit->unit_name,
@@ -257,12 +260,14 @@ class ProjectListController extends Controller
     $data['request'] = $request;
     $data['session_user'] = null;
     $data['session_active'] = null;
+    $data['hasrequest'] = 0;
 
     if( session()->has('isCustomer') )
     {
       $customer = new Customer;
       $data['session_active'] = 'customer';
       $data['session_user'] = $customer->getinfo();
+      $data['hasrequest'] = $customer->hasRequest();
     }
 
     if( session()->has('isDeveloper') )
@@ -270,6 +275,7 @@ class ProjectListController extends Controller
       $developer = new DeveloperUser;
       $data['session_active'] = 'developer';
       $data['session_user'] = $developer->getinfo();
+      $data['hasrequest'] = $developer->hasRequest();
     }
 
     if( session()->has('isMarketing') )
@@ -277,6 +283,7 @@ class ProjectListController extends Controller
       $marketing = new MarketingUser;
       $data['session_active'] = 'marketing';
       $data['session_user'] = $marketing->getinfo();
+      $data['hasrequest'] = $marketing->hasRequest();
     }
 
     $city = new CityDB;
@@ -403,23 +410,27 @@ class ProjectListController extends Controller
     $data['request'] = $request;
     $data['session_user'] = null;
     $data['session_active'] = null;
+    $data['hasrequest'] = 0;
 
     if( session()->has('isCustomer') )
     {
       $data['session_active'] = 'customer';
       $data['session_user'] = $customer->getinfo();
+      $data['hasrequest'] = $customer->hasRequest();
     }
 
     if( session()->has('isDeveloper') )
     {
       $data['session_active'] = 'developer';
       $data['session_user'] = $developer->getinfo();
+      $data['hasrequest'] = $developer->hasRequest();
     }
 
     if( session()->has('isMarketing') )
     {
       $data['session_active'] = 'marketing';
       $data['session_user'] = $marketing->getinfo();
+      $data['hasrequest'] = $marketing->hasRequest();
     }
 
     $city = new CityDB;

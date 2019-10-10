@@ -24,6 +24,7 @@ class ProjectGalleryController extends Controller
       $data = [
         'request' => $request,
         'session_user' => $developeruser->getinfo(),
+        'hasrequest' => $developeruser->hasrequest(),
         'projects' => $getproject
       ];
 

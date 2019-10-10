@@ -39,6 +39,7 @@ Vue.component('customer-register-page', require('./components/Frontend/Customer/
 Vue.component('customer-login-page', require('./components/Frontend/Customer/Masuk.vue').default);
 Vue.component('customer-profile-page', require('./components/Frontend/Customer/Profile.vue').default);
 Vue.component('customer-list-request', require('./components/Frontend/Customer/ListRequestUnit.vue').default);
+Vue.component('customer-meeting-invitation', require('./components/Frontend/Customer/MeetingInvitation.vue').default);
 
 // main page
 Vue.component('homepage-available-project', require('./components/Frontend/HomepageProject.vue').default);

@@ -60,7 +60,10 @@ import EmailAccount from './EmailAccount.vue';
 import ProfilePhoto from './ProfilePhoto.vue';
 
 export default {
-  props: ['session_user'],
+  props: [
+    'session_user',
+    'hasrequest'
+  ],
   components: {
     AccountInformation,
     PasswordAccount,

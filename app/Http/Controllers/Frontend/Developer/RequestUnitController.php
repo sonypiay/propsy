@@ -19,12 +19,10 @@ class RequestUnitController extends Controller
   {
     if( session()->has('isDeveloper') )
     {
-      $has_request = $project_request->hasNewRequest();
-
       $data = [
         'request' => $request,
         'session_user' => $developeruser->getinfo(),
-        'hasRequest' => $has_request
+        'hasrequest' => $developeruser->hasrequest()
       ];
       return response()->view('frontend.pages.developer.request_unit', $data);
     }

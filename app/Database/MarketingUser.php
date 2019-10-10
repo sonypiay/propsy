@@ -3,6 +3,8 @@
 namespace App\Database;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Database\ProjectRequest;
+use App\Database\MarketingUser;
 
 class MarketingUser extends Model
 {
@@ -42,7 +44,7 @@ class MarketingUser extends Model
   public function generateId()
   {
     $id = 1;
-    $getlastid = $this::select('seqid')->orderBy('seqid', 'desc')->first();
+    $getlastid = MeetingAppointment::select('seqid')->orderBy('seqid', 'desc')->first();
 
     if( $getlastid !== null )
       $id = $getlastid->seqid + 1;
@@ -51,5 +53,31 @@ class MarketingUser extends Model
     $pad = str_pad( $id, 4, '0', STR_PAD_LEFT );
     $generate_id = $key . $pad;
     return $generate_id;
+  }
+
+  public function hasRequest()
+  {
+    $session_user = session()->get('mkt_user_id');
+    $getdeveloper = MarketingUser::select('dev_user_id')
+    ->where('mkt_user_id', $session_user)
+    ->first();
+    $has_request = 0;
+
+    $check_request = ProjectRequest::where([
+      ['project_request.dev_user_id', '=', $getdeveloper->dev_user_id],
+      ['project_request.status_request', '=', 'waiting_response']
+    ])
+    ->orWhere([
+      ['project_request.dev_user_id', '=', $getdeveloper->dev_user_id],
+      ['meeting_appointment.meeting_status', '=', 'accept']
+    ])
+    ->join('meeting_appointment', 'project_request.request_id', '=', 'meeting_appointment.request_id')
+    ->count();
+
+    if( $check_request > 0 )
+    {
+      $has_request = $check_request;
+    }
+    return $has_request;
   }
 }

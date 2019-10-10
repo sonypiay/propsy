@@ -23,7 +23,8 @@ class ProjectListController extends Controller
     {
       $data = [
         'request' => $request,
-        'session_user' => $developeruser->getinfo()
+        'session_user' => $developeruser->getinfo(),
+        'hasrequest' => $developeruser->hasrequest()
       ];
 
       return response()->view('frontend.pages.developer.projects', $data);
@@ -40,7 +41,8 @@ class ProjectListController extends Controller
     {
       $data = [
         'request' => $request,
-        'session_user' => $developeruser->getinfo()
+        'session_user' => $developeruser->getinfo(),
+        'hasrequest' => $developeruser->hasrequest()
       ];
 
       return response()->view('frontend.pages.developer.add_project', $data);
@@ -137,6 +139,7 @@ class ProjectListController extends Controller
       $data = [
         'request' => $request,
         'session_user' => $developeruser->getinfo(),
+        'hasrequest' => $developeruser->hasrequest(),
         'getproject' => $getproject
       ];
 
@@ -347,7 +350,8 @@ class ProjectListController extends Controller
       $data = [
         'request' => $request,
         'session_user' => $developeruser->getinfo(),
-        'getproject' => $getproject
+        'getproject' => $getproject,
+        'hasrequest' => $developeruser->hasrequest()
       ];
       return response()->view('frontend.pages.developer.detail_project', $data);
     }

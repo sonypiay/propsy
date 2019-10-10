@@ -35,9 +35,29 @@
   color: #1fc8c9;
 }
 
-.main-header .main-navbar .main-nav li a span {
-  transition: all 0.1s linear 0s;
-  border-radius: 4px;
+.main-header .main-navbar .main-nav li a .notif {
+  background: #e02c2c;
+  padding: 3px;
+  border-radius: 20px;
+  margin-left: 3px;
+  margin-top: -10px;
+}
+
+.main-header .main-navbar .main-nav li .main-nav-dropdown {
+  border-radius: 10px;
+}
+
+.main-header .main-navbar .main-nav li .main-nav-dropdown ul li a .newinvite {
+  background: #e02c2c;
+  padding: 3px 6px;
+  border-radius: 20px;
+  color: #ffffff;
+  font-size: 10px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.4px;
 }
 
 .main-header .main-navbar .main-nav li .navlogin span {
@@ -217,6 +237,42 @@ body {
   background: #f9f9f9;
   text-align: center;
   border-radius: 4px;
+}
+
+.btn-reject {
+  background: #e02c2c;
+  color: #ffffff;
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  text-transform: capitalize;
+}
+
+.btn-reject:hover,
+.btn-reject:focus {
+  background: #e02c2c;
+  color: #ffffff;
+}
+
+.btn-accept {
+  background: #1fc8c9;
+  color: #ffffff;
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  text-transform: capitalize;
+}
+
+.btn-accept:hover,
+.btn-accept:focus {
+  background: #1fc8c9;
+  color: #ffffff;
 }
 
 .card-verify-email {

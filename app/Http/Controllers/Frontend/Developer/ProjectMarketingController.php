@@ -21,6 +21,7 @@ class ProjectMarketingController extends Controller
       $data = [
         'request' => $request,
         'session_user' => $developeruser->getinfo(),
+        'hasrequest' => $developeruser->hasrequest(),
         'getcity' => $getcity
       ];
       return response()->view('frontend.pages.developer.manage_marketing', $data);

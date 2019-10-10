@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Database\MarketingUser;
 use App\Database\ProjectRequest;
+use App\Database\LogProjectRequest;
 use App\Database\Customer;
 use App\Http\Controllers\Controller;
 

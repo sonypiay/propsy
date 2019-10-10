@@ -525,4 +525,70 @@ class ProjectListController extends Controller
 
     return response()->json( $res, 200 );
   }
+
+  public function project_developer( ProjectList $project_list, $slug )
+  {
+    $getproject  = $project_list->select(
+      'project_list.project_id',
+      'project_list.project_name',
+      'project_list.project_slug',
+      'project_list.project_thumbnail',
+      'project_list.project_status',
+      'project_list.project_type',
+      'project_list.project_status',
+      'project_list.project_estimate_launch',
+      'developer_user.dev_name',
+      'developer_user.dev_slug',
+      'city.city_name',
+      'province.province_name',
+      'project_unit_type.unit_price',
+      'project_unit_type.unit_lb'
+    )
+    ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
+    ->join('city', 'project_list.city_id', '=', 'city.city_id')
+    ->join('province', 'city.province_id', '=', 'province.province_id')
+    ->leftJoin('project_unit_type', 'project_list.project_id', '=', 'project_unit_type.project_id')
+    ->where('developer_user.dev_slug', $slug)
+    ->orderBy('project_unit_type.unit_price', 'asc')
+    ->orderBy('project_unit_type.unit_lb', 'asc')
+    ->groupBy('project_list.project_id')
+    ->get();
+
+    $result = [
+      'result' => [
+        'data' => $getproject,
+        'total' => $getproject->count()
+      ]
+    ];
+
+    return response()->json( $result );
+  }
+
+  public function marketing_developer( MarketingUser $marketing, $id )
+  {
+    $getmarketing = $marketing->select(
+      'marketing_user.mkt_fullname',
+      'marketing_user.mkt_email',
+      'marketing_user.mkt_phone_number',
+      'marketing_user.mkt_mobile_phone',
+      'marketing_user.mkt_address',
+      'marketing_user.mkt_profile_photo',
+      'marketing_user.city_id',
+      'marketing_user.created_at',
+      'city.city_name',
+      'province.province_name'
+    )
+    ->leftJoin('city', 'marketing_user.city_id', '=', 'city.city_id')
+    ->leftJoin('province', 'city.province_id', '=', 'province.province_id')
+    ->where('marketing_user.dev_user_id', $id)
+    ->get();
+
+    $result = [
+      'result' => [
+        'data' => $getmarketing,
+        'total' => $getmarketing->count()
+      ]
+    ];
+    return response()->json( $result );
+  }
 }

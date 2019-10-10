@@ -159,6 +159,9 @@ Route::group(['prefix' => 'project'], function() {
 
   Route::get('/search', 'Frontend\Projects\ProjectListController@search_project')->name('page_search_project');
   Route::get('/search_list', 'Frontend\Projects\ProjectListController@get_search_list');
+
+  Route::get('/project_developer/{slug}', 'Frontend\Projects\ProjectListController@project_developer');
+  Route::get('/marketing_developer/{id}', 'Frontend\Projects\ProjectListController@marketing_developer');
 });
 
 

@@ -850,6 +850,39 @@ html, body {
   }
 }
 
-.profile-dev-banner {
-  background: $color2;
+.profile-developer-top {
+  background: #f9f9f9;
+  .profile-developer-name {
+    .developer-logo {
+      border-radius: 10px;
+      background: #ffffff;
+    }
+    .developer-name {
+      @include fontsetting( $font-primary, 28px, 700, normal, normal, 0.4px );
+      color: #333333;
+    }
+  }
+}
+.navbar-developer-container {
+  background: $color3;
+  .navbar-developer-profile {
+    ul {
+      li {
+        a {
+          @include fontsetting( $font-primary, 18px, 600, normal, normal, 0.4px );
+          color: #ffffff;
+          text-transform: capitalize;
+          text-align: center;
+          &:hover, &:focus {
+            background: #ffffff;
+            color: $color3;
+          }
+        }
+        .active {
+          background: #ffffff;
+          color: $color3;
+        }
+      }
+    }
+  }
 }

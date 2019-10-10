@@ -66,6 +66,7 @@ class HomepageController extends Controller
     }
 
     $getdeveloper = $developeruser->select(
+      'developer_user.dev_user_id',
       'developer_user.dev_name',
       'developer_user.dev_ownername',
       'developer_user.dev_slug',

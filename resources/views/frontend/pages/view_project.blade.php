@@ -6,8 +6,6 @@
   :session_user="{{ json_encode( $session_user ) }}"
   :getproject="{{ json_encode( $getproject ) }}"
   :getgallery="{{ json_encode( $getgallery ) }}"
-  :projectcity="{{ json_encode( $project_city ) }}"
-  :devcity="{{ json_encode( $dev_city ) }}"
   :getunit_price="{{ json_encode( $getunit_price ) }}"
   session_active="{{ $session_active }}"
    />

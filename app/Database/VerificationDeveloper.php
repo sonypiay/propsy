@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class VerificationDeveloper extends Model
 {
-  public function $timestamps = true;
+  public $timestamps = true;
+  public $incrementing = false;
   protected $table = 'verification_developer';
-  protected $primaryKey = 'verify_id';
+  protected $primaryKey = 'hash_id';
   protected $guarded = ['created_at', 'updated_at'];
 }

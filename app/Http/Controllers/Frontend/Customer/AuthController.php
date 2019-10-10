@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend\Customer;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Database\Customer;
 use App\Database\VerificationCustomer;
 use App\Http\Controllers\Controller;
@@ -18,6 +19,7 @@ class AuthController extends Controller
     $check_username = $customer->where('customer_username', $username);
     $check_email = $customer->where('customer_email', $username);
     $valid = false;
+
     if( $check_username->count() === 1 )
     {
       $result = $check_username->first();
@@ -32,7 +34,7 @@ class AuthController extends Controller
 
     if( $valid )
     {
-      if( $result->customer_password === md5( $password ) )
+      if( Hash::check( $password, $result->customer_password ) )
       {
         $res = [
           'status' => 200,
@@ -69,7 +71,7 @@ class AuthController extends Controller
     $email = $request->email;
     $username = $request->username;
     $password = $request->password;
-    $hash_password = md5( $password );
+    $hash_password = Hash::make( $password, ['rounds' => 12]);
     $check_username = $customer->where('customer_username', $username);
     $check_email = $customer->where('customer_email', $email);
 
@@ -90,6 +92,7 @@ class AuthController extends Controller
     else
     {
       $insert = new $customer;
+      $insert->customer_id = $customer->generateId();
       $insert->customer_name = $fullname;
       $insert->customer_email = $email;
       $insert->customer_username = $username;
@@ -102,7 +105,7 @@ class AuthController extends Controller
       ])->first();
 
       $expire_date = time() + 60 * 30;
-      $hash_id = base64_encode( uniqid() );
+      $hash_id = sha1( Hash::make($email.$hash_password) );
       $data_verify = [
         'customer_id' => $getuser->customer_id,
         'hash_id' => $hash_id,

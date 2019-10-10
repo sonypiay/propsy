@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend\Developer;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Database\DeveloperUser;
 use App\Http\Controllers\Controller;
 
@@ -29,7 +30,7 @@ class AuthController extends Controller
 
     if( $valid )
     {
-      if( $result->dev_password === md5( $password ) )
+      if( Hash::check( $password, $result->dev_password ) )
       {
         session()->put('isDeveloper', true);
         session()->put('dev_user_id', $result->dev_user_id);
@@ -68,8 +69,7 @@ class AuthController extends Controller
     $ownername = $request->dev_ownername;
     $biography = $request->dev_biography;
     $name = $request->dev_name;
-    $ownership = $request->dev_ownership;
-    $hash_password = md5( $password );
+    $hash_password = Hash::make( $password, ['rounds' => 12]);
     $check_username = $developeruser->where('dev_username', $username);
     $check_email = $developeruser->where('dev_email', $email);
 
@@ -90,6 +90,7 @@ class AuthController extends Controller
     else
     {
       $insert = new $developeruser;
+      $insert->dev_user_id = $developeruser->generateId();
       $insert->dev_name = $name;
       $insert->dev_slug = str_slug( $name );
       $insert->dev_ownername = $ownername;
@@ -97,7 +98,6 @@ class AuthController extends Controller
       $insert->dev_password = $hash_password;
       $insert->dev_email = $email;
       $insert->dev_biography = $biography;
-      $insert->dev_ownership = $ownership;
       $insert->save();
 
       $res = [ 'status' => 200, 'statusText' => 'success' ];

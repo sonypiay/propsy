@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class VerificationCustomer extends Model
 {
   public $timestamps = true;
+  public $incrementing = false;
   protected $table = 'verification_customer';
-  protected $primaryKey = 'verify_id';
+  protected $primaryKey = 'hash_id';
   protected $guarded = ['created_at', 'updated_at'];
 
   public function makeVerification($data)

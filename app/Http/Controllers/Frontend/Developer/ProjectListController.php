@@ -9,6 +9,7 @@ use App\Database\DeveloperUser;
 use App\Database\ProjectList;
 use App\Database\ProjectUnitType;
 use App\Database\ProjectGallery;
+use App\Database\ProjectUnitGallery;
 use App\Database\UnitFacility;
 use App\Database\ProvinceDB;
 use App\Database\CityDB;
@@ -22,7 +23,8 @@ class ProjectListController extends Controller
     {
       $data = [
         'request' => $request,
-        'session_user' => $developeruser->getinfo()
+        'session_user' => $developeruser->getinfo(),
+        'hasrequest' => $developeruser->hasrequest()
       ];
 
       return response()->view('frontend.pages.developer.projects', $data);
@@ -39,7 +41,8 @@ class ProjectListController extends Controller
     {
       $data = [
         'request' => $request,
-        'session_user' => $developeruser->getinfo()
+        'session_user' => $developeruser->getinfo(),
+        'hasrequest' => $developeruser->hasrequest()
       ];
 
       return response()->view('frontend.pages.developer.add_project', $data);
@@ -66,20 +69,14 @@ class ProjectListController extends Controller
     $data_site_plan = [];
     $storage = Storage::disk('assets');
     $thumbnail = ! empty( $project_thumbnail ) ? $project_thumbnail->hashName() : null;
-    $getid = 1;
-    $get_last_id = $project_list->select('project_id')->orderBy('project_id', 'desc')->first();
-    if( $get_last_id !== null )
-    {
-      $getid = $get_last_id->project_id + 1;
-    }
-    $unique_id = 'PRY' . str_pad( $getid, 5, '0', STR_PAD_LEFT );
+    $project_id = $project_list->generateId();
 
     $insert_project = new $project_list;
     $insert_gallery = new $project_gallery;
     $insert_project->project_name = $project_name;
-    $insert_project->project_unique_id = $unique_id;
+    $insert_project->project_id = $project_id;
     $insert_project->project_slug = $project_slug;
-    $insert_project->project_city = $project_city;
+    $insert_project->city_id = $project_city;
     $insert_project->project_address = $project_address;
     $insert_project->project_link_map = $project_link_map;
     $insert_project->project_map_embed = $project_map_embed;
@@ -98,7 +95,7 @@ class ProjectListController extends Controller
     {
 
       $insert_gallery->gallery_filename = $thumbnail;
-      $insert_gallery->project_unique_id = $unique_id;
+      $insert_gallery->project_id = $project_id;
       $insert_gallery->save();
       $storage->putFileAs( 'images/project/gallery', $project_thumbnail, $thumbnail );
     }
@@ -113,12 +110,11 @@ class ProjectListController extends Controller
     {
       $getproject = $project_list->select(
         'project_list.project_id',
-        'project_list.project_unique_id',
         'project_list.project_name',
         'project_list.project_slug',
         'project_list.project_thumbnail',
         'project_list.project_description',
-        'project_list.project_city',
+        'project_list.city_id',
         'project_list.project_address',
         'project_list.project_link_map',
         'project_list.project_map_embed',
@@ -129,23 +125,21 @@ class ProjectListController extends Controller
         'project_list.dev_user_id',
         'project_list.created_at',
         'project_list.updated_at',
-        'city.city_id',
         'city.city_name',
-        'city.city_slug',
         'province.province_id',
-        'province.province_name',
-        'province.province_slug'
+        'province.province_name'
       )
-      ->leftJoin('city', 'project_list.project_city', '=', 'city.city_id')
+      ->leftJoin('city', 'project_list.city_id', '=', 'city.city_id')
       ->leftJoin('province', 'city.province_id', '=', 'province.province_id')
       ->where('project_list.project_id', $id)
-      ->orWhere('project_list.project_unique_id', $id)
+      ->orWhere('project_list.project_id', $id)
       ->first();
       if( ! $getproject ) abort(404);
 
       $data = [
         'request' => $request,
         'session_user' => $developeruser->getinfo(),
+        'hasrequest' => $developeruser->hasrequest(),
         'getproject' => $getproject
       ];
 
@@ -181,7 +175,7 @@ class ProjectListController extends Controller
 
       $insert_gallery = new $project_gallery;
       $insert_gallery->gallery_filename = $thumbnail;
-      $insert_gallery->project_unique_id = $update->project_unique_id;
+      $insert_gallery->project_id = $update->project_id;
       $insert_gallery->save();
       $storage->putFileAs( $thumbnail_path, $project_thumbnail, $thumbnail );
     }
@@ -197,7 +191,7 @@ class ProjectListController extends Controller
 
     $update->project_name = $project_name;
     $update->project_slug = $project_slug;
-    $update->project_city = $project_city;
+    $update->city_id = $project_city;
     $update->project_address = $project_address;
     $update->project_link_map = $project_link_map;
     $update->project_map_embed = $project_map_embed;
@@ -217,12 +211,10 @@ class ProjectListController extends Controller
     $devuser = $developeruser->getinfo();
     $project = $project_list->select(
       'project_list.project_id',
-      'project_list.project_unique_id',
       'project_list.project_name',
       'project_list.project_slug',
       'project_list.project_thumbnail',
       'project_list.project_description',
-      'project_list.project_city',
       'project_list.project_address',
       'project_list.project_link_map',
       'project_list.project_map_embed',
@@ -234,12 +226,10 @@ class ProjectListController extends Controller
       'project_list.updated_at',
       'city.city_id',
       'city.city_name',
-      'city.city_slug',
       'province.province_id',
-      'province.province_name',
-      'province.province_slug'
+      'province.province_name'
     )
-    ->leftJoin('city', 'project_list.project_city', '=', 'city.city_id')
+    ->leftJoin('city', 'project_list.city_id', '=', 'city.city_id')
     ->leftJoin('province', 'city.province_id', '=', 'province.province_id');
 
     if( empty( $keywords ) )
@@ -267,7 +257,7 @@ class ProjectListController extends Controller
         $query = $project->where([
           ['project_list.project_status', $status],
           ['project_list.project_name', 'like', '%' . $keywords . '%'],
-          ['.project_list.dev_user_id', $devuser->dev_user_id]
+          ['project_list.dev_user_id', $devuser->dev_user_id]
         ])
         ->orderBy('project_list.created_at', 'desc');
       }
@@ -281,7 +271,7 @@ class ProjectListController extends Controller
     return response()->json( $data, $data['status'] );
   }
 
-  public function delete_project( Request $request, ProjectList $project_list, ProjectGallery $gallery, $project_id )
+  public function delete_project( Request $request, ProjectList $project_list, ProjectGallery $gallery, ProjectUnitGallery $unit_gallery, $project_id )
   {
     $path_img = 'images/project/gallery';
     $storage = Storage::disk('assets');
@@ -289,8 +279,17 @@ class ProjectListController extends Controller
     if( $getproject->count() !== 0 )
     {
       $result_project = $getproject->first();
-      $getgallery = $gallery->where('project_unique_id', $result_project->project_unique_id);
-      if( $getgallery->count() !== 0 )
+      $getgallery = $gallery->where('project_id', $result_project->project_id);
+      $getunitgallery = $unit_gallery->select(
+        'project_unit_gallery.unit_gallery_filename',
+        'project_unit_gallery.unit_type_id'
+      )
+      ->join('project_unit_type', 'project_unit_gallery.unit_type_id', '=', 'project_unit_type.unit_type_id')
+      ->where('project_unit_type.project_id', $project_id)
+      ->groupBy('project_unit_type.unit_type_id')
+      ->get();
+
+      if( $getgallery->count() > 0 )
       {
         foreach( $getgallery->get() as $g ):
           if( $storage->exists( $path_img . '/' . $g->gallery_filename ) )
@@ -298,7 +297,16 @@ class ProjectListController extends Controller
             $storage->delete( $path_img . '/' . $g->gallery_filename );
           }
         endforeach;
-        $getgallery->delete();
+      }
+
+      if( $getunitgallery->count() > 0 )
+      {
+        foreach( $getunitgallery as $g ):
+          if( $storage->exists( $path_img . '/' . $g->unit_gallery_filename ) )
+          {
+            $storage->delete( $path_img . '/' . $g->unit_gallery_filename );
+          }
+        endforeach;
       }
       $getproject->delete();
     }
@@ -312,12 +320,10 @@ class ProjectListController extends Controller
     {
       $getproject = $project_list->select(
         'project_list.project_id',
-        'project_list.project_unique_id',
         'project_list.project_name',
         'project_list.project_slug',
         'project_list.project_thumbnail',
         'project_list.project_description',
-        'project_list.project_city',
         'project_list.project_address',
         'project_list.project_link_map',
         'project_list.project_map_embed',
@@ -329,15 +335,13 @@ class ProjectListController extends Controller
         'project_list.updated_at',
         'city.city_id',
         'city.city_name',
-        'city.city_slug',
         'province.province_id',
-        'province.province_name',
-        'province.province_slug'
+        'province.province_name'
       )
-      ->leftJoin('city', 'project_list.project_city', '=', 'city.city_id')
+      ->leftJoin('city', 'project_list.city_id', '=', 'city.city_id')
       ->leftJoin('province', 'city.province_id', '=', 'province.province_id')
       ->where([
-        ['project_list.project_unique_id', $project_id],
+        ['project_list.project_id', $project_id],
         ['project_list.dev_user_id', session()->get('dev_user_id')]
       ])
       ->first();
@@ -346,7 +350,8 @@ class ProjectListController extends Controller
       $data = [
         'request' => $request,
         'session_user' => $developeruser->getinfo(),
-        'getproject' => $getproject
+        'getproject' => $getproject,
+        'hasrequest' => $developeruser->hasrequest()
       ];
       return response()->view('frontend.pages.developer.detail_project', $data);
     }

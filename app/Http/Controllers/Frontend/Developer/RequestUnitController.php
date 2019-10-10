@@ -19,12 +19,10 @@ class RequestUnitController extends Controller
   {
     if( session()->has('isDeveloper') )
     {
-      $has_request = $project_request->hasNewRequest();
-
       $data = [
         'request' => $request,
         'session_user' => $developeruser->getinfo(),
-        'hasRequest' => $has_request
+        'hasrequest' => $developeruser->hasrequest()
       ];
       return response()->view('frontend.pages.developer.request_unit', $data);
     }
@@ -42,10 +40,9 @@ class RequestUnitController extends Controller
     $devuser = $developeruser->getinfo();
 
     $query = $project_request->select(
-      'project_request.request_unique_id',
+      'project_request.request_id',
       'project_request.request_message',
       'project_request.status_request',
-      'project_request.request_note',
       'project_request.isReviewed',
       'project_request.created_at',
       'project_request.updated_at',
@@ -63,10 +60,10 @@ class RequestUnitController extends Controller
       'meeting_appointment.meeting_note'
     )
     ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
-    ->join('city', 'customer.customer_city', '=', 'city.city_id')
+    ->join('city', 'customer.city_id', '=', 'city.city_id')
     ->join('province', 'city.province_id', '=', 'province.province_id')
     ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
-    ->leftJoin('meeting_appointment', 'project_request.request_unique_id', '=', 'meeting_appointment.request_unique_id');
+    ->leftJoin('meeting_appointment', 'project_request.request_id', '=', 'meeting_appointment.request_id');
 
     if( empty( $keywords ) )
     {
@@ -89,7 +86,7 @@ class RequestUnitController extends Controller
     {
       $result = $query->where([
         ['project_request.dev_user_id', $devuser->dev_user_id],
-        ['project_request.request_unique_id', 'like', '%' . $keywords . '%'],
+        ['project_request.request_id', 'like', '%' . $keywords . '%'],
         ['project_request.status_request', '!=', 'done']
       ])
       ->orWhere([
@@ -108,6 +105,11 @@ class RequestUnitController extends Controller
       {
         $result = $query->where([
           ['project_request.dev_user_id', $devuser->dev_user_id],
+          ['project_request.request_id', 'like', '%' . $keywords . '%'],
+          ['project_request.status_request', '!=', 'done']
+        ])
+        ->orWhere([
+          ['project_request.dev_user_id', $devuser->dev_user_id],
           ['customer.customer_name', 'like', '%' . $keywords . '%'],
           ['project_request.status_request', $status_request]
         ])
@@ -122,19 +124,16 @@ class RequestUnitController extends Controller
 
     $getresult = $result->paginate( $limit );
 
-    $res = [
-      'results' => $getresult
-    ];
+    $res = [ 'results' => $getresult ];
     return response()->json( $res, 200 );
   }
 
   public function detail_request( ProjectRequest $project_request, LogProjectRequest $log_request, $request_id )
   {
     $getrequest = $project_request->select(
-      'project_request.request_unique_id',
+      'project_request.request_id',
       'project_request.request_message',
       'project_request.status_request',
-      'project_request.request_note',
       'project_request.created_at',
       'project_request.updated_at',
       'customer.customer_id',
@@ -150,18 +149,19 @@ class RequestUnitController extends Controller
       'meeting_appointment.meeting_note',
       'meeting_appointment.meeting_result',
       'meeting_appointment.document_file',
-      'meeting_appointment.last_updated_by'
+      'meeting_appointment.created_by',
+      'meeting_appointment.updated_by'
     )
     ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
-    ->join('city', 'customer.customer_city', '=', 'city.city_id')
+    ->join('city', 'customer.city_id', '=', 'city.city_id')
     ->join('province', 'city.province_id', '=', 'province.province_id')
     ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
-    ->leftJoin('meeting_appointment', 'project_request.request_unique_id', '=', 'meeting_appointment.request_unique_id')
-    ->where('project_request.request_unique_id', '=', $request_id)
+    ->leftJoin('meeting_appointment', 'project_request.request_id', '=', 'meeting_appointment.request_id')
+    ->where('project_request.request_id', '=', $request_id)
     ->first();
 
-    $getlog = $log_request->where('request_unique_id', '=', $request_id)
-    ->orderBy('created_at', 'desc')
+    $getlog = $log_request->where('request_id', '=', $request_id)
+    ->orderBy('log_date', 'desc')
     ->get();
 
     $res = [
@@ -176,7 +176,7 @@ class RequestUnitController extends Controller
 
   public function review_request_unit( ProjectRequest $project_request, LogProjectRequest $log_request, ProjectUnitType $unit_type, $request_id, $status_review )
   {
-    $getrequest = $project_request->where('request_unique_id', $request_id)
+    $getrequest = $project_request->where('request_id', $request_id)
     ->first();
 
     if( $getrequest->isReviewed === 'N' )
@@ -193,6 +193,12 @@ class RequestUnitController extends Controller
       $log_request->insert_log([
         'request_id' => $request_id,
         'message' => 'Developer telah me-review pengajuan pemesanan unit.'
+      ]);
+
+      $log_message = $status_review === 'reject' ? 'Developer menolak pesanan pelanggan.' : 'Developer menyetujui pesanan pelanggan. <br /> Unit telah terjual.';
+      $log_request->insert_log([
+        'request_id' => $request_id,
+        'message' => $log_message
       ]);
     }
 

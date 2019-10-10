@@ -103,7 +103,7 @@ export default {
   data() {
     return {
       forms: {
-        request_id: this.getrequest.request_unique_id,
+        request_id: this.getrequest.request_id,
         meeting_note: this.getmeeting.meeting_note,
         status_meeting: this.getmeeting.meeting_status !== 'done' ? 'revision' : this.getmeeting.meeting_status,
         meeting_result: this.getmeeting.meeting_result === null ? '' : this.getmeeting.meeting_result,
@@ -251,7 +251,7 @@ export default {
       ax.then( res => {
         swal({
           title: 'Sukses',
-          text: 'Jadwal meeting berhasil dibuat',
+          text: 'Jadwal meeting berhasil diubah',
           icon: 'success',
           timer: 3000
         });

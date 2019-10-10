@@ -2407,13 +2407,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['getcity'],
   data: function data() {
@@ -4078,6 +4071,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: [],
   data: function data() {
@@ -4086,6 +4090,7 @@ __webpack_require__.r(__webpack_exports__);
         keywords: '',
         city_name: '',
         city_id: '',
+        city_flag_id: '',
         province: '',
         isedit: false,
         submit: 'Tambah'
@@ -4159,6 +4164,7 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         this.forms.city_name = data.city_name;
         this.forms.city_id = data.city_id;
+        this.forms.city_flag_id = data.city_id;
         this.forms.province = data.province_id;
         this.forms.isedit = true;
         this.forms.submit = 'Simpan';
@@ -4174,13 +4180,18 @@ __webpack_require__.r(__webpack_exports__);
       this.message.errorMessage = '';
       this.message.iserror = false;
 
-      if (this.forms.province === '') {
-        this.message.errors.province = 'Provinsi tidak boleh kosong';
+      if (this.forms.city_id === '') {
+        this.message.errors.city_id = 'ID Kota tidak boleh kosong';
         this.message.iserror = true;
       }
 
       if (this.forms.city_name === '') {
         this.message.errors.city_name = 'Nama kota tidak boleh kosong';
+        this.message.iserror = true;
+      }
+
+      if (this.forms.province === '') {
+        this.message.errors.province = 'Provinsi tidak boleh kosong';
         this.message.iserror = true;
       }
 
@@ -4190,6 +4201,7 @@ __webpack_require__.r(__webpack_exports__);
         method: 'post',
         url: this.$root.url + '/cp/wilayah/city/store',
         params: {
+          city_id: this.forms.city_id,
           city_name: this.forms.city_name,
           province: this.forms.province
         }
@@ -4205,7 +4217,7 @@ __webpack_require__.r(__webpack_exports__);
           UIkit.modal('#modal-city').hide();
         }, 1000);
       })["catch"](function (err) {
-        _this3.message.errorMessage = err.response.statusText;
+        if (err.response.status === 500) _this3.message.errorMessage = err.response.statusText;else _this3.message.errorMessage = err.response.data.statusText;
         _this3.forms.submit = 'Tambah';
       });
     },
@@ -4216,8 +4228,8 @@ __webpack_require__.r(__webpack_exports__);
       this.message.errorMessage = '';
       this.message.iserror = false;
 
-      if (this.forms.province === '') {
-        this.message.errors.province = 'Provinsi tidak boleh kosong';
+      if (this.forms.city_id === '') {
+        this.message.errors.city_id = 'ID Kota tidak boleh kosong';
         this.message.iserror = true;
       }
 
@@ -4226,12 +4238,18 @@ __webpack_require__.r(__webpack_exports__);
         this.message.iserror = true;
       }
 
+      if (this.forms.province === '') {
+        this.message.errors.province = 'Provinsi tidak boleh kosong';
+        this.message.iserror = true;
+      }
+
       if (this.message.iserror === true) return false;
       this.forms.submit = '<span uk-spinner></span>';
       axios({
         method: 'put',
-        url: this.$root.url + '/cp/wilayah/city/save/' + this.forms.city_id,
+        url: this.$root.url + '/cp/wilayah/city/save/' + this.forms.city_flag_id,
         params: {
+          city_id: this.forms.city_id,
           city_name: this.forms.city_name,
           province: this.forms.province
         }
@@ -4247,7 +4265,7 @@ __webpack_require__.r(__webpack_exports__);
           UIkit.modal('#modal-city').hide();
         }, 1000);
       })["catch"](function (err) {
-        _this4.message.errorMessage = err.response.statusText;
+        if (err.response.status === 500) _this4.message.errorMessage = err.response.statusText;else _this4.message.errorMessage = err.response.data.statusText;
         _this4.forms.submit = 'Simpan';
       });
     },
@@ -4307,6 +4325,15 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4478,6 +4505,11 @@ __webpack_require__.r(__webpack_exports__);
       this.message.iserror = false;
 
       if (this.forms.province_name === '') {
+        this.message.errors.province_id = 'ID provinsi tidak boleh kosong';
+        this.message.iserror = true;
+      }
+
+      if (this.forms.province_name === '') {
         this.message.errors.province_name = 'Nama provinsi tidak boleh kosong';
         this.message.iserror = true;
       }
@@ -4488,6 +4520,7 @@ __webpack_require__.r(__webpack_exports__);
         method: 'post',
         url: this.$root.url + '/cp/wilayah/province/store',
         params: {
+          province_id: this.forms.province_id,
           province_name: this.forms.province_name
         }
       }).then(function (res) {
@@ -4502,7 +4535,7 @@ __webpack_require__.r(__webpack_exports__);
           UIkit.modal('#modal-provinsi').hide();
         }, 1000);
       })["catch"](function (err) {
-        _this2.message.errorMessage = err.response.statusText;
+        if (err.response.status === 500) _this2.message.errorMessage = err.response.statusText;else _this2.message.errorMessage = err.response.data.statusText;
         _this2.forms.submit = 'Tambah';
       });
     },
@@ -4512,6 +4545,11 @@ __webpack_require__.r(__webpack_exports__);
       this.message.errors = {};
       this.message.errorMessage = '';
       this.message.iserror = false;
+
+      if (this.forms.province_name === '') {
+        this.message.errors.province_id = 'ID provinsi tidak boleh kosong';
+        this.message.iserror = true;
+      }
 
       if (this.forms.province_name === '') {
         this.message.errors.province_name = 'Nama provinsi tidak boleh kosong';
@@ -4524,6 +4562,7 @@ __webpack_require__.r(__webpack_exports__);
         method: 'put',
         url: this.$root.url + '/cp/wilayah/province/save/' + this.forms.province_id,
         params: {
+          province_id: this.forms.province_id,
           province_name: this.forms.province_name
         }
       }).then(function (res) {
@@ -4538,7 +4577,7 @@ __webpack_require__.r(__webpack_exports__);
           UIkit.modal('#modal-provinsi').hide();
         }, 1000);
       })["catch"](function (err) {
-        _this3.message.errorMessage = err.response.statusText;
+        if (err.response.status === 500) _this3.message.errorMessage = err.response.statusText;else _this3.message.errorMessage = err.response.data.statusText;
         _this3.forms.submit = 'Simpan';
       });
     },
@@ -59557,22 +59596,6 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "uk-panel uk-margin" }, [
                   _c("h4", { staticClass: "uk-h5 uk-margin-remove-bottom" }, [
-                    _vm._v("Jenis Pengembang")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "p",
-                    { staticClass: "uk-text-meta uk-margin-remove-top" },
-                    [
-                      _vm.getdeveloper.detail.dev_ownership === "perusahaan"
-                        ? _c("span", [_vm._v("Perusahaan")])
-                        : _c("span", [_vm._v("Individu")])
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "uk-panel uk-margin" }, [
-                  _c("h4", { staticClass: "uk-h5 uk-margin-remove-bottom" }, [
                     _vm._v("Alamat Email")
                   ]),
                   _vm._v(" "),
@@ -62143,15 +62166,113 @@ var render = function() {
                   {
                     name: "show",
                     rawName: "v-show",
-                    value: _vm.message.errors.errorMessage,
-                    expression: "message.errors.errorMessage"
+                    value: _vm.message.errorMessage,
+                    expression: "message.errorMessage"
                   }
                 ],
                 staticClass: "uk-margin uk-alert-danger",
                 attrs: { "uk-alert": "" }
               },
-              [_vm._v(_vm._s(_vm.message.errors.errorMessage))]
+              [_vm._v(_vm._s(_vm.message.errorMessage))]
             ),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-margin" }, [
+              _c("label", { staticClass: "uk-form-label" }, [
+                _vm._v("ID Kota")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-form-controls" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.forms.city_id,
+                      expression: "forms.city_id"
+                    }
+                  ],
+                  staticClass: "uk-input uk-width-1-1",
+                  class: { "uk-form-danger": _vm.message.errors.city_id },
+                  attrs: { type: "text", maxlength: "3" },
+                  domProps: { value: _vm.forms.city_id },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.forms, "city_id", $event.target.value)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "uk-text-small uk-text-muted" }, [
+                  _vm._v("Contoh: JKP (Jakarta Pusat)")
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.message.errors.city_id,
+                      expression: "message.errors.city_id"
+                    }
+                  ],
+                  staticClass: "uk-text-danger"
+                },
+                [_vm._v(_vm._s(_vm.message.errors.city_id))]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-margin" }, [
+              _c("label", { staticClass: "uk-form-label" }, [
+                _vm._v("Nama Kota")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-form-controls" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.forms.city_name,
+                      expression: "forms.city_name"
+                    }
+                  ],
+                  staticClass: "uk-input uk-width-1-1",
+                  class: { "uk-form-danger": _vm.message.errors.city_name },
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.forms.city_name },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.forms, "city_name", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.message.errors.city_name,
+                      expression: "message.errors.city_name"
+                    }
+                  ],
+                  staticClass: "uk-text-danger"
+                },
+                [_vm._v(_vm._s(_vm.message.errors.city_name))]
+              )
+            ]),
             _vm._v(" "),
             _c("div", { staticClass: "uk-margin" }, [
               _c("label", { staticClass: "uk-form-label" }, [
@@ -62206,37 +62327,6 @@ var render = function() {
                   ],
                   2
                 )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "uk-margin" }, [
-              _c("label", { staticClass: "uk-form-label" }, [
-                _vm._v("Nama Kota")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "uk-form-controls" }, [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.forms.city_name,
-                      expression: "forms.city_name"
-                    }
-                  ],
-                  staticClass: "uk-input uk-width-1-1",
-                  class: { "uk-form-danger": _vm.message.errors.city_name },
-                  attrs: { type: "text" },
-                  domProps: { value: _vm.forms.city_name },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.forms, "city_name", $event.target.value)
-                    }
-                  }
-                })
               ]),
               _vm._v(" "),
               _c(
@@ -62246,13 +62336,13 @@ var render = function() {
                     {
                       name: "show",
                       rawName: "v-show",
-                      value: _vm.message.errors.city_name,
-                      expression: "message.errors.city_name"
+                      value: _vm.message.errors.province,
+                      expression: "message.errors.province"
                     }
                   ],
                   staticClass: "uk-text-danger"
                 },
-                [_vm._v(_vm._s(_vm.message.errors.city_name))]
+                [_vm._v(_vm._s(_vm.message.errors.province))]
               )
             ]),
             _vm._v(" "),
@@ -62394,6 +62484,8 @@ var render = function() {
                             })
                           ]),
                           _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(city.city_id))]),
+                          _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(city.city_name))]),
                           _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(city.province_name))])
@@ -62463,7 +62555,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("li", { staticClass: "uk-disabled" }, [
-      _c("span", [_vm._v("Wilayah")])
+      _c("span", [_vm._v("Manajemen")])
     ])
   },
   function() {
@@ -62479,6 +62571,8 @@ var staticRenderFns = [
     return _c("thead", [
       _c("tr", [
         _c("th", [_vm._v("Aksi")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("ID")]),
         _vm._v(" "),
         _c("th", [_vm._v("Nama Kota")]),
         _vm._v(" "),
@@ -62538,15 +62632,62 @@ var render = function() {
                   {
                     name: "show",
                     rawName: "v-show",
-                    value: _vm.message.errors.errorMessage,
-                    expression: "message.errors.errorMessage"
+                    value: _vm.message.errorMessage,
+                    expression: "message.errorMessage"
                   }
                 ],
                 staticClass: "uk-margin uk-alert-danger",
                 attrs: { "uk-alert": "" }
               },
-              [_vm._v(_vm._s(_vm.message.errors.errorMessage))]
+              [_vm._v(_vm._s(_vm.message.errorMessage))]
             ),
+            _vm._v(" "),
+            _c("div", { staticClass: "uk-margin" }, [
+              _c("label", { staticClass: "uk-form-label" }, [
+                _vm._v("ID Provinsi")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-form-controls" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.forms.province_id,
+                      expression: "forms.province_id"
+                    }
+                  ],
+                  staticClass: "uk-input uk-width-1-1",
+                  class: { "uk-form-danger": _vm.message.errors.province_id },
+                  attrs: { type: "text", maxlength: "2" },
+                  domProps: { value: _vm.forms.province_id },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.forms, "province_id", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.message.errors.province_id,
+                      expression: "message.errors.province_id"
+                    }
+                  ],
+                  staticClass: "uk-text-danger"
+                },
+                [_vm._v(_vm._s(_vm.message.errors.province_id))]
+              )
+            ]),
             _vm._v(" "),
             _c("div", { staticClass: "uk-margin" }, [
               _c("label", { staticClass: "uk-form-label" }, [
@@ -62737,6 +62878,8 @@ var render = function() {
                             })
                           ]),
                           _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(province.province_id))]),
+                          _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(province.province_name))])
                         ])
                       }),
@@ -62804,7 +62947,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("li", { staticClass: "uk-disabled" }, [
-      _c("span", [_vm._v("Wilayah")])
+      _c("span", [_vm._v("Manajemen")])
     ])
   },
   function() {
@@ -62820,6 +62963,8 @@ var staticRenderFns = [
     return _c("thead", [
       _c("tr", [
         _c("th", [_vm._v("Aksi")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("ID")]),
         _vm._v(" "),
         _c("th", [_vm._v("Nama Provinsi")])
       ])
@@ -76061,7 +76206,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\maps_laravel\resources\js\app.controlpanel.js */"./resources/js/app.controlpanel.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\propsy\resources\js\app.controlpanel.js */"./resources/js/app.controlpanel.js");
 
 
 /***/ })

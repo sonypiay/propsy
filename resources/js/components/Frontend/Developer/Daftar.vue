@@ -44,19 +44,6 @@
               <div v-show="errors.name.dev_ownername" class="uk-text-danger uk-text-small">{{ errors.name.dev_ownername }}</div>
             </div>
             <div class="uk-margin">
-              <label class="uk-form-label signup-form-label">Jenis Pengembang</label>
-              <div class="uk-form-controls">
-                <div class="uk-grid-small" uk-grid>
-                  <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
-                    <a @click="forms.dev_ownership = 'perusahaan'" :class="{ 'signup-btn-tabactive': forms.dev_ownership === 'perusahaan' }" class="uk-width-1-1 uk-button uk-button-primary signup-btn-tab">Perusahaan</a>
-                  </div>
-                  <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
-                    <a @click="forms.dev_ownership = 'individu'" :class="{ 'signup-btn-tabactive': forms.dev_ownership === 'individu' }" class="uk-width-1-1 uk-button uk-button-primary signup-btn-tab">Individu</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="uk-margin">
               <label class="uk-form-label signup-form-label">Tentang Pengembang</label>
               <div class="uk-form-controls">
                 <textarea class="uk-width-1-1 uk-textarea uk-height-small signup-form-input" v-model="forms.dev_biography"></textarea>
@@ -86,7 +73,6 @@ export default {
         dev_biography: '',
         dev_username: '',
         dev_password: '',
-        dev_ownership: 'perusahaan',
         submit: 'Daftar'
       },
       errors: {
@@ -145,15 +131,22 @@ export default {
       axios({
         method: 'post',
         url: this.$root.url + '/registration/developer',
-        params: this.forms
+        params: {
+          dev_name: this.forms.dev_name,
+          dev_username: this.forms.dev_username,
+          dev_password: this.forms.dev_password,
+          dev_email: this.forms.dev_email,
+          dev_ownername: this.forms.dev_ownername,
+          dev_biography: this.forms.dev_biography
+        }
       }).then( res => {
         swal({
           title: 'Registrasi Sukses',
-          text: 'Mengarahkan ke halaman profil',
+          text: 'Mengarahkan ke halaman dashboard',
           icon: 'success'
         });
         setTimeout(() => {
-          document.location = this.$root.url + '/developer/profile';
+          document.location = this.$root.url + '/developer/dashboard';
         }, 2000);
       }).catch( err => {
         this.forms.submit = 'Daftar';

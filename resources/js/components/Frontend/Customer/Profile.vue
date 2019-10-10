@@ -1,17 +1,16 @@
 <template>
   <div>
     <div class="uk-container uk-margin-large-top uk-margin-large-bottom">
+      <div v-show="session_user.status_verification === 'N'" class="uk-alert-warning uk-margin" uk-alert>
+        Akun anda belum terverifikasi. Silakan cek inbox / spam email atau <a @click="isMenuActive = 'email'"><strong>klik disini</strong></a>
+      </div>
       <div class="uk-grid-small uk-grid-match" uk-grid>
         <div class="uk-width-1-4">
           <div class="uk-card uk-card-body uk-card-default side-navbar-profile">
             <div class="uk-margin side-profile-info">
-              <div v-if="session_user.customer_photo === null" class="uk-tile uk-tile-default uk-margin side-profile-photo">
-                <div class="uk-position-center">
-                  <span uk-icon="icon: user; ratio: 3"></span>
-                </div>
-              </div>
-              <div v-else class="uk-margin side-profile-photo">
-                <img class="uk-width-1-1" :src="$root.url + '/images/avatar/' + session_user.customer_photo" alt="">
+              <div class="uk-margin side-profile-photo">
+                <img v-if="session_user.customer_photo" class="uk-width-1-1" :src="$root.url + '/storage/assets/images/avatar/' + session_user.customer_photo" alt="">
+                <img v-else class="uk-width-1-1" :src="$root.url + '/images/avatar/avatar.jpg'" alt="">
               </div>
               <div class="uk-margin side-profile-joined">
                 Bergabung pada <br>
@@ -21,7 +20,7 @@
             <ul class="uk-nav uk-nav-default" uk-nav>
               <li class="uk-nav-divider"></li>
               <li><a :href="$root.url + '/customer/request_unit'">Pemesanan</a></li>
-              <li><a :href="$root.url + '/customer/survey'">Survey</a></li>
+              <li><a :href="$root.url + '/customer/meeting_invitation'">Jadwal Meeting</a></li>
               <li class="uk-nav-divider"></li>
               <li><a :class="{ 'navactive': isMenuActive === 'account_info' }" @click="isMenuActive = 'account_info'">Informasi Akun</a></li>
               <li><a :class="{ 'navactive': isMenuActive === 'password' }" @click="isMenuActive = 'password'">Password</a></li>
@@ -61,7 +60,10 @@ import EmailAccount from './EmailAccount.vue';
 import ProfilePhoto from './ProfilePhoto.vue';
 
 export default {
-  props: ['session_user'],
+  props: [
+    'session_user',
+    'hasrequest'
+  ],
   components: {
     AccountInformation,
     PasswordAccount,

@@ -7,6 +7,9 @@
           <div class="uk-margin-small-bottom card-requestlist-subtext">Status Pengajuan</div>
           <div class="uk-grid-small uk-child-width-auto" uk-grid>
             <div>
+              <button @click="getRequestList('all')" :class="{'btn-status-active': forms.status_request === 'all'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Semua</button>
+            </div>
+            <div>
               <button @click="getRequestList('waiting_response')" :class="{'btn-status-active': forms.status_request === 'waiting_response'}" class="uk-button uk-button-primary uk-button-small btn-status-request">Menunggu Tanggapan</button>
             </div>
             <div>
@@ -37,9 +40,9 @@
               <div class="uk-card card-unit-project uk-grid-collapse uk-grid-match uk-margin" uk-grid>
                 <div class="uk-width-1-3@xl uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s">
                   <div class="uk-card-media-left">
-                    <div v-if="unit.unit_thumbnail" class="uk-background-cover unit-thumbnail" :style="{'background-image': 'url(' + $root.url + '/images/project/gallery/' + unit.unit_thumbnail + ')'}">
+                    <div v-if="unit.unit_thumbnail" class="uk-background-cover unit-thumbnail" :style="{'background-image': 'url(' + $root.url + '/storage/assets/images/project/gallery/' + unit.unit_thumbnail + ')'}">
                     </div>
-                    <div v-else class="uk-background-cover unit-thumbnail" :style="{'background-image': 'url(' + $root.url + '/images/banner/homepage2.jpg)'}">
+                    <div v-else class="uk-background-cover unit-thumbnail" :style="{'background-image': 'url(' + $root.url + '/images/banner/homepage3.jpg)'}">
                     </div>
                   </div>
                 </div>
@@ -55,7 +58,7 @@
                     <div class="unit-price">
                       Rp. {{ unit.unit_price | currency }}
                     </div>
-                    <div v-if="unit.meeting_time !== null">
+                    <div>
                       <div v-if="unit.meeting_status === 'waiting_confirmation' || unit.meeting_status === 'revision'">
                         <div class="uk-text-small uk-margin-small-bottom">
                           Anda menerima undangan dari Marketing pada :<br>
@@ -63,27 +66,40 @@
                             {{ $root.formatDate( unit.meeting_time, 'dddd, DD MMMM YYYY HH:mm' ) }}
                           </strong>
                         </div>
-                        <button @click="onResponseMeeting( unit.request_unique_id, 'accept' )" class="uk-button uk-button-small btn-approve">Terima</button>
-                        <button @click="onResponseMeeting( unit.request_unique_id, 'reject' )" class="uk-button uk-button-small btn-reject">Tolak</button>
+                        <button @click="onResponseMeeting( unit.request_id, 'accept' )" class="uk-button uk-button-small btn-approve">Terima</button>
+                        <button @click="onResponseMeeting( unit.request_id, 'reject' )" class="uk-button uk-button-small btn-reject">Tolak</button>
                       </div>
                       <div v-else>
-                        <div class="uk-text-small uk-margin-small-bottom">
-                          Jadwal undangan meeting :<br>
-                          <strong>
-                            {{ $root.formatDate( unit.meeting_time, 'dddd, DD MMMM YYYY HH:mm' ) }}
-                          </strong>
+                        <div v-if="unit.status_request === 'cancel'" class="uk-label uk-label-danger">
+                          <span uk-icon="close"></span> Pengajuan dibatalkan
                         </div>
-                        <div uk-tooltip="Meeting telah dibatalkan oleh pihak Marketing" class="uk-label uk-label-danger" v-if="unit.meeting_status === 'cancel'">
-                          <span uk-icon="close"></span> Meeting Dibatalkan
+                        <div v-else-if="unit.status_request === 'reject'" class="uk-label uk-label-danger">
+                          <span uk-icon="close"></span> Pengajuan Ditolak
                         </div>
-                        <div uk-tooltip="Anda telah menolak undangan ini" class="uk-label uk-label-danger" v-else-if="unit.meeting_status === 'reject'">
-                          <span uk-icon="close"></span> Meeting Ditolak
+                        <div v-else-if="unit.status_request === 'accept'" class="uk-label uk-label-success">
+                          <span uk-icon="check"></span> Pengajuan Diterima
                         </div>
-                        <div uk-tooltip="Anda telah menerima undangan ini" class="uk-label uk-label-success" v-else-if="unit.meeting_status === 'accept'">
-                          <span uk-icon="check"></span> Meeting Diterima
-                        </div>
-                        <div uk-tooltip="Meeting telah selesai dilakukan" class="uk-label uk-label-success" v-else>
-                          <span uk-icon="check"></span> Meeting Selesai
+                        <div v-else>
+                          <div v-show="unit.meeting_time !== null">
+                            <div class="uk-text-small uk-margin-small-bottom">
+                              Jadwal undangan meeting :<br>
+                              <strong>
+                                {{ $root.formatDate( unit.meeting_time, 'dddd, DD MMMM YYYY HH:mm' ) }}
+                              </strong>
+                            </div>
+                            <div uk-tooltip="Meeting telah dibatalkan oleh pihak Marketing" class="uk-label uk-label-danger" v-if="unit.meeting_status === 'cancel'">
+                              <span uk-icon="close"></span> Meeting Dibatalkan
+                            </div>
+                            <div uk-tooltip="Anda telah menolak undangan ini" class="uk-label uk-label-danger" v-else-if="unit.meeting_status === 'reject'">
+                              <span uk-icon="close"></span> Meeting Ditolak
+                            </div>
+                            <div uk-tooltip="Anda telah menerima undangan ini" class="uk-label uk-label-success" v-else-if="unit.meeting_status === 'accept'">
+                              <span uk-icon="check"></span> Meeting Diterima
+                            </div>
+                            <div uk-tooltip="Meeting telah selesai dilakukan" class="uk-label uk-label-success" v-else>
+                              <span uk-icon="check"></span> Meeting Selesai
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -92,7 +108,7 @@
                     <div class="uk-grid-small uk-child-width-auto" uk-grid>
                       <div>
                         <div class="unit-specification">
-                          {{ unit.request_unique_id }}
+                          {{ unit.request_id }}
                           <span>Request ID</span>
                         </div>
                       </div>
@@ -113,8 +129,17 @@
                           Lihat Lebih Lanjut
                         </a>
                       </div>
+                      <div v-if="unit.status_request === 'accept'">
+                        <a class="uk-button uk-button-small uk-button-primary unit-readmore">Pengajuan Diterima</a>
+                      </div>
+                      <div v-if="unit.status_request === 'reject'">
+                        <a class="uk-button uk-button-small btn-cancel-request">Pengajuan Ditolak</a>
+                      </div>
+                      <div v-if="unit.status_request === 'cancel'">
+                        <a class="uk-button uk-button-small btn-cancel-request">Pengajuan Dibatalkan</a>
+                      </div>
                       <div v-if="unit.status_request === 'waiting_response' || unit.status_request === 'meeting'">
-                        <button @click="onCancelRequest( unit.request_unique_id )" class="uk-button uk-button-small btn-cancel-request">Batalkan Pengajuan</button>
+                        <button @click="onCancelRequest( unit.request_id )" class="uk-button uk-button-small btn-cancel-request">Batalkan Pengajuan</button>
                       </div>
                     </div>
                   </div>
@@ -150,7 +175,7 @@ export default {
   data() {
     return {
       forms: {
-        status_request: 'waiting_response'
+        status_request: 'all'
       },
       errors: {
         errorMessage: ''
@@ -174,7 +199,7 @@ export default {
       this.errors.errorMessage = '';
 
       if( status_request === undefined )
-        status_request = 'waiting_response';
+        status_request = 'all';
 
       this.forms.status_request = status_request;
       var url = this.$root.url + '/customer/get_request_list/' + this.forms.status_request;

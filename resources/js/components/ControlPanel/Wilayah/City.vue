@@ -7,7 +7,22 @@
           <span v-else>Tambah Kota</span>
         </div>
         <form class="uk-form-stacked" @submit.prevent="forms.isedit === false ? addCity() : saveCity()">
-          <div v-show="message.errors.errorMessage" class="uk-margin uk-alert-danger" uk-alert>{{ message.errors.errorMessage }}</div>
+          <div v-show="message.errorMessage" class="uk-margin uk-alert-danger" uk-alert>{{ message.errorMessage }}</div>
+          <div class="uk-margin">
+            <label class="uk-form-label">ID Kota</label>
+            <div class="uk-form-controls">
+              <input type="text" :class="{'uk-form-danger': message.errors.city_id}" maxlength="3" class="uk-input uk-width-1-1" v-model="forms.city_id" />
+              <span class="uk-text-small uk-text-muted">Contoh: JKP (Jakarta Pusat)</span>
+            </div>
+            <div v-show="message.errors.city_id" class="uk-text-danger">{{ message.errors.city_id }}</div>
+          </div>
+          <div class="uk-margin">
+            <label class="uk-form-label">Nama Kota</label>
+            <div class="uk-form-controls">
+              <input type="text" :class="{'uk-form-danger': message.errors.city_name}" class="uk-input uk-width-1-1" v-model="forms.city_name" />
+            </div>
+            <div v-show="message.errors.city_name" class="uk-text-danger">{{ message.errors.city_name }}</div>
+          </div>
           <div class="uk-margin">
             <label class="uk-form-label">Provinsi</label>
             <div class="uk-form-controls">
@@ -16,13 +31,7 @@
                 <option v-for="province in getprovince" :value="province.province_id">{{ province.province_name }}</option>
               </select>
             </div>
-          </div>
-          <div class="uk-margin">
-            <label class="uk-form-label">Nama Kota</label>
-            <div class="uk-form-controls">
-              <input type="text" :class="{'uk-form-danger': message.errors.city_name}" class="uk-input uk-width-1-1" v-model="forms.city_name" />
-            </div>
-            <div v-show="message.errors.city_name" class="uk-text-danger">{{ message.errors.city_name }}</div>
+            <div v-show="message.errors.province" class="uk-text-danger">{{ message.errors.province }}</div>
           </div>
           <div class="uk-margin">
             <button class="uk-button uk-button-primary" v-html="forms.submit"></button>
@@ -33,7 +42,7 @@
     <div class="uk-container uk-margin-large-top">
       <ul class="uk-breadcrumb">
         <li><a :href="$root.url + '/cp/'">Dashboard</a></li>
-        <li class="uk-disabled"><span>Wilayah</span></li>
+        <li class="uk-disabled"><span>Manajemen</span></li>
         <li><span>Kota</span></li>
       </ul>
       <div class="uk-card uk-card-body uk-card-default">
@@ -60,6 +69,7 @@
               <thead>
                 <tr>
                   <th>Aksi</th>
+                  <th>ID</th>
                   <th>Nama Kota</th>
                   <th>Provinsi</th>
                 </tr>
@@ -70,6 +80,7 @@
                     <a @click="onClickModal( city )" class="uk-icon-link uk-margin-small-right" uk-icon="file-edit"></a>
                     <a @click="deleteCity( city.city_id )" href="#" class="uk-icon-link uk-margin-small-right" uk-icon="trash"></a>
                   </td>
+                  <td>{{ city.city_id }}</td>
                   <td>{{ city.city_name }}</td>
                   <td>{{ city.province_name }}</td>
                 </tr>
@@ -110,6 +121,7 @@ export default {
         keywords: '',
         city_name: '',
         city_id: '',
+        city_flag_id: '',
         province: '',
         isedit: false,
         submit: 'Tambah'
@@ -186,6 +198,7 @@ export default {
       {
         this.forms.city_name = data.city_name;
         this.forms.city_id = data.city_id;
+        this.forms.city_flag_id = data.city_id;
         this.forms.province = data.province_id;
         this.forms.isedit = true;
         this.forms.submit = 'Simpan';
@@ -200,15 +213,19 @@ export default {
       this.message.errorMessage = '';
       this.message.iserror = false;
 
-      if( this.forms.province === '' )
+      if( this.forms.city_id === '' )
       {
-        this.message.errors.province = 'Provinsi tidak boleh kosong';
+        this.message.errors.city_id = 'ID Kota tidak boleh kosong';
         this.message.iserror = true;
       }
-
       if( this.forms.city_name === '' )
       {
         this.message.errors.city_name = 'Nama kota tidak boleh kosong';
+        this.message.iserror = true;
+      }
+      if( this.forms.province === '' )
+      {
+        this.message.errors.province = 'Provinsi tidak boleh kosong';
         this.message.iserror = true;
       }
 
@@ -219,6 +236,7 @@ export default {
         method: 'post',
         url: this.$root.url + '/cp/wilayah/city/store',
         params: {
+          city_id: this.forms.city_id,
           city_name: this.forms.city_name,
           province: this.forms.province
         }
@@ -233,7 +251,8 @@ export default {
           UIkit.modal('#modal-city').hide();
         }, 1000);
       }).catch( err => {
-        this.message.errorMessage = err.response.statusText;
+        if( err.response.status === 500 ) this.message.errorMessage = err.response.statusText;
+        else this.message.errorMessage = err.response.data.statusText;
         this.forms.submit = 'Tambah';
       });
     },
@@ -243,15 +262,19 @@ export default {
       this.message.errorMessage = '';
       this.message.iserror = false;
 
-      if( this.forms.province === '' )
+      if( this.forms.city_id === '' )
       {
-        this.message.errors.province = 'Provinsi tidak boleh kosong';
+        this.message.errors.city_id = 'ID Kota tidak boleh kosong';
         this.message.iserror = true;
       }
-
       if( this.forms.city_name === '' )
       {
         this.message.errors.city_name = 'Nama kota tidak boleh kosong';
+        this.message.iserror = true;
+      }
+      if( this.forms.province === '' )
+      {
+        this.message.errors.province = 'Provinsi tidak boleh kosong';
         this.message.iserror = true;
       }
 
@@ -260,8 +283,9 @@ export default {
       this.forms.submit = '<span uk-spinner></span>';
       axios({
         method: 'put',
-        url: this.$root.url + '/cp/wilayah/city/save/' + this.forms.city_id,
+        url: this.$root.url + '/cp/wilayah/city/save/' + this.forms.city_flag_id,
         params: {
+          city_id: this.forms.city_id,
           city_name: this.forms.city_name,
           province: this.forms.province
         }
@@ -276,7 +300,8 @@ export default {
           UIkit.modal('#modal-city').hide();
         }, 1000);
       }).catch( err => {
-        this.message.errorMessage = err.response.statusText;
+        if( err.response.status === 500 ) this.message.errorMessage = err.response.statusText;
+        else this.message.errorMessage = err.response.data.statusText;
         this.forms.submit = 'Simpan';
       });
     },

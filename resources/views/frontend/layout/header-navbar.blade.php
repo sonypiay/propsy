@@ -42,10 +42,11 @@
           </li>
           @elseif( session()->has('isCustomer') )
           <li>
-            <a href="#">{{ $session_user->customer_name }}</a>
+            <a href="#">{{ $session_user->customer_name }} @if( $hasrequest > 0 )<span class="uk-float-right notif"></span>@endif </a>
             <div class="uk-navbar-dropdown main-nav-dropdown">
               <ul class="uk-nav uk-dropdown-nav">
                 <li><a href="{{ route('customer_request_page') }}">Pemesanan</a></li>
+                <li><a href="{{ route('customer_meeting_page') }}">Jadwal Meeting @if( $hasrequest > 0 )<label class="uk-float-right newinvite">{{ $hasrequest }}</label>@endif </a></li>
                 <li><a href="{{ route('customer_profile_page') }}">Lihat Akun</a></li>
                 <li class="uk-nav-divider"></li>
                 <li><a href="{{ route('auth_logout_customer') }}">Keluar</a></li>

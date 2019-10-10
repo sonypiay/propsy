@@ -23,27 +23,28 @@ class MarketingController extends Controller
       'marketing_user.mkt_password',
       'marketing_user.mkt_phone_number',
       'marketing_user.mkt_mobile_phone',
-      'marketing_user.mkt_city',
       'marketing_user.mkt_address',
       'marketing_user.mkt_profile_photo',
       'marketing_user.created_at',
       'marketing_user.updated_at',
       'developer_user.dev_name',
+      'city.city_id',
       'city.city_name',
       'province.province_name',
     )
     ->join('developer_user', 'marketing_user.dev_user_id', '=', 'developer_user.dev_user_id')
-    ->join('city', 'marketing_user.project_city', '=', 'city.city_id')
+    ->join('city', 'marketing_user.city_id', '=', 'city.city_id')
     ->join('province', 'city.province_id', '=', 'province.province_id')
     ->orderBy('marketing_user.created_at', 'desc');
 
     if( $city !== 'all' )
     {
-      $getmarketing = $getmarketing->where('marketing_user.mkt_city', $city);
+      $getmarketing = $getmarketing->where('marketing_user.city_id', $city);
     }
     if( ! empty( $keywords ) )
     {
-      $getmarketing = $getmarketing->where('marketing_user.mkt_city', 'like', '%' . $keywords . '%');
+      $getmarketing = $getmarketing->where('marketing_user.mkt_fullname', 'like', '%' . $keywords . '%')
+      ->orWhere('marketing_user.mkt_email', 'like', '%' . $keywords . '%');
     }
 
     $result = $getmarketing->paginate( $limit );

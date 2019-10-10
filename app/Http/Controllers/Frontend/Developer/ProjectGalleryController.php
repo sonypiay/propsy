@@ -18,13 +18,13 @@ class ProjectGalleryController extends Controller
     {
       $getproject = $project_list->select(
         'project_id',
-        'project_unique_id',
         'project_name'
       )
-      ->where('project_unique_id', $project_id)->first();
+      ->where('project_id', $project_id)->first();
       $data = [
         'request' => $request,
         'session_user' => $developeruser->getinfo(),
+        'hasrequest' => $developeruser->hasrequest(),
         'projects' => $getproject
       ];
 
@@ -42,16 +42,12 @@ class ProjectGalleryController extends Controller
     $query = $gallery->select(
       'project_gallery.gallery_id',
       'project_gallery.gallery_filename',
-      'project_gallery.gallery_description',
-      'project_gallery.created_at',
-      'project_gallery.updated_at',
       'project_list.project_id',
-      'project_list.project_unique_id',
       'project_list.project_name'
     )
-    ->join('project_list', 'project_gallery.project_unique_id', '=', 'project_list.project_unique_id')
-    ->where('project_gallery.project_unique_id', $project_id)
-    ->orderBy('project_gallery.created_at', 'desc');
+    ->join('project_list', 'project_gallery.project_id', '=', 'project_list.project_id')
+    ->where('project_gallery.project_id', $project_id)
+    ->orderBy('project_gallery.gallery_id', 'desc');
 
     $data = [
       'data' => [
@@ -72,7 +68,7 @@ class ProjectGalleryController extends Controller
 
     $gallery = new $gallery;
     $gallery->gallery_filename = $filename;
-    $gallery->project_unique_id = $project_id;
+    $gallery->project_id = $project_id;
     $gallery->save();
     $storage->putFileAs( $path_img, $image, $filename );
 
@@ -83,7 +79,7 @@ class ProjectGalleryController extends Controller
   public function gallery_asThumbnail( ProjectList $project_list, ProjectGallery $gallery, $gallery_id )
   {
     $getgallery = $gallery->where('gallery_id', $gallery_id)->first();
-    $getproject = $project_list->where('project_unique_id', $getgallery->project_unique_id)->first();
+    $getproject = $project_list->where('project_id', $getgallery->project_id)->first();
     $getproject->project_thumbnail = $getgallery->gallery_filename;
     $getproject->save();
     $res = [ 'status' => 200, 'statusText' => 'success', 'results' => $getgallery ];
@@ -102,8 +98,8 @@ class ProjectGalleryController extends Controller
       {
         $storage->delete( $path_img . '/' . $result->gallery_filename );
       }
-      
-      $update = $project_list->where( 'project_unique_id', $result->project_unique_id )->first();
+
+      $update = $project_list->where( 'project_id', $result->project_id )->first();
       $update->project_thumbnail = null;
       $update->save();
       $getgallery->delete();

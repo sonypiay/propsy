@@ -2,7 +2,7 @@
   <div>
     <div class="uk-card dashboard-content">
       <ul class="uk-breadcrumb">
-        <li><a :href="$root.url + '/developer/project/dashboard'">Dashboard</a></li>
+        <li><a :href="$root.url + '/developer/dashboard'">Dashboard</a></li>
         <li><a :href="$root.url + '/developer/project/manage_project'">Kelola Proyek</a></li>
         <li><span>Edit Proyek</span></li>
       </ul>
@@ -46,7 +46,7 @@
           <div v-show="errors.name.project_city" class="uk-text-small uk-text-danger">{{ errors.name.project_city }}</div>
         </div>
         <div class="uk-margin">
-          <label class="uk-form-label dash-form-label">Alamat <span v-html="formRequired"></span> </label>
+          <label class="uk-form-label dash-form-label">Lokasi <span v-html="formRequired"></span> </label>
           <div class="uk-form-controls">
             <textarea class="uk-textarea uk-height-small dash-form-input" v-model="forms.project_address"></textarea>
           </div>
@@ -144,7 +144,7 @@ export default {
         project_description: this.getproject.project_description,
         project_address: this.getproject.project_address,
         project_region: this.getproject.province_id === null ? '' : this.getproject.province_id,
-        project_city: this.getproject.project_city,
+        project_city: this.getproject.city_id,
         project_link_map: this.getproject.project_link_map === null ? '' : this.getproject.project_link_map,
         project_map_embed: this.getproject.project_map_embed === null ? '' : this.getproject.project_map_embed,
         project_status: this.getproject.project_status,

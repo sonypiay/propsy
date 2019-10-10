@@ -4,34 +4,51 @@
       <div class="uk-modal-body uk-modal-dialog">
         <a class="uk-modal-close uk-modal-close-default" uk-close></a>
         <h3 class="uk-h3">Detail Marketing</h3>
-        <table class="uk-table uk-table-divider uk-table-striped uk-table-hover uk-table-small uk-table-middle">
-          <tbody>
-            <tr>
-              <th>Nama</th>
-              <td>{{ marketing_detail.mkt_fullname }}</td>
-            </tr>
-            <tr>
-              <th>Email</th>
-              <td>{{ marketing_detail.mkt_email }}</td>
-            </tr>
-            <tr>
-              <th>Telepon Kantor</th>
-              <td>{{ marketing_detail.mkt_phone_number }}</td>
-            </tr>
-            <tr>
-              <th>No. Handphone / Whatsapp</th>
-              <td>{{ marketing_detail.mkt_mobile_phone }}</td>
-            </tr>
-            <tr>
-              <th>Kota</th>
-              <td>{{ marketing_detail.city_name }}, {{ marketing_detail.province_name }}</td>
-            </tr>
-            <tr>
-              <th>Username</th>
-              <td>{{ marketing_detail.mkt_username }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="uk-grid-small" uk-grid>
+          <div class="uk-width-1-3@xl uk-width-1-3@l uk-width-1-3@m uk-width-1-1@s">
+            <div class="uk-panel uk-margin">
+              <img v-if="marketing_detail.mkt_profile_photo" :src="this.$root.url + '/storage/assets/images/marketing/' + marketing_detail.mkt_profile_photo" />
+              <img v-else :src="this.$root.url + '/images/avatar/avatar.jpg'" alt="" />
+            </div>
+          </div>
+          <div class="uk-width-expand">
+            <div class="uk-panel uk-margin">
+              <h4 class="uk-h5 uk-margin-remove-bottom">{{ marketing_detail.mkt_fullname }}</h4>
+              <p class="uk-text-meta uk-margin-remove-top">
+                Terakhir diubah
+                <span v-show="marketing_detail.updated_at">
+                  {{ $root.formatDate( marketing_detail.updated_at, 'DD MMM YYYY HH:mm' ) }}
+                </span>
+              </p>
+            </div>
+            <div class="uk-panel uk-margin">
+              <h4 class="uk-h5 uk-margin-remove-bottom">Username</h4>
+              <p class="uk-text-meta uk-margin-remove-top">
+                {{ marketing_detail.mkt_username }}
+              </p>
+            </div>
+            <div class="uk-panel uk-margin">
+              <h4 class="uk-h5 uk-margin-remove-bottom">Alamat Email</h4>
+              <p class="uk-text-meta uk-margin-remove-top">
+                {{ marketing_detail.mkt_email }}
+              </p>
+            </div>
+            <div class="uk-panel uk-margin">
+              <h4 class="uk-h5 uk-margin-remove-bottom">Telepon</h4>
+              <p class="uk-text-meta uk-margin-remove-top">
+                Kantor: {{ marketing_detail.mkt_phone_number }} <br />
+                Whatsapp: {{ marketing_detail.mkt_mobile_phone }}
+              </p>
+            </div>
+            <div class="uk-panel uk-margin">
+              <h4 class="uk-h5 uk-margin-remove-bottom">Alamat</h4>
+              <p class="uk-text-meta uk-margin-remove-top">
+                {{ marketing_detail.mkt_address }} <br>
+                {{ marketing_detail.city_name }}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -94,6 +111,12 @@
                 </select>
               </div>
               <div v-show="errors.name.mkt_city" class="uk-text-small uk-text-danger">{{ errors.name.mkt_city }}</div>
+            </div>
+            <div class="uk-margin">
+              <label class="uk-form-label modal-label">Alamat</label>
+              <div class="uk-form-controls">
+                <input type="text" class="uk-input modal-input" v-model="forms.marketing.address">
+              </div>
             </div>
             <div class="uk-margin">
               <label class="uk-form-label modal-label">Username</label>
@@ -218,6 +241,7 @@ export default {
           mobile_phone: '',
           city: 0,
           region: 0,
+          address: '',
           username: '',
           password: '',
           submit: 'Tambah Marketing',
@@ -282,6 +306,7 @@ export default {
         this.forms.marketing.mobile_phone = '';
         this.forms.marketing.region = 0;
         this.forms.marketing.city = 0;
+        this.forms.marketing.address = '';
         this.forms.marketing.username = '';
         this.forms.marketing.isedit = false;
         this.forms.marketing.submit = 'Tambah';
@@ -294,13 +319,13 @@ export default {
         this.forms.marketing.mobile_phone = data.mkt_mobile_phone;
         this.forms.marketing.region = data.province_id;
         this.forms.marketing.city = data.city_id;
+        this.forms.marketing.address = data.mkt_address;
         this.forms.marketing.username = data.mkt_username;
         this.forms.marketing.user_id = data.mkt_user_id;
         this.forms.marketing.isedit = true;
         this.forms.marketing.submit = 'Simpan Perubahan';
       }
       this.forms.marketing.password = '';
-      console.log( this.forms.marketing );
 
       this.errors.name = {};
       this.errors.iserror = false;
@@ -331,7 +356,6 @@ export default {
     },
     detailMarketing( mkt )
     {
-      this.forms.selectproject = [];
       this.marketing_detail = mkt;
       axios({
         method: 'get',
@@ -340,10 +364,6 @@ export default {
         let result = res.data;
         this.project_selected.results = result.results.data;
         this.project_selected.total = result.results.total;
-        this.project_selected.results.filter( p => {
-          if( p.mkt_user_id !== null && p.mkt_user_id === mkt.mkt_user_id )
-            this.forms.selectproject.push(p.project_id);
-        });
       }).catch( err => { console.log( err.response.statusText ); });
       UIkit.modal('#modal').show();
     },
@@ -408,6 +428,7 @@ export default {
           mkt_phone_number: form_marketing.phone_number,
           mkt_mobile_phone: form_marketing.mobile_phone,
           mkt_city: form_marketing.city,
+          mkt_address: form_marketing.address,
           mkt_password: form_marketing.password,
           mkt_username: form_marketing.username
         }
@@ -495,6 +516,7 @@ export default {
           mkt_phone_number: form_marketing.phone_number,
           mkt_mobile_phone: form_marketing.mobile_phone,
           mkt_city: form_marketing.city,
+          mkt_address: form_marketing.address,
           mkt_password: form_marketing.password,
           mkt_username: form_marketing.username
         }

@@ -3,30 +3,21 @@
     <div class="uk-heading-line uk-text-center uk-margin-bottom side-content-profile-heading"><span>Informasi Akun</span></div>
     <div v-show="errors.errorMessage" class="uk-margin uk-alert-danger" uk-alert>{{ errors.errorMessage }}</div>
     <form class="uk-form-stacked uk-grid-small content-form" @submit.prevent="onUpdateAccountInfo" uk-grid>
-      <div class="uk-width-1-2">
+      <div class="uk-width-1-3">
         <label class="uk-form-label content-form-label">Nama Pengembang</label>
         <div class="uk-form-controls">
           <input type="text" v-model="forms.name" class="uk-input content-form-input">
         </div>
         <div v-show="errors.name.name" class="uk-text-danger uk-text-small">{{ errors.name.name }}</div>
       </div>
-      <div class="uk-width-1-2">
+      <div class="uk-width-1-3">
         <label class="uk-form-label content-form-label">Nama Pemilik</label>
         <div class="uk-form-controls">
           <input type="text" v-model="forms.ownername" class="uk-input content-form-input">
         </div>
         <div v-show="errors.name.ownername" class="uk-text-danger uk-text-small">{{ errors.name.ownername }}</div>
       </div>
-      <div class="uk-width-1-2">
-        <label class="uk-form-label content-form-label">Jenis Pengembang</label>
-        <div class="uk-form-controls">
-          <select class="uk-select content-form-input" v-model="forms.ownership">
-            <option value="perusahaan">Perusahaan</option>
-            <option value="individu">Individu</option>
-          </select>
-        </div>
-      </div>
-      <div class="uk-width-1-2">
+      <div class="uk-width-1-3">
         <label class="uk-form-label content-form-label">Username</label>
         <div class="uk-form-controls">
           <input type="text" v-model="forms.username" class="uk-input content-form-input">
@@ -93,7 +84,7 @@ export default {
         ownership: this.session_user.dev_ownership,
         phone_office: this.session_user.dev_phone_office,
         mobile_phone: this.session_user.dev_mobile_phone,
-        city: this.session_user.dev_city === null ? '' : this.session_user.dev_city,
+        city: this.session_user.city_id === null ? '' : this.session_user.city_id,
         region: this.session_user.province_id === null ? '' : this.session_user.province_id,
         biography: this.session_user.dev_biography,
         username: this.session_user.dev_username,

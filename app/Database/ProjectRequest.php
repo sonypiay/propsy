@@ -7,24 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 class ProjectRequest extends Model
 {
   public $timestamps = true;
+  public $incrementing = false;
   protected $table = 'project_request';
   protected $primaryKey = 'request_id';
 
-  public function hasNewRequest( $session_user = null )
+  public function generateId()
   {
-    if( $session_user === null )
-      $session_user = session()->get('dev_user_id');
+    $id = 1;
+    $getlastid = $this::select('seqid')->orderBy('seqid', 'desc')->first();
 
-    $has_request = false;
+    if( $getlastid !== null )
+      $id = $getlastid->seqid + 1;
 
-    $check_request = $this->where([
-      ['dev_user_id', '=', $session_user],
-      ['status_request', '=', 'waiting_response']
-    ])->count();
-    if( $check_request > 0 )
-    {
-      $has_request = true;
-    }
-    return $has_request;
+    $key = 'REQ';
+    $pad = str_pad( $id, 4, '0', STR_PAD_LEFT );
+    $generate_id = $key . date('Ymd') . $pad;
+    return $generate_id;
   }
 }

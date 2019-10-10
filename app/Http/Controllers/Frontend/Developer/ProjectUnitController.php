@@ -21,12 +21,12 @@ class ProjectUnitController extends Controller
     $unit = new $unit_type;
     if( empty( $keywords ) )
     {
-      $query = $unit->where('project_unique_id', $project_id);
+      $query = $unit->where('project_id', $project_id);
     }
     else
     {
       $query = $unit->where([
-        ['project_unique_id', $project_id],
+        ['project_id', $project_id],
         ['unit_name', 'like', '%' . $keywords . '%']
       ]);
     }
@@ -42,11 +42,11 @@ class ProjectUnitController extends Controller
     if( session()->has('isDeveloper') )
     {
       $getproject = $project_list->select(
-        'project_unique_id',
         'project_id',
-        'project_name'
+        'project_name',
+        'project_type'
       )
-      ->where('project_unique_id', $project_id)->first();
+      ->where('project_id', $project_id)->first();
 
       if( ! $getproject ) abort(404);
 
@@ -57,7 +57,8 @@ class ProjectUnitController extends Controller
         'session_user' => $developeruser->getinfo(),
         'project_id' => $project_id,
         'getfacility' => $getfacility,
-        'getproject' => $getproject
+        'getproject' => $getproject,
+        'hasrequest' => $developeruser->hasrequest()
       ];
 
       return response()->view('frontend.pages.developer.add_unit', $data);
@@ -84,6 +85,7 @@ class ProjectUnitController extends Controller
     $unit_facility = implode( ',', $request->unit_facility );
 
     $insert = new $unit_type;
+    $insert->unit_type_id = $unit_type->generateId();
     $insert->unit_name = $unit_name;
     $insert->unit_slug = $unit_slug;
     $insert->unit_description = $unit_description;
@@ -96,7 +98,7 @@ class ProjectUnitController extends Controller
     $insert->unit_status = $unit_status;
     $insert->unit_watt = $unit_watt;
     $insert->unit_facility = $unit_facility;
-    $insert->project_unique_id = $project_id;
+    $insert->project_id = $project_id;
     $insert->save();
 
     $res = ['status' => 200, 'statusText' => 'success' ];
@@ -112,11 +114,11 @@ class ProjectUnitController extends Controller
       if( ! $getunit ) abort( 404 );
 
       $getproject = $project_list->select(
-        'project_unique_id',
         'project_id',
-        'project_name'
+        'project_name',
+        'project_type'
       )
-      ->where('project_unique_id', $getunit->project_unique_id)->first();
+      ->where('project_id', $getunit->project_id)->first();
 
       if( ! $getproject ) abort(404);
 
@@ -127,7 +129,8 @@ class ProjectUnitController extends Controller
         'session_user' => $developeruser->getinfo(),
         'getunit' => $getunit,
         'getfacility' => $getfacility,
-        'getproject' => $getproject
+        'getproject' => $getproject,
+        'hasrequest' => $developeruser->hasrequest()
       ];
 
       return response()->view('frontend.pages.developer.edit_unit', $data);
@@ -204,30 +207,29 @@ class ProjectUnitController extends Controller
     $images = $request->images;
     $gallery = new $unit_gallery;
     $data_images = [];
-    $date = date('Y-m-d H:i:s');
     $storage = Storage::disk('assets');
     $imagepath = 'images/project/gallery';
 
     foreach( $images as $img )
     {
-      $filename = 'unit-' . $img->getClientOriginalName();
+      $filename = 'unit-' . $img->hashName();
       array_push( $data_images, [
         'unit_gallery_filename' => $filename,
-        'unit_type_id' => $id,
-        'created_at' => $date,
-        'updated_at' => $date
+        'unit_type_id' => $id
       ]);
       $storage->putFileAs( $imagepath, $img, $filename );
     }
 
     $gallery->insert( $data_images );
-    return response()->json( $data_images );
+
+    $res = ['status' => 200, 'statusText' => 'success'];
+    return response()->json( $res, $res['status'] );
   }
 
   public function get_gallery_unit( Request $request, ProjectUnitGallery $unit_gallery, $id )
   {
     $gallery = $unit_gallery->where('unit_type_id', $id)
-    ->orderBy('created_at', 'desc')->get();
+    ->orderBy('unit_gallery_id', 'desc')->get();
 
     $res = [
       'results' => [

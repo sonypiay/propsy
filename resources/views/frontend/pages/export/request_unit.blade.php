@@ -10,7 +10,7 @@
   <table class="uk-table uk-table-divider uk-table-small">
     <tr>
       <td class="uk-text-bold uk-width-small">Request ID</td>
-      <td>: {{ $result->request_unique_id }}</td>
+      <td>: {{ $result->request_id }}</td>
     </tr>
     <tr>
       <td class="uk-text-bold uk-width-small">Tanggal</td>
@@ -30,7 +30,11 @@
         @elseif( $result->status_request === 'revision' )
         <label class="uk-label uk-label-warning">Revisi</label>
         @elseif( $result->status_request === 'meeting' )
-        <label class="uk-label uk-label-warning">Dijadwalkan Meeting</label>
+          @if( $result->meeting_status === 'waiting_confirmation' )
+          <label class="uk-label uk-label-warning">Dijadwalkan Meeting</label>
+          @else
+          <label class="uk-label">Belum direview</label>
+          @endif
         @else
         <label class="uk-label uk-label-success">Selesai</label>
         @endif
@@ -105,7 +109,7 @@
       <tr>
         <th>Hasil Meeting</th>
         <td colspan="2">
-          {{ $result->meeting_result }}
+          {!! $result->meeting_result !!}
         </td>
       </tr>
     </tbody>
@@ -119,9 +123,10 @@
       @foreach( $log_request as $log )
       <li>
         <div class="uk-text-small uk-text-bold">
-          {{ $log->created_at->format('d/m/Y H:i') }}
+          @php $log_date = new DateTime( $log->log_date ) @endphp
+          {{ $log_date->format('d/m/Y H:i') }}
         </div>
-        {{ $log->log_message }}
+        {!! $log->log_message !!}
       </li>
       @endforeach
     </ul>

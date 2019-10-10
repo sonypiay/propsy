@@ -2,7 +2,7 @@
   <div>
     <div class="uk-card dashboard-content">
       <ul class="uk-breadcrumb">
-        <li><a :href="$root.url + '/developer/project/dashboard'">Dashboard</a></li>
+        <li><a :href="$root.url + '/developer/dashboard'">Dashboard</a></li>
         <li><a :href="$root.url + '/developer/project/manage_project'">Kelola Proyek</a></li>
         <li><span>Tambah Proyek</span></li>
       </ul>
@@ -46,7 +46,7 @@
           <div v-show="errors.name.project_city" class="uk-text-small uk-text-danger">{{ errors.name.project_city }}</div>
         </div>
         <div class="uk-margin">
-          <label class="uk-form-label dash-form-label">Alamat <span v-html="formRequired"></span> </label>
+          <label class="uk-form-label dash-form-label">Lokasi <span v-html="formRequired"></span> </label>
           <div class="uk-form-controls">
             <textarea class="uk-textarea uk-height-small dash-form-input" v-model="forms.project_address"></textarea>
           </div>

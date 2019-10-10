@@ -45,6 +45,9 @@ Route::group(['prefix' => 'customer'], function() {
   Route::get('/get_request_list/{status_request}', 'Frontend\Customer\RequestUnitController@get_request_list');
   Route::put('/cancel_request/{request_id}', 'Frontend\Customer\RequestUnitController@cancel_request');
   Route::put('/response_meeting_invitation/{request_id}/{status_request}', 'Frontend\Customer\RequestUnitController@response_meeting_invitation');
+
+  Route::get('/meeting_invitation', 'Frontend\Customer\MeetingInvitationController@index')->name('customer_meeting_page');
+  Route::get('/get_meeting_invitation', 'Frontend\Customer\MeetingInvitationController@get_meeting_invitation');
 });
 
 // Marketing
@@ -65,7 +68,7 @@ Route::group(['prefix' => 'marketing'], function() {
   Route::group(['prefix' => 'customer'], function() {
     Route::get('/request_unit', 'Frontend\Marketing\RequestUnitController@customer_request_unit')->name('marketing_request_unit');
     Route::get('/get_request_unit', 'Frontend\Marketing\RequestUnitController@get_request_unit');
-    Route::get('/detail_request/{request_id}', 'Frontend\Developer\RequestUnitController@detail_request');
+    Route::get('/detail_request/{request_id}', 'Frontend\Marketing\RequestUnitController@detail_request');
   });
 
   Route::group(['prefix' => 'meeting'], function() {
@@ -77,6 +80,12 @@ Route::group(['prefix' => 'marketing'], function() {
     Route::post('/update_schedule/{request_id}', 'Frontend\Marketing\MeetingListController@update_schedule');
     Route::get('/detail_meeting/{request_id}', 'Frontend\Marketing\MeetingListController@get_detail_schedule');
     Route::put('/cancel_request/{request_id}', 'Frontend\Marketing\MeetingListController@cancel_request');
+  });
+
+  Route::group(['prefix' => 'project'], function() {
+    Route::get('/', 'Frontend\Marketing\ProjectListController@index')->name('marketing_view_project');
+    Route::get('/list_project', 'Frontend\Marketing\ProjectListController@getProjectList');
+    Route::get('/detail/{project_id}', 'Frontend\Marketing\ProjectListController@detail_project')->name('marketing_detail_project');
   });
 });
 
@@ -159,6 +168,9 @@ Route::group(['prefix' => 'project'], function() {
 
   Route::get('/search', 'Frontend\Projects\ProjectListController@search_project')->name('page_search_project');
   Route::get('/search_list', 'Frontend\Projects\ProjectListController@get_search_list');
+
+  Route::get('/project_developer/{slug}', 'Frontend\Projects\ProjectListController@project_developer');
+  Route::get('/marketing_developer/{id}', 'Frontend\Projects\ProjectListController@marketing_developer');
 });
 
 

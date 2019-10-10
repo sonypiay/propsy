@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend\Developer;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Database\DeveloperUser;
 use App\Database\MarketingUser;
 use App\Database\CityDB;
@@ -15,11 +16,12 @@ class ProjectMarketingController extends Controller
     if( session()->has('isDeveloper') )
     {
       $city = new CityDB;
-      $getcity = $city->orderBy('city_name', 'asc')->get();
+      $getcity = $city->getcity();
 
       $data = [
         'request' => $request,
         'session_user' => $developeruser->getinfo(),
+        'hasrequest' => $developeruser->hasrequest(),
         'getcity' => $getcity
       ];
       return response()->view('frontend.pages.developer.manage_marketing', $data);
@@ -44,15 +46,17 @@ class ProjectMarketingController extends Controller
       'marketing_user.mkt_email',
       'marketing_user.mkt_phone_number',
       'marketing_user.mkt_mobile_phone',
-      'marketing_user.mkt_city',
       'marketing_user.mkt_username',
       'marketing_user.mkt_password',
+      'marketing_user.mkt_address',
+      'marketing_user.created_at',
+      'marketing_user.updated_at',
       'city.city_id',
       'city.city_name',
       'province.province_id',
       'province.province_name'
     )
-    ->join('city', 'marketing_user.mkt_city', '=', 'city.city_id')
+    ->join('city', 'marketing_user.city_id', '=', 'city.city_id')
     ->join('province', 'city.province_id', '=', 'province.province_id');
 
     if( empty( $keywords ) )
@@ -62,7 +66,7 @@ class ProjectMarketingController extends Controller
       if( $city !== 'all' )
       {
         $getmarketing = $marketing->where([
-          ['marketing_user.mkt_city', $city],
+          ['marketing_user.city_id', $city],
           ['marketing_user.dev_user_id', session()->get('dev_user_id')]
         ])
         ->orderBy('marketing_user.mkt_fullname', $sorting);
@@ -80,7 +84,7 @@ class ProjectMarketingController extends Controller
       {
         $getmarketing = $marketing->where([
           ['marketing_user.' . $column, 'like', '%' . $keywords. '%'],
-          ['marketing_user.mkt_city', $city],
+          ['marketing_user.city_id', $city],
           ['marketing_user.dev_user_id', session()->get('dev_user_id')]
         ])
         ->orderBy('marketing_user.mkt_fullname', $sorting);
@@ -98,8 +102,9 @@ class ProjectMarketingController extends Controller
     $email = $request->mkt_email;
     $username = $request->mkt_username;
     $password = $request->mkt_password;
-    $hash_password = md5( $password );
+    $hash_password = Hash::make( $password, ['rounds' => 12]);
     $city = $request->mkt_city;
+    $address = $request->mkt_address;
     $phone_number = $request->mkt_phone_number === '' ? null : $request->mkt_phone_number;
     $mobile_phone = $request->mkt_mobile_phone;
     $check_username = $marketinguser->where('mkt_username', $username);
@@ -122,11 +127,13 @@ class ProjectMarketingController extends Controller
     else
     {
       $insert = new $marketinguser;
+      $insert->mkt_user_id = $marketinguser->generateId();
       $insert->mkt_fullname = $fullname;
       $insert->mkt_email = $email;
       $insert->mkt_username = $username;
       $insert->mkt_password = $hash_password;
-      $insert->mkt_city = $city;
+      $insert->city_id = $city;
+      $insert->mkt_address = $address;
       $insert->mkt_phone_number = $phone_number;
       $insert->mkt_mobile_phone = $mobile_phone;
       $insert->dev_user_id = session()->get('dev_user_id');
@@ -143,8 +150,9 @@ class ProjectMarketingController extends Controller
     $email = $request->mkt_email;
     $username = $request->mkt_username;
     $password = $request->mkt_password;
-    $hash_password = md5( $password );
+    $hash_password = Hash::make( $password, ['rounds' => 12]);
     $city = $request->mkt_city;
+    $address = $request->mkt_address;
     $phone_number = $request->mkt_phone_number === '' ? null : $request->mkt_phone_number;
     $mobile_phone = $request->mkt_mobile_phone;
     $getmarketing = $marketinguser->where('mkt_user_id', $userid)->first();
@@ -152,7 +160,8 @@ class ProjectMarketingController extends Controller
 
     $getmarketing->mkt_fullname = $fullname;
     if( ! empty( $password ) ) $getmarketing->mkt_password = $hash_password;
-    $getmarketing->mkt_city = $city;
+    $getmarketing->city_id = $city;
+    $getmarketing->mkt_address = $address;
     $getmarketing->mkt_phone_number = $phone_number;
     $getmarketing->mkt_mobile_phone = $mobile_phone;
 

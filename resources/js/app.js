@@ -17,6 +17,8 @@ Vue.component('marketing-request-unit', require('./components/Frontend/Marketing
 Vue.component('marketing-meeting-list', require('./components/Frontend/Marketing/MeetingList.vue').default);
 Vue.component('marketing-create-schedule', require('./components/Frontend/Marketing/CreateMeetingSchedule.vue').default);
 Vue.component('marketing-update-schedule', require('./components/Frontend/Marketing/UpdateMeetingSchedule.vue').default);
+Vue.component('marketing-view-project', require('./components/Frontend/Marketing/Projects.vue').default);
+Vue.component('marketing-detail-project', require('./components/Frontend/Marketing/DetailProject.vue').default);
 
 // developer
 Vue.component('developer-register-page', require('./components/Frontend/Developer/Daftar.vue').default);
@@ -39,6 +41,7 @@ Vue.component('customer-register-page', require('./components/Frontend/Customer/
 Vue.component('customer-login-page', require('./components/Frontend/Customer/Masuk.vue').default);
 Vue.component('customer-profile-page', require('./components/Frontend/Customer/Profile.vue').default);
 Vue.component('customer-list-request', require('./components/Frontend/Customer/ListRequestUnit.vue').default);
+Vue.component('customer-meeting-invitation', require('./components/Frontend/Customer/MeetingInvitation.vue').default);
 
 // main page
 Vue.component('homepage-available-project', require('./components/Frontend/HomepageProject.vue').default);
@@ -46,6 +49,7 @@ Vue.component('page-view-project', require('./components/Frontend/ViewProject.vu
 Vue.component('page-view-unit', require('./components/Frontend/ViewDetailUnit.vue').default);
 Vue.component('page-browse-project', require('./components/Frontend/BrowseProject.vue').default);
 Vue.component('page-search-project', require('./components/Frontend/SearchProject.vue').default);
+Vue.component('page-view-developer', require('./components/Frontend/DeveloperProfile.vue').default);
 
 
 import VueCurrencyFilter from 'vue-currency-filter';

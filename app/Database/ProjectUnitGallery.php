@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProjectUnitGallery extends Model
 {
-  public $timestamps = true;
+  public $timestamps = false;
   protected $table = 'project_unit_gallery';
   protected $primaryKey = 'unit_gallery_id';
 }

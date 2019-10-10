@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ControlPanel\Pages;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Database\AdminOwner;
 use App\Http\Controllers\Controller;
 
@@ -29,7 +30,7 @@ class AdminOwnerController extends Controller
   public function change_password( Request $request, AdminOwner $owner )
   {
     $password = $request->password;
-    $hash_password = md5( $password );
+    $hash_password = Hash::make( $password, ['rounds' => 12]);
     $owner = $owner->getinfo();
     $owner->admin_password = $hash_password;
     $owner->save();
@@ -131,8 +132,7 @@ class AdminOwnerController extends Controller
   {
     $keywords = $request->keywords;
     $limit = $request->limit;
-    $getowner = $owner
-    ->orderBy('admin_id', 'desc');
+    $getowner = $owner->orderBy('created_at', 'desc');
 
     if( ! empty( $keywords ) )
     {
@@ -152,7 +152,7 @@ class AdminOwnerController extends Controller
     $admin_username = $request->admin_username;
     $admin_password = $request->admin_password;
     $admin_gender = $request->admin_gender;
-    $hash_password = md5( $admin_password );
+    $hash_password = Hash::make( $admin_password, ['rounds' => 12]);
 
     $check_email = $owner->where('admin_email', $admin_email);
     $check_username = $owner->where('admin_username', $admin_username);
@@ -173,6 +173,7 @@ class AdminOwnerController extends Controller
     }
     else
     {
+      $owner->admin_id = $owner->generateId();
       $owner->admin_fullname = $admin_fullname;
       $owner->admin_username = $admin_username;
       $owner->admin_email = $admin_email;
@@ -196,7 +197,7 @@ class AdminOwnerController extends Controller
     $admin_username = $request->admin_username;
     $admin_password = $request->admin_password;
     $admin_gender = $request->admin_gender;
-    $hash_password = md5( $admin_password );
+    $hash_password = Hash::make( $admin_password, ['rounds' => 12]);
 
     $check_email = $owner->where('admin_email', $admin_email);
     $check_username = $owner->where('admin_username', $admin_username);

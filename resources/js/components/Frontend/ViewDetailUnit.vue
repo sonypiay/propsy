@@ -1,18 +1,64 @@
 <template>
   <div id="background">
-    <div id="contact-agent" uk-modal>
-      <div class="uk-modal-body uk-modal-dialog">
-        <a class="uk-modal-close uk-modal-close-outside" uk-close></a>
-        <h3 class="uk-h3">Kontak Agen Marketing</h3>
-        <div class="uk-grid-small uk-grid-divider" uk-grid>
-          <div v-for="mkt in getmarketing" class="uk-width-1-1">
-            <div class="uk-card">
-              <h4 class="uk-h4">{{ mkt.mkt_fullname }}</h4>
-              <div v-show="mkt.mkt_phone_number">
-                {{ mkt.mkt_phone_number }}
-              </div>
-              <div v-show="mkt.mkt_mobile_number">
-                {{ mkt.mkt_mobile_number }}
+    <div id="contact-agent" class="uk-modal-container" uk-modal>
+      <div class="uk-modal-dialog">
+        <a class="uk-modal-close-full uk-close-large" uk-close></a>
+        <div class="uk-modal-body">
+          <h3 class="uk-h3">Kontak Agen Marketing</h3>
+          <div class="uk-grid-small uk-grid-match" uk-grid>
+            <div v-for="mkt in marketinglist.results" class="uk-width-1-3@xl uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s">
+              <div class="uk-card uk-card-default">
+                <div class="uk-card-header">
+                  <div class="uk-grid-small uk-flex-middle" uk-grid>
+                    <div class="uk-width-auto">
+                      <img v-if="mkt.mkt_profile_photo" class="uk-border-circle" width="40" height="40" :src="$root.url + '/storage/assets/images/avatar/marketing/' + mkt.mkt_profile_photo" />
+                      <img v-else class="uk-border-circle" width="40" height="40" :src="$root.url + '/images/avatar/avatar.jpg'" />
+                    </div>
+                    <div class="uk-width-expand">
+                      <h4 class="uk-h4 uk-margin-remove-bottom">{{ mkt.mkt_fullname }}</h4>
+                    </div>
+                  </div>
+                </div>
+                <div class="uk-card-body">
+                  <div class="uk-panel uk-margin">
+                    <h4 class="uk-h4 uk-margin-remove-bottom">Email</h4>
+                    <p class="uk-text-meta uk-text-justify uk-margin-remove-top">
+                      {{ mkt.mkt_email }}
+                    </p>
+                  </div>
+                  <div class="uk-panel uk-margin">
+                    <h4 class="uk-h4 uk-margin-remove-bottom">Alamat</h4>
+                    <p class="uk-text-meta uk-text-justify uk-margin-remove-top">
+                      {{ mkt.mkt_address }}
+                    </p>
+                  </div>
+                  <div class="uk-panel uk-margin">
+                    <h4 class="uk-h4 uk-margin-remove-bottom">Kota</h4>
+                    <p class="uk-text-meta uk-text-justify uk-margin-remove-top">
+                      {{ mkt.city_name }}, {{ mkt.province_name }}
+                    </p>
+                  </div>
+                </div>
+                <div class="uk-card-footer">
+                  <div class="uk-panel uk-grid-small" uk-grid>
+                    <div class="uk-width-1-2 uk-text-meta uk-text-center">
+                      <a class="uk-button uk-button-text">
+                        <div>
+                          <span uk-icon="receiver"></span>
+                        </div>
+                        {{ mkt.mkt_phone_number }}
+                      </a>
+                    </div>
+                    <div class="uk-width-1-2 uk-text-meta uk-text-center">
+                      <a class="uk-button uk-button-text">
+                        <div>
+                          <span uk-icon="whatsapp"></span>
+                        </div>
+                        {{ mkt.mkt_mobile_phone }}
+                      </a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -21,21 +67,25 @@
     </div>
     <div class="uk-padding container-projectinfo">
       <div class="container-projectheading">
-        {{ getunit.project_name }}
+        {{ getunit.unit_name }}
         <label class="uk-label uk-label-success" v-if="getunit.unit_status === 'available'">Tersedia</label>
         <label class="uk-label uk-label-warning" v-else-if="getunit.unit_status === 'booked'">Sudah dipesan</label>
         <label class="uk-label uk-label-danger" v-else>Terjual</label>
       </div>
       <div class="uk-margin-bottom container-projectlead">
-        <span uk-icon="location"></span> {{ projectcity.city_name }}, {{ projectcity.province_name }}
+        <span uk-icon="location"></span> {{ getunit.city_name }}, {{ getunit.province_name }}
+        <div v-show="getunit.project_address" class="uk-text-small">
+          {{ getunit.project_address }}
+        </div>
       </div>
       <div class="uk-grid-medium" uk-grid>
         <div class="uk-width-expand">
           <!-- gallery -->
-          <div class="uk-position-relative uk-visible-toggle uk-light" tabindex="-1" uk-slideshow="ratio: 16:9; animation: push">
+          <div class="uk-position-relative uk-visible-toggle uk-light" tabindex="-1" uk-slideshow="animation: push">
             <ul class="uk-slideshow-items">
               <li v-for="gallery in getgallery">
-                <img :src="$root.url + '/images/project/gallery/' + gallery.unit_gallery_filename" uk-cover>
+                <img :src="$root.url + '/storage/assets/images/project/gallery/' + gallery.unit_gallery_filename" uk-cover>
+                <canvas width="600" height="400"></canvas>
               </li>
             </ul>
             <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slideshow-item="previous"></a>
@@ -173,13 +223,12 @@
               </div>
             </div>
             <hr class="uk-divider-icon">
-            <div id="fasilitas" class="uk-card-body uk-card-small container-projectbody">
+            <div id="lokasi" class="uk-card-body uk-card-small container-projectbody">
               <div class="uk-margin content-projectdetail">
                 <div class="uk-margin-small content-projectheading">
-                  Google Maps
+                  Lokasi
                 </div>
                 <div class="uk-margin-small content-projectlead" v-html="getunit.project_map_embed">
-
                 </div>
               </div>
             </div>
@@ -192,7 +241,7 @@
                 <div class="uk-margin-small content-projectlead">
                   <div class="uk-card uk-grid-collapse uk-margin" uk-grid>
                     <div class="uk-width-1-3 uk-card-media-left uk-cover-container" v-if="getunit.project_thumbnail">
-                      <img :src="$root.url + '/images/project/gallery/' + getunit.project_thumbnail" uk-cover />
+                      <img :src="$root.url + '/storage/assets/images/project/gallery/' + getunit.project_thumbnail" uk-cover />
                       <canvas width="600" height="400"></canvas>
                     </div>
                     <div class="uk-width-expand">
@@ -217,11 +266,10 @@
               <span uk-icon="icon: users; ratio: 4"></span>
             </div>
             <div v-else class="dev-withlogo">
-              <img class="uk-align-center" :src="$root.url + '/images/devlogo/' + getunit.dev_logo" :alt="getunit.dev_name">
+              <img class="uk-align-center" :src="$root.url + '/storage/assets/images/devlogo/' + getunit.dev_logo" />
             </div>
             <div class="uk-margin sidebar-dev-profile">
               <a class="dev-profile-name" href="#">{{ getunit.dev_name }}</a>
-              <div class="dev-profile-region">{{ devcity.province_name + ', ' + devcity.city_name }}</div>
             </div>
             <div class="uk-margin uk-text-center">
               <a class="uk-width-1-1 uk-button uk-button-primary uk-margin-small sidebar-viewproject" :href="$root.url + '/profile/developer/' + getunit.dev_slug">Lihat Pengembang</a>
@@ -258,8 +306,6 @@ export default {
     'getunit',
     'getgallery',
     'getmarketing',
-    'projectcity',
-    'devcity',
     'session_active'
   ],
   data() {
@@ -270,10 +316,27 @@ export default {
           message: 'Halo ' + this.getunit.dev_name + ', saya ingin mengajukan pemesenan unit ' + this.getunit.unit_name + '.',
           errorMessage: ''
         }
+      },
+      marketinglist: {
+        total: 0,
+        results: []
       }
     }
   },
   methods: {
+    getMarketingList()
+    {
+      axios({
+        method: 'get',
+        url: this.$root.url + '/project/marketing_developer/' + this.getunit.dev_user_id
+      }).then( res => {
+        let result = res.data;
+        this.marketinglist.total = result.result.total;
+        this.marketinglist.results = result.result.data;
+      }).catch( err => {
+        console.log( err.response.statusText );
+      });
+    },
     requestUnit()
     {
       this.forms.booking.errorMessage = '';
@@ -317,7 +380,7 @@ export default {
     }
   },
   mounted() {
-
+    this.getMarketingList();
   }
 }
 </script>

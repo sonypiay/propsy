@@ -31,20 +31,9 @@
           <div v-for="project in project_list.results" class="uk-width-1-3@xl uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s">
             <div class="uk-card uk-card-default dash-grid-box">
               <div class="uk-card-media-top">
-                <div v-if="project.project_thumbnail === null" class="uk-tile uk-tile-default grid-image">
-                  <div class="uk-position-top-right">
-                    <div class="grid-badge">
-                      <label v-if="project.project_status === 'available'" class="uk-label uk-label-success">Tersedia</label>
-                      <label v-else-if="project.project_status === 'soon'" class="uk-label">Segera</label>
-                      <label v-else class="uk-label uk-label-danger">Terjual</label>
-                    </div>
-                  </div>
-                  <div class="uk-text-center">
-                    <span uk-icon="icon: image; ratio: 3"></span>
-                  </div>
-                </div>
-                <div v-else class="uk-cover-container grid-image">
-                  <img :src="$root.url + '/images/project/gallery/' + project.project_thumbnail" alt="" uk-cover>
+                <div class="uk-cover-container grid-image">
+                  <img v-if="project.project_thumbnail !== null" :src="$root.url + '/storage/assets/images/project/gallery/' + project.project_thumbnail" alt="" uk-cover>
+                  <img v-else :src="$root.url + '/images/banner/homepage3.jpg'" alt="" uk-cover>
                   <div class="uk-overlay uk-position-cover">
                     <div class="uk-position-top-right">
                       <div class="grid-badge">
@@ -77,8 +66,8 @@
                     <a uk-tooltip="Lainnya" class="uk-width-1-1 uk-button uk-button-primary dash-btn dash-btn-action"><i uk-icon="more-vertical"></i></a>
                     <div class="grid-dropdown-nav" uk-dropdown="pos: top-right; mode: click">
                       <ul class="uk-nav uk-dropdown-nav">
-                        <li><a :href="$root.url + '/developer/project/detail/' + project.project_unique_id"><span class="uk-margin-small-right" uk-icon="forward"></span> Lihat Proyek</a></li>
-                        <li><a :href="$root.url + '/developer/project/gallery/' + project.project_unique_id"><span class="uk-margin-small-right" uk-icon="image"></span> Galeri</a></li>
+                        <li><a :href="$root.url + '/developer/project/detail/' + project.project_id"><span class="uk-margin-small-right" uk-icon="forward"></span> Lihat Proyek</a></li>
+                        <li><a :href="$root.url + '/developer/project/gallery/' + project.project_id"><span class="uk-margin-small-right" uk-icon="image"></span> Galeri</a></li>
                       </ul>
                     </div>
                   </div>

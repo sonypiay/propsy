@@ -50,34 +50,60 @@ class CityController extends Controller
 
   public function store( Request $request, CityDB $city )
   {
+    $city_id = $request->city_id;
     $city_name = $request->city_name;
-    $slug_name = str_slug( $city_name );
     $province = $request->province;
+    $check_city = $city->where('city_id', $city_id);
 
-    $city->city_name = $city_name;
-    $city->city_slug = $slug_name;
-    $city->province_id = $province;
-    $city->save();
+    if( $check_city->count() > 0 )
+    {
+      $res = [
+        'status' => 409,
+        'statusText' => $city_id . ' sudah digunakan.'
+      ];
+    }
+    else
+    {
+      $city->city_name = $city_name;
+      $city->city_id = $city_id;
+      $city->province_id = $province;
+      $city->save();
+      $res = ['status' => 200, 'statusText' => 'success'];
+    }
 
-    $res = ['status' => 200, 'statusText' => 'success'];
-
-    return response()->json( $res, 200 );
+    return response()->json( $res, $res['status'] );
   }
 
   public function save( Request $request, CityDB $city, $id )
   {
+    $city_id = $request->city_id;
     $city_name = $request->city_name;
-    $slug_name = str_slug( $city_name );
     $province = $request->province;
     $getcity = $city->where('city_id', $id)->first();
 
     $getcity->city_name = $city_name;
-    $getcity->city_slug = $slug_name;
     $getcity->province_id = $province;
-    $getcity->save();
 
-    $res = ['status' => 200, 'statusText' => 'success'];
-    return response()->json( $res, 200 );
+    if( $getcity->city_id !== $city_id )
+    {
+      $check_city = $city->where('city_id', $city_id)->count();
+      if( $check_city > 0 )
+      {
+        $res = ['status' => 409, 'statusText' => $city_id . ' sudah digunakan.'];
+      }
+      else
+      {
+        $getcity->save();
+        $res = ['status' => 200, 'statusText' => 'success'];
+      }
+    }
+    else
+    {
+      $getcity->save();
+      $res = ['status' => 200, 'statusText' => 'success'];
+    }
+
+    return response()->json( $res, $res['status'] );
   }
 
   public function destroy( Request $request, CityDB $city, $id )

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend\Developer;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Database\DeveloperUser;
@@ -18,7 +19,8 @@ class DeveloperController extends Controller
     {
       $data = [
         'request' => $request,
-        'session_user' => $developeruser->getinfo()
+        'session_user' => $developeruser->getinfo(),
+        'hasrequest' => $developeruser->hasrequest()
       ];
 
       return response()->view('frontend.pages.developer.dashboard_page', $data);
@@ -65,7 +67,8 @@ class DeveloperController extends Controller
     {
       $data = [
         'request' => $request,
-        'session_user' => $developeruser->getinfo()
+        'session_user' => $developeruser->getinfo(),
+        'hasrequest' => $developeruser->hasrequest()
       ];
 
       return response()->view('frontend.pages.developer.profile_page', $data);
@@ -81,7 +84,6 @@ class DeveloperController extends Controller
     $name = $request->name;
     $slug_name = str_slug( $name );
     $ownername = $request->ownername;
-    $ownership = $request->ownership;
     $phone_office = $request->phone_office;
     $mobile_phone = $request->mobile_phone;
     $city = $request->city;
@@ -95,10 +97,9 @@ class DeveloperController extends Controller
     $getinfo->dev_ownername = $ownername;
     $getinfo->dev_phone_office = $phone_office;
     $getinfo->dev_mobile_phone = $mobile_phone;
-    $getinfo->dev_city = $city;
+    $getinfo->city_id = $city;
     $getinfo->dev_biography = $biography;
     $getinfo->dev_address = $address;
-    $getinfo->dev_ownership = $ownership;
 
     if( $getinfo->dev_username === $username )
     {
@@ -126,7 +127,7 @@ class DeveloperController extends Controller
   public function change_password( Request $request, DeveloperUser $developeruser )
   {
     $password = $request->password;
-    $hash_password = md5( $password );
+    $hash_password = Hash::make( $password, ['rounds' => 12]);
     $getinfo = $developeruser->getinfo();
     $getinfo->dev_password = $hash_password;
     $getinfo->save();
@@ -157,7 +158,6 @@ class DeveloperController extends Controller
     {
       $res = [ 'status' => 200, 'statusText' => 'success' ];
     }
-
     return response()->json( $res, $res['status'] );
   }
 
@@ -168,7 +168,7 @@ class DeveloperController extends Controller
     $storage = Storage::disk('assets');
     $getinfo = $developeruser->getinfo();
     $path_img = 'images/devlogo';
-    if( ! empty( $getinfo->mkt_profile_photo ) )
+    if( ! empty( $getinfo->dev_logo ) )
     {
       if( $storage->exists( $path_img . '/' . $getinfo->dev_logo ) )
       {

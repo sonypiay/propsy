@@ -28,13 +28,6 @@
               </p>
             </div>
             <div class="uk-panel uk-margin">
-              <h4 class="uk-h5 uk-margin-remove-bottom">Jenis Pengembang</h4>
-              <p class="uk-text-meta uk-margin-remove-top">
-                <span v-if="getdeveloper.detail.dev_ownership === 'perusahaan'">Perusahaan</span>
-                <span v-else>Individu</span>
-              </p>
-            </div>
-            <div class="uk-panel uk-margin">
               <h4 class="uk-h5 uk-margin-remove-bottom">Alamat Email</h4>
               <p class="uk-text-meta uk-margin-remove-top">
                 {{ getdeveloper.detail.dev_email }}

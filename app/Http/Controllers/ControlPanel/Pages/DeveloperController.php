@@ -46,21 +46,21 @@ class DeveloperController extends Controller
       'developer_user.dev_biography',
       'developer_user.dev_phone_office',
       'developer_user.dev_mobile_phone',
-      'developer_user.dev_ownership',
       'developer_user.dev_logo',
       'developer_user.status_verification',
       'developer_user.created_at',
       'developer_user.updated_at',
+      'city.city_id',
       'city.city_name',
       'province.province_name'
     )
-    ->leftJoin('city', 'developer_user.dev_city', '=', 'city.city_id')
+    ->leftJoin('city', 'developer_user.city_id', '=', 'city.city_id')
     ->leftJoin('province', 'city.province_id', '=', 'province.province_id')
     ->orderBy('developer_user.created_at', 'desc');
 
     if( $city !== 'all' )
     {
-      $getdeveloper = $getdeveloper->where('developer_user.dev_city', $city);
+      $getdeveloper = $getdeveloper->where('developer_user.city_id', $city);
     }
     if( ! empty( $keywords ) )
     {
@@ -89,21 +89,21 @@ class DeveloperController extends Controller
       'developer_user.dev_biography',
       'developer_user.dev_phone_office',
       'developer_user.dev_mobile_phone',
-      'developer_user.dev_ownership',
       'developer_user.dev_logo',
       'developer_user.status_verification',
       'developer_user.created_at',
       'developer_user.updated_at',
+      'city.city_id',
       'city.city_name',
       'province.province_name'
     )
-    ->leftJoin('city', 'developer_user.dev_city', '=', 'city.city_id')
+    ->leftJoin('city', 'developer_user.city_id', '=', 'city.city_id')
     ->leftJoin('province', 'city.province_id', '=', 'province.province_id')
     ->orderBy('developer_user.created_at', 'desc');
 
     if( $city !== 'all' )
     {
-      $getdeveloper = $getdeveloper->where('developer_user.dev_city', $city);
+      $getdeveloper = $getdeveloper->where('developer_user.city_id', $city);
     }
     if( ! empty( $keywords ) )
     {

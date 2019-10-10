@@ -10,6 +10,12 @@
       <a href="{{ route('marketing_dashboard_page') }}"><span class="uk-margin-small-right" uk-icon="icon: home; ratio: 1"></span> Dashboard</a>
     </li>
     <li class="uk-parent">
+      <a href="#"><span class="uk-margin-small-right" uk-icon="icon: link; ratio: 1"></span> Proyek <span class="uk-float-right" uk-icon="icon: chevron-down; ratio: 1"></span> </a>
+      <ul class="uk-nav-sub side-nav-sub">
+        <li><a href="{{ route('marketing_view_project') }}"><span class="uk-margin-small-right" uk-icon="icon: list; ratio: 1"></span> Daftar Proyek</a></li>
+      </ul>
+    </li>
+    <li class="uk-parent">
       <a href="#"><span class="uk-margin-small-right" uk-icon="icon: clock; ratio: 1"></span> Meeting <span class="uk-float-right" uk-icon="icon: chevron-down; ratio: 1"></span> </a>
       <ul class="uk-nav-sub side-nav-sub">
         <li><a href="{{ route('marketing_meeting_list') }}"><span class="uk-margin-small-right" uk-icon="icon: list; ratio: 1"></span> Jadwal Meeting</a></li>

@@ -17,6 +17,8 @@ Vue.component('marketing-request-unit', require('./components/Frontend/Marketing
 Vue.component('marketing-meeting-list', require('./components/Frontend/Marketing/MeetingList.vue').default);
 Vue.component('marketing-create-schedule', require('./components/Frontend/Marketing/CreateMeetingSchedule.vue').default);
 Vue.component('marketing-update-schedule', require('./components/Frontend/Marketing/UpdateMeetingSchedule.vue').default);
+Vue.component('marketing-view-project', require('./components/Frontend/Marketing/Projects.vue').default);
+Vue.component('marketing-detail-project', require('./components/Frontend/Marketing/DetailProject.vue').default);
 
 // developer
 Vue.component('developer-register-page', require('./components/Frontend/Developer/Daftar.vue').default);

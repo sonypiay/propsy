@@ -190,7 +190,7 @@
               </div>
             </div>
 
-            <div v-show="session_active !== 'developer'" class="uk-card uk-card-body uk-card-default uk-margin sidebar-dev-info">
+            <div v-show="session_active === 'customer'" class="uk-card uk-card-body uk-card-default uk-margin sidebar-dev-info">
               <div class="uk-margin sidebar-dev-heading">Apakah anda tertarik?</div>
               <div v-show="forms.booking.errorMessage" class="uk-alert-danger" uk-alert>{{ forms.booking.errorMessage }}</div>
               <div v-if="session_active === 'customer'" class="uk-margin uk-grid-small" uk-grid>

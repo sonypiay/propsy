@@ -52,21 +52,17 @@ class ProjectListController extends Controller
       $data['session_user'] = $customer->getinfo();
       $data['hasrequest'] = $customer->hasRequest();
     }
-
-    if( session()->has('isDeveloper') )
+    else if( session()->has('isDeveloper') )
     {
       $developer = new DeveloperUser;
       $data['session_active'] = 'developer';
       $data['session_user'] = $developer->getinfo();
-      $data['hasrequest'] = $developer->hasRequest();
     }
-
-    if( session()->has('isMarketing') )
+    else
     {
       $marketing = new MarketingUser;
       $data['session_active'] = 'marketing';
       $data['session_user'] = $marketing->getinfo();
-      $data['hasrequest'] = $developer->hasRequest();
     }
 
     $getproject  = $project_list->select(
@@ -127,19 +123,15 @@ class ProjectListController extends Controller
       $data['session_user'] = $customer->getinfo();
       $data['hasrequest'] = $customer->hasRequest();
     }
-
-    if( session()->has('isDeveloper') )
+    else if( session()->has('isDeveloper') )
     {
       $data['session_active'] = 'developer';
       $data['session_user'] = $developer->getinfo();
-      $data['hasrequest'] = $developer->hasRequest();
     }
-
-    if( session()->has('isMarketing') )
+    else
     {
       $marketing = new MarketingUser;
       $data['session_user'] = $marketing->getinfo();
-      $data['hasrequest'] = $marketing->hasRequest();
     }
 
     $getunit  = $unit_type->select(
@@ -269,21 +261,17 @@ class ProjectListController extends Controller
       $data['session_user'] = $customer->getinfo();
       $data['hasrequest'] = $customer->hasRequest();
     }
-
-    if( session()->has('isDeveloper') )
+    else if( session()->has('isDeveloper') )
     {
       $developer = new DeveloperUser;
       $data['session_active'] = 'developer';
       $data['session_user'] = $developer->getinfo();
-      $data['hasrequest'] = $developer->hasRequest();
     }
-
-    if( session()->has('isMarketing') )
+    else
     {
       $marketing = new MarketingUser;
       $data['session_active'] = 'marketing';
       $data['session_user'] = $marketing->getinfo();
-      $data['hasrequest'] = $marketing->hasRequest();
     }
 
     $city = new CityDB;
@@ -418,19 +406,16 @@ class ProjectListController extends Controller
       $data['session_user'] = $customer->getinfo();
       $data['hasrequest'] = $customer->hasRequest();
     }
-
-    if( session()->has('isDeveloper') )
+    else if( session()->has('isDeveloper') )
     {
       $data['session_active'] = 'developer';
       $data['session_user'] = $developer->getinfo();
       $data['hasrequest'] = $developer->hasRequest();
     }
-
-    if( session()->has('isMarketing') )
+    else
     {
       $data['session_active'] = 'marketing';
       $data['session_user'] = $marketing->getinfo();
-      $data['hasrequest'] = $marketing->hasRequest();
     }
 
     $city = new CityDB;

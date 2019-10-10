@@ -257,7 +257,7 @@ class ProjectListController extends Controller
         $query = $project->where([
           ['project_list.project_status', $status],
           ['project_list.project_name', 'like', '%' . $keywords . '%'],
-          ['.project_list.dev_user_id', $devuser->dev_user_id]
+          ['project_list.dev_user_id', $devuser->dev_user_id]
         ])
         ->orderBy('project_list.created_at', 'desc');
       }

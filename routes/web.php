@@ -81,6 +81,12 @@ Route::group(['prefix' => 'marketing'], function() {
     Route::get('/detail_meeting/{request_id}', 'Frontend\Marketing\MeetingListController@get_detail_schedule');
     Route::put('/cancel_request/{request_id}', 'Frontend\Marketing\MeetingListController@cancel_request');
   });
+
+  Route::group(['prefix' => 'project'], function() {
+    Route::get('/', 'Frontend\Marketing\ProjectListController@index')->name('marketing_view_project');
+    Route::get('/list_project', 'Frontend\Marketing\ProjectListController@getProjectList');
+    Route::get('/detail/{project_id}', 'Frontend\Marketing\ProjectListController@detail_project')->name('marketing_detail_project');
+  });
 });
 
 Route::group(['prefix' => 'developer'], function() {

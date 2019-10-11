@@ -204,6 +204,16 @@
                     </div>
                   </a>
                 </li>
+                <li>
+                  <a href="#cicilan" uk-scroll>
+                    <div>
+                      <span uk-icon="tag"></span>
+                      <div class="uk-navbar-subtitle">
+                        Angsuran
+                      </div>
+                    </div>
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
@@ -275,7 +285,7 @@
               </div>
             </div>
             <hr class="uk-divider-icon">
-            <div class="uk-card-body uk-card-small container-projectbody">
+            <div id="cicilan" class="uk-card-body uk-card-small container-projectbody">
               <div class="uk-margin content-projectdetail">
                 <div class="uk-margin-small uk-text-uppercase content-projectheading">
                   Rincian Angsuran

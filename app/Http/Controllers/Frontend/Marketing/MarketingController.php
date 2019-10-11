@@ -130,7 +130,7 @@ class MarketingController extends Controller
     $getinfo->mkt_fullname = $fullname;
     $getinfo->mkt_phone_number = $phone_number;
     $getinfo->mkt_mobile_phone = $mobile_phone;
-    $getinfo->mkt_city = $city;
+    $getinfo->city_id = $city;
     $getinfo->mkt_address = $address;
 
     if( $getinfo->mkt_username == $username )

@@ -18,6 +18,7 @@
       <div v-if="getproject.project_thumbnail" class="uk-background-cover uk-height-large uk-panel" :style="{'background-image': 'url(' + $root.url + '/storage/assets/images/project/gallery/' + getproject.project_thumbnail + ')'}"></div>
       <div v-else class="uk-background-cover uk-height-large uk-panel" :style="{'background-image': 'url(' + $root.url + '/images/banner/homepage3.jpg)'}"></div>
       <div v-show="getproject.project_map_embed" v-html="getproject.project_map_embed" class="uk-margin"></div>
+
       <!-- gallery -->
       <div id="modal-view-gallery" class="uk-modal-full" uk-modal>
         <div class="uk-modal-dialog uk-modal-body uk-height-viewport">
@@ -80,6 +81,27 @@
                     <span uk-icon="icon: check; ratio: 0.6"></span> {{ fac }}
                   </div>
                 </div>
+                <hr>
+                <h3 class="uk-h3">Biaya Angsuran</h3>
+                <table class="uk-table uk-table-hover uk-table-striped uk-table-divider uk-table-small uk-table-middle">
+                  <thead>
+                    <tr>
+                      <th>DP</th>
+                      <th>Angsuran</th>
+                      <th>Tenor</th>
+                      <th>Total Angsuran</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="installment in getinstallment.results">
+                      <td>Rp. {{ installment.dp_price | currency }}</td>
+                      <td>Rp. {{ installment.installment_price | currency }}</td>
+                      <td>{{ installment.installment_tenor }} bulan (<span v-if="installment.installment_tenor >= 12">{{ roundFixedYear( installment.installment_tenor ) }} tahun</span>)</td>
+                      <td>Rp. {{ installment.installment_tenor * installment.installment_price | currency }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -131,6 +153,75 @@
         </div>
       </div>
       <!-- gallery unit -->
+
+      <!-- cicilan -->
+      <div id="modal-cicilan" class="uk-modal-container" uk-modal>
+        <div class="uk-modal-dialog uk-modal-body">
+          <a class="uk-modal-close-default" uk-close></a>
+          <h3 class="uk-h3">Cicilan {{ unit_tipe.detail.unit_name }}</h3>
+          <div class="uk-panel uk-margin">
+            <form class="uk-form-stacked uk-grid uk-grid-small" @submit.prevent="forms.installment.isedit === false ? addCicilan() : saveCicilan()">
+              <div class="uk-width-1-3">
+                <label class="uk-form-label">DP</label>
+                <div class="uk-form-controls">
+                  <input type="number" :class="{'uk-form-danger': errors.name.dp}" class="uk-input" v-model="forms.installment.dp" placeholder="Masukkan nominal DP" />
+                  <span class="uk-text-muted uk-text-meta" v-show="forms.installment.dp > 0">Rp. {{ forms.installment.dp | currency }}</span>
+                </div>
+                <div v-show="errors.name.dp" class="uk-text-danger">{{ errors.name.dp }}</div>
+              </div>
+              <div class="uk-width-1-3">
+                <label class="uk-form-label">Angsuran</label>
+                <div class="uk-form-controls">
+                  <input type="number" :class="{'uk-form-danger': errors.name.cicilan}" class="uk-input" v-model="forms.installment.cicilan" placeholder="Masukkan nominal angsuran" />
+                  <span class="uk-text-muted uk-text-meta" v-show="forms.installment.cicilan > 0">Rp. {{ forms.installment.cicilan | currency }}</span>
+                </div>
+                <div v-show="errors.name.cicilan" class="uk-text-danger">{{ errors.name.cicilan }}</div>
+              </div>
+              <div class="uk-width-1-3">
+                <label class="uk-form-label">Tenor (bulan)</label>
+                <div class="uk-form-controls">
+                  <div class="uk-inline">
+                    <span class="uk-form-icon-flip"></span>
+                    <input type="number" :class="{'uk-form-danger': errors.name.tenor}" class="uk-input uk-width-medium" v-model="forms.installment.tenor" />
+                  </div>
+                </div>
+                <div v-show="errors.name.tenor" class="uk-text-danger">{{ errors.name.tenor }}</div>
+              </div>
+              <div class="uk-margin">
+                <button class="uk-button uk-button-primary uk-button-small" v-html="forms.installment.submit"></button>
+                <a class="uk-button uk-button-primary uk-button-small" @click="onClearCicilanForm()">Reset</a>
+              </div>
+            </form>
+          </div>
+          <div class="uk-margin">
+            <table class="uk-table uk-table-hover uk-table-striped uk-table-divider uk-table-small uk-table-middle">
+              <thead>
+                <tr>
+                  <th>Aksi</th>
+                  <th>DP</th>
+                  <th>Angsuran</th>
+                  <th>Tenor</th>
+                  <th>Total Angsuran</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="installment in getinstallment.results">
+                  <td>
+                    <a @click="onToggleEditCicilan( installment )" uk-tooltip="Edit" class="uk-icon-link" uk-icon="pencil"></a>
+                    <a @click="onDeleteCicilan( installment.id )" uk-tooltip="Hapus" class="uk-icon-link" uk-icon="trash"></a>
+                  </td>
+                  <td>Rp. {{ installment.dp_price | currency }}</td>
+                  <td>Rp. {{ installment.installment_price | currency }}</td>
+                  <td>{{ installment.installment_tenor }} bulan (<span v-if="installment.installment_tenor >= 12">{{ roundFixedYear( installment.installment_tenor ) }} tahun</span>)</td>
+                  <td>Rp. {{ installment.installment_tenor * installment.installment_price | currency }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- cicilan -->
 
       <div class="uk-card-title uk-margin dashboard-content-heading">
         Deskripsi Proyek
@@ -218,6 +309,7 @@
                         <ul class="uk-nav uk-dropdown-nav">
                           <li><a @click="onDetailUnit( unit )"><span class="uk-margin-small-right" uk-icon="forward"></span> Lihat Detail</a></li>
                           <li><a @click="onViewGalleryUnit( unit )"><span class="uk-margin-small-right" uk-icon="image"></span> Galeri</a></li>
+                          <li><a @click="modalCicilan( unit )"><span class="uk-margin-small-right" uk-icon="tag"></span> Cicilan</a></li>
                         </ul>
                       </div>
                     </div>
@@ -288,10 +380,22 @@ export default {
           unit_name: null
         }
       },
+      getinstallment: {
+        total: 0,
+        results: []
+      },
       forms: {
         keywords: '',
         imageselected: [],
-        uploadProgress: 0
+        uploadProgress: 0,
+        installment: {
+          id: 0,
+          dp: 0,
+          cicilan: 0,
+          tenor: 0,
+          submit: 'Tambah',
+          isedit: false
+        }
       }
     }
   },
@@ -339,6 +443,7 @@ export default {
     onDetailUnit( data )
     {
       this.unit_tipe.detail = data;
+      this.getInstallmentList( data.unit_type_id );
       UIkit.modal('#modal-detail-unit').show();
     },
     onDeleteUnitType( id )
@@ -513,12 +618,187 @@ export default {
         }
       });
     },
+    modalCicilan( data )
+    {
+      this.errors.name = {};
+      this.errors.errorMessage = '';
+      this.forms.installment.id = 0;
+      this.forms.installment.dp = 0;
+      this.forms.installment.cicilan = 0;
+      this.forms.installment.tenor = 0;
+      this.forms.installment.submit = 'Tambah';
+      this.unit_tipe.detail = data;
+      this.getInstallmentList( data.unit_type_id );
+      UIkit.modal('#modal-cicilan').show();
+    },
+    onToggleEditCicilan( cicilan )
+    {
+      this.forms.installment.dp = parseInt( cicilan.dp_price );
+      this.forms.installment.cicilan = parseInt( cicilan.installment_price );
+      this.forms.installment.tenor = parseInt( cicilan.installment_tenor );
+      this.forms.installment.id = cicilan.id;
+      this.forms.installment.isedit = true;
+      this.forms.installment.submit = 'Edit';
+    },
+    onClearCicilanForm()
+    {
+      this.forms.installment.dp = 0;
+      this.forms.installment.cicilan = 0;
+      this.forms.installment.tenor = 0;
+      this.forms.installment.id = 0;
+      this.forms.installment.isedit = false;
+      this.forms.installment.submit = 'Tambah';
+    },
+    getInstallmentList( id )
+    {
+      axios({
+        method: 'get',
+        url: this.$root.url + '/developer/project/get_installment/' + id
+      }).then( res => {
+        let result = res.data;
+        this.getinstallment.total = result.results.total;
+        this.getinstallment.results = result.results.data;
+      }).catch( err => {
+        console.log( err.response.statusText );
+      });
+    },
+    addCicilan()
+    {
+      this.errors.name = {};
+      this.errors.errorMessage = '';
+      this.errors.iserror = false;
+
+      if( this.forms.installment.dp < 1 || this.forms.installment.dp === '' )
+      {
+        this.errors.name.dp = 'DP tidak boleh kosong';
+        this.errors.iserror = true;
+      }
+      if( this.forms.installment.cicilan < 1 || this.forms.installment.cicilan === '' )
+      {
+        this.errors.name.cicilan = 'Cicilan tidak boleh kosong';
+        this.errors.iserror = true;
+      }
+      if( this.forms.installment.tenor < 1 || this.forms.installment.tenor === '' )
+      {
+        this.errors.name.tenor = 'Tenor tidak boleh kosong';
+        this.errors.iserror = true;
+      }
+      if( this.errors.iserror === true ) return false;
+
+      axios({
+        method: 'post',
+        url: this.$root.url + '/developer/project/add_installment',
+        params: {
+          dp: this.forms.installment.dp,
+          cicilan: this.forms.installment.cicilan,
+          tenor: this.forms.installment.tenor,
+          unit_id: this.unit_tipe.detail.unit_type_id
+        }
+      }).then( res => {
+        swal({
+          title: 'Berhasil',
+          text: 'Cicilan berhasil ditambah',
+          icon: 'success'
+        });
+        this.forms.installment.dp = 0;
+        this.forms.installment.cicilan = 0;
+        this.forms.installment.tenor = 0;
+        this.forms.installment.id = 0;
+        this.forms.installment.isedit = false;
+        this.forms.installment.submit = 'Tambah';
+        this.getInstallmentList( this.unit_tipe.detail.unit_type_id );
+      }).catch( err => {
+        this.errors.errorMessage = err.response.statusText;
+      });
+    },
+    saveCicilan()
+    {
+      this.errors.name = {};
+      this.errors.errorMessage = '';
+      if( this.forms.installment.dp < 1 || this.forms.installment.dp === '' )
+      {
+        this.errors.name.dp = 'DP tidak boleh kosong';
+        this.errors.iserror = true;
+      }
+      if( this.forms.installment.cicilan < 1 || this.forms.installment.cicilan === '' )
+      {
+        this.errors.name.cicilan = 'Cicilan tidak boleh kosong';
+        this.errors.iserror = true;
+      }
+      if( this.forms.installment.tenor < 1 || this.forms.installment.tenor === '' )
+      {
+        this.errors.name.tenor = 'Tenor tidak boleh kosong';
+        this.errors.iserror = true;
+      }
+      if( this.errors.iserror === true ) return false;
+
+      axios({
+        method: 'put',
+        url: this.$root.url + '/developer/project/save_installment/' + this.forms.installment.id,
+        params: {
+          dp: this.forms.installment.dp,
+          cicilan: this.forms.installment.cicilan,
+          tenor: this.forms.installment.tenor,
+          unit_id: this.unit_tipe.detail.unit_type_id
+        }
+      }).then( res => {
+        swal({
+          title: 'Berhasil',
+          text: 'Cicilan berhasil diubah',
+          icon: 'success'
+        });
+        this.forms.installment.dp = 0;
+        this.forms.installment.cicilan = 0;
+        this.forms.installment.tenor = 0;
+        this.forms.installment.id = 0;
+        this.forms.installment.isedit = false;
+        this.forms.installment.submit = 'Tambah';
+        this.getInstallmentList( this.unit_tipe.detail.unit_type_id );
+      }).catch( err => {
+        this.errors.errorMessage = err.response.statusText;
+      });
+    },
+    onDeleteCicilan( id )
+    {
+      swal({
+        title: 'Konfirmasi',
+        text: 'Apakah anda ingin menghapus cicilan ini?',
+        icon: 'warning',
+        buttons: {
+          confirm: { value: true, text: 'Hapus' },
+          cancel: 'Tidak'
+        }
+      }).then( val => {
+        if( val )
+        {
+          axios({
+            method: 'delete',
+            url: this.$root.url + '/developer/project/delete_installment/' + id
+          }).then( res => {
+            swal({
+              title: 'Berhasil',
+              text: 'Cicilan berhasil dihapus',
+              icon: 'success'
+            });
+            this.getInstallmentList( this.unit_tipe.detail.unit_type_id );
+          }).catch( err => {
+            console.log( err.response.statusText );
+          });
+        }
+      });
+    },
     getFacility( facility )
     {
       if( facility !== undefined )
       {
         return facility.split(',');
       }
+    },
+    roundFixedYear( val )
+    {
+      var year = parseInt( val ) / 12;
+      if( Number.isInteger(year) ) return year;
+      else return year.toFixed(1);
     }
   },
   mounted() {

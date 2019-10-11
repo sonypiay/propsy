@@ -65,6 +65,48 @@
         </div>
       </div>
     </div>
+    <div id="ajukan" class="uk-modal-container" uk-modal>
+      <div class="uk-modal-dialog uk-modal-body">
+        <h3 class="uk-h3">Ajukan Pesanan</h3>
+        <div class="uk-margin">
+          <div v-show="forms.booking.errorMessage" class="uk-alert-danger" uk-alert>{{ forms.booking.errorMessage }}</div>
+          <div class="uk-margin">
+            <input type="text" class="uk-width-1-1 uk-input form-booking-unit" :value="getunit.unit_name" readonly />
+          </div>
+          <div class="uk-margin">
+            <table class="uk-table uk-table-hover uk-table-striped uk-table-divider uk-table-small uk-table-middle">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>DP</th>
+                  <th>Angsuran</th>
+                  <th>Tenor</th>
+                  <th>Total Angsuran</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="installment in getinstallment.results">
+                  <td>
+                    <input type="radio" class="uk-radio" v-model="forms.booking.selectinstallment" :value="installment.id">
+                  </td>
+                  <td>Rp. {{ installment.dp_price | currency }}</td>
+                  <td>Rp. {{ installment.installment_price | currency }}</td>
+                  <td>{{ installment.installment_tenor }} bulan (<span v-if="installment.installment_tenor >= 12">{{ roundFixedYear( installment.installment_tenor ) }} tahun</span>)</td>
+                  <td>Rp. {{ installment.installment_tenor * installment.installment_price | currency }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="uk-margin">
+            <textarea v-model="forms.booking.message" placeholder="Ketik pesan..." class="uk-textarea form-booking-unit uk-height-small"></textarea>
+          </div>
+          <div class="uk-margin">
+            <button @click="requestUnit()" class="uk-width-1-1 uk-button uk-button-primary btn-booking-unit">Ajukan Pemesanan</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="uk-padding container-projectinfo">
       <div class="container-projectheading">
         {{ getunit.unit_name }}
@@ -236,6 +278,35 @@
             <div class="uk-card-body uk-card-small container-projectbody">
               <div class="uk-margin content-projectdetail">
                 <div class="uk-margin-small uk-text-uppercase content-projectheading">
+                  Rincian Angsuran
+                </div>
+                <div class="uk-margin-small content-projectlead">
+                  <table class="uk-table uk-table-hover uk-table-striped uk-table-divider uk-table-small uk-table-middle">
+                    <thead>
+                      <tr>
+                        <th>DP</th>
+                        <th>Angsuran</th>
+                        <th>Tenor</th>
+                        <th>Total Angsuran</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="installment in getinstallment.results">
+                        <td>Rp. {{ installment.dp_price | currency }}</td>
+                        <td>Rp. {{ installment.installment_price | currency }}</td>
+                        <td>{{ installment.installment_tenor }} bulan (<span v-if="installment.installment_tenor >= 12">{{ roundFixedYear( installment.installment_tenor ) }} tahun</span>)</td>
+                        <td>Rp. {{ installment.installment_tenor * installment.installment_price | currency }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <hr class="uk-divider-icon">
+            <div class="uk-card-body uk-card-small container-projectbody">
+              <div class="uk-margin content-projectdetail">
+                <div class="uk-margin-small uk-text-uppercase content-projectheading">
                   Listing ini adalah Proyek {{ getunit.project_name }}
                 </div>
                 <div class="uk-margin-small content-projectlead">
@@ -277,19 +348,10 @@
             </div>
           </div>
 
-          <div v-show="session_active !== 'developer'" class="uk-card uk-card-body uk-card-default uk-margin sidebar-dev-info">
+          <div v-show="session_active === 'customer' || session_active === ''" class="uk-card uk-card-body uk-card-default uk-margin sidebar-dev-info">
             <div class="uk-margin sidebar-dev-heading">Apakah anda tertarik?</div>
-            <div v-show="forms.booking.errorMessage" class="uk-alert-danger" uk-alert>{{ forms.booking.errorMessage }}</div>
             <div v-if="session_active === 'customer'" class="uk-margin uk-grid-small" uk-grid>
-              <div class="uk-width-1-1">
-                <input type="text" class="uk-width-1-1 uk-input form-booking-unit" :value="getunit.unit_name" readonly />
-              </div>
-              <div class="uk-width-1-1">
-                <textarea v-model="forms.booking.message" placeholder="Ketik pesan..." class="uk-textarea form-booking-unit uk-height-small"></textarea>
-              </div>
-              <div class="uk-width-1-1">
-                <button @click="requestUnit()" class="uk-width-1-1 uk-button uk-button-primary btn-booking-unit">Ajukan Pemesanan</button>
-              </div>
+              <button uk-toggle="target: #ajukan" class="uk-width-1-1 uk-button uk-button-primary btn-booking-unit">Ajukan Pemesanan</button>
             </div>
             <a v-else :href="$root.url + '/customer/masuk'" class="uk-width-1-1 uk-button uk-button-primary btn-login">Masuk / Daftar</a>
           </div>
@@ -313,11 +375,16 @@ export default {
       forms: {
         booking: {
           selectunit: this.getunit.unit_type_id,
+          selectinstallment: 0,
           message: 'Halo ' + this.getunit.dev_name + ', saya ingin mengajukan pemesenan unit ' + this.getunit.unit_name + '.',
           errorMessage: ''
         }
       },
       marketinglist: {
+        total: 0,
+        results: []
+      },
+      getinstallment: {
         total: 0,
         results: []
       }
@@ -341,10 +408,12 @@ export default {
     {
       this.forms.booking.errorMessage = '';
       if( this.forms.booking.selectunit === '' || this.forms.booking.message === '' ) return false;
+      if( this.forms.booking.selectinstallment === '' || this.forms.booking.selectinstallment === 0 ) return false;
 
       var param = {
         message: this.forms.booking.message,
-        dev_user: this.getunit.dev_user_id
+        dev_user: this.getunit.dev_user_id,
+        selectinstallment: this.forms.booking.selectinstallment
       };
 
       axios({
@@ -370,6 +439,26 @@ export default {
           this.forms.booking.errorMessage = err.response.data.statusText;
         }
       });
+    },
+    getInstallmentList()
+    {
+      let id = this.getunit.unit_type_id;
+      axios({
+        method: 'get',
+        url: this.$root.url + '/project/get_installment/' + id
+      }).then( res => {
+        let result = res.data;
+        this.getinstallment.total = result.results.total;
+        this.getinstallment.results = result.results.data;
+      }).catch( err => {
+        console.log( err.response.statusText );
+      });
+    },
+    roundFixedYear( val )
+    {
+      var year = parseInt( val ) / 12;
+      if( Number.isInteger(year) ) return year;
+      else return year.toFixed(1);
     }
   },
   computed: {
@@ -381,6 +470,7 @@ export default {
   },
   mounted() {
     this.getMarketingList();
+    this.getInstallmentList();
   }
 }
 </script>

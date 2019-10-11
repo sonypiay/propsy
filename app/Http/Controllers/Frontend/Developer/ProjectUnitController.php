@@ -10,6 +10,7 @@ use App\Database\ProjectList;
 use App\Database\ProjectUnitType;
 use App\Database\ProjectUnitGallery;
 use App\Database\UnitFacility;
+use App\Database\PriceInstallment;
 
 use App\Http\Controllers\Controller;
 
@@ -277,6 +278,65 @@ class ProjectUnitController extends Controller
 
       $gallery->delete();
     }
+    $res = [ 'status' => 200, 'statusText' => 'success' ];
+    return response()->json( $res, $res['status'] );
+  }
+
+  public function get_installment( PriceInstallment $installment, $unit_id )
+  {
+    $getinstallment = $installment->where('unit_type_id', $unit_id)->get();
+
+    $res = [
+      'results' => [
+        'data' => $getinstallment,
+        'total' => $getinstallment->count()
+      ]
+    ];
+
+    return response( $res );
+  }
+
+  public function add_installment( Request $request, PriceInstallment $installment )
+  {
+    $dp = $request->dp;
+    $cicilan = $request->cicilan;
+    $tenor = $request->tenor;
+    $unit_id = $request->unit_id;
+
+    $data = [
+      'unit_id' => $unit_id,
+      'dp' => $dp,
+      'cicilan' => $cicilan,
+      'tenor' => $tenor
+    ];
+
+    $installment->store_cicilan( $data );
+    $res = [ 'status' => 200, 'statusText' => 'success' ];
+    return response()->json( $res, $res['status'] );
+  }
+
+  public function save_installment( Request $request, PriceInstallment $installment, $id )
+  {
+    $dp = $request->dp;
+    $cicilan = $request->cicilan;
+    $tenor = $request->tenor;
+    $unit_id = $request->unit_id;
+
+    $data = [
+      'unit_id' => $unit_id,
+      'dp' => $dp,
+      'cicilan' => $cicilan,
+      'tenor' => $tenor
+    ];
+
+    $installment->save_cicilan( $data, $id );
+    $res = [ 'status' => 200, 'statusText' => 'success' ];
+    return response()->json( $res, $res['status'] );
+  }
+
+  public function delete_installment( PriceInstallment $installment, $id )
+  {
+    $installment->delete_cicilan( $id );
     $res = [ 'status' => 200, 'statusText' => 'success' ];
     return response()->json( $res, $res['status'] );
   }

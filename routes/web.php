@@ -121,6 +121,11 @@ Route::group(['prefix' => 'developer'], function() {
     Route::get('/gallery_unit/{id}', 'Frontend\Developer\ProjectUnitController@get_gallery_unit');
     Route::put('/gallery_set_thumbnail/{id}', 'Frontend\Developer\ProjectUnitController@gallery_set_thumbnail');
     Route::delete('/delete_gallery_unit/{id}', 'Frontend\Developer\ProjectUnitController@delete_gallery_unit');
+
+    Route::get('/get_installment/{unit_id}', 'Frontend\Developer\ProjectUnitController@get_installment');
+    Route::post('/add_installment', 'Frontend\Developer\ProjectUnitController@add_installment');
+    Route::put('/save_installment/{id}', 'Frontend\Developer\ProjectUnitController@save_installment');
+    Route::delete('/delete_installment/{id}', 'Frontend\Developer\ProjectUnitController@delete_installment');
   });
 
   Route::group(['prefix' => 'profile'], function() {
@@ -165,12 +170,11 @@ Route::group(['prefix' => 'project'], function() {
   Route::get('/detail_unit/{unit_id}', 'Frontend\Projects\ProjectListController@detail_unit')->name('project_detail_unit');
   Route::get('/browse_project', 'Frontend\Projects\ProjectListController@browse_project_page')->name('browse_project_page');
   Route::get('/project_list', 'Frontend\Projects\ProjectListController@browse_project');
-
   Route::get('/search', 'Frontend\Projects\ProjectListController@search_project')->name('page_search_project');
   Route::get('/search_list', 'Frontend\Projects\ProjectListController@get_search_list');
-
   Route::get('/project_developer/{slug}', 'Frontend\Projects\ProjectListController@project_developer');
   Route::get('/marketing_developer/{id}', 'Frontend\Projects\ProjectListController@marketing_developer');
+  Route::get('/get_installment/{unit_id}', 'Frontend\Projects\ProjectListController@get_installment');
 });
 
 

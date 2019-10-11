@@ -107,6 +107,31 @@
                   <div class="uk-card-footer card-unit-footer uk-padding-small">
                     <div class="uk-grid-small uk-child-width-auto" uk-grid>
                       <div>
+                        <a class="uk-button uk-button-small uk-button-primary unit-readmore">Cicilan dipilih</a>
+                        <div class="uk-width-2-3" uk-dropdown="mode: click;">
+                          <h3 class="uk-h3">Info Cicilan</h3>
+                          <table class="uk-table uk-table-hover uk-table-striped uk-table-divider uk-table-small uk-table-middle">
+                            <thead>
+                              <tr>
+                                <th>DP</th>
+                                <th>Angsuran</th>
+                                <th>Tenor</th>
+                                <th>Total Angsuran</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>Rp. {{ unit.dp_price | currency }}</td>
+                                <td>Rp. {{ unit.installment_price | currency }}</td>
+                                <td>{{ unit.installment_tenor }} bulan (<span v-if="unit.installment_tenor >= 12">{{ roundFixedYear( unit.installment_tenor ) }} tahun</span>)</td>
+                                <td>Rp. {{ unit.installment_tenor * unit.installment_price | currency }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <div>
                         <div class="unit-specification">
                           {{ unit.request_id }}
                           <span>Request ID</span>
@@ -305,6 +330,12 @@ export default {
           });
         }
       });
+    },
+    roundFixedYear( val )
+    {
+      var year = parseInt( val ) / 12;
+      if( Number.isInteger(year) ) return year;
+      else return year.toFixed(1);
     }
   },
   mounted() {

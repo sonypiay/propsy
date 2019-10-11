@@ -54,12 +54,6 @@
         </div>
       </div>
       <div class="uk-width-1-1">
-        <label class="uk-form-label content-form-label">Deskripsikan Anda</label>
-        <div class="uk-form-controls">
-          <textarea class="uk-textarea uk-height-small content-form-input" v-model="forms.biography"></textarea>
-        </div>
-      </div>
-      <div class="uk-width-1-1">
         <button class="uk-button uk-button-primary content-form-btn" v-html="forms.submit"></button>
       </div>
     </form>
@@ -75,9 +69,8 @@ export default {
         fullname: this.session_user.mkt_fullname,
         phone_number: this.session_user.mkt_phone_number,
         mobile_phone: this.session_user.mkt_mobile_phone,
-        city: this.session_user.mkt_city === null ? '' : this.session_user.mkt_city,
+        city: this.session_user.city_id === null ? '' : this.session_user.city_id,
         region: this.session_user.province_id === null ? '' : this.session_user.province_id,
-        biography: this.session_user.mkt_biography,
         address: this.session_user.mkt_address,
         username: this.session_user.mkt_username,
         submit: 'Simpan'

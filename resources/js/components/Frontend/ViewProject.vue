@@ -42,7 +42,7 @@
             </div>
             <div v-if="getunit_price !== null" class="card-projectinfo-price">
               Mulai dari
-              <span>Rp. {{ $root.formatNumeral( getunit_price.unit_price ) }}</span>
+              <span>Rp. {{ getunit_price.unit_price | currency }}</span>
             </div>
             <div v-show="getproject.project_estimate_launch !== null" class="card-projectinfo-launch">
               Segera Hadir
@@ -189,26 +189,6 @@
                 <a class="uk-width-1-1 uk-button uk-button-primary sidebar-viewproject" :href="$root.url + '/profile/developer/' + getproject.dev_slug">Lihat Pengembang</a>
               </div>
             </div>
-
-            <div v-show="session_active === 'customer'" class="uk-card uk-card-body uk-card-default uk-margin sidebar-dev-info">
-              <div class="uk-margin sidebar-dev-heading">Apakah anda tertarik?</div>
-              <div v-show="forms.booking.errorMessage" class="uk-alert-danger" uk-alert>{{ forms.booking.errorMessage }}</div>
-              <div v-if="session_active === 'customer'" class="uk-margin uk-grid-small" uk-grid>
-                <div class="uk-width-1-1">
-                  <select class="uk-select form-booking-unit" v-model="forms.booking.selectunit">
-                    <option value="">-- Pilih Unit --</option>
-                    <option v-for="unit in projectunit.results" :value="unit.unit_type_id">{{ unit.unit_name }}</option>
-                  </select>
-                </div>
-                <div class="uk-width-1-1">
-                  <textarea v-model="forms.booking.message" placeholder="Ketik pesan..." class="uk-textarea form-booking-unit uk-height-small"></textarea>
-                </div>
-                <div class="uk-width-1-1">
-                  <button @click="requestUnit()" class="uk-width-1-1 uk-button uk-button-primary btn-booking-unit">Ajukan Pemesanan</button>
-                </div>
-              </div>
-              <a v-else :href="$root.url + '/customer/masuk'" class="uk-width-1-1 uk-button uk-button-primary btn-login">Masuk / Daftar</a>
-            </div>
           </div>
         </div>
       </div>
@@ -227,13 +207,7 @@ export default {
   ],
   data() {
     return {
-      forms: {
-        booking: {
-          selectunit: '',
-          message: 'Halo ' + this.getproject.dev_name + ', saya ingin mengajukan pemesenan unit.',
-          errorMessage: ''
-        }
-      },
+      forms: {},
       projectunit: {
         total: 0,
         results: [],
@@ -268,40 +242,6 @@ export default {
         };
       }).catch( err => {
         console.log( err.response.statusText );
-      });
-    },
-    requestUnit()
-    {
-      this.forms.booking.errorMessage = '';
-      if( this.forms.booking.selectunit === '' || this.forms.booking.message === '' ) return false;
-
-      var param = {
-        message: this.forms.booking.message,
-        dev_user: this.getproject.dev_user_id
-      };
-
-      axios({
-        method: 'post',
-        url: this.$root.url + '/project/request_unit/' + this.forms.booking.selectunit,
-        params: param
-      }).then( res => {
-        let result = res.data;
-        swal({
-          title: 'Sukses',
-          text: 'Berhasil mengajukan pemesanan',
-          icon: 'success',
-          timer: 3000
-        });
-        setTimeout(() => { document.location = this.$root.url + '/customer/request_unit' }, 2000);
-      }).catch( err => {
-        if( err.response.status === 500 )
-        {
-          this.forms.booking.errorMessage = 'Whoops, ' + err.response.statusText;
-        }
-        else
-        {
-          this.forms.booking.errorMessage = err.response.data.statusText;
-        }
       });
     }
   },

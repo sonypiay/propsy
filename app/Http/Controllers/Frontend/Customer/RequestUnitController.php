@@ -33,14 +33,19 @@ class RequestUnitController extends Controller
       'city.city_name',
       'province.province_name',
       'meeting_appointment.meeting_status',
-      'meeting_appointment.meeting_time'
+      'meeting_appointment.meeting_time',
+      'price_installment.dp_price',
+      'price_installment.installment_price',
+      'price_installment.installment_tenor'
     )
     ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
+    ->join('price_installment', 'project_request.installment', '=', 'price_installment.id')
     ->join('project_list', 'project_unit_type.project_id', '=', 'project_unit_type.project_id')
     ->join('city', 'project_list.city_id', '=', 'city.city_id')
     ->join('province', 'city.province_id', '=', 'province.province_id')
     ->leftJoin('meeting_appointment', 'project_request.request_id', '=', 'meeting_appointment.request_id')
     ->where('project_request.customer_id', '=', $session_user);
+    
     if( $status_request !== 'all' )
     {
       $getrequest = $getrequest->where('project_request.status_request', '=', $status_request);

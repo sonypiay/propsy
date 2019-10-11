@@ -14,6 +14,7 @@ use App\Database\MarketingUser;
 use App\Database\DeveloperUser;
 use App\Database\CityDB;
 use App\Database\UnitFacility;
+use App\Database\PriceInstallment;
 use App\Http\Controllers\Controller;
 
 class ProjectListController extends Controller
@@ -200,6 +201,7 @@ class ProjectListController extends Controller
   {
     $message = $request->message;
     $dev_user = $request->dev_user;
+    $selectinstallment = $request->selectinstallment;
     $getcustomer = $customer->getinfo();
     $getunit = $unit_type->where('unit_type_id', $unit_id)->first();
 
@@ -226,16 +228,18 @@ class ProjectListController extends Controller
         'request_id' => $generate_request_id
       ];
 
-      $getunit->unit_status = 'booked';
-      $getunit->save();
-
       $insert_request = new $project_request;
       $insert_request->request_id = $generate_request_id;
       $insert_request->dev_user_id = $dev_user;
       $insert_request->customer_id = $getcustomer->customer_id;
       $insert_request->unit_type_id = $unit_id;
+      $insert_request->installment = $selectinstallment;
       $insert_request->request_message = $message;
       $insert_request->save();
+
+      $getunit->unit_status = 'booked';
+      $getunit->save();
+      
       $log_request->insert_log($data_log);
 
       $res = [
@@ -583,5 +587,17 @@ class ProjectListController extends Controller
       ]
     ];
     return response()->json( $result );
+  }
+
+  public function get_installment( PriceInstallment $installment, $unit_id )
+  {
+    $getinstallment = $installment->where('unit_type_id', $unit_id)->get();
+    $res = [
+      'results' => [
+        'data' => $getinstallment,
+        'total' => $getinstallment->count()
+      ]
+    ];
+    return response( $res, 200 );
   }
 }

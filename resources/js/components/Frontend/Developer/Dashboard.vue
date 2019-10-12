@@ -251,9 +251,7 @@
                 <div class="uk-article-meta grid-latest-date">
                   {{ $root.formatDate( log.log_date, 'dddd, DD MMMM YYYY HH:mm' ) }}
                 </div>
-                <div>
-                  {{ log.log_message }}
-                </div>
+                <p v-html="log.log_message" class="uk-margin-remove-top"></p>
               </article>
             </div>
           </div>

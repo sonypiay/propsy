@@ -53,12 +53,9 @@ class ReportController extends Controller
     ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
     ->where($whereClauses);
 
-    if( ! empty( $start_date ) && empty( $end_date ) )
+    if( ! empty( $start_date ) && ! empty( $end_date ) )
     {
-      $getrequest = $getrequest->where(DB::raw('date_format(project_request.created_at, "%Y-%m-%d")'), '=', $start_date);
-    }
-    else
-    {
+      //$getrequest = $getrequest->where(DB::raw('date_format(project_request.created_at, "%Y-%m-%d")'), '=', $start_date);
       $getrequest = $getrequest->whereBetween(DB::raw('date_format(project_request.created_at, "%Y-%m-%d")'), [$start_date, $end_date]);
     }
 

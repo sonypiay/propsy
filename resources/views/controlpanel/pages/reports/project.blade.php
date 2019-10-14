@@ -22,7 +22,7 @@
           <th>Kota</th>
           <th>Jumlah Unit</th>
           <th>Tanggal Posting</th>
-          <th>Status Verifikasi</th>
+          <th>Status</th>
         </tr>
       </thead>
       <tbody>

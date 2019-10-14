@@ -3809,6 +3809,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['getcity'],
   data: function data() {
@@ -3816,7 +3830,8 @@ __webpack_require__.r(__webpack_exports__);
       forms: {
         keywords: '',
         limit: 10,
-        city: 'all'
+        city: 'all',
+        status: 'all'
       },
       message: {
         errors: {},
@@ -3840,7 +3855,7 @@ __webpack_require__.r(__webpack_exports__);
     getProjectList: function getProjectList(p) {
       var _this = this;
 
-      var param = 'keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&city=' + this.forms.city;
+      var param = 'keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&city=' + this.forms.city + '&status=' + this.forms.status;
       var url = this.$root.url + '/cp/property/project/get_project?page=' + this.getproject.paginate.current_page + '&' + param;
       if (p !== undefined) url = p + '&' + param;
       axios({
@@ -3865,7 +3880,7 @@ __webpack_require__.r(__webpack_exports__);
       UIkit.modal('#modal-customer').show();
     },
     saveReport: function saveReport() {
-      var param = 'city=' + this.forms.city + '&keywords=' + this.forms.keywords;
+      var param = 'city=' + this.forms.city + '&keywords=' + this.forms.keywords + '&status=' + this.forms.status;
       var url = this.$root.url + '/cp/property/project/save_report?' + param;
       window.open(url, '_blank');
     }
@@ -62262,6 +62277,64 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
+                      value: _vm.forms.status,
+                      expression: "forms.status"
+                    }
+                  ],
+                  staticClass: "uk-select",
+                  on: {
+                    change: [
+                      function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.forms,
+                          "status",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      },
+                      function($event) {
+                        return _vm.getProjectList()
+                      }
+                    ]
+                  }
+                },
+                [
+                  _c("option", { attrs: { value: "all" } }, [
+                    _vm._v("Semua status")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "available" } }, [
+                    _vm._v("Tersedia")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "soon" } }, [
+                    _vm._v("Segera Hadir")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "sold" } }, [
+                    _vm._v("Terjual")
+                  ])
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
                       value: _vm.forms.city,
                       expression: "forms.city"
                     }
@@ -62414,6 +62487,24 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _c("td", [
+                            project.project_status === "sold"
+                              ? _c(
+                                  "label",
+                                  { staticClass: "uk-label uk-label-danger" },
+                                  [_vm._v("Terjual")]
+                                )
+                              : project.project_status === "soon"
+                              ? _c("label", { staticClass: "uk-label" }, [
+                                  _vm._v("Segera Hadir")
+                                ])
+                              : _c(
+                                  "label",
+                                  { staticClass: "uk-label uk-label-success" },
+                                  [_vm._v("Tersedia")]
+                                )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
                             _vm._v(
                               _vm._s(
                                 _vm.$root.formatDate(
@@ -62513,6 +62604,8 @@ var staticRenderFns = [
         _c("th", [_vm._v("Kota")]),
         _vm._v(" "),
         _c("th", [_vm._v("Jumlah Unit")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Status")]),
         _vm._v(" "),
         _c("th", [_vm._v("Tanggal Posting")])
       ])

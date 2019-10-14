@@ -38,6 +38,7 @@ class ProjectController extends Controller
     $keywords = $request->keywords;
     $limit = isset( $request->limit ) ? $request->limit : 10;
     $city = $request->city;
+    $status = $request->status;
 
     $getproject = $project_list->select(
       'project_list.project_id',
@@ -67,10 +68,16 @@ class ProjectController extends Controller
     {
       $getproject = $getproject->where('project_list.city_id', '=', $city);
     }
+    if( $status !== 'all' )
+    {
+      $getproject = $getproject->where('project_list.project_status', $status);
+    }
     if( ! empty( $keywords ) )
     {
-      $getproject = $getproject->where('project_list.project_name', 'like', '%' . $keywords . '%')
-      ->orWhere('project_list.project_id', 'like', '%' . $keywords . '%');
+      $getproject = $getproject->where(function($query) use ($keywords){
+        $query->where('project_list.project_name', 'like', '%' . $keywords . '%')
+        ->orWhere('project_list.project_id', 'like', '%' . $keywords . '%');
+      });
     }
 
     $result = $getproject->paginate( $limit );
@@ -80,7 +87,7 @@ class ProjectController extends Controller
   public function save_report_project( Request $request, ProjectList $project_list )
   {
     $keywords = $request->keywords;
-    $limit = isset( $request->limit ) ? $request->limit : 10;
+    $status = $request->status;
     $city = $request->city;
 
     $getproject = $project_list->select(
@@ -113,10 +120,16 @@ class ProjectController extends Controller
       $getproject = $getproject->where('project_list.city_id', '=', $city);
       $getcity = CityDB::where('city_id', $city)->first();
     }
+    if( $status !== 'all' )
+    {
+      $getproject = $getproject->where('project_list.project_status', $status);
+    }
     if( ! empty( $keywords ) )
     {
-      $getproject = $getproject->where('project_list.project_name', 'like', '%' . $keywords . '%')
-      ->orWhere('project_list.project_id', 'like', '%' . $keywords . '%');
+      $getproject = $getproject->where(function($query) use ($keywords){
+        $query->where('project_list.project_name', 'like', '%' . $keywords . '%')
+        ->orWhere('project_list.project_id', 'like', '%' . $keywords . '%');
+      });
     }
 
     $filename = 'DataProyek-' . date('d/m/Y');
@@ -151,6 +164,7 @@ class ProjectController extends Controller
     $keywords = $request->keywords;
     $limit = isset( $request->limit ) ? $request->limit : 10;
     $city = $request->city;
+    $status = $request->status;
 
     $getunit  = $unit_type->select(
       'project_unit_type.unit_type_id',
@@ -181,11 +195,9 @@ class ProjectController extends Controller
     ->join('province', 'city.province_id', '=', 'province.province_id')
     ->orderBy('project_unit_type.created_at', 'desc');
 
-    $getcity = '';
     if( $city !== 'all' )
     {
       $getunit = $getunit->where('project_list.city_id', '=', $city);
-      $getcity = CityDB::where('city_id', $city)->first();
     }
     if( $status !== 'all' )
     {
@@ -196,7 +208,7 @@ class ProjectController extends Controller
       $getunit = $getunit->where(function($query) use ($keywords) {
         $query->where('project_list.unit_name', 'like', '%' . $keywords . '%')
         ->orWhere('project_list.unit_type_id', 'like', '%' . $keywords . '%')
-        ->orWhere('project_list.project_name', 'like', '%' . $keywords . '%')
+        ->orWhere('project_list.project_name', 'like', '%' . $keywords . '%');
       });
     }
 
@@ -239,7 +251,7 @@ class ProjectController extends Controller
       $getunit = $getunit->where(function($query) use ($keywords) {
         $query->where('project_list.unit_name', 'like', '%' . $keywords . '%')
         ->orWhere('project_list.unit_type_id', 'like', '%' . $keywords . '%')
-        ->orWhere('project_list.project_name', 'like', '%' . $keywords . '%')
+        ->orWhere('project_list.project_name', 'like', '%' . $keywords . '%');
       });
     }
 

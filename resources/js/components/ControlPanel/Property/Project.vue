@@ -75,6 +75,14 @@
             </select>
           </div>
           <div>
+            <select class="uk-select" v-model="forms.status" @change="getProjectList()">
+              <option value="all">Semua status</option>
+              <option value="available">Tersedia</option>
+              <option value="soon">Segera Hadir</option>
+              <option value="sold">Terjual</option>
+            </select>
+          </div>
+          <div>
             <select class="uk-select" v-model="forms.city" @change="getProjectList()">
               <option value="all">Semua kota</option>
               <option v-for="city in getcity" :value="city.city_id">{{ city.city_name }}</option>
@@ -105,6 +113,7 @@
                   <th>Pengembang</th>
                   <th>Kota</th>
                   <th>Jumlah Unit</th>
+                  <th>Status</th>
                   <th>Tanggal Posting</th>
                 </tr>
               </thead>
@@ -117,6 +126,11 @@
                   <td>{{ project.dev_name }}</td>
                   <td>{{ project.city_name }}</td>
                   <td>{{ project.total_unit }} unit</td>
+                  <td>
+                    <label v-if="project.project_status === 'sold'" class="uk-label uk-label-danger">Terjual</label>
+                    <label v-else-if="project.project_status === 'soon'" class="uk-label">Segera Hadir</label>
+                    <label v-else class="uk-label uk-label-success">Tersedia</label>
+                  </td>
                   <td>{{ $root.formatDate( project.created_at, 'DD/MM/YYYY' ) }}</td>
                 </tr>
               </tbody>
@@ -155,7 +169,8 @@ export default {
       forms: {
         keywords: '',
         limit: 10,
-        city: 'all'
+        city: 'all',
+        status: 'all'
       },
       message: {
         errors: {},
@@ -178,7 +193,7 @@ export default {
   methods: {
     getProjectList( p )
     {
-      var param = 'keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&city=' + this.forms.city;
+      var param = 'keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&city=' + this.forms.city + '&status=' + this.forms.status;
       var url = this.$root.url + '/cp/property/project/get_project?page=' + this.getproject.paginate.current_page + '&' + param;
       if( p !== undefined ) url = p + '&' + param;
 
@@ -206,7 +221,7 @@ export default {
     },
     saveReport()
     {
-      let param = 'city=' + this.forms.city + '&keywords=' + this.forms.keywords;
+      let param = 'city=' + this.forms.city + '&keywords=' + this.forms.keywords + '&status=' + this.forms.status;
       let url = this.$root.url + '/cp/property/project/save_report?' + param;
       window.open( url, '_blank' );
     }

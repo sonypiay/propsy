@@ -164,6 +164,7 @@ Route::group(['prefix' => 'developer'], function() {
 
 Route::group(['prefix' => 'project'], function() {
   Route::get('/available', 'Frontend\Projects\ProjectListController@homepage_available_project');
+  Route::get('/unit_available', 'Frontend\Projects\ProjectListController@homepage_available_unit');
   Route::get('/view/{slug}', 'Frontend\Projects\ProjectListController@view_project')->name('project_view_detail');
   Route::get('/unit/{project_id}', 'Frontend\Projects\ProjectListController@list_project_unit')->name('list_project_unit');
   Route::post('/request_unit/{unit_id}', 'Frontend\Projects\ProjectListController@request_unit');

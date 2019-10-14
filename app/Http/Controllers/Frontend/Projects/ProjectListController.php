@@ -16,6 +16,7 @@ use App\Database\CityDB;
 use App\Database\UnitFacility;
 use App\Database\PriceInstallment;
 use App\Http\Controllers\Controller;
+use DB;
 
 class ProjectListController extends Controller
 {
@@ -26,17 +27,72 @@ class ProjectListController extends Controller
       'project_list.project_name',
       'project_list.project_slug',
       'project_list.project_thumbnail',
-      'project_list.project_description',
       'project_list.project_status',
-      'project_list.created_at',
-      'project_list.updated_at',
+      'project_list.project_type',
+      'project_list.project_status',
+      'project_list.project_description',
+      'project_list.project_estimate_launch',
       'developer_user.dev_name',
-      'developer_user.dev_slug'
+      'developer_user.dev_slug',
+      'city.city_name',
+      'province.province_name',
+      DB::raw('min(project_unit_type.unit_price) as unit_price'),
+      DB::raw('min(project_unit_type.unit_lb) as unit_lb')
     )
     ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
+    ->join('city', 'project_list.city_id', '=', 'city.city_id')
+    ->join('province', 'city.province_id', '=', 'province.province_id')
+    ->leftJoin('project_unit_type', 'project_list.project_id', '=', 'project_unit_type.project_id')
     ->orderBy('project_list.created_at', 'desc')
+    ->groupBy('project_list.project_id')
+    ->take(9)
     ->get();
-    return response()->json([ 'results' => [ 'total' => $getproject->count(), 'data' => $getproject ] ], 200 );
+    $res = [
+      'results' => [
+        'total' => $getproject->count(),
+        'data' => $getproject
+      ]
+    ];
+    return response()->json($res, 200 );
+  }
+
+  public function homepage_available_unit( Request $request, ProjectUnitType $unit_type )
+  {
+    $getunit  = $unit_type->select(
+      'project_unit_type.unit_name',
+      'project_unit_type.unit_slug',
+      'project_unit_type.unit_price',
+      'project_unit_type.unit_floor',
+      'project_unit_type.unit_kt',
+      'project_unit_type.unit_km',
+      'project_unit_type.unit_lb',
+      'project_unit_type.unit_price',
+      'project_unit_type.unit_status',
+      'project_unit_type.unit_thumbnail',
+      'project_unit_type.unit_facility',
+      'project_list.project_name',
+      'project_list.project_slug',
+      'project_list.project_type',
+      'developer_user.dev_name',
+      'developer_user.dev_slug',
+      'city.city_name',
+      'province.province_name'
+    )
+    ->join('project_list', 'project_unit_type.project_id', '=', 'project_list.project_id')
+    ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
+    ->join('city', 'project_list.city_id', '=', 'city.city_id')
+    ->join('province', 'city.province_id', '=', 'province.province_id')
+    ->orderBy('project_unit_type.created_at', 'desc')
+    ->take(9)
+    ->get();
+
+    $res = [
+      'results' => [
+        'data' => $getunit,
+        'total' => $getunit->count()
+      ]
+    ];
+    return response()->json( $res, 200 );
   }
 
   public function view_project( Request $request, ProjectList $project_list, ProjectGallery $project_gallery, ProjectUnitType $unit_type, $slug )
@@ -239,7 +295,7 @@ class ProjectListController extends Controller
 
       $getunit->unit_status = 'booked';
       $getunit->save();
-      
+
       $log_request->insert_log($data_log);
 
       $res = [
@@ -305,8 +361,8 @@ class ProjectListController extends Controller
       'developer_user.dev_slug',
       'city.city_name',
       'province.province_name',
-      'project_unit_type.unit_price',
-      'project_unit_type.unit_lb'
+      DB::raw('min(project_unit_type.unit_price) as unit_price'),
+      DB::raw('min(project_unit_type.unit_lb) as unit_lb')
     )
     ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
     ->join('city', 'project_list.city_id', '=', 'city.city_id')
@@ -386,8 +442,7 @@ class ProjectListController extends Controller
       }
     }
 
-    $result = $query->orderBy('project_unit_type.unit_price', 'asc')
-    ->orderBy('project_unit_type.unit_lb', 'asc')
+    $result = $query->orderBy('project_list.created_at', 'desc')
     ->groupBy('project_list.project_id')
     ->paginate( 10 );
 

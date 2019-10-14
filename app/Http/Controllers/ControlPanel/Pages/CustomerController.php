@@ -33,6 +33,7 @@ class CustomerController extends Controller
   {
     $keywords = $request->keywords;
     $city = $request->city;
+    $status = $request->status;
     $limit = isset( $request->limit ) ? $request->limit : 10;
 
     $getcustomer = $customer->select(
@@ -60,11 +61,18 @@ class CustomerController extends Controller
       $getcustomer = $getcustomer->where('city.city_id', '=', $city);
     }
 
+    if( $status !== 'all' )
+    {
+      $getcustomer = $getcustomer->where('customer.status_verification', $status);
+    }
+
     if( ! empty( $keywords ) )
     {
-      $getcustomer = $getcustomer->where('customer.customer_name', 'like', '%' . $keywords . '%')
-      ->orWhere('customer.customer_email', 'like', '%' . $keywords . '%')
-      ->orWhere('customer.customer_phone_number', 'like', '%' . $keywords . '%');
+      $getcustomer = $getcustomer->where(function($query) use ($keywords){
+        $query->where('customer.customer_name', 'like', '%' . $keywords . '%')
+        ->orWhere('customer.customer_email', 'like', '%' . $keywords . '%')
+        ->orWhere('customer.customer_phone_number', 'like', '%' . $keywords . '%');
+      });
     }
     $result = $getcustomer->paginate( $limit );
 
@@ -75,7 +83,7 @@ class CustomerController extends Controller
   {
     $keywords = $request->keywords;
     $city = $request->city;
-    $limit = isset( $request->limit ) ? $request->limit : 10;
+    $status = $request->status;
 
     $getcustomer = $customer->select(
       'customer.customer_id',
@@ -96,21 +104,34 @@ class CustomerController extends Controller
     ->leftJoin('city', 'customer.city_id', '=', 'city.city_id')
     ->leftJoin('province', 'city.province_id', '=', 'province.province_id')
     ->orderBy('customer.created_at', 'desc');
+    $getcity = '';
 
     if( $city !== 'all' )
     {
       $getcustomer = $getcustomer->where('city.city_id', '=', $city);
+      $getcity = CityDB::where('city_id', $city)->first();
+    }
+
+    if( $status !== 'all' )
+    {
+      $getcustomer = $getcustomer->where('customer.status_verification', $status);
     }
 
     if( ! empty( $keywords ) )
     {
-      $getcustomer = $getcustomer->where('customer.customer_name', 'like', '%' . $keywords . '%')
-      ->orWhere('customer.customer_email', 'like', '%' . $keywords . '%')
-      ->orWhere('customer.customer_phone_number', 'like', '%' . $keywords . '%');
+      $getcustomer = $getcustomer->where(function($query) use ($keywords){
+        $query->where('customer.customer_name', 'like', '%' . $keywords . '%')
+        ->orWhere('customer.customer_email', 'like', '%' . $keywords . '%')
+        ->orWhere('customer.customer_phone_number', 'like', '%' . $keywords . '%');
+      });
     }
 
-    $result = $getcustomer->paginate( $limit );
-
-    return response()->json( $result, 200 );
+    $filename = 'CustomerUser-' . date('d/m/Y');
+    $res = [
+      'filename' => $filename,
+      'result' => $getcustomer->get(),
+      'getcity' => $getcity
+    ];
+    return PDF::loadView('controlpanel.pages.reports.customer', $res)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
   }
 }

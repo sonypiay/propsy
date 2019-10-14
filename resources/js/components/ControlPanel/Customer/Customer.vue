@@ -67,6 +67,13 @@
             </select>
           </div>
           <div>
+            <select class="uk-select" v-model="forms.status" @change="getCustomerList()">
+              <option value="all">Semua status</option>
+              <option value="Y">Terverifikasi</option>
+              <option value="N">Belum Verifikasi</option>
+            </select>
+          </div>
+          <div>
             <select class="uk-select" v-model="forms.city" @change="getCustomerList()">
               <option value="all">Semua kota</option>
               <option v-for="city in getcity" :value="city.city_id">{{ city.city_name }}</option>
@@ -86,6 +93,9 @@
           </div>
           <div v-else>
             <label class="uk-label">{{ getcustomer.total }} pelanggan</label>
+            <a uk-tooltip="Cetak" class="uk-link uk-link-text" @click="saveReport()">
+              <span uk-icon="print"></span>
+            </a>
             <table class="uk-table uk-table-middle uk-table-striped uk-table-divider uk-table-hover uk-table-small">
               <thead>
                 <tr>
@@ -145,7 +155,8 @@ export default {
       forms: {
         keywords: '',
         limit: 10,
-        city: 'all'
+        city: 'all',
+        status: 'all'
       },
       message: {
         errors: {},
@@ -168,7 +179,7 @@ export default {
   methods: {
     getCustomerList( p )
     {
-      var param = 'keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&city=' + this.forms.city;
+      var param = 'keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&city=' + this.forms.city + '&status=' + this.forms.status;
       var url = this.$root.url + '/cp/customer/get_customer?page=' + this.getcustomer.paginate.current_page + '&' + param;
       if( p !== undefined ) url = p + '&' + param;
 
@@ -193,6 +204,12 @@ export default {
     {
       this.getcustomer.detail = data;
       UIkit.modal('#modal-customer').show();
+    },
+    saveReport()
+    {
+      let param = 'city=' + this.forms.city + '&keywords=' + this.forms.keywords + '&status=' + this.forms.status;
+      let url = this.$root.url + '/cp/customer/save_report?' + param;
+      window.open( url, '_blank' );
     }
   },
   mounted() {

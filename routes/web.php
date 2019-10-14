@@ -234,6 +234,21 @@ Route::group(['prefix' => 'cp'], function() {
   });
 
   Route::group(['prefix' => 'property'], function() {
+
+    Route::group(['prefix' => 'project'], function() {
+      Route::get('/', 'ControlPanel\Pages\ProjectController@index')->name('cp_project_list_page');
+      Route::get('/get_project', 'ControlPanel\Pages\ProjectController@get_project');
+      Route::get('/get_unit/{project_id}', 'ControlPanel\Pages\ProjectController@get_unit_type');
+      Route::get('/save_report', 'ControlPanel\Pages\ProjectController@save_report_project');
+    });
+
+    Route::group(['prefix' => 'unit'], function() {
+      Route::get('/', 'ControlPanel\Pages\ProjectController@index_unit')->name('cp_project_unit_page');
+      Route::get('/get_unit', 'ControlPanel\Pages\ProjectController@get_unit_type');
+      Route::get('/detail_unit/{project_id}', 'ControlPanel\Pages\ProjectController@get_unit_type');
+      Route::get('/save_report', 'ControlPanel\Pages\ProjectController@save_report_unit');
+    });
+
     Route::group(['prefix' => 'facility'], function() {
       Route::get('/', 'ControlPanel\Pages\FacilityController@index')->name('cp_facility_page');
       Route::get('/get_facility', 'ControlPanel\Pages\FacilityController@get_facility');
@@ -259,11 +274,5 @@ Route::group(['prefix' => 'cp'], function() {
     Route::get('/', 'ControlPanel\Pages\DeveloperController@index')->name('cp_developer_page');
     Route::get('/get_developer', 'ControlPanel\Pages\DeveloperController@get_developer');
     Route::get('/save_report', 'ControlPanel\Pages\DeveloperController@save_report');
-
-    Route::group(['prefix' => 'project'], function() {
-      Route::get('/get_project', 'ControlPanel\Pages\ProjectController@get_project');
-      Route::get('/get_unit/{project_id}', 'ControlPanel\Pages\ProjectController@get_unit_type');
-      Route::get('/save_report', 'ControlPanel\Pages\ProjectController@save_report');
-    });
   });
 });

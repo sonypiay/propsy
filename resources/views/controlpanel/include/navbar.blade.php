@@ -26,8 +26,8 @@
             <a href="#">Properti <span uk-icon="chevron-down"></span></a>
             <div class="uk-navbar-dropdown">
               <ul class="uk-nav uk-navbar-dropdown-nav">
-                <li><a href="#">Proyek</a></li>
-                <li><a href="#">Tipe Unit</a></li>
+                <li><a href="{{ route('cp_project_list_page') }}">Proyek</a></li>
+                <li><a href="{{ route('cp_project_unit_page') }}">Tipe Unit</a></li>
                 <li><a href="{{ route('cp_facility_page') }}">Fasilitas</a></li>
               </ul>
             </div>

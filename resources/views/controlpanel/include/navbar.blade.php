@@ -18,7 +18,7 @@
             <div class="uk-navbar-dropdown">
               <ul class="uk-nav uk-navbar-dropdown-nav">
                 <li><a href="{{ route('cp_customer_page') }}">Pelanggan</a></li>
-                <li><a href="#">Riwayat Pengajuan Unit</a></li>
+                <li><a href="{{ route('cp_request_history_page') }}">Riwayat Pengajuan Unit</a></li>
               </ul>
             </div>
           </li>

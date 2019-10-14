@@ -2027,24 +2027,132 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: [],
   data: function data() {
     return {
       forms: {
         keywords: '',
-        city_name: '',
-        city_id: '',
-        province: '',
-        isedit: false,
-        submit: 'Tambah'
+        limit: 10,
+        status: 'all'
       },
       message: {
         errors: {},
         errorMessage: '',
         iserror: false
       },
-      getcity: {
+      getrequest: {
         total: 0,
         results: [],
         paginate: {
@@ -2052,39 +2160,29 @@ __webpack_require__.r(__webpack_exports__);
           last_page: 1,
           next_page_url: '',
           prev_page_url: ''
+        },
+        detail: {
+          data: {},
+          log_request: []
         }
-      },
-      getprovince: []
+      }
     };
   },
   methods: {
-    getProvince: function getProvince() {
+    getRequestUnit: function getRequestUnit(p) {
       var _this = this;
 
-      axios({
-        method: 'get',
-        url: this.$root.url + '/api/region/provinsi/all'
-      }).then(function (res) {
-        var results = res.data;
-        _this.getprovince = results.results.data;
-      })["catch"](function (err) {
-        console.log(err.response.statusText);
-      });
-    },
-    getCity: function getCity(p) {
-      var _this2 = this;
-
-      var params = 'keywords=' + this.forms.keywords;
-      var url = this.$root.url + '/cp/wilayah/city/get_city?page=' + this.getcity.paginate.current_page + '&' + params;
-      if (p !== undefined) url = p + '&' + params;
+      var param = 'keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&city=' + this.forms.city + '&status=' + this.forms.status;
+      var url = this.$root.url + '/cp/customer/request_unit/get_request?page=' + this.getrequest.paginate.current_page + '&' + param;
+      if (p !== undefined) url = p + '&' + param;
       axios({
         method: 'get',
         url: url
       }).then(function (res) {
         var result = res.data;
-        _this2.getcity.total = result.total;
-        _this2.getcity.results = result.data;
-        _this2.getcity.paginate = {
+        _this.getrequest.total = result.total;
+        _this.getrequest.results = result.data;
+        _this.getrequest.paginate = {
           current_page: result.current_page,
           last_page: result.last_page,
           next_page_url: result.next_page_url,
@@ -2094,154 +2192,33 @@ __webpack_require__.r(__webpack_exports__);
         console.log(err.response.statusText);
       });
     },
-    onClickModal: function onClickModal(data) {
-      this.message.errors = {};
-      this.message.errorMessage = '';
-      this.message.iserror = false;
+    onDetailRequest: function onDetailRequest(id) {
+      var _this2 = this;
 
-      if (data === undefined) {
-        this.forms.city_name = '';
-        this.forms.city_id = '';
-        this.forms.province = '';
-        this.forms.isedit = false;
-        this.forms.submit = 'Tambah';
-      } else {
-        this.forms.city_name = data.city_name;
-        this.forms.city_id = data.city_id;
-        this.forms.province = data.province_id;
-        this.forms.isedit = true;
-        this.forms.submit = 'Simpan';
-      }
-
-      this.getProvince();
-      UIkit.modal('#modal-city').show();
-    },
-    addCity: function addCity() {
-      var _this3 = this;
-
-      this.message.errors = {};
-      this.message.errorMessage = '';
-      this.message.iserror = false;
-
-      if (this.forms.province === '') {
-        this.message.errors.province = 'Provinsi tidak boleh kosong';
-        this.message.iserror = true;
-      }
-
-      if (this.forms.city_name === '') {
-        this.message.errors.city_name = 'Nama kota tidak boleh kosong';
-        this.message.iserror = true;
-      }
-
-      if (this.message.iserror === true) return false;
-      this.forms.submit = '<span uk-spinner></span>';
       axios({
-        method: 'post',
-        url: this.$root.url + '/cp/wilayah/city/store',
-        params: {
-          city_name: this.forms.city_name,
-          province: this.forms.province
-        }
+        method: 'get',
+        url: this.$root.url + '/cp/customer/request_unit/detail_request/' + id
       }).then(function (res) {
-        swal({
-          title: 'Berhasil',
-          text: 'Kota baru berhasil ditambah',
-          icon: 'success'
-        });
-        setTimeout(function () {
-          _this3.getCity();
-
-          UIkit.modal('#modal-city').hide();
-        }, 1000);
+        var result = res.data;
+        _this2.getrequest.detail.data = result.results.data;
+        _this2.getrequest.detail.log_request = result.results.log;
+        UIkit.modal('#detail-request').show();
       })["catch"](function (err) {
-        _this3.message.errorMessage = err.response.statusText;
-        _this3.forms.submit = 'Tambah';
+        console.log(err.response.statusText);
       });
     },
-    saveCity: function saveCity() {
-      var _this4 = this;
-
-      this.message.errors = {};
-      this.message.errorMessage = '';
-      this.message.iserror = false;
-
-      if (this.forms.province === '') {
-        this.message.errors.province = 'Provinsi tidak boleh kosong';
-        this.message.iserror = true;
-      }
-
-      if (this.forms.city_name === '') {
-        this.message.errors.city_name = 'Nama kota tidak boleh kosong';
-        this.message.iserror = true;
-      }
-
-      if (this.message.iserror === true) return false;
-      this.forms.submit = '<span uk-spinner></span>';
-      axios({
-        method: 'put',
-        url: this.$root.url + '/cp/wilayah/city/save/' + this.forms.city_id,
-        params: {
-          city_name: this.forms.city_name,
-          province: this.forms.province
-        }
-      }).then(function (res) {
-        swal({
-          title: 'Berhasil',
-          text: 'Kota berhasil disimpan',
-          icon: 'success'
-        });
-        setTimeout(function () {
-          _this4.getCity();
-
-          UIkit.modal('#modal-city').hide();
-        }, 1000);
-      })["catch"](function (err) {
-        _this4.message.errorMessage = err.response.statusText;
-        _this4.forms.submit = 'Simpan';
-      });
+    saveReport: function saveReport() {
+      var param = 'city=' + this.forms.city + '&keywords=' + this.forms.keywords + '&status=' + this.forms.status;
+      var url = this.$root.url + '/cp/customer/save_report?' + param;
+      window.open(url, '_blank');
     },
-    deleteCity: function deleteCity(id) {
-      var _this5 = this;
-
-      swal({
-        title: 'Konfirmasi',
-        text: 'Apakah anda ingin menghapus kota ini?',
-        icon: 'warning',
-        dangerMode: true,
-        buttons: {
-          cancel: 'Batal',
-          confirm: {
-            value: true,
-            text: 'Ya'
-          }
-        }
-      }).then(function (val) {
-        if (val) {
-          axios({
-            method: 'delete',
-            url: _this5.$root.url + '/cp/wilayah/city/delete/' + id
-          }).then(function (res) {
-            swal({
-              title: 'Berhasil',
-              text: 'Kota berhasil dihapus',
-              icon: 'success'
-            });
-            setTimeout(function () {
-              _this5.getCity();
-            }, 1000);
-          })["catch"](function (err) {
-            swal({
-              title: 'Whoops',
-              text: 'Terjadi kesalahan',
-              icon: 'error'
-            });
-          });
-        }
-      });
+    roundFixedYear: function roundFixedYear(val) {
+      var year = parseInt(val) / 12;
+      if (Number.isInteger(year)) return year;else return year.toFixed(1);
     }
   },
   mounted: function mounted() {
-    this.getCity();
+    this.getRequestUnit();
   }
 });
 
@@ -59345,63 +59322,456 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { attrs: { id: "modal-city", "uk-modal": "" } }, [
-      _c("div", { staticClass: "uk-modal-dialog uk-modal-body" }, [
-        _c("div", { staticClass: "uk-modal-title" }, [
-          _vm.forms.isedit
-            ? _c("span", [_vm._v("Edit Kota")])
-            : _c("span", [_vm._v("Tambah Kota")])
+    _c(
+      "div",
+      {
+        staticClass: "uk-modal-full",
+        attrs: { id: "detail-request", "uk-modal": "" }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "uk-modal-dialog uk-modal-body",
+            attrs: { "uk-height-viewport": "" }
+          },
+          [
+            _c("a", {
+              staticClass: "uk-modal-close-full uk-close-large",
+              attrs: { type: "button", "uk-close": "" }
+            }),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "uk-card uk-card-body container-viewschedule" },
+              [
+                _c(
+                  "div",
+                  {
+                    staticClass: "uk-card-title container-viewschedule-heading"
+                  },
+                  [
+                    _vm._v(
+                      "\n          Rincian Pemesanan Unit " +
+                        _vm._s(_vm.getrequest.detail.data.request_id) +
+                        "\n        "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "uk-margin container-viewschedule-body" },
+                  [
+                    _c(
+                      "table",
+                      {
+                        staticClass:
+                          "uk-table uk-table-divider uk-table-hover uk-table-middle uk-table-striped uk-table-small"
+                      },
+                      [
+                        _c("tbody", [
+                          _c("tr", [
+                            _c("th", [_vm._v("Nama Pelanggan")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(_vm.getrequest.detail.data.customer_name)
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("th", [_vm._v("Nomor Telepon")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.getrequest.detail.data
+                                    .customer_phone_number
+                                )
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("th", [_vm._v("Alamat Email")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.getrequest.detail.data.customer_email
+                                )
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("th", [_vm._v("Alamat")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                "\n                  " +
+                                  _vm._s(
+                                    _vm.getrequest.detail.data.customer_address
+                                  ) +
+                                  " "
+                              ),
+                              _c("br"),
+                              _vm._v(
+                                "\n                  " +
+                                  _vm._s(_vm.getrequest.detail.data.city_name) +
+                                  ", " +
+                                  _vm._s(
+                                    _vm.getrequest.detail.data.province_name
+                                  ) +
+                                  "\n                "
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("th", [_vm._v("Unit Dipesan")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                "\n                  " +
+                                  _vm._s(_vm.getrequest.detail.data.unit_name) +
+                                  "\n                "
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("th", [_vm._v("Pesan")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.getrequest.detail.data.request_message
+                                )
+                              )
+                            ])
+                          ])
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "uk-card-title container-viewschedule-heading"
+                      },
+                      [_vm._v("Angsuran Pilihan")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "table",
+                      {
+                        staticClass:
+                          "uk-table uk-table-hover uk-table-striped uk-table-divider uk-table-small uk-table-middle"
+                      },
+                      [
+                        _vm._m(0),
+                        _vm._v(" "),
+                        _c("tbody", [
+                          _c("tr", [
+                            _c("td", [
+                              _vm._v(
+                                "Rp. " +
+                                  _vm._s(
+                                    _vm._f("currency")(
+                                      _vm.getrequest.detail.data.dp_price
+                                    )
+                                  )
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                "Rp. " +
+                                  _vm._s(
+                                    _vm._f("currency")(
+                                      _vm.getrequest.detail.data
+                                        .installment_price
+                                    )
+                                  )
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.getrequest.detail.data.installment_tenor
+                                ) + " bulan ("
+                              ),
+                              _vm.getrequest.detail.data.installment_tenor >= 12
+                                ? _c("span", [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.roundFixedYear(
+                                          _vm.getrequest.detail.data
+                                            .installment_tenor
+                                        )
+                                      ) + " tahun"
+                                    )
+                                  ])
+                                : _vm._e(),
+                              _vm._v(")")
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                "Rp. " +
+                                  _vm._s(
+                                    _vm._f("currency")(
+                                      _vm.getrequest.detail.data
+                                        .installment_tenor *
+                                        _vm.getrequest.detail.data
+                                          .installment_price
+                                    )
+                                  ) +
+                                  "\n                "
+                              )
+                            ])
+                          ])
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "table",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.getrequest.detail.data.meeting_time,
+                            expression: "getrequest.detail.data.meeting_time"
+                          }
+                        ],
+                        staticClass:
+                          "uk-table uk-table-divider uk-table-hover uk-table-middle uk-table-striped uk-table-small"
+                      },
+                      [
+                        _vm._m(1),
+                        _vm._v(" "),
+                        _c("tbody", [
+                          _c("tr", [
+                            _c("td", { staticClass: "uk-width-medium" }, [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.$root.formatDate(
+                                    _vm.getrequest.detail.data.meeting_time,
+                                    "dddd, DD MMMM YYYY"
+                                  )
+                                )
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "uk-width-medium" }, [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.$root.formatDate(
+                                    _vm.getrequest.detail.data.meeting_time,
+                                    "HH:mm"
+                                  )
+                                )
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm.getrequest.detail.data.meeting_status ===
+                              "waiting_confirmation"
+                                ? _c("label", { staticClass: "uk-label" }, [
+                                    _vm._v("Menunggu Konfirmasi")
+                                  ])
+                                : _vm.getrequest.detail.data.meeting_status ===
+                                  "accept"
+                                ? _c(
+                                    "label",
+                                    {
+                                      staticClass: "uk-label uk-label-success"
+                                    },
+                                    [_vm._v("Diterima")]
+                                  )
+                                : _vm.getrequest.detail.data.meeting_status ===
+                                  "reject"
+                                ? _c(
+                                    "label",
+                                    { staticClass: "uk-label uk-label-danger" },
+                                    [_vm._v("Ditolak")]
+                                  )
+                                : _vm.getrequest.detail.data.meeting_status ===
+                                  "cancel"
+                                ? _c(
+                                    "label",
+                                    { staticClass: "uk-label uk-label-danger" },
+                                    [_vm._v("Dibatalkan")]
+                                  )
+                                : _vm.getrequest.detail.data.meeting_status ===
+                                  "revision"
+                                ? _c(
+                                    "label",
+                                    {
+                                      staticClass: "uk-label uk-label-warning"
+                                    },
+                                    [_vm._v("Revisi")]
+                                  )
+                                : _c(
+                                    "label",
+                                    {
+                                      staticClass: "uk-label uk-label-success"
+                                    },
+                                    [_vm._v("Selesai")]
+                                  )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm.getrequest.detail.data.document_file
+                                ? _c(
+                                    "a",
+                                    {
+                                      staticClass:
+                                        "uk-button uk-button-small uk-button-default",
+                                      attrs: {
+                                        target: "_blank",
+                                        href:
+                                          _vm.$root.url +
+                                          "/storage/assets/document/meeting/" +
+                                          _vm.getrequest.detail.data
+                                            .document_file
+                                      }
+                                    },
+                                    [
+                                      _c("span", {
+                                        attrs: { "uk-icon": "download" }
+                                      }),
+                                      _vm._v(" Unduh Dokumen")
+                                    ]
+                                  )
+                                : _c(
+                                    "a",
+                                    {
+                                      staticClass:
+                                        "uk-button uk-button-small uk-button-default",
+                                      attrs: { href: "#" }
+                                    },
+                                    [
+                                      _c("span", {
+                                        attrs: { "uk-icon": "download" }
+                                      }),
+                                      _vm._v(" Unduh Dokumen")
+                                    ]
+                                  )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("tr", [
+                            _c("th", [_vm._v("Hasil Meeting")]),
+                            _vm._v(" "),
+                            _c("td", { attrs: { colspan: "3" } }, [
+                              _vm._v(
+                                "\n                  " +
+                                  _vm._s(
+                                    _vm.getrequest.detail.data.meeting_result
+                                  ) +
+                                  "\n                "
+                              )
+                            ])
+                          ])
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "uk-margin" }, [
+                      _c("h3", { staticClass: "uk-h3" }, [
+                        _vm._v("Track Pemesanan Unit")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "ul",
+                        { staticClass: "uk-margin uk-list uk-list-divider" },
+                        _vm._l(_vm.getrequest.detail.log_request, function(
+                          log
+                        ) {
+                          return _c("li", [
+                            _c(
+                              "div",
+                              { staticClass: "uk-text-small uk-text-bold" },
+                              [
+                                _vm._v(
+                                  "\n                  " +
+                                    _vm._s(
+                                      _vm.$root.formatDate(
+                                        log.log_date,
+                                        "DD MMMM YYYY, HH:mm"
+                                      )
+                                    ) +
+                                    "\n                "
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("span", {
+                              domProps: { innerHTML: _vm._s(log.log_message) }
+                            })
+                          ])
+                        }),
+                        0
+                      )
+                    ])
+                  ]
+                )
+              ]
+            )
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "uk-container uk-margin-large-top" }, [
+      _c("ul", { staticClass: "uk-breadcrumb" }, [
+        _c("li", [
+          _c("a", { attrs: { href: _vm.$root.url + "/cp/" } }, [
+            _vm._v("Dashboard")
+          ])
+        ]),
+        _vm._v(" "),
+        _vm._m(2),
+        _vm._v(" "),
+        _vm._m(3)
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "uk-card uk-card-body uk-card-default" }, [
+        _c("div", { staticClass: "uk-h3 uk-heading-line" }, [
+          _vm._v("Riwayat Pengajuan Pesanan")
         ]),
         _vm._v(" "),
         _c(
-          "form",
+          "div",
           {
-            staticClass: "uk-form-stacked",
-            on: {
-              submit: function($event) {
-                $event.preventDefault()
-                _vm.forms.isedit === false ? _vm.addCity() : _vm.saveCity()
-              }
-            }
+            staticClass: "uk-grid-small uk-child-width-auto",
+            attrs: { "uk-grid": "" }
           },
           [
-            _c(
-              "div",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.message.errors.errorMessage,
-                    expression: "message.errors.errorMessage"
-                  }
-                ],
-                staticClass: "uk-margin uk-alert-danger",
-                attrs: { "uk-alert": "" }
-              },
-              [_vm._v(_vm._s(_vm.message.errors.errorMessage))]
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "uk-margin" }, [
-              _c("label", { staticClass: "uk-form-label" }, [
-                _vm._v("Provinsi")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "uk-form-controls" }, [
-                _c(
-                  "select",
-                  {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.forms.province,
-                        expression: "forms.province"
-                      }
-                    ],
-                    staticClass: "uk-select uk-width-1-1",
-                    on: {
-                      change: function($event) {
+            _c("div", [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.forms.limit,
+                      expression: "forms.limit"
+                    }
+                  ],
+                  staticClass: "uk-select",
+                  on: {
+                    change: [
+                      function($event) {
                         var $$selectedVal = Array.prototype.filter
                           .call($event.target.options, function(o) {
                             return o.selected
@@ -59412,113 +59782,96 @@ var render = function() {
                           })
                         _vm.$set(
                           _vm.forms,
-                          "province",
+                          "limit",
                           $event.target.multiple
                             ? $$selectedVal
                             : $$selectedVal[0]
                         )
+                      },
+                      function($event) {
+                        return _vm.getRequestUnit()
                       }
-                    }
-                  },
-                  [
-                    _c("option", { attrs: { value: "" } }, [
-                      _vm._v("-- Pilih Provinsi --")
-                    ]),
-                    _vm._v(" "),
-                    _vm._l(_vm.getprovince, function(province) {
-                      return _c(
-                        "option",
-                        { domProps: { value: province.province_id } },
-                        [_vm._v(_vm._s(province.province_name))]
-                      )
-                    })
-                  ],
-                  2
-                )
-              ])
+                    ]
+                  }
+                },
+                [
+                  _c("option", { attrs: { value: "10" } }, [_vm._v("10")]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "20" } }, [_vm._v("20")]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "50" } }, [_vm._v("50")]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "100" } }, [_vm._v("100")])
+                ]
+              )
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "uk-margin" }, [
-              _c("label", { staticClass: "uk-form-label" }, [
-                _vm._v("Nama Kota")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "uk-form-controls" }, [
-                _c("input", {
+            _c("div", [
+              _c(
+                "select",
+                {
                   directives: [
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.forms.city_name,
-                      expression: "forms.city_name"
+                      value: _vm.forms.status,
+                      expression: "forms.status"
                     }
                   ],
-                  staticClass: "uk-input uk-width-1-1",
-                  class: { "uk-form-danger": _vm.message.errors.city_name },
-                  attrs: { type: "text" },
-                  domProps: { value: _vm.forms.city_name },
+                  staticClass: "uk-select",
                   on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
+                    change: [
+                      function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.forms,
+                          "status",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      },
+                      function($event) {
+                        return _vm.getRequestUnit()
                       }
-                      _vm.$set(_vm.forms, "city_name", $event.target.value)
-                    }
+                    ]
                   }
-                })
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.message.errors.city_name,
-                      expression: "message.errors.city_name"
-                    }
-                  ],
-                  staticClass: "uk-text-danger"
                 },
-                [_vm._v(_vm._s(_vm.message.errors.city_name))]
+                [
+                  _c("option", { attrs: { value: "all" } }, [
+                    _vm._v("Semua status")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "waiting_response" } }, [
+                    _vm._v("Menunggu Tanggapan")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "cancel" } }, [
+                    _vm._v("Dibatalkan")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "meeting" } }, [
+                    _vm._v("Dijadwalkan Meeting")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "accept" } }, [
+                    _vm._v("Diterima")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "reject" } }, [
+                    _vm._v("Ditolak")
+                  ])
+                ]
               )
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "uk-margin" }, [
-              _c("button", {
-                staticClass: "uk-button uk-button-primary",
-                domProps: { innerHTML: _vm._s(_vm.forms.submit) }
-              })
-            ])
-          ]
-        )
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "uk-container uk-margin-large-top" }, [
-      _c("ul", { staticClass: "uk-breadcrumb" }, [
-        _c("li", [
-          _c("a", { attrs: { href: _vm.$root.url + "/cp/" } }, [
-            _vm._v("Dashboard")
-          ])
-        ]),
-        _vm._v(" "),
-        _vm._m(0),
-        _vm._v(" "),
-        _vm._m(1)
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "uk-card uk-card-body uk-card-default" }, [
-        _c("div", { staticClass: "uk-h3 uk-heading-line" }, [_vm._v("Kota")]),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "uk-grid-small uk-child-width-auto",
-            attrs: { "uk-grid": "" }
-          },
-          [
             _c("div", [
               _c("div", { staticClass: "uk-inline" }, [
                 _c("span", {
@@ -59546,7 +59899,7 @@ var render = function() {
                       ) {
                         return null
                       }
-                      return _vm.getCity()
+                      return _vm.getRequestUnit()
                     },
                     input: function($event) {
                       if ($event.target.composing) {
@@ -59557,36 +59910,35 @@ var render = function() {
                   }
                 })
               ])
-            ]),
-            _vm._v(" "),
-            _c("div", [
-              _c(
-                "a",
-                {
-                  staticClass: "uk-button uk-button-primary",
-                  on: {
-                    click: function($event) {
-                      return _vm.onClickModal()
-                    }
-                  }
-                },
-                [_vm._v("Tambah Kota")]
-              )
             ])
           ]
         ),
         _vm._v(" "),
         _c("div", { staticClass: "uk-margin" }, [
-          _vm.getcity.total === 0
+          _vm.getrequest.total === 0
             ? _c(
                 "div",
                 { staticClass: "uk-alert-warning", attrs: { "uk-alert": "" } },
-                [_vm._v("\n          Belum ada kota\n        ")]
+                [_vm._v("\n          Belum ada Pengajuan Pesanan\n        ")]
               )
             : _c("div", [
                 _c("label", { staticClass: "uk-label" }, [
-                  _vm._v(_vm._s(_vm.getcity.total) + " kota")
+                  _vm._v(_vm._s(_vm.getrequest.total) + " Pesanan")
                 ]),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass: "uk-link uk-link-text",
+                    attrs: { "uk-tooltip": "Cetak" },
+                    on: {
+                      click: function($event) {
+                        return _vm.saveReport()
+                      }
+                    }
+                  },
+                  [_c("span", { attrs: { "uk-icon": "print" } })]
+                ),
                 _vm._v(" "),
                 _c(
                   "table",
@@ -59595,37 +59947,73 @@ var render = function() {
                       "uk-table uk-table-middle uk-table-striped uk-table-divider uk-table-hover uk-table-small"
                   },
                   [
-                    _vm._m(2),
+                    _vm._m(4),
                     _vm._v(" "),
                     _c(
                       "tbody",
-                      _vm._l(_vm.getcity.results, function(city) {
+                      _vm._l(_vm.getrequest.results, function(req) {
                         return _c("tr", [
                           _c("td", [
                             _c("a", {
-                              staticClass: "uk-icon-link uk-margin-small-right",
-                              attrs: { "uk-icon": "file-edit" },
+                              staticClass: "uk-icon-link",
+                              attrs: {
+                                "uk-tooltip": "Lihat Detail",
+                                "uk-icon": "forward"
+                              },
                               on: {
                                 click: function($event) {
-                                  return _vm.onClickModal(city)
-                                }
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("a", {
-                              staticClass: "uk-icon-link uk-margin-small-right",
-                              attrs: { href: "#", "uk-icon": "trash" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.deleteCity(city.city_id)
+                                  return _vm.onDetailRequest(req.request_id)
                                 }
                               }
                             })
                           ]),
                           _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(city.city_name))]),
+                          _c("td", [_vm._v(_vm._s(req.request_id))]),
                           _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(city.province_name))])
+                          _c("td", [_vm._v(_vm._s(req.customer_name))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(req.unit_name))]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v(
+                              _vm._s(
+                                _vm.$root.formatDate(
+                                  req.created_at,
+                                  "DD/MM/YYYY"
+                                )
+                              )
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            req.status_request === "waiting_response"
+                              ? _c("label", { staticClass: "uk-label" }, [
+                                  _vm._v("Menunggu Konfirmasi")
+                                ])
+                              : req.status_request === "cancel"
+                              ? _c(
+                                  "label",
+                                  { staticClass: "uk-label uk-label-danger" },
+                                  [_vm._v("Dibatalkan")]
+                                )
+                              : req.status_request === "reject"
+                              ? _c(
+                                  "label",
+                                  { staticClass: "uk-label uk-label-danger" },
+                                  [_vm._v("Ditolak")]
+                                )
+                              : req.status_request === "meeting"
+                              ? _c(
+                                  "label",
+                                  { staticClass: "uk-label uk-label-warning" },
+                                  [_vm._v("Dijadwalkan Meeting")]
+                                )
+                              : _c(
+                                  "label",
+                                  { staticClass: "uk-label uk-label-success" },
+                                  [_vm._v("Diterima")]
+                                )
+                          ])
                         ])
                       }),
                       0
@@ -59635,14 +60023,14 @@ var render = function() {
                 _vm._v(" "),
                 _c("ul", { staticClass: "uk-pagination uk-flex-center" }, [
                   _c("li", [
-                    _vm.getcity.paginate.prev_page_url
+                    _vm.getrequest.paginate.prev_page_url
                       ? _c(
                           "a",
                           {
                             on: {
                               click: function($event) {
-                                return _vm.getCity(
-                                  _vm.getcity.paginate.prev_page_url
+                                return _vm.getRequestUnit(
+                                  _vm.getrequest.paginate.prev_page_url
                                 )
                               }
                             }
@@ -59661,14 +60049,14 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("li", [
-                    _vm.getcity.paginate.next_page_url
+                    _vm.getrequest.paginate.next_page_url
                       ? _c(
                           "a",
                           {
                             on: {
                               click: function($event) {
-                                return _vm.getCity(
-                                  _vm.getcity.paginate.next_page_url
+                                return _vm.getRequestUnit(
+                                  _vm.getrequest.paginate.next_page_url
                                 )
                               }
                             }
@@ -59691,15 +60079,47 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("li", { staticClass: "uk-disabled" }, [
-      _c("span", [_vm._v("Wilayah")])
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("DP")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Angsuran")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Tenor")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Total Angsuran")])
+      ])
     ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("li", [_c("span", [_vm._v("Kota")])])
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Tanggal Meeting")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Jam")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Status")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Dokumen")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", { staticClass: "uk-disabled" }, [
+      _c("span", [_vm._v("Pelanggan")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [_c("span", [_vm._v("Riwayat Pengajuan Pesanan")])])
   },
   function() {
     var _vm = this
@@ -59709,9 +60129,15 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("Aksi")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Nama Kota")]),
+        _c("th", [_vm._v("ID")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Provinsi")])
+        _c("th", [_vm._v("Nama Pelanggan")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Unit")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Tanggal Pesan")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Status")])
       ])
     ])
   }

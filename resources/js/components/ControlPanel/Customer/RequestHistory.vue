@@ -1,83 +1,195 @@
 <template>
   <div>
-    <div id="modal-city" uk-modal>
-      <div class="uk-modal-dialog uk-modal-body">
-        <div class="uk-modal-title">
-          <span v-if="forms.isedit">Edit Kota</span>
-          <span v-else>Tambah Kota</span>
+    <div id="detail-request" class="uk-modal-full" uk-modal>
+      <div class="uk-modal-dialog uk-modal-body" uk-height-viewport>
+        <a class="uk-modal-close-full uk-close-large" type="button" uk-close></a>
+        <div class="uk-card uk-card-body container-viewschedule">
+          <div class="uk-card-title container-viewschedule-heading">
+            Rincian Pemesanan Unit {{ getrequest.detail.data.request_id }}
+          </div>
+          <div class="uk-margin container-viewschedule-body">
+            <table class="uk-table uk-table-divider uk-table-hover uk-table-middle uk-table-striped uk-table-small">
+              <tbody>
+                <tr>
+                  <th>Nama Pelanggan</th>
+                  <td>{{ getrequest.detail.data.customer_name }}</td>
+                </tr>
+                <tr>
+                  <th>Nomor Telepon</th>
+                  <td>{{ getrequest.detail.data.customer_phone_number }}</td>
+                </tr>
+                <tr>
+                  <th>Alamat Email</th>
+                  <td>{{ getrequest.detail.data.customer_email }}</td>
+                </tr>
+                <tr>
+                  <th>Alamat</th>
+                  <td>
+                    {{ getrequest.detail.data.customer_address }} <br>
+                    {{ getrequest.detail.data.city_name }}, {{ getrequest.detail.data.province_name }}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Unit Dipesan</th>
+                  <td>
+                    {{ getrequest.detail.data.unit_name }}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Pesan</th>
+                  <td>{{ getrequest.detail.data.request_message }}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="uk-card-title container-viewschedule-heading">Angsuran Pilihan</div>
+            <table class="uk-table uk-table-hover uk-table-striped uk-table-divider uk-table-small uk-table-middle">
+              <thead>
+                <tr>
+                  <th>DP</th>
+                  <th>Angsuran</th>
+                  <th>Tenor</th>
+                  <th>Total Angsuran</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Rp. {{ getrequest.detail.data.dp_price | currency }}</td>
+                  <td>Rp. {{ getrequest.detail.data.installment_price | currency }}</td>
+                  <td>{{ getrequest.detail.data.installment_tenor }} bulan (<span v-if="getrequest.detail.data.installment_tenor >= 12">{{ roundFixedYear( getrequest.detail.data.installment_tenor ) }} tahun</span>)</td>
+                  <td>Rp. {{ getrequest.detail.data.installment_tenor * getrequest.detail.data.installment_price | currency }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table v-show="getrequest.detail.data.meeting_time" class="uk-table uk-table-divider uk-table-hover uk-table-middle uk-table-striped uk-table-small">
+              <thead>
+                <tr>
+                  <th>Tanggal Meeting</th>
+                  <th>Jam</th>
+                  <th>Status</th>
+                  <th>Dokumen</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="uk-width-medium">{{ $root.formatDate( getrequest.detail.data.meeting_time, 'dddd, DD MMMM YYYY' ) }}</td>
+                  <td class="uk-width-medium">{{ $root.formatDate( getrequest.detail.data.meeting_time, 'HH:mm' ) }}</td>
+                  <td>
+                    <label class="uk-label" v-if="getrequest.detail.data.meeting_status === 'waiting_confirmation'">Menunggu Konfirmasi</label>
+                    <label class="uk-label uk-label-success" v-else-if="getrequest.detail.data.meeting_status === 'accept'">Diterima</label>
+                    <label class="uk-label uk-label-danger" v-else-if="getrequest.detail.data.meeting_status === 'reject'">Ditolak</label>
+                    <label class="uk-label uk-label-danger" v-else-if="getrequest.detail.data.meeting_status === 'cancel'">Dibatalkan</label>
+                    <label class="uk-label uk-label-warning" v-else-if="getrequest.detail.data.meeting_status === 'revision'">Revisi</label>
+                    <label class="uk-label uk-label-success" v-else>Selesai</label>
+                  </td>
+                  <td>
+                    <a v-if="getrequest.detail.data.document_file" target="_blank" class="uk-button uk-button-small uk-button-default" :href="$root.url + '/storage/assets/document/meeting/' + getrequest.detail.data.document_file"><span uk-icon="download"></span> Unduh Dokumen</a>
+                    <a v-else class="uk-button uk-button-small uk-button-default" href="#"><span uk-icon="download"></span> Unduh Dokumen</a>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Hasil Meeting</th>
+                  <td colspan="3">
+                    {{ getrequest.detail.data.meeting_result }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="uk-margin">
+              <h3 class="uk-h3">Track Pemesanan Unit</h3>
+              <ul class="uk-margin uk-list uk-list-divider">
+                <li v-for="log in getrequest.detail.log_request">
+                  <div class="uk-text-small uk-text-bold">
+                    {{ $root.formatDate( log.log_date, 'DD MMMM YYYY, HH:mm' ) }}
+                  </div>
+                  <span v-html="log.log_message"></span>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <form class="uk-form-stacked" @submit.prevent="forms.isedit === false ? addCity() : saveCity()">
-          <div v-show="message.errors.errorMessage" class="uk-margin uk-alert-danger" uk-alert>{{ message.errors.errorMessage }}</div>
-          <div class="uk-margin">
-            <label class="uk-form-label">Provinsi</label>
-            <div class="uk-form-controls">
-              <select class="uk-select uk-width-1-1" v-model="forms.province">
-                <option value="">-- Pilih Provinsi --</option>
-                <option v-for="province in getprovince" :value="province.province_id">{{ province.province_name }}</option>
-              </select>
-            </div>
-          </div>
-          <div class="uk-margin">
-            <label class="uk-form-label">Nama Kota</label>
-            <div class="uk-form-controls">
-              <input type="text" :class="{'uk-form-danger': message.errors.city_name}" class="uk-input uk-width-1-1" v-model="forms.city_name" />
-            </div>
-            <div v-show="message.errors.city_name" class="uk-text-danger">{{ message.errors.city_name }}</div>
-          </div>
-          <div class="uk-margin">
-            <button class="uk-button uk-button-primary" v-html="forms.submit"></button>
-          </div>
-        </form>
       </div>
     </div>
+
     <div class="uk-container uk-margin-large-top">
       <ul class="uk-breadcrumb">
         <li><a :href="$root.url + '/cp/'">Dashboard</a></li>
-        <li class="uk-disabled"><span>Wilayah</span></li>
-        <li><span>Kota</span></li>
+        <li class="uk-disabled"><span>Pelanggan</span></li>
+        <li><span>Riwayat Pengajuan Pesanan</span></li>
       </ul>
       <div class="uk-card uk-card-body uk-card-default">
-        <div class="uk-h3 uk-heading-line">Kota</div>
+        <div class="uk-h3 uk-heading-line">Riwayat Pengajuan Pesanan</div>
         <div class="uk-grid-small uk-child-width-auto" uk-grid>
+          <div>
+            <select class="uk-select" v-model="forms.limit" @change="getRequestUnit()">
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+          <div>
+            <select class="uk-select" v-model="forms.status" @change="getRequestUnit()">
+              <option value="all">Semua status</option>
+              <option value="waiting_response">Menunggu Tanggapan</option>
+              <option value="cancel">Dibatalkan</option>
+              <option value="meeting">Dijadwalkan Meeting</option>
+              <option value="accept">Diterima</option>
+              <option value="reject">Ditolak</option>
+            </select>
+          </div>
           <div>
             <div class="uk-inline">
               <span class="uk-form-icon" uk-icon="search"></span>
-              <input type="search" class="uk-input" v-model="forms.keywords" placeholder="Search..." @keyup.enter="getCity()" />
+              <input type="search" class="uk-input" v-model="forms.keywords" placeholder="Search..." @keyup.enter="getRequestUnit()" />
             </div>
-          </div>
-          <div>
-            <a @click="onClickModal()" class="uk-button uk-button-primary">Tambah Kota</a>
           </div>
         </div>
 
         <div class="uk-margin">
-          <div v-if="getcity.total === 0" class="uk-alert-warning" uk-alert>
-            Belum ada kota
+          <div v-if="getrequest.total === 0" class="uk-alert-warning" uk-alert>
+            Belum ada Pengajuan Pesanan
           </div>
           <div v-else>
-            <label class="uk-label">{{ getcity.total }} kota</label>
+            <label class="uk-label">{{ getrequest.total }} Pesanan</label>
+            <a uk-tooltip="Cetak" class="uk-link uk-link-text" @click="saveReport()">
+              <span uk-icon="print"></span>
+            </a>
             <table class="uk-table uk-table-middle uk-table-striped uk-table-divider uk-table-hover uk-table-small">
               <thead>
                 <tr>
                   <th>Aksi</th>
-                  <th>Nama Kota</th>
-                  <th>Provinsi</th>
+                  <th>ID</th>
+                  <th>Nama Pelanggan</th>
+                  <th>Unit</th>
+                  <th>Tanggal Pesan</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="city in getcity.results">
+                <tr v-for="req in getrequest.results">
                   <td>
-                    <a @click="onClickModal( city )" class="uk-icon-link uk-margin-small-right" uk-icon="file-edit"></a>
-                    <a @click="deleteCity( city.city_id )" href="#" class="uk-icon-link uk-margin-small-right" uk-icon="trash"></a>
+                    <a uk-tooltip="Lihat Detail" @click="onDetailRequest( req.request_id )" class="uk-icon-link" uk-icon="forward"></a>
                   </td>
-                  <td>{{ city.city_name }}</td>
-                  <td>{{ city.province_name }}</td>
+                  <td>{{ req.request_id }}</td>
+                  <td>{{ req.customer_name }}</td>
+                  <td>{{ req.unit_name }}</td>
+                  <td>{{ $root.formatDate( req.created_at, 'DD/MM/YYYY' ) }}</td>
+                  <td>
+                    <label class="uk-label" v-if="req.status_request === 'waiting_response'">Menunggu Konfirmasi</label>
+                    <label class="uk-label uk-label-danger" v-else-if="req.status_request === 'cancel'">Dibatalkan</label>
+                    <label class="uk-label uk-label-danger" v-else-if="req.status_request === 'reject'">Ditolak</label>
+                    <label class="uk-label uk-label-warning" v-else-if="req.status_request === 'meeting'">Dijadwalkan Meeting</label>
+                    <label class="uk-label uk-label-success" v-else>Diterima</label>
+                  </td>
                 </tr>
               </tbody>
             </table>
             <ul class="uk-pagination uk-flex-center">
               <li>
-                <a v-if="getcity.paginate.prev_page_url" @click="getCity( getcity.paginate.prev_page_url )">
+                <a v-if="getrequest.paginate.prev_page_url" @click="getRequestUnit( getrequest.paginate.prev_page_url )">
                   <span uk-pagination-previous></span>
                 </a>
                 <a v-else>
@@ -86,7 +198,7 @@
               </li>
 
               <li>
-                <a v-if="getcity.paginate.next_page_url" @click="getCity( getcity.paginate.next_page_url )">
+                <a v-if="getrequest.paginate.next_page_url" @click="getRequestUnit( getrequest.paginate.next_page_url )">
                   <span uk-pagination-next></span>
                 </a>
                 <a v-else>
@@ -103,23 +215,19 @@
 
 <script>
 export default {
-  props: [],
   data() {
     return {
       forms: {
         keywords: '',
-        city_name: '',
-        city_id: '',
-        province: '',
-        isedit: false,
-        submit: 'Tambah'
+        limit: 10,
+        status: 'all'
       },
       message: {
         errors: {},
         errorMessage: '',
         iserror: false
       },
-      getcity: {
+      getrequest: {
         total: 0,
         results: [],
         paginate: {
@@ -127,38 +235,29 @@ export default {
           last_page: 1,
           next_page_url: '',
           prev_page_url: ''
+        },
+        detail: {
+          data: {},
+          log_request: []
         }
-      },
-      getprovince: []
+      }
     }
   },
   methods: {
-    getProvince() {
-      axios({
-        method: 'get',
-        url: this.$root.url + '/api/region/provinsi/all'
-      }).then( res => {
-        let results = res.data;
-        this.getprovince = results.results.data
-      }).catch( err => {
-        console.log( err.response.statusText );
-      });
-    },
-    getCity( p )
+    getRequestUnit( p )
     {
-      var params = 'keywords=' + this.forms.keywords;
-      var url = this.$root.url + '/cp/wilayah/city/get_city?page=' + this.getcity.paginate.current_page + '&' + params;
-      if( p !== undefined ) url = p + '&' + params;
+      var param = 'keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&city=' + this.forms.city + '&status=' + this.forms.status;
+      var url = this.$root.url + '/cp/customer/request_unit/get_request?page=' + this.getrequest.paginate.current_page + '&' + param;
+      if( p !== undefined ) url = p + '&' + param;
 
       axios({
         method: 'get',
         url: url
       }).then( res => {
         let result = res.data;
-        this.getcity.total = result.total;
-        this.getcity.results = result.data;
-
-        this.getcity.paginate = {
+        this.getrequest.total = result.total;
+        this.getrequest.results = result.data;
+        this.getrequest.paginate = {
           current_page: result.current_page,
           last_page: result.last_page,
           next_page_url: result.next_page_url,
@@ -168,157 +267,35 @@ export default {
         console.log( err.response.statusText );
       });
     },
-    onClickModal( data )
+    onDetailRequest( id )
     {
-      this.message.errors = {};
-      this.message.errorMessage = '';
-      this.message.iserror = false;
-
-      if( data === undefined )
-      {
-        this.forms.city_name = '';
-        this.forms.city_id = '';
-        this.forms.province = '';
-        this.forms.isedit = false;
-        this.forms.submit = 'Tambah';
-      }
-      else
-      {
-        this.forms.city_name = data.city_name;
-        this.forms.city_id = data.city_id;
-        this.forms.province = data.province_id;
-        this.forms.isedit = true;
-        this.forms.submit = 'Simpan';
-      }
-
-      this.getProvince();
-      UIkit.modal('#modal-city').show();
-    },
-    addCity()
-    {
-      this.message.errors = {};
-      this.message.errorMessage = '';
-      this.message.iserror = false;
-
-      if( this.forms.province === '' )
-      {
-        this.message.errors.province = 'Provinsi tidak boleh kosong';
-        this.message.iserror = true;
-      }
-
-      if( this.forms.city_name === '' )
-      {
-        this.message.errors.city_name = 'Nama kota tidak boleh kosong';
-        this.message.iserror = true;
-      }
-
-      if( this.message.iserror === true ) return false;
-
-      this.forms.submit = '<span uk-spinner></span>';
       axios({
-        method: 'post',
-        url: this.$root.url + '/cp/wilayah/city/store',
-        params: {
-          city_name: this.forms.city_name,
-          province: this.forms.province
-        }
+        method: 'get',
+        url: this.$root.url + '/cp/customer/request_unit/detail_request/' + id
       }).then( res => {
-        swal({
-          title: 'Berhasil',
-          text: 'Kota baru berhasil ditambah',
-          icon: 'success'
-        });
-        setTimeout(() => {
-          this.getCity();
-          UIkit.modal('#modal-city').hide();
-        }, 1000);
+        let result = res.data;
+        this.getrequest.detail.data = result.results.data;
+        this.getrequest.detail.log_request = result.results.log;
+        UIkit.modal('#detail-request').show();
       }).catch( err => {
-        this.message.errorMessage = err.response.statusText;
-        this.forms.submit = 'Tambah';
+        console.log( err.response.statusText );
       });
     },
-    saveCity()
+    saveReport()
     {
-      this.message.errors = {};
-      this.message.errorMessage = '';
-      this.message.iserror = false;
-
-      if( this.forms.province === '' )
-      {
-        this.message.errors.province = 'Provinsi tidak boleh kosong';
-        this.message.iserror = true;
-      }
-
-      if( this.forms.city_name === '' )
-      {
-        this.message.errors.city_name = 'Nama kota tidak boleh kosong';
-        this.message.iserror = true;
-      }
-
-      if( this.message.iserror === true ) return false;
-
-      this.forms.submit = '<span uk-spinner></span>';
-      axios({
-        method: 'put',
-        url: this.$root.url + '/cp/wilayah/city/save/' + this.forms.city_id,
-        params: {
-          city_name: this.forms.city_name,
-          province: this.forms.province
-        }
-      }).then( res => {
-        swal({
-          title: 'Berhasil',
-          text: 'Kota berhasil disimpan',
-          icon: 'success'
-        });
-        setTimeout(() => {
-          this.getCity();
-          UIkit.modal('#modal-city').hide();
-        }, 1000);
-      }).catch( err => {
-        this.message.errorMessage = err.response.statusText;
-        this.forms.submit = 'Simpan';
-      });
+      let param = 'city=' + this.forms.city + '&keywords=' + this.forms.keywords + '&status=' + this.forms.status;
+      let url = this.$root.url + '/cp/customer/save_report?' + param;
+      window.open( url, '_blank' );
     },
-    deleteCity( id )
+    roundFixedYear( val )
     {
-      swal({
-        title: 'Konfirmasi',
-        text: 'Apakah anda ingin menghapus kota ini?',
-        icon: 'warning',
-        dangerMode: true,
-        buttons: {
-          cancel: 'Batal',
-          confirm: { value: true, text: 'Ya' }
-        }
-      }).then( val => {
-        if( val )
-        {
-          axios({
-            method: 'delete',
-            url: this.$root.url + '/cp/wilayah/city/delete/' + id
-          }).then( res => {
-            swal({
-              title: 'Berhasil',
-              text: 'Kota berhasil dihapus',
-              icon: 'success'
-            });
-            setTimeout(() => {
-              this.getCity();
-            }, 1000);
-          }).catch( err => {
-            swal({
-              title: 'Whoops',
-              text: 'Terjadi kesalahan',
-              icon: 'error'
-            });
-          });
-        }
-      });
+      var year = parseInt( val ) / 12;
+      if( Number.isInteger(year) ) return year;
+      else return year.toFixed(1);
     }
   },
   mounted() {
-    this.getCity();
+    this.getRequestUnit();
   }
 }
 </script>

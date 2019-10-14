@@ -264,9 +264,10 @@ Route::group(['prefix' => 'cp'], function() {
     Route::get('/save_report', 'ControlPanel\Pages\CustomerController@save_report');
 
     Route::group(['prefix' => 'request_unit'], function() {
+      Route::get('/', 'ControlPanel\Pages\ProjectRequestController@index')->name('cp_request_history_page');
       Route::get('/get_request', 'ControlPanel\Pages\ProjectRequestController@get_request');
       Route::get('/save_report', 'ControlPanel\Pages\ProjectRequestController@save_report');
-      Route::get('/get_detail_request/{request_id}', 'ControlPanel\Pages\ProjectRequestController@get_detail_request');
+      Route::get('/detail_request/{request_id}', 'ControlPanel\Pages\ProjectRequestController@get_detail_request');
     });
   });
 

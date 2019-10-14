@@ -2,91 +2,6 @@
   <div>
     <div class="dashboard-container">
       <div class="dashboard-content">
-        <div class="uk-margin dashboard-content-heading">
-          Overview
-        </div>
-        <div class="uk-grid-small uk-grid-match" uk-grid>
-          <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
-            <div class="uk-card uk-card-default card-overview-primary">
-              <div class="uk-card-header card-overview-header">
-                <div class="card-overview-value">
-                  {{ overviewData.project.total }}
-                </div>
-                <div class="card-overview-text">
-                  Proyek
-                </div>
-              </div>
-              <div class="uk-card-body card-overview-body">
-                <div class="uk-grid-small" uk-grid>
-                  <div class="uk-width-1-1">
-                    <div class="uk-float-left">
-                      Tersedia
-                    </div>
-                    <div class="uk-float-right">
-                      {{ overviewData.project.available }}
-                    </div>
-                  </div>
-                  <div class="uk-width-1-1">
-                    <div class="uk-float-left">
-                      Terjual
-                    </div>
-                    <div class="uk-float-right">
-                      {{ overviewData.project.sold }}
-                    </div>
-                  </div>
-                  <div class="uk-width-1-1">
-                    <div class="uk-float-left">
-                      Segera Hadir
-                    </div>
-                    <div class="uk-float-right">
-                      {{ overviewData.project.soon }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
-            <div class="uk-card uk-card-default card-overview-primary">
-              <div class="uk-card-header card-overview-header">
-                <div class="card-overview-value">
-                  {{ overviewData.unit.total }}
-                </div>
-                <div class="card-overview-text">
-                  Unit
-                </div>
-              </div>
-              <div class="uk-card-body card-overview-body">
-                <div class="uk-grid-small" uk-grid>
-                  <div class="uk-width-1-1">
-                    <div class="uk-float-left">
-                      Tersedia
-                    </div>
-                    <div class="uk-float-right">
-                      {{ overviewData.unit.available }}
-                    </div>
-                  </div>
-                  <div class="uk-width-1-1">
-                    <div class="uk-float-left">
-                      Terjual
-                    </div>
-                    <div class="uk-float-right">
-                      {{ overviewData.unit.sold }}
-                    </div>
-                  </div>
-                  <div class="uk-width-1-1">
-                    <div class="uk-float-left">
-                      Sudah dipesan
-                    </div>
-                    <div class="uk-float-right">
-                      {{ overviewData.unit.booked }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <div class="uk-grid-small uk-grid-match" uk-grid>
           <div class="uk-width-1-1">
             <div class="uk-margin dashboard-content-heading">
@@ -166,6 +81,92 @@
                 </div>
                 <div class="card-overview-text">
                   Ditolak
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="uk-margin dashboard-content-heading">
+          Proyek
+        </div>
+        <div class="uk-grid-small uk-grid-match" uk-grid>
+          <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
+            <div class="uk-card uk-card-default card-overview-primary">
+              <div class="uk-card-header card-overview-header">
+                <div class="card-overview-value">
+                  {{ overviewData.project.total }}
+                </div>
+                <div class="card-overview-text">
+                  Proyek
+                </div>
+              </div>
+              <div class="uk-card-body card-overview-body">
+                <div class="uk-grid-small" uk-grid>
+                  <div class="uk-width-1-1">
+                    <div class="uk-float-left">
+                      Tersedia
+                    </div>
+                    <div class="uk-float-right">
+                      {{ overviewData.project.available }}
+                    </div>
+                  </div>
+                  <div class="uk-width-1-1">
+                    <div class="uk-float-left">
+                      Terjual
+                    </div>
+                    <div class="uk-float-right">
+                      {{ overviewData.project.sold }}
+                    </div>
+                  </div>
+                  <div class="uk-width-1-1">
+                    <div class="uk-float-left">
+                      Segera Hadir
+                    </div>
+                    <div class="uk-float-right">
+                      {{ overviewData.project.soon }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
+            <div class="uk-card uk-card-default card-overview-primary">
+              <div class="uk-card-header card-overview-header">
+                <div class="card-overview-value">
+                  {{ overviewData.unit.total }}
+                </div>
+                <div class="card-overview-text">
+                  Unit
+                </div>
+              </div>
+              <div class="uk-card-body card-overview-body">
+                <div class="uk-grid-small" uk-grid>
+                  <div class="uk-width-1-1">
+                    <div class="uk-float-left">
+                      Tersedia
+                    </div>
+                    <div class="uk-float-right">
+                      {{ overviewData.unit.available }}
+                    </div>
+                  </div>
+                  <div class="uk-width-1-1">
+                    <div class="uk-float-left">
+                      Terjual
+                    </div>
+                    <div class="uk-float-right">
+                      {{ overviewData.unit.sold }}
+                    </div>
+                  </div>
+                  <div class="uk-width-1-1">
+                    <div class="uk-float-left">
+                      Sudah dipesan
+                    </div>
+                    <div class="uk-float-right">
+                      {{ overviewData.unit.booked }}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

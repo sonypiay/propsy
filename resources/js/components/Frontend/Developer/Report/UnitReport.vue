@@ -241,9 +241,8 @@ export default {
     onSaveAs( file )
     {
       let datepicker = this.forms.datepicker.selectedDate;
-      let start_datepicker = this.$root.formatDate( datepicker.start, 'YYYY-MM-DD' );
-      let end_datepicker = this.$root.formatDate( datepicker.end, 'YYYY-MM-DD' );
-      if( start_datepicker === end_datepicker ) end_datepicker = '';
+      let start_datepicker = this.filterdate.isfiltered === false ? '' : this.$root.formatDate( datepicker.start, 'YYYY-MM-DD' );
+      let end_datepicker = this.filterdate.isfiltered === false ? '' : this.$root.formatDate( datepicker.end, 'YYYY-MM-DD' );
 
       var param = 'start_date=' + start_datepicker + '&end_date=' + end_datepicker;
       var url = this.$root.url + '/developer/report/unit/save/' + file + '?' + param;

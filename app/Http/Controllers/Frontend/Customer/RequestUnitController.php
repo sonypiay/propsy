@@ -9,6 +9,7 @@ use App\Database\LogProjectRequest;
 use App\Database\ProjectUnitType;
 use App\Database\MeetingAppointment;
 use App\Http\Controllers\Controller;
+use PDF;
 
 class RequestUnitController extends Controller
 {
@@ -45,7 +46,7 @@ class RequestUnitController extends Controller
     ->join('province', 'city.province_id', '=', 'province.province_id')
     ->leftJoin('meeting_appointment', 'project_request.request_id', '=', 'meeting_appointment.request_id')
     ->where('project_request.customer_id', '=', $session_user);
-    
+
     if( $status_request !== 'all' )
     {
       $getrequest = $getrequest->where('project_request.status_request', '=', $status_request);
@@ -106,5 +107,57 @@ class RequestUnitController extends Controller
     ];
 
     return response()->json( $res, $res['status'] );
+  }
+
+  public function report_save_project_request( ProjectRequest $project_request, LogProjectRequest $log_request, $request_id )
+  {
+    if( ! session()->has('customer_id') ) abort(401);
+
+    $getrequest = $project_request->select(
+      'project_request.request_id',
+      'project_request.request_message',
+      'project_request.status_request',
+      'project_request.created_at',
+      'project_request.updated_at',
+      'customer.customer_id',
+      'customer.customer_name',
+      'customer.customer_email',
+      'customer.customer_phone_number',
+      'project_unit_type.unit_type_id',
+      'project_unit_type.unit_name',
+      'city.city_name',
+      'province.province_name',
+      'meeting_appointment.meeting_time',
+      'meeting_appointment.meeting_status',
+      'meeting_appointment.meeting_note',
+      'meeting_appointment.meeting_result',
+      'meeting_appointment.document_file',
+      'meeting_appointment.created_by',
+      'meeting_appointment.updated_by',
+      'price_installment.dp_price',
+      'price_installment.installment_price',
+      'price_installment.installment_tenor'
+    )
+    ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
+    ->join('city', 'customer.city_id', '=', 'city.city_id')
+    ->join('province', 'city.province_id', '=', 'province.province_id')
+    ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
+    ->join('price_installment', 'project_request.installment', '=', 'price_installment.id')
+    ->leftJoin('meeting_appointment', 'project_request.request_id', '=', 'meeting_appointment.request_id')
+    ->where([
+      ['project_request.request_id', $request_id],
+      ['project_request.customer_id', session()->get('customer_id')]
+    ])
+    ->first();
+    if( ! $getrequest ) abort(404);
+
+    $filename = 'RequestUnit-' . $request_id . '.pdf';
+
+    $res = [
+      'filename' => $filename,
+      'result' => $getrequest
+    ];
+
+    return PDF::loadView('frontend.pages.export.customer_request_unit', $res)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
   }
 }

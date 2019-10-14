@@ -12,8 +12,7 @@
             <div class="uk-grid-small uk-child-width-auto uk-margin-top banner-search-navbottom" uk-grid>
               <div>
                 <a>
-                  <span v-if="forms.type.name === ''">Semua Properti</span>
-                  <span v-else>{{ forms.type.value }}</span>
+                  <span>{{ forms.type.name }}</span>
                   <span uk-icon="chevron-down"></span>
                 </a>
                 <div uk-dropdown="mode: click;" id="filtertype" class="uk-box-shadow-small banner-search-navdropdown">
@@ -181,8 +180,8 @@ export default {
           isfiltered: false
         },
         type: {
-          name: '',
-          value: ''
+          name: 'Semua Properti',
+          value: 'all'
         }
       },
       projects: {
@@ -216,7 +215,7 @@ export default {
         console.log( err.response.statusText );
       });
     },
-    changePropertyType( name, value )
+    changePropertyType( value, name )
     {
       if( name === undefined && value === undefined )
       {

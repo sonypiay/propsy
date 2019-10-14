@@ -48,6 +48,11 @@
                 </div>
                 <div class="uk-width-expand">
                   <div class="uk-card-body uk-card-small card-unit-body">
+                    <div class="uk-clearfix">
+                      <a class="uk-link uk-link-text uk-float-right" :href="$root.url + '/customer/print/' + unit.request_id">
+                        <span uk-icon="print"></span>
+                      </a>
+                    </div>
                     <a :href="$root.url + '/project/detail_unit/' + unit.unit_slug" class="uk-card-title unit-name">{{ unit.unit_name }}</a>
                     <div class="unit-location">
                       <span uk-icon="icon: location; ratio: 0.8"></span>
@@ -107,9 +112,6 @@
                   <div class="uk-card-footer card-unit-footer uk-padding-small">
                     <div class="uk-grid-small uk-child-width-auto" uk-grid>
                       <div>
-                        
-                      </div>
-                      <div>
                         <div class="unit-specification">
                           {{ unit.request_id }}
                           <span>Request ID</span>
@@ -128,9 +130,29 @@
                   <div class="uk-card-footer card-unit-footer uk-padding-remove uk-margin-small-top">
                     <div class="uk-grid-small uk-child-width-auto" uk-grid>
                       <div>
-                        <a :href="$root.url + '/project/detail_unit/' + unit.unit_slug" class="uk-button uk-button-small uk-button-primary unit-readmore">
-                          Lihat Lebih Lanjut
-                        </a>
+                        <a class="uk-button uk-button-small uk-button-primary unit-readmore">Cicilan dipilih</a>
+                        <div class="uk-width-2-3" uk-dropdown="mode: click;">
+                          <h3 class="uk-h3">Info Cicilan</h3>
+                          <table class="uk-table uk-table-hover uk-table-striped uk-table-divider uk-table-small uk-table-middle">
+                            <thead>
+                              <tr>
+                                <th>DP</th>
+                                <th>Angsuran</th>
+                                <th>Tenor</th>
+                                <th>Total Angsuran</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>Rp. {{ unit.dp_price | currency }}</td>
+                                <td>Rp. {{ unit.installment_price | currency }}</td>
+                                <td>{{ unit.installment_tenor }} bulan (<span v-if="unit.installment_tenor >= 12">{{ roundFixedYear( unit.installment_tenor ) }} tahun</span>)</td>
+                                <td>Rp. {{ unit.installment_tenor * unit.installment_price | currency }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
                       <div v-if="unit.status_request === 'accept'">
                         <a class="uk-button uk-button-small uk-button-primary unit-readmore">Pengajuan Diterima</a>

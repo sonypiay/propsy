@@ -40,14 +40,13 @@ Route::group(['prefix' => 'customer'], function() {
     Route::put('/change_account_information', 'Frontend\Customer\CustomerController@change_account_information');
     Route::post('/upload_photo_profile', 'Frontend\Customer\CustomerController@upload_photo_profile');
   });
-
   Route::get('/request_unit', 'Frontend\Customer\CustomerController@request_unit_page')->name('customer_request_page');
   Route::get('/get_request_list/{status_request}', 'Frontend\Customer\RequestUnitController@get_request_list');
   Route::put('/cancel_request/{request_id}', 'Frontend\Customer\RequestUnitController@cancel_request');
   Route::put('/response_meeting_invitation/{request_id}/{status_request}', 'Frontend\Customer\RequestUnitController@response_meeting_invitation');
-
   Route::get('/meeting_invitation', 'Frontend\Customer\MeetingInvitationController@index')->name('customer_meeting_page');
   Route::get('/get_meeting_invitation', 'Frontend\Customer\MeetingInvitationController@get_meeting_invitation');
+  Route::get('/print/{request_id}', 'Frontend\Customer\RequestUnitController@report_save_project_request');
 });
 
 // Marketing

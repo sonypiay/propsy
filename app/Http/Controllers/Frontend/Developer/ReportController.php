@@ -53,11 +53,7 @@ class ReportController extends Controller
     ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
     ->where($whereClauses);
 
-    if( ! empty( $start_date ) && empty( $end_date ) )
-    {
-      $getrequest = $getrequest->where(DB::raw('date_format(project_request.created_at, "%Y-%m-%d")'), '=', $start_date);
-    }
-    else
+    if( ! empty( $start_date ) && ! empty( $end_date ) )
     {
       $getrequest = $getrequest->whereBetween(DB::raw('date_format(project_request.created_at, "%Y-%m-%d")'), [$start_date, $end_date]);
     }
@@ -89,11 +85,7 @@ class ReportController extends Controller
     ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
     ->where($whereClauses);
 
-    if( ! empty( $start_date ) && empty( $end_date ) )
-    {
-      $getrequest = $getrequest->where(DB::raw('date_format(project_request.created_at, "%Y-%m-%d")'), '=', $start_date);
-    }
-    else
+    if( ! empty( $start_date ) && ! empty( $end_date ) )
     {
       $getrequest = $getrequest->whereBetween(DB::raw('date_format(project_request.created_at, "%Y-%m-%d")'), [$start_date, $end_date]);
     }
@@ -106,6 +98,7 @@ class ReportController extends Controller
       'start_date' => $start_date,
       'end_date' => $end_date
     ];
+    //return response()->view('frontend.pages.export.unit', $data);
     return PDF::loadView('frontend.pages.export.unit', $data)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
   }
 
@@ -141,17 +134,13 @@ class ReportController extends Controller
     ->where('project_request.request_id', $request_id)
     ->first();
 
-    $getlog = $log_request->where('request_id', '=', $request_id)
-    ->orderBy('log_date', 'desc')
-    ->get();
-
     $filename = 'RequestUnit-' . $request_id . '.pdf';
 
     $res = [
       'filename' => $filename,
-      'result' => $getrequest,
-      'log_request' => $getlog
+      'result' => $getrequest
     ];
+    //return response()->view('frontend.pages.export.request_unit', $res);
     return PDF::loadView('frontend.pages.export.request_unit', $res)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
   }
 }

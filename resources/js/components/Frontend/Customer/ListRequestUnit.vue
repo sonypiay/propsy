@@ -48,6 +48,11 @@
                 </div>
                 <div class="uk-width-expand">
                   <div class="uk-card-body uk-card-small card-unit-body">
+                    <div class="uk-clearfix">
+                      <a class="uk-link uk-link-text uk-float-right" :href="$root.url + '/customer/print/' + unit.request_id">
+                        <span uk-icon="print"></span>
+                      </a>
+                    </div>
                     <a :href="$root.url + '/project/detail_unit/' + unit.unit_slug" class="uk-card-title unit-name">{{ unit.unit_name }}</a>
                     <div class="unit-location">
                       <span uk-icon="icon: location; ratio: 0.8"></span>
@@ -107,6 +112,24 @@
                   <div class="uk-card-footer card-unit-footer uk-padding-small">
                     <div class="uk-grid-small uk-child-width-auto" uk-grid>
                       <div>
+                        <div class="unit-specification">
+                          {{ unit.request_id }}
+                          <span>Request ID</span>
+                        </div>
+                      </div>
+                      <div>
+                        <div class="unit-specification">
+                          {{ $root.formatDate( unit.created_at, 'DD MMMM YYYY' ) }}
+                          <span>Tanggal Pengajuan</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="uk-width-1-1">
+                  <div class="uk-card-footer card-unit-footer uk-padding-remove uk-margin-small-top">
+                    <div class="uk-grid-small uk-child-width-auto" uk-grid>
+                      <div>
                         <a class="uk-button uk-button-small uk-button-primary unit-readmore">Cicilan dipilih</a>
                         <div class="uk-width-2-3" uk-dropdown="mode: click;">
                           <h3 class="uk-h3">Info Cicilan</h3>
@@ -130,29 +153,6 @@
                             </tbody>
                           </table>
                         </div>
-                      </div>
-                      <div>
-                        <div class="unit-specification">
-                          {{ unit.request_id }}
-                          <span>Request ID</span>
-                        </div>
-                      </div>
-                      <div>
-                        <div class="unit-specification">
-                          {{ $root.formatDate( unit.created_at, 'DD MMMM YYYY' ) }}
-                          <span>Tanggal Pengajuan</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="uk-width-1-1">
-                  <div class="uk-card-footer card-unit-footer uk-padding-remove uk-margin-small-top">
-                    <div class="uk-grid-small uk-child-width-auto" uk-grid>
-                      <div>
-                        <a :href="$root.url + '/project/detail_unit/' + unit.unit_slug" class="uk-button uk-button-small uk-button-primary unit-readmore">
-                          Lihat Lebih Lanjut
-                        </a>
                       </div>
                       <div v-if="unit.status_request === 'accept'">
                         <a class="uk-button uk-button-small uk-button-primary unit-readmore">Pengajuan Diterima</a>

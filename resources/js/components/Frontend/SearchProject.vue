@@ -158,21 +158,24 @@ export default {
     'session_user',
     'keywords',
     'getcity',
-    'getfacility'
+    'getfacility',
+    'pricemin',
+    'pricemax',
+    'type'
   ],
   data() {
     return {
       forms: {
         keywords: this.keywords,
-        type: 'all',
+        type: this.type,
         city: {
           value: 'all',
           name: 'Semua Kota'
         },
         price: {
-          min: '',
-          max: '',
-          step: 50000000
+          min: this.pricemin === '' ? '' : this.pricemin,
+          max: this.pricemax === '' ? '' : this.pricemax,
+          step: 10000000
         },
         facility: [],
         submitsearch: 'Cari proyek'

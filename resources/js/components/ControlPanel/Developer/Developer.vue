@@ -93,6 +93,9 @@
           </div>
           <div v-else>
             <label class="uk-label">{{ getdeveloper.total }} Pengembang</label>
+            <a uk-tooltip="Cetak" class="uk-link uk-link-text" @click="saveReport()">
+              <span uk-icon="print"></span>
+            </a>
             <table class="uk-table uk-table-middle uk-table-striped uk-table-divider uk-table-hover uk-table-small">
               <thead>
                 <tr>
@@ -200,6 +203,12 @@ export default {
     {
       this.getdeveloper.detail = data;
       UIkit.modal('#modal-developer').show();
+    },
+    saveReport()
+    {
+      let param = 'city=' + this.forms.city + '&keywords=' + this.forms.keywords;
+      let url = this.$root.url + '/cp/developer/save_report?' + param;
+      window.open( url, '_blank' );
     }
   },
   mounted() {

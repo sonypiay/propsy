@@ -7,6 +7,9 @@
 }
 </style>
 <div class="uk-width-1-1">
+  <div class="uk-margin-bottom">
+    <img style="width: 130px;" src="{{ asset('images/brand/logo_maps_primary.png') }}" alt="">
+  </div>
   <table class="uk-table uk-table-divider uk-table-small">
     <tr>
       <td class="uk-text-bold uk-width-small">Request ID</td>
@@ -84,6 +87,8 @@
         <th>Tanggal Meeting</th>
         <th>Jam</th>
         <th>Status</th>
+        <th>Dibuat oleh</th>
+        <th>Revisi</th>
       </tr>
     </thead>
     <tbody>
@@ -105,6 +110,12 @@
           <label class="uk-label uk-label-success">Selesai</label>
           @endif
         </td>
+        <td>
+          {{ $result->created_by }}
+        </td>
+        <td>
+          {{ $result->updated_by }}
+        </td>
       </tr>
       <tr>
         <th>Hasil Meeting</th>
@@ -114,22 +125,7 @@
       </tr>
     </tbody>
   </table>
-  <div class="page-break"></div>
+  <!--<div class="page-break"></div>-->
   @endif
-
-  <div class="uk-margin">
-    <h3 class="uk-h3">Track Pemesanan Unit</h3>
-    <ul class="uk-margin uk-list uk-list-divider">
-      @foreach( $log_request as $log )
-      <li>
-        <div class="uk-text-small uk-text-bold">
-          @php $log_date = new DateTime( $log->log_date ) @endphp
-          {{ $log_date->format('d/m/Y H:i') }}
-        </div>
-        {!! $log->log_message !!}
-      </li>
-      @endforeach
-    </ul>
-  </div>
 </div>
 @endsection

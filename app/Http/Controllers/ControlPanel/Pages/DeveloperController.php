@@ -62,21 +62,23 @@ class DeveloperController extends Controller
     {
       $getdeveloper = $getdeveloper->where('developer_user.city_id', $city);
     }
+
     if( ! empty( $keywords ) )
     {
-      $getdeveloper = $getdeveloper->where('developer_user.dev_name', 'like', '%' . $keywords . '%')
-      ->orWhere('developer_user.dev_ownername', 'like', '%' . $keywords . '%');
+      $getdeveloper = $getdeveloper->where(function( $query ) use ( $keywords ) {
+        $query->where('developer_user.dev_name', 'like', '%' . $keywords . '%')
+        ->orWhere('developer_user.dev_ownername', 'like', '%' . $keywords . '%');
+      });
     }
 
     $result = $getdeveloper->paginate( $limit );
     return response()->json( $result, 200 );
   }
 
-  public function save_report( Request $request, DeveloperUser $developeruser )
+  public function save_report( Request $request, DeveloperUser $developeruser, CityDB $citydb )
   {
     $keywords = $request->keywords;
     $city = $request->city;
-    $limit = isset( $request->limit ) ? $request->limit : 10;
 
     $getdeveloper = $developeruser->select(
       'developer_user.dev_user_id',
@@ -99,19 +101,29 @@ class DeveloperController extends Controller
     )
     ->leftJoin('city', 'developer_user.city_id', '=', 'city.city_id')
     ->leftJoin('province', 'city.province_id', '=', 'province.province_id')
-    ->orderBy('developer_user.created_at', 'desc');
+    ->orderBy('developer_user.created_at', 'asc');
+    $getcity = '';
 
     if( $city !== 'all' )
     {
       $getdeveloper = $getdeveloper->where('developer_user.city_id', $city);
-    }
-    if( ! empty( $keywords ) )
-    {
-      $getdeveloper = $getdeveloper->where('developer_user.dev_name', 'like', '%' . $keywords . '%')
-      ->orWhere('developer_user.dev_ownername', 'like', '%' . $keywords . '%');
+      $getcity = $citydb->where('city_id', $city)->first();
     }
 
-    $result = $getdeveloper->paginate( $limit );
-    return response()->json( $result, 200 );
+    if( ! empty( $keywords ) )
+    {
+      $getdeveloper = $getdeveloper->where(function( $query ) use ( $keywords ) {
+        $query->where('developer_user.dev_name', 'like', '%' . $keywords . '%')
+        ->orWhere('developer_user.dev_ownername', 'like', '%' . $keywords . '%');
+      });
+    }
+
+    $filename = 'DeveloperUser-' . date('d/m/Y');
+    $res = [
+      'filename' => $filename,
+      'result' => $getdeveloper->get(),
+      'getcity' => $getcity
+    ];
+    return PDF::loadView('controlpanel.pages.reports.developer', $res)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
   }
 }

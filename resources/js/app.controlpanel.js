@@ -14,10 +14,11 @@ Vue.component('wilayah-city-component', require('./components/ControlPanel/Wilay
 Vue.component('facility-component', require('./components/ControlPanel/Property/Facility.vue').default);
 Vue.component('admin-page-component', require('./components/ControlPanel/Manajemen/Admin.vue').default);
 Vue.component('developer-page-component', require('./components/ControlPanel/Developer/Developer.vue').default);
-Vue.component('project-page-component', require('./components/ControlPanel/Developer/Project.vue').default);
 Vue.component('customer-page-component', require('./components/ControlPanel/Customer/Customer.vue').default);
 Vue.component('requesthistory-page-component', require('./components/ControlPanel/Customer/RequestHistory.vue').default);
 Vue.component('admin-page-component', require('./components/ControlPanel/Manajemen/Admin.vue').default);
+Vue.component('project-page-component', require('./components/ControlPanel/Property/Project.vue').default);
+Vue.component('projectunit-page-component', require('./components/ControlPanel/Property/ProjectUnit.vue').default);
 
 import VueCurrencyFilter from 'vue-currency-filter';
 Vue.use(VueCurrencyFilter);

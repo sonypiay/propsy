@@ -18,7 +18,7 @@
             <div class="uk-navbar-dropdown">
               <ul class="uk-nav uk-navbar-dropdown-nav">
                 <li><a href="{{ route('cp_customer_page') }}">Pelanggan</a></li>
-                <li><a href="#">Riwayat Pengajuan Unit</a></li>
+                <li><a href="{{ route('cp_request_history_page') }}">Riwayat Pengajuan Unit</a></li>
               </ul>
             </div>
           </li>
@@ -26,8 +26,8 @@
             <a href="#">Properti <span uk-icon="chevron-down"></span></a>
             <div class="uk-navbar-dropdown">
               <ul class="uk-nav uk-navbar-dropdown-nav">
-                <li><a href="#">Proyek</a></li>
-                <li><a href="#">Tipe Unit</a></li>
+                <li><a href="{{ route('cp_project_list_page') }}">Proyek</a></li>
+                <li><a href="{{ route('cp_project_unit_page') }}">Tipe Unit</a></li>
                 <li><a href="{{ route('cp_facility_page') }}">Fasilitas</a></li>
               </ul>
             </div>

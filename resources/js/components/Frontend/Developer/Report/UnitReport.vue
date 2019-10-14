@@ -36,7 +36,7 @@
               </div>
             </div>
           </div>
-        </div>
+         </div>
       </div>
       <div class="uk-margin uk-grid-small uk-child-width-auto" uk-grid>
         <div>
@@ -55,7 +55,7 @@
           </thead>
           <tbody>
             <tr v-for="unit in getunit.results">
-              <td>{{ unit.request_unique_id }}</td>
+              <td>{{ unit.request_id }}</td>
               <td>{{ unit.unit_name }}</td>
               <td>{{ $root.formatDate( unit.created_at, 'dddd, DD MMM YYYY' ) }}</td>
               <td>{{ unit.customer_name }}</td>
@@ -104,7 +104,8 @@ export default {
       },
       filterdate: {
         value: '',
-        text: this.$root.formatDate( new Date(), 'MMM DD, YYYY' ) + ' <span uk-icon="chevron-down"></span>'
+        text: this.$root.formatDate( new Date(), 'MMM DD, YYYY' ) + ' <span uk-icon="chevron-down"></span>',
+        isfiltered: false,
       },
       getunit: {
         total: 0,
@@ -196,6 +197,7 @@ export default {
           this.filterdate.text = start_datepicker + ' - ' + end_datepicker + ' ' + icon_chevron;
         }
       }
+      this.filterdate.isfiltered = true;
       this.getReportUnit();
       UIkit.dropdown('#dropdown-date').hide();
     },
@@ -207,14 +209,15 @@ export default {
       let start_datepicker = this.$root.formatDate( datepicker.start, 'MMM DD, YYYY' );
       this.filterdate.text = start_datepicker + ' <span uk-icon="chevron-down"></span>'
       this.filterdate.value = '';
+      this.filterdate.isfiltered = false;
+      this.getReportUnit();
       UIkit.dropdown('#dropdown-date').hide();
     },
     getReportUnit( p )
     {
       let datepicker = this.forms.datepicker.selectedDate;
-      let start_datepicker = this.$root.formatDate( datepicker.start, 'YYYY-MM-DD' );
-      let end_datepicker = this.$root.formatDate( datepicker.end, 'YYYY-MM-DD' );
-      if( start_datepicker === end_datepicker ) end_datepicker = '';
+      let start_datepicker = this.filterdate.isfiltered === false ? '' : this.$root.formatDate( datepicker.start, 'YYYY-MM-DD' );
+      let end_datepicker = this.filterdate.isfiltered === false ? '' : this.$root.formatDate( datepicker.end, 'YYYY-MM-DD' );
 
       var param = 'start_date=' + start_datepicker + '&end_date=' + end_datepicker;
       var url = this.$root.url + '/developer/report/get_unit?page=' + this.getunit.paginate.current_page + '&' + param;
@@ -238,9 +241,8 @@ export default {
     onSaveAs( file )
     {
       let datepicker = this.forms.datepicker.selectedDate;
-      let start_datepicker = this.$root.formatDate( datepicker.start, 'YYYY-MM-DD' );
-      let end_datepicker = this.$root.formatDate( datepicker.end, 'YYYY-MM-DD' );
-      if( start_datepicker === end_datepicker ) end_datepicker = '';
+      let start_datepicker = this.filterdate.isfiltered === false ? '' : this.$root.formatDate( datepicker.start, 'YYYY-MM-DD' );
+      let end_datepicker = this.filterdate.isfiltered === false ? '' : this.$root.formatDate( datepicker.end, 'YYYY-MM-DD' );
 
       var param = 'start_date=' + start_datepicker + '&end_date=' + end_datepicker;
       var url = this.$root.url + '/developer/report/unit/save/' + file + '?' + param;

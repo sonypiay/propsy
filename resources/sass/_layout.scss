@@ -156,11 +156,48 @@ html, body {
 // banner homepage
 .banner-homepage {
   .banner-overlay-hmpg {}
-  .banner-content {
-    @include fontsetting( $font-primary, 48px, 300, normal, normal, 0.4px );
+  .banner-search {
     color: #efefef;
-    strong {
-      font-weight: 600 !important;
+    .banner-search-card {
+      width: 768px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 10px;
+      .search-input {
+        border-radius: 4px;
+        @include fontsetting( $font-primary, 16px, 400, normal, normal, 0.4px );
+        &:hover, &:focus {
+          border: 1px solid #ffffff;
+        }
+      }
+      .banner-search-navbottom {
+        z-index: 9999;
+        a {
+          color: #ffffff;
+          @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+        }
+        .banner-filter-dropdown {
+          z-index: 9999;
+        }
+        .banner-search-navdropdown {
+          z-index: 9999;
+          padding: 0;
+          padding-top: 20px;
+          padding-bottom: 20px;
+          border-radius: 4px;
+          ul {
+            li {
+              a {
+                padding-left: 15px;
+                color: #333333;
+                @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+                &:hover {
+                  background: #e9e9e9;
+                }
+              }
+            }
+          }
+        }
+      }
     }
     .learnmore {
       background: $color2;
@@ -175,6 +212,7 @@ html, body {
 
 // what is maps
 .whatis-maps {
+  margin-top: 10px;
   background: #f9f9f9;
   color: #666666;
   border-radius: 0 0 25% 25%;
@@ -194,7 +232,6 @@ html, body {
   .hmpg-listproject-heading {
     @include fontsetting( $font-primary, 28px, 600, normal, normal, 0.4px );
     color: #666666;
-    text-align: center;
   }
   .browse_project_btn {
     background: $color3;
@@ -436,6 +473,20 @@ html, body {
     .dev-profile-biography {
       color: #888888;
       @include fontsetting( $font-primary, .7rem, 400, normal, normal, 0.4px );
+    }
+  }
+  .sidebar-dev-contact {
+    .sidebar-btncontact {
+      background: #ffffff;
+      border: 1px solid $color3;
+      color: $color3;
+      border-radius: 4px;
+      text-transform: capitalize;
+      @include fontsetting( $font-primary, 12px, 400, normal, normal, 0.4px );
+      &:hover {
+        background: $color3;
+        color: #ffffff;
+      }
     }
   }
   .sidebar-viewproject {

@@ -382,6 +382,7 @@ export default {
   ],
   data() {
     return {
+      isViewPhone: false,
       forms: {
         booking: {
           selectunit: this.getunit.unit_type_id,
@@ -469,6 +470,12 @@ export default {
       var year = parseInt( val ) / 12;
       if( Number.isInteger(year) ) return year;
       else return year.toFixed(1);
+    },
+    whatsAppChat()
+    {
+      let text = 'Halo, Saya mau tanya...';
+      let url = 'https://api.whatsapp.com/send?phone=' + this.getproject.dev_mobile_phone + '&text=' + text;
+      window.open( url, '_blank' );
     }
   },
   computed: {

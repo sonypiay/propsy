@@ -485,7 +485,6 @@ class ProjectListController extends Controller
     $getfacility = $unit_facility->orderBy('facility_name', 'asc')->get();
     $data['getfacility'] = $getfacility;
 
-
     return response()->view('frontend.pages.search_project', $data);
   }
 

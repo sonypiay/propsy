@@ -4,44 +4,49 @@
       <!--<img :src="$root.url + '/images/banner/homepage3.jpg'" alt="" uk-cover>-->
       <div class="uk-position-center banner-search">
         <div class="uk-card uk-card-default uk-card-body banner-search-card">
-          <div class="uk-width-1-1 uk-inline">
-            <span class="uk-form-icon" uk-icon="search"></span>
-            <input type="search" class="uk-width-1-1 uk-input search-input" v-model="forms.keywords" placeholder="Cari berdasarkan nama properti, nama proyek atau nama pengembang" />
-          </div>
-          <div class="uk-grid-small uk-child-width-auto uk-margin-top banner-search-navbottom" uk-grid>
-            <div>
-              <a>Jenis Properti <span uk-icon="chevron-down"></span></a>
-              <div uk-dropdown="mode: click;" id="search-navdropdown" class="uk-box-shadow-small banner-search-navdropdown">
-                <ul class="uk-nav uk-dropdown-nav">
-                  <li><a>Residensial</a></li>
-                  <li><a>Apartemen</a></li>
-                </ul>
-              </div>
+          <form class="uk-form-stacked">
+            <div class="uk-width-1-1 uk-inline">
+              <span class="uk-form-icon" uk-icon="search"></span>
+              <input @keyup.enter="searchUnit()" type="search" class="uk-width-1-1 uk-input search-input" v-model="forms.keywords" placeholder="Cari berdasarkan nama properti, nama proyek atau nama pengembang" />
             </div>
-            <div>
-              <a>Harga Min (Rp.) - Harga Max (Rp.) <span uk-icon="chevron-down"></span></a>
-              <div uk-dropdown="mode: click;" class="uk-width-large banner-filter-dropdown">
-                <div class="uk-margin">
-                  <input type="number" class="uk-input" min="0" placeholder="Harga minimal" :step="10000000">
-                </div>
-                <div class="uk-margin">
-                  <input type="number" class="uk-input" min="0" placeholder="Harga maksimal" :step="10000000">
-                </div>
-                <div class="uk-margin">
-                  <button type="button" class="uk-button uk-button-primary">Terapkan</button>
+            <div class="uk-grid-small uk-child-width-auto uk-margin-top banner-search-navbottom" uk-grid>
+              <div>
+                <a>
+                  <span v-if="forms.type.name === ''">Semua Properti</span>
+                  <span v-else>{{ forms.type.value }}</span>
+                  <span uk-icon="chevron-down"></span>
+                </a>
+                <div uk-dropdown="mode: click;" id="filtertype" class="uk-box-shadow-small banner-search-navdropdown">
+                  <ul class="uk-nav uk-dropdown-nav">
+                    <li><a @click="changePropertyType('all', 'Semua Properti')">Semua Properti</a></li>
+                    <li><a @click="changePropertyType('residensial', 'Residensial')">Residensial</a></li>
+                    <li><a @click="changePropertyType('apartemen', 'Apartemen')">Apartemen</a></li>
+                  </ul>
                 </div>
               </div>
-            </div>
-            <div>
-              <a>Jenis Properti <span uk-icon="chevron-down"></span></a>
-              <div uk-dropdown="mode: click;" class="banner-search-dropdown">
-                <ul class="uk-nav uk-dropdown-nav">
-                  <li><a>Residensial</a></li>
-                  <li><a>Apartemen</a></li>
-                </ul>
+              <div>
+                <a>
+                  <span v-if="forms.price.isfiltered === false">Harga Min (Rp.) - Harga Max (Rp.)</span>
+                  <span v-else>Rp. {{ forms.price.min | currency }} - Rp. {{ forms.price.max | currency }} </span>
+                  <span uk-icon="chevron-down"></span>
+                </a>
+                <div uk-dropdown="mode: click;" id="filterprice" class="uk-width-large banner-filter-dropdown">
+                  <div class="uk-margin">
+                    <input type="number" class="uk-input" min="0" v-model="forms.price.min" placeholder="Harga minimal" :step="10000000">
+                    <span class="uk-text-small uk-text-muted" v-show="forms.price.min > 0 || forms.price.min !== ''">Rp. {{ forms.price.min | currency }}</span>
+                  </div>
+                  <div class="uk-margin">
+                    <input type="number" class="uk-input" min="0" v-model="forms.price.max" placeholder="Harga maksimal" :step="10000000">
+                    <span class="uk-text-small uk-text-muted" v-show="forms.price.max > 0 || forms.price.max !== ''">Rp. {{ forms.price.max | currency }}</span>
+                  </div>
+                  <div class="uk-margin">
+                    <a @click="filterPriceRange(true)" class="uk-button uk-button-small uk-button-primary">Terapkan</a>
+                    <a @click="filterPriceRange(false)" class="uk-button uk-button-small uk-button-primary">Reset</a>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>
@@ -169,7 +174,16 @@ export default {
   data() {
     return {
       forms: {
-        keywords: ''
+        keywords: '',
+        price: {
+          min: '',
+          max: '',
+          isfiltered: false
+        },
+        type: {
+          name: '',
+          value: ''
+        }
       },
       projects: {
         total: 0,
@@ -201,6 +215,52 @@ export default {
       }).catch( err => {
         console.log( err.response.statusText );
       });
+    },
+    changePropertyType( name, value )
+    {
+      if( name === undefined && value === undefined )
+      {
+        name = '';
+        value = '';
+      }
+
+      this.forms.type = {
+        name: name,
+        value: value
+      };
+
+      UIkit.dropdown('#filtertype').hide();
+    },
+    filterPriceRange( bool )
+    {
+      if( bool )
+      {
+        this.forms.price.isfiltered = true;
+        if( this.forms.price.min === '' || this.forms.price.min < 1 )
+        {
+          this.forms.price.min = ''
+          this.forms.price.isfiltered = false;
+        }
+
+        if( this.forms.price.max === '' || this.forms.price.max < 1 )
+        {
+          this.forms.price.max = '';
+          this.forms.price.isfiltered = false;
+        }
+      }
+      else
+      {
+        this.forms.price.isfiltered = false;
+        this.forms.price.min = '';
+        this.forms.price.max = '';
+      }
+
+      UIkit.dropdown('#filterprice').hide();
+    },
+    searchUnit()
+    {
+      var param = 'keywords=' + this.forms.keywords + '&type=' + this.forms.type.value + '&price_min=' + this.forms.price.min + '&price_max=' + this.forms.price.max;
+      document.location = this.$root.url + '/project/search?' + param;
     }
   },
   mounted() {

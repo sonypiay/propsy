@@ -4,6 +4,9 @@
 <div id="app">
   <page-search-project
   keywords="{{ $request->keywords }}"
+  pricemin="{{ $request->price_min }}"
+  pricemax="{{ $request->price_max }}"
+  type="{{ $request->type }}"
   session_active="{{ $session_active }}"
   :session_user="{{ json_encode( $session_user ) }}"
   :getcity="{{ json_encode( $getcity ) }}"

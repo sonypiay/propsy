@@ -475,6 +475,20 @@ html, body {
       @include fontsetting( $font-primary, .7rem, 400, normal, normal, 0.4px );
     }
   }
+  .sidebar-dev-contact {
+    .sidebar-btncontact {
+      background: #ffffff;
+      border: 1px solid $color3;
+      color: $color3;
+      border-radius: 4px;
+      text-transform: capitalize;
+      @include fontsetting( $font-primary, 12px, 400, normal, normal, 0.4px );
+      &:hover {
+        background: $color3;
+        color: #ffffff;
+      }
+    }
+  }
   .sidebar-viewproject {
     background: #ffffff;
     border: 1px solid $color3;

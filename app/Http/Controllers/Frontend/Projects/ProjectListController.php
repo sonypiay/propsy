@@ -142,7 +142,9 @@ class ProjectListController extends Controller
       'developer_user.dev_user_id',
       'developer_user.dev_name',
       'developer_user.dev_slug',
-      'developer_user.dev_logo'
+      'developer_user.dev_logo',
+      'developer_user.dev_phone_office',
+      'developer_user.dev_mobile_phone'
     )
     ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
     ->join('city', 'project_list.city_id', '=', 'city.city_id')
@@ -217,6 +219,8 @@ class ProjectListController extends Controller
       'developer_user.dev_slug',
       'developer_user.dev_logo',
       'developer_user.dev_biography',
+      'developer_user.dev_phone_office',
+      'developer_user.dev_mobile_phone',
       'city.city_id',
       'city.city_name',
       'province.province_name'

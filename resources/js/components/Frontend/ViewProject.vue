@@ -180,13 +180,32 @@
                 <span uk-icon="icon: users; ratio: 4"></span>
               </div>
               <div v-else class="dev-withlogo">
-                <img class="uk-align-center" :src="$root.url + '/storage/assets/images/devlogo/' + getproject.dev_logo" :alt="getproject.dev_name">
+                <img class="uk-align-center uk-width-1-4" :src="$root.url + '/storage/assets/images/devlogo/' + getproject.dev_logo" :alt="getproject.dev_name">
               </div>
               <div class="uk-margin sidebar-dev-profile">
                 <a class="dev-profile-name" href="#">{{ getproject.dev_name }}</a>
               </div>
               <div class="uk-margin uk-text-center">
                 <a class="uk-width-1-1 uk-button uk-button-primary sidebar-viewproject" :href="$root.url + '/profile/developer/' + getproject.dev_slug">Lihat Pengembang</a>
+              </div>
+              <div class="uk-margin sidebar-dev-contact">
+                <div class="uk-grid-small" uk-grid>
+                  <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
+                    <button @click="isViewPhone = true" class="uk-width-1-1 uk-button uk-button-default sidebar-btncontact">
+                      <div v-if="isViewPhone">
+                        {{ getproject.dev_phone_office }}
+                      </div>
+                      <div v-else class="uk-text-truncate">
+                        <span uk-icon="icon: receiver; ratio: 0.8"></span> {{ getproject.dev_phone_office }}
+                      </div>
+                    </button>
+                  </div>
+                  <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
+                    <button @click="whatsappChat()" class="uk-width-1-1 uk-button uk-button-default sidebar-btncontact">
+                      <span uk-icon="icon: whatsapp; ratio: 0.8"></span> WhatsApp
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -208,6 +227,7 @@ export default {
   data() {
     return {
       forms: {},
+      isViewPhone: false,
       projectunit: {
         total: 0,
         results: [],
@@ -243,6 +263,12 @@ export default {
       }).catch( err => {
         console.log( err.response.statusText );
       });
+    },
+    whatsAppChat()
+    {
+      let text = 'Halo, Saya mau tanya...';
+      let url = 'https://api.whatsapp.com/send?phone=' + this.getproject.dev_mobile_phone + '&text=' + text;
+      window.open( url, '_blank' );
     }
   },
   mounted() {

@@ -201,7 +201,7 @@
                     </button>
                   </div>
                   <div class="uk-width-1-2@xl uk-width-1-2@l uk-width-1-2@m uk-width-1-1@s">
-                    <button @click="whatsappChat()" class="uk-width-1-1 uk-button uk-button-default sidebar-btncontact">
+                    <button @click="whatsAppChat()" class="uk-width-1-1 uk-button uk-button-default sidebar-btncontact">
                       <span uk-icon="icon: whatsapp; ratio: 0.8"></span> WhatsApp
                     </button>
                   </div>

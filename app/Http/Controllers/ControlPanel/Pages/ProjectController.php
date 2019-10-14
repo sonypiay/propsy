@@ -261,7 +261,6 @@ class ProjectController extends Controller
       'result' => $getunit->get(),
       'getcity' => $getcity
     ];
-    return response()->view('controlpanel.pages.reports.projectunit', $res);
-    //return PDF::loadView('controlpanel.pages.reports.projectunit', $res)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
+    return PDF::loadView('controlpanel.pages.reports.projectunit', $res)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
   }
 }

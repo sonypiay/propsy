@@ -2208,8 +2208,8 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     saveReport: function saveReport() {
-      var param = 'city=' + this.forms.city + '&keywords=' + this.forms.keywords + '&status=' + this.forms.status;
-      var url = this.$root.url + '/cp/customer/save_report?' + param;
+      var param = 'keywords=' + this.forms.keywords + '&status=' + this.forms.status;
+      var url = this.$root.url + '/cp/customer/request_unit/save_report?' + param;
       window.open(url, '_blank');
     },
     roundFixedYear: function roundFixedYear(val) {

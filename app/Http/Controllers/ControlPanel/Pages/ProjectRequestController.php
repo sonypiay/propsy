@@ -62,7 +62,7 @@ class ProjectRequestController extends Controller
   public function save_report( Request $request, ProjectRequest $project_request )
   {
     $keywords = $request->keywords;
-    $limit = isset( $request->limit ) ? $request->limit : 10;
+    $status = $request->status;
 
     $getrequest = $project_request->select(
       'project_request.request_id',
@@ -76,13 +76,22 @@ class ProjectRequestController extends Controller
     ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
     ->orderBy('project_request.created_at', 'desc');
 
+    if( $status !== 'all' )
+    {
+      $getrequest = $getrequest->where('project_request.status_request', $status);
+    }
+
     if( ! empty( $keywords ) )
     {
       $getrequest = $getrequest->where('project_request.request_id', 'like', '%' . $keywords . '%');
     }
 
-    $result = $getrequest->paginate( $limit );
-    return response()->json( $result, 200 );
+    $filename = 'DataRiwayatPesanan-' . date('d/m/Y');
+    $res = [
+      'filename' => $filename,
+      'result' => $getrequest->get()
+    ];
+    return PDF::loadView('controlpanel.pages.reports.request_unit', $res)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
   }
 
   public function get_detail_request( ProjectRequest $project_request, LogProjectRequest $log_request, $request_id )

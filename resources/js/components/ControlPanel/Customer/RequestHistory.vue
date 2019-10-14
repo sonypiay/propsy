@@ -283,8 +283,8 @@ export default {
     },
     saveReport()
     {
-      let param = 'city=' + this.forms.city + '&keywords=' + this.forms.keywords + '&status=' + this.forms.status;
-      let url = this.$root.url + '/cp/customer/save_report?' + param;
+      let param = 'keywords=' + this.forms.keywords + '&status=' + this.forms.status;
+      let url = this.$root.url + '/cp/customer/request_unit/save_report?' + param;
       window.open( url, '_blank' );
     },
     roundFixedYear( val )

@@ -86,7 +86,7 @@ class ProjectRequestController extends Controller
       $getrequest = $getrequest->where('project_request.request_id', 'like', '%' . $keywords . '%');
     }
 
-    $filename = 'DataRiwayatPesanan-' . date('d/m/Y');
+    $filename = 'DataRiwayatPesanan-' . date('dmY') . '.pdf';
     $res = [
       'filename' => $filename,
       'result' => $getrequest->get()

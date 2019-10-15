@@ -227,6 +227,7 @@ Route::group(['prefix' => 'cp'], function() {
     Route::group(['prefix' => 'city'], function() {
       Route::get('/', 'ControlPanel\Pages\CityController@index')->name('cp_city_page');
       Route::get('/get_city', 'ControlPanel\Pages\CityController@get_city');
+      Route::get('/save_report/{table}', 'ControlPanel\Pages\CityController@save_report');
       Route::post('/store', 'ControlPanel\Pages\CityController@store');
       Route::put('/save/{id}', 'ControlPanel\Pages\CityController@save');
       Route::delete('/delete/{id}', 'ControlPanel\Pages\CityController@destroy');

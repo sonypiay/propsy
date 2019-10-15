@@ -57,6 +57,16 @@
           <div>
             <a @click="onClickModal()" class="uk-button uk-button-primary">Tambah Kota</a>
           </div>
+          <div>
+            <a class="uk-button uk-button-default"><span class="uk-margin-small-right" uk-icon="print"></span> Cetak</a>
+            <div uk-dropdown>
+              <ul class="uk-nav uk-dropdown-nav">
+                <li><a @click="saveReport('customer')">Pelanggan</a></li>
+                <li><a @click="saveReport('developer')">Pengembang</a></li>
+                <li><a @click="saveReport('project')">Proyek</a></li>
+              </ul>
+            </div>
+          </div>
         </div>
 
         <div class="uk-margin">
@@ -340,6 +350,12 @@ export default {
           });
         }
       });
+    },
+    saveReport( p )
+    {
+      let param = 'keywords=' + this.forms.keywords;
+      let url = this.$root.url + '/cp/wilayah/city/save_report/' + p + '?' + param;
+      window.open( url, '_blank' );
     }
   },
   mounted() {

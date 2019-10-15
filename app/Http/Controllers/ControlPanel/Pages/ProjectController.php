@@ -132,7 +132,7 @@ class ProjectController extends Controller
       });
     }
 
-    $filename = 'DataProyek-' . date('d/m/Y');
+    $filename = 'DataProyek-' . date('dmY') . '.pdf';
     $res = [
       'filename' => $filename,
       'result' => $getproject->get(),
@@ -255,7 +255,7 @@ class ProjectController extends Controller
       });
     }
 
-    $filename = 'DataTipeUnit-' . date('d/m/Y');
+    $filename = 'DataTipeUnit-' . date('dmY') . '.pdf';
     $res = [
       'filename' => $filename,
       'result' => $getunit->get(),

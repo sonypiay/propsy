@@ -4274,6 +4274,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: [],
   data: function data() {
@@ -4499,6 +4509,11 @@ __webpack_require__.r(__webpack_exports__);
           });
         }
       });
+    },
+    saveReport: function saveReport(p) {
+      var param = 'keywords=' + this.forms.keywords;
+      var url = this.$root.url + '/cp/wilayah/city/save_report/' + p + '?' + param;
+      window.open(url, '_blank');
     }
   },
   mounted: function mounted() {
@@ -64078,6 +64093,56 @@ var render = function() {
                 },
                 [_vm._v("Tambah Kota")]
               )
+            ]),
+            _vm._v(" "),
+            _c("div", [
+              _vm._m(2),
+              _vm._v(" "),
+              _c("div", { attrs: { "uk-dropdown": "" } }, [
+                _c("ul", { staticClass: "uk-nav uk-dropdown-nav" }, [
+                  _c("li", [
+                    _c(
+                      "a",
+                      {
+                        on: {
+                          click: function($event) {
+                            return _vm.saveReport("customer")
+                          }
+                        }
+                      },
+                      [_vm._v("Pelanggan")]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _c(
+                      "a",
+                      {
+                        on: {
+                          click: function($event) {
+                            return _vm.saveReport("developer")
+                          }
+                        }
+                      },
+                      [_vm._v("Pengembang")]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _c(
+                      "a",
+                      {
+                        on: {
+                          click: function($event) {
+                            return _vm.saveReport("project")
+                          }
+                        }
+                      },
+                      [_vm._v("Proyek")]
+                    )
+                  ])
+                ])
+              ])
             ])
           ]
         ),
@@ -64101,7 +64166,7 @@ var render = function() {
                       "uk-table uk-table-middle uk-table-striped uk-table-divider uk-table-hover uk-table-small"
                   },
                   [
-                    _vm._m(2),
+                    _vm._m(3),
                     _vm._v(" "),
                     _c(
                       "tbody",
@@ -64208,6 +64273,18 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("li", [_c("span", [_vm._v("Kota")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("a", { staticClass: "uk-button uk-button-default" }, [
+      _c("span", {
+        staticClass: "uk-margin-small-right",
+        attrs: { "uk-icon": "print" }
+      }),
+      _vm._v(" Cetak")
+    ])
   },
   function() {
     var _vm = this

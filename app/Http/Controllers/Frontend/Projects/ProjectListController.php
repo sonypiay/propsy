@@ -34,6 +34,7 @@ class ProjectListController extends Controller
       'project_list.project_estimate_launch',
       'developer_user.dev_name',
       'developer_user.dev_slug',
+      'developer_user.status_verification',
       'city.city_name',
       'province.province_name',
       DB::raw('min(project_unit_type.unit_price) as unit_price'),
@@ -75,6 +76,7 @@ class ProjectListController extends Controller
       'project_list.project_type',
       'developer_user.dev_name',
       'developer_user.dev_slug',
+      'developer_user.status_verification',
       'city.city_name',
       'province.province_name'
     )

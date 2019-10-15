@@ -94,6 +94,8 @@ Route::group(['prefix' => 'developer'], function() {
   Route::get('/profile', 'Frontend\Developer\DeveloperController@profile_page')->name('developer_profile_page');
   Route::get('/masuk', 'Frontend\Developer\DeveloperController@login_page')->name('developer_login_page');
   Route::get('/daftar', 'Frontend\Developer\DeveloperController@register_page')->name('developer_register_page');
+  Route::get('/request_verification', 'Frontend\Verification\DeveloperController@index')->name('developer_request_verification');
+  Route::post('/request_verification', 'Frontend\Verification\DeveloperController@request_verification')->name('developer_request_verification');
   Route::group(['prefix' => 'project'], function() {
     Route::get('/detail/{project_id}', 'Frontend\Developer\ProjectListController@detail_project')->name('developer_detail_project');
     Route::get('/manage_project', 'Frontend\Developer\ProjectListController@dev_manage_project')->name('developer_manage_project');
@@ -276,5 +278,11 @@ Route::group(['prefix' => 'cp'], function() {
     Route::get('/', 'ControlPanel\Pages\DeveloperController@index')->name('cp_developer_page');
     Route::get('/get_developer', 'ControlPanel\Pages\DeveloperController@get_developer');
     Route::get('/save_report', 'ControlPanel\Pages\DeveloperController@save_report');
+
+    Route::group(['prefix' => 'verification'], function() {
+      Route::get('/', 'ControlPanel\Pages\RequestVerificationController@index')->name('cp_request_verification_page');
+      Route::get('/get_verification', 'ControlPanel\Pages\RequestVerificationController@get_request_verification');
+      Route::put('/approval/{id}/{approval}', 'ControlPanel\Pages\RequestVerificationController@approval_request');
+    });
   });
 });

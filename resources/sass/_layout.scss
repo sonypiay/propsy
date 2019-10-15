@@ -957,3 +957,51 @@ html, body {
     }
   }
 }
+
+
+.verification-container {
+  border-radius: 4px;
+  .verification-heading {
+    @include fontsetting( $font-primary, 24px, 700, normal, normal, 0.8px );
+  }
+  .verification-info {
+    color: #555555;
+    @include fontsetting( $font-primary, 15px, 400, normal, normal, 0.4px );
+  }
+  .verification-form {
+    .form-label {
+      color: #555555;
+      @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+    }
+    .content-upload-picture {
+      background: #ffffff;
+      border: 1px dashed #dddddd;
+      text-align: center;
+    }
+    .form-submit-verification {
+      border-radius: 4px;
+      color: #555555;
+      @include fontsetting( $font-primary, 14px, 400, normal, normal, 0.4px );
+      text-transform: capitalize;
+      &:active {
+        background: $color3;
+        color: #ffffff;
+        border: 1px solid $color3;
+      }
+    }
+  }
+}
+.badge-verification {
+  border-radius: 30px;
+  background: $color3;
+  color: #ffffff;
+  &:hover { color: #ffffff; }
+}
+.badge-verification-outline {
+  color: #ffffff;
+  background: transparent !important;
+  border: 1px solid #ffffff !important;
+}
+.badge-verification-small { padding: 3px; }
+.badge-verification-medium { padding: 8px; }
+.badge-verification-large { padding: 15px; }

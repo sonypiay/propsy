@@ -29,6 +29,7 @@ class DeveloperUser extends Model
       'developer_user.dev_mobile_phone',
       'developer_user.created_at',
       'developer_user.updated_at',
+      'developer_user.status_verification',
       'city.city_name',
       'city.city_id',
       'province.province_id',

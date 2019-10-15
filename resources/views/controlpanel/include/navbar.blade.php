@@ -9,7 +9,7 @@
             <div class="uk-navbar-dropdown">
               <ul class="uk-nav uk-navbar-dropdown-nav">
                 <li><a href="{{ route('cp_developer_page') }}">Developer</a></li>
-                <li><a href="#">Pengajuan Verifikasi</a></li>
+                <li><a href="{{ route('cp_request_verification_page') }}">Pengajuan Verifikasi</a></li>
               </ul>
             </div>
           </li>

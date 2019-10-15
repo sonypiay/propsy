@@ -104,4 +104,35 @@ class RequestVerificationController extends Controller
 
     return response()->json( $res, $res['status'] );
   }
+
+  public function save_report( Request $request, VerificationDeveloper $verification )
+  {
+    $status = $request->status;
+
+    $getrequest = $verification->select(
+      'verification_developer.hash_id',
+      'verification_developer.npwp_image',
+      'verification_developer.official_certificate',
+      'verification_developer.additional_document',
+      'verification_developer.status_verification',
+      'verification_developer.created_at',
+      'verification_developer.updated_at',
+      'developer_user.dev_name',
+      'developer_user.dev_email'
+    )
+    ->join('developer_user', 'verification_developer.dev_user_id', '=', 'developer_user.dev_user_id')
+    ->orderBy('verification_developer.created_at', 'desc');
+
+    if( $status !== 'all' )
+    {
+      $getrequest = $getrequest->where('verification_developer.status_verification', $status);
+    }
+
+    $filename = 'PengajuanVerifikasi_Developer-' . date('dmY') .'.pdf';
+    $data = [
+      'filename' => $filename,
+      'result' => $getrequest->get()
+    ];
+    return PDF::loadView('controlpanel.pages.reports.request_verification', $data)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
+  }
 }

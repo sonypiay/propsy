@@ -2633,8 +2633,8 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     saveReport: function saveReport() {
-      var param = 'keywords=' + this.forms.keywords + '&status=' + this.forms.status;
-      var url = this.$root.url + '/cp/developer/request_unit/save_report?' + param;
+      var param = 'status=' + this.forms.status;
+      var url = this.$root.url + '/cp/developer/verification/save_report?' + param;
       window.open(url, '_blank');
     },
     onApprovalRequest: function onApprovalRequest(id, approval) {

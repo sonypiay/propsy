@@ -60,11 +60,12 @@
         <td>{{ $result->customer_email }}</td>
       </tr>
       <tr>
-        <th>Alamat</th>
-        <td>
-          {{ $result->customer_address }} <br>
-          {{ $result->city_name }}, {{ $result->province_name }}
-        </td>
+        <th>Pengembang</th>
+        <td>{{ $result->dev_name }}</td>
+      </tr>
+      <tr>
+        <th>Proyek</th>
+        <td>{{ $result->project_name }}</td>
       </tr>
       <tr>
         <th>Unit Dipesan</th>
@@ -99,7 +100,8 @@
             tahun
           @endif
         </td>
-        <td>Rp. {{ $result->installment_tenor * $result->installment_price }}
+        <td>Rp. @php $total_tenor = $result->installment_tenor * $result->installment_price @endphp
+          {{ number_format( $total_tenor, 0, ',', '.' ) }}
         </td>
       </tr>
     </tbody>

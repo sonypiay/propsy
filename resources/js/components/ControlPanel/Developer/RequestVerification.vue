@@ -153,8 +153,8 @@ export default {
     },
     saveReport()
     {
-      let param = 'keywords=' + this.forms.keywords + '&status=' + this.forms.status;
-      let url = this.$root.url + '/cp/developer/request_unit/save_report?' + param;
+      let param = 'status=' + this.forms.status;
+      let url = this.$root.url + '/cp/developer/verification/save_report?' + param;
       window.open( url, '_blank' );
     },
     onApprovalRequest( id, approval )

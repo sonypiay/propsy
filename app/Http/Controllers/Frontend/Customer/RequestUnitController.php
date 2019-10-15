@@ -118,32 +118,21 @@ class RequestUnitController extends Controller
       'project_request.request_message',
       'project_request.status_request',
       'project_request.created_at',
-      'project_request.updated_at',
-      'customer.customer_id',
       'customer.customer_name',
       'customer.customer_email',
+      'developer_user.dev_name',
       'customer.customer_phone_number',
-      'project_unit_type.unit_type_id',
       'project_unit_type.unit_name',
-      'city.city_name',
-      'province.province_name',
-      'meeting_appointment.meeting_time',
-      'meeting_appointment.meeting_status',
-      'meeting_appointment.meeting_note',
-      'meeting_appointment.meeting_result',
-      'meeting_appointment.document_file',
-      'meeting_appointment.created_by',
-      'meeting_appointment.updated_by',
+      'project_list.project_name',
       'price_installment.dp_price',
       'price_installment.installment_price',
       'price_installment.installment_tenor'
     )
     ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
-    ->join('city', 'customer.city_id', '=', 'city.city_id')
-    ->join('province', 'city.province_id', '=', 'province.province_id')
+    ->join('developer_user', 'project_request.dev_user_id', '=', 'developer_user.dev_user_id')
     ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
+    ->join('project_list', 'project_unit_type.project_id', '=', 'project_list.project_id')
     ->join('price_installment', 'project_request.installment', '=', 'price_installment.id')
-    ->leftJoin('meeting_appointment', 'project_request.request_id', '=', 'meeting_appointment.request_id')
     ->where([
       ['project_request.request_id', $request_id],
       ['project_request.customer_id', session()->get('customer_id')]

@@ -283,6 +283,7 @@ Route::group(['prefix' => 'cp'], function() {
       Route::get('/', 'ControlPanel\Pages\RequestVerificationController@index')->name('cp_request_verification_page');
       Route::get('/get_verification', 'ControlPanel\Pages\RequestVerificationController@get_request_verification');
       Route::put('/approval/{id}/{approval}', 'ControlPanel\Pages\RequestVerificationController@approval_request');
+      Route::get('/save_report', 'ControlPanel\Pages\RequestVerificationController@save_report');
     });
   });
 });

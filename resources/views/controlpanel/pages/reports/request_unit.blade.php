@@ -30,11 +30,11 @@
           <td>
             @if( $res->status_request === 'waiting_response' )
               <label class="uk-label">Menunggu Tanggapan</label>
-            @elseif( $res->project_status === 'reject' )
+            @elseif( $res->status_request === 'reject' )
               <label class="uk-label uk-label-danger">Ditolak</label>
-            @elseif( $res->project_status === 'cancel' )
+            @elseif( $res->status_request === 'cancel' )
               <label class="uk-label uk-label-danger">Dibatalkan</label>
-            @elseif( $res->project_status === 'meeting' )
+            @elseif( $res->status_request === 'meeting' )
               <label class="uk-label uk-label-warning">Dijadwalkan Meeting</label>
             @else
               <label class="uk-label uk-label-success">Diterima</label>

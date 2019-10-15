@@ -11,9 +11,10 @@
                 </div>
               </div>
               <div v-else class="uk-margin side-profile-photo">
-                <img class="uk-width-1-1" :src="$root.url + '/storage/assets/images/devlogo/' + session_user.dev_logo" alt="">
+                <img class="uk-width-1-4 uk-align-center" :src="$root.url + '/storage/assets/images/devlogo/' + session_user.dev_logo" alt="">
               </div>
               <div class="uk-margin side-profile-joined">
+                {{ session_user.dev_name }} <a v-show="session_user.status_verification === 'Y'" uk-tooltip="Terverifikasi" class="badge-verification badge-verification-small" uk-icon="icon: check; ratio: 0.6"></a> <br>
                 Bergabung pada <br>
                 <span class="profile-joined-date">{{ $root.formatDate( session_user.created_at, 'MMMM DD, YYYY', 'id' ) }}</span>
               </div>

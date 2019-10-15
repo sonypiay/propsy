@@ -63,7 +63,7 @@
                     <div class="uk-position-bottom">
                       <div class="uk-padding-small project-card-title">
                         {{ unit.unit_name }}
-                        <div class="project-card-devname">{{ unit.dev_name }}</div>
+                        <div class="project-card-devname">{{ unit.dev_name }} <a v-show="unit.status_verification === 'Y'" uk-tooltip="Terverifikasi" class="badge-verification badge-verification-small" uk-icon="icon: check; ratio: 0.5"></a> </div>
                         <div class="project-card-location">
                           <span uk-icon="icon: location; ratio: 1"></span> {{ unit.city_name }}, {{ unit.province_name }}
                         </div>
@@ -126,7 +126,7 @@
                     <div class="uk-position-bottom">
                       <div class="uk-padding-small project-card-title">
                         {{ project.project_name }}
-                        <div class="project-card-devname">{{ project.dev_name }}</div>
+                        <div class="project-card-devname">{{ project.dev_name }} <a v-show="project.status_verification === 'Y'" uk-tooltip="Terverifikasi" class="badge-verification badge-verification-small" uk-icon="icon: check; ratio: 0.5"></a></div>
                         <div class="project-card-location">
                           <span uk-icon="icon: location; ratio: 1"></span> {{ project.city_name }}, {{ project.province_name }}
                         </div>

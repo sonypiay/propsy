@@ -19,6 +19,7 @@ Vue.component('requesthistory-page-component', require('./components/ControlPane
 Vue.component('admin-page-component', require('./components/ControlPanel/Manajemen/Admin.vue').default);
 Vue.component('project-page-component', require('./components/ControlPanel/Property/Project.vue').default);
 Vue.component('projectunit-page-component', require('./components/ControlPanel/Property/ProjectUnit.vue').default);
+Vue.component('page-requestverification-component', require('./components/ControlPanel/Developer/RequestVerification.vue').default);
 
 import VueCurrencyFilter from 'vue-currency-filter';
 Vue.use(VueCurrencyFilter);

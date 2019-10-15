@@ -118,7 +118,7 @@ class DeveloperController extends Controller
       });
     }
 
-    $filename = 'DeveloperUser-' . date('d/m/Y');
+    $filename = 'DeveloperUser-' . date('dmY') . '.pdf';
     $res = [
       'filename' => $filename,
       'result' => $getdeveloper->get(),

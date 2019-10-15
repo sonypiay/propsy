@@ -34,6 +34,7 @@ class ProjectListController extends Controller
       'project_list.project_estimate_launch',
       'developer_user.dev_name',
       'developer_user.dev_slug',
+      'developer_user.status_verification',
       'city.city_name',
       'province.province_name',
       DB::raw('min(project_unit_type.unit_price) as unit_price'),
@@ -75,6 +76,7 @@ class ProjectListController extends Controller
       'project_list.project_type',
       'developer_user.dev_name',
       'developer_user.dev_slug',
+      'developer_user.status_verification',
       'city.city_name',
       'province.province_name'
     )
@@ -144,7 +146,8 @@ class ProjectListController extends Controller
       'developer_user.dev_slug',
       'developer_user.dev_logo',
       'developer_user.dev_phone_office',
-      'developer_user.dev_mobile_phone'
+      'developer_user.dev_mobile_phone',
+      'developer_user.status_verification'
     )
     ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
     ->join('city', 'project_list.city_id', '=', 'city.city_id')
@@ -221,6 +224,7 @@ class ProjectListController extends Controller
       'developer_user.dev_biography',
       'developer_user.dev_phone_office',
       'developer_user.dev_mobile_phone',
+      'developer_user.status_verification',
       'city.city_id',
       'city.city_name',
       'province.province_name'
@@ -363,6 +367,7 @@ class ProjectListController extends Controller
       'project_list.project_estimate_launch',
       'developer_user.dev_name',
       'developer_user.dev_slug',
+      'developer_user.status_verification',
       'city.city_name',
       'province.province_name',
       DB::raw('min(project_unit_type.unit_price) as unit_price'),
@@ -495,10 +500,10 @@ class ProjectListController extends Controller
   public function get_search_list( Request $request, ProjectUnitType $unit_type )
   {
     $keywords = $request->keywords;
-    $type = $request->type;
+    $type = isset( $request->type ) ? $request->type : 'all';
     $filtercity = $request->filtercity;
-    $price_min = $request->price_min;
-    $price_max = $request->price_max;
+    $price_min = isset( $request->price_min ) ? $request->price_min : '';
+    $price_max = isset( $request->price_max ) ? $request->price_max : '';
     $facility = empty( $request->facility ) ? [] : explode(',', $request->facility);
 
     $getunit  = $unit_type->select(
@@ -518,6 +523,7 @@ class ProjectListController extends Controller
       'project_list.project_type',
       'developer_user.dev_name',
       'developer_user.dev_slug',
+      'developer_user.status_verification',
       'city.city_name',
       'province.province_name'
     )
@@ -594,6 +600,7 @@ class ProjectListController extends Controller
       'project_list.project_estimate_launch',
       'developer_user.dev_name',
       'developer_user.dev_slug',
+      'developer_user.status_verification',
       'city.city_name',
       'province.province_name',
       'project_unit_type.unit_price',

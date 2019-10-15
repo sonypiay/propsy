@@ -183,7 +183,9 @@
                 <img class="uk-align-center uk-width-1-4" :src="$root.url + '/storage/assets/images/devlogo/' + getproject.dev_logo" :alt="getproject.dev_name">
               </div>
               <div class="uk-margin sidebar-dev-profile">
-                <a class="dev-profile-name" href="#">{{ getproject.dev_name }}</a>
+                <a class="dev-profile-name" href="#">{{ getproject.dev_name }}
+                  <span v-show="getproject.status_verification === 'Y'" uk-tooltip="Terverifikasi" class="badge-verification badge-verification-medium" uk-icon="icon: check; ratio: 0.6"></span>
+                </a>
               </div>
               <div class="uk-margin uk-text-center">
                 <a class="uk-width-1-1 uk-button uk-button-primary sidebar-viewproject" :href="$root.url + '/profile/developer/' + getproject.dev_slug">Lihat Pengembang</a>

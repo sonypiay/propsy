@@ -7,6 +7,8 @@ use App\Database\AdminOwner;
 use App\Database\CityDB;
 use App\Database\ProvinceDB;
 use App\Http\Controllers\Controller;
+use PDF;
+use DB;
 
 class CityController extends Controller
 {
@@ -113,5 +115,49 @@ class CityController extends Controller
 
     $res = ['status' => 200, 'statusText' => 'success'];
     return response()->json( $res, 200 );
+  }
+
+  public function save_report( Request $request, CityDB $city, $table )
+  {
+    if( $table === 'customer' )
+    {
+      $dbcount = 'count(customer.customer_id) as total_data';
+      $getcity = $city->leftJoin('customer', 'city.city_id', '=', 'customer.city_id')
+      ->orderBy(DB::raw('count(customer.customer_id)'), 'desc');
+      $filename = 'DataCustomer';
+    }
+    else if( $table === 'developer' )
+    {
+      $dbcount = 'count(developer_user.dev_user_id) as total_data';
+      $getcity = $city->leftJoin('developer_user', 'city.city_id', '=', 'developer_user.city_id')
+      ->orderBy(DB::raw('count(developer_user.dev_user_id)'), 'desc');
+      $filename = 'DataDeveloper';
+    }
+    else if( $table === 'project' )
+    {
+      $dbcount = 'count(project_list.project_id) as total_data';
+      $getcity = $city->leftJoin('project_list', 'city.city_id', '=', 'project_list.city_id')
+      ->orderBy(DB::raw('count(project_list.project_id)'), 'desc');
+      $filename = 'DataProject';
+    }
+    else { abort(404); }
+
+    $getcity = $getcity->select(
+      'city.city_id',
+      'city.city_name',
+      DB::raw($dbcount)
+    )
+    ->groupBy('city.city_id')
+    ->get();
+
+    $filename = $filename . date('dmY') . '.pdf';
+    $res = [
+      'filename' => $filename,
+      'result' => $getcity,
+      'table' => $table
+    ];
+
+    //return response()->json( $res );
+    return PDF::loadView('controlpanel.pages.reports.kota', $res)->setPaper('a4', 'portrait')->setWarnings(false)->stream( $filename );
   }
 }

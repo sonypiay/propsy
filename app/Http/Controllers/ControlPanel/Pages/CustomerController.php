@@ -126,7 +126,7 @@ class CustomerController extends Controller
       });
     }
 
-    $filename = 'CustomerUser-' . date('d/m/Y');
+    $filename = 'CustomerUser-' . date('dmY') . '.pdf';
     $res = [
       'filename' => $filename,
       'result' => $getcustomer->get(),

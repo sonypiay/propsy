@@ -22,6 +22,9 @@
               <ul class="uk-nav uk-dropdown-nav">
                 <li><a href="{{ route('developer_dashboard_page') }}">Dashboard</a></li>
                 <li><a href="{{ route('developer_profile_page') }}">Lihat Akun</a></li>
+                @if( $session_user->status_verification === 'N' )
+                <li><a href="{{ route('developer_request_verification') }}">Verifikasi Akun</a></li>
+                @endif
                 <li class="uk-nav-divider"></li>
                 <li><a href="{{ route('auth_logout_dev') }}">Keluar</a></li>
               </ul>

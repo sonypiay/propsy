@@ -1975,3 +1975,88 @@ body {
   color: #1fc8c9;
 }
 
+.verification-container {
+  border-radius: 4px;
+}
+
+.verification-container .verification-heading {
+  font-size: 24px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+
+.verification-container .verification-info {
+  color: #555555;
+  font-size: 15px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+}
+
+.verification-container .verification-form .form-label {
+  color: #555555;
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+}
+
+.verification-container .verification-form .content-upload-picture {
+  background: #ffffff;
+  border: 1px dashed #dddddd;
+  text-align: center;
+}
+
+.verification-container .verification-form .form-submit-verification {
+  border-radius: 4px;
+  color: #555555;
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  text-transform: capitalize;
+}
+
+.verification-container .verification-form .form-submit-verification:active {
+  background: #1fc8c9;
+  color: #ffffff;
+  border: 1px solid #1fc8c9;
+}
+
+.badge-verification {
+  border-radius: 40px;
+  background: #1fc8c9;
+  color: #ffffff;
+}
+
+.badge-verification:hover {
+  color: #ffffff;
+}
+
+.badge-verification-outline {
+  color: #ffffff;
+  background: transparent !important;
+  border: 1px solid #ffffff !important;
+}
+
+.badge-verification-small {
+  padding: 3px;
+}
+
+.badge-verification-medium {
+  padding: 4px;
+}
+
+.badge-verification-large {
+  padding: 6px;
+}
+

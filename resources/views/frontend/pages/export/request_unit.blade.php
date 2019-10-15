@@ -93,8 +93,8 @@
     </thead>
     <tbody>
       <tr>
-        <td class="uk-width-medium">{{ $meeting_time->format('d/m/Y') }}</td>
-        <td class="uk-width-medium">{{ $meeting_time->format('H:i') }}</td>
+        <td class="uk-width-small">{{ $meeting_time->format('d/m/Y') }}</td>
+        <td class="uk-width-small">{{ $meeting_time->format('H:i') }}</td>
         <td>
           @if( $result->meeting_status === 'waiting_confirmation' )
           <label class="uk-label">Menunggu Konfirmasi</label>
@@ -119,7 +119,7 @@
       </tr>
       <tr>
         <th>Hasil Meeting</th>
-        <td colspan="2">
+        <td colspan="3">
           {!! $result->meeting_result !!}
         </td>
       </tr>

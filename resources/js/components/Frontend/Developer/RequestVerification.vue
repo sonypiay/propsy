@@ -4,7 +4,7 @@
       <a :href="$root.url + '/developer/profile'"><span uk-icon="icon: chevron-left; ratio: 0.8"></span> Kembali ke Profil</a>
     </div>
     <div class="uk-card uk-card-body uk-card-default verification-container">
-      <h2 class="uk-h2 verification-heading">Permohonan Verifikasi Akun</h2>
+      <h2 class="uk-h2 verification-heading">Pengajuan Verifikasi Akun</h2>
       <p class="verification-info">
         Lencana verifikasi hijau <a class="badge-verification badge-verification-small" uk-icon="icon: check; ratio: 0.6"></a> di Propsy memudahkan orang
         mengenali bahwa sebuah akun Pengembang adalah resmi.
@@ -15,7 +15,7 @@
         misalnya, di logo perusahaan atau bio, bukan akun terverifikasi.
       </p>-->
       <p class="verification-info">
-        Mengajukan permohonan verifkasi akun tidak menjamin bahwa akun Anda akan diverifikasi.
+        Mengajukan verifkasi akun tidak menjamin bahwa akun Anda akan diverifikasi.
       </p>
       <hr>
       <div v-if="session_user.status_verification === 'Y'">
@@ -27,10 +27,10 @@
           <div v-if="getverification === null" class="uk-margin-bottom verification-info"><strong>Silakan lengkapi formulir untuk permohonan verifikasi.</strong></div>
           <div v-else class="uk-margin-bottom">
             <div v-if="getverification.status_verification === 'N'" class="uk-alert-warning uk-text-small" uk-alert>
-              Anda sudah mengajukan permohonan verifkasi namun belum ditinjau oleh Admin. Silakan menunggu kembali.
+              Pengajuan verifkasi akun sudah terkirim. Silakan menunggu kembali 1 x 24 jam.
             </div>
-            <div v-if="getverification.status_verification === 'R'">
-              <strong>Silakan lengkapi formulir untuk permohonan verifikasi.</strong>
+            <div v-if="getverification.status_verification === 'R'" class="uk-alert-danger" uk-alert>
+              <strong>Sepertinya pengajuan Anda telah ditolak. Silakan lengkapi formulir kembali untuk pengajuan verifikasi.</strong>
             </div>
           </div>
           <div class="uk-margin">
@@ -192,9 +192,10 @@ export default {
       axios.post( url, formdata).then( res => {
         swal({
           title: 'Berhasil',
-          text: 'Permohonan verifikasi akun berhasil terkirim',
+          text: 'Pengajuan verifikasi akun berhasil terkirim',
           icon: 'success'
         });
+        setTimeout(() => { document.location = ''; }, 2000);
         this.forms.submit = 'Kirim Permohonan';
       }).catch( err => {
         this.forms.submit = 'Kirim Permohonan';

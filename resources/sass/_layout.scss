@@ -992,7 +992,7 @@ html, body {
   }
 }
 .badge-verification {
-  border-radius: 30px;
+  border-radius: 40px;
   background: $color3;
   color: #ffffff;
   &:hover { color: #ffffff; }
@@ -1003,5 +1003,5 @@ html, body {
   border: 1px solid #ffffff !important;
 }
 .badge-verification-small { padding: 3px; }
-.badge-verification-medium { padding: 8px; }
-.badge-verification-large { padding: 15px; }
+.badge-verification-medium { padding: 4px; }
+.badge-verification-large { padding: 6px; }

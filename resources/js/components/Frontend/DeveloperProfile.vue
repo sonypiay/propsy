@@ -3,10 +3,10 @@
     <div class="profile-developer-top">
       <div class="uk-container">
         <div class="uk-card uk-card-body profile-developer-name">
-          <div class="uk-width-1-4 uk-padding uk-box-shadow-small developer-logo">
-            <img :src="$root.url + '/storage/assets/images/devlogo/' + getdeveloper.dev_logo" />
+          <div class="uk-width-1-6 uk-padding uk-box-shadow-small developer-logo">
+            <img class="uk-width-1-1" :src="$root.url + '/storage/assets/images/devlogo/' + getdeveloper.dev_logo" />
           </div>
-          <div class="uk-margin-small-top developer-name">{{ getdeveloper.dev_name }}</div>
+          <div class="uk-margin-small-top developer-name">{{ getdeveloper.dev_name }} <a v-show="getdeveloper.status_verification === 'Y'" uk-tooltip="Terverifikasi" class="badge-verification badge-verification-medium" uk-icon="icon: check; ratio: 0.8"></a></div>
         </div>
       </div>
     </div>

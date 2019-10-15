@@ -347,10 +347,12 @@
               <span uk-icon="icon: users; ratio: 4"></span>
             </div>
             <div v-else class="dev-withlogo">
-              <img class="uk-align-center" :src="$root.url + '/storage/assets/images/devlogo/' + getunit.dev_logo" />
+              <img class="uk-width-1-4 uk-align-center" :src="$root.url + '/storage/assets/images/devlogo/' + getunit.dev_logo" />
             </div>
             <div class="uk-margin sidebar-dev-profile">
-              <a class="dev-profile-name" href="#">{{ getunit.dev_name }}</a>
+              <a class="dev-profile-name" href="#">{{ getunit.dev_name }}
+                <span v-show="getunit.status_verification === 'Y'" uk-tooltip="Terverifikasi" class="badge-verification badge-verification-medium" uk-icon="icon: check; ratio: 0.6"></span>
+              </a>
             </div>
             <div class="uk-margin uk-text-center">
               <a class="uk-width-1-1 uk-button uk-button-primary uk-margin-small sidebar-viewproject" :href="$root.url + '/profile/developer/' + getunit.dev_slug">Lihat Pengembang</a>

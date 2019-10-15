@@ -2033,7 +2033,7 @@ body {
 }
 
 .badge-verification {
-  border-radius: 30px;
+  border-radius: 40px;
   background: #1fc8c9;
   color: #ffffff;
 }
@@ -2053,10 +2053,10 @@ body {
 }
 
 .badge-verification-medium {
-  padding: 8px;
+  padding: 4px;
 }
 
 .badge-verification-large {
-  padding: 15px;
+  padding: 6px;
 }
 

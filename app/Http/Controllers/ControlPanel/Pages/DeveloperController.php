@@ -33,6 +33,7 @@ class DeveloperController extends Controller
   {
     $keywords = $request->keywords;
     $city = $request->city;
+    $status = $request->status;
     $limit = isset( $request->limit ) ? $request->limit : 10;
 
     $getdeveloper = $developeruser->select(
@@ -63,6 +64,11 @@ class DeveloperController extends Controller
       $getdeveloper = $getdeveloper->where('developer_user.city_id', $city);
     }
 
+    if( $status !== 'all' )
+    {
+      $getdeveloper = $developeruser->where('developer_user.status_verification', $status);
+    }
+
     if( ! empty( $keywords ) )
     {
       $getdeveloper = $getdeveloper->where(function( $query ) use ( $keywords ) {
@@ -78,6 +84,7 @@ class DeveloperController extends Controller
   public function save_report( Request $request, DeveloperUser $developeruser, CityDB $citydb )
   {
     $city = $request->city;
+    $status = $request->status;
 
     $getdeveloper = $developeruser->select(
       'developer_user.dev_user_id',
@@ -107,6 +114,11 @@ class DeveloperController extends Controller
     {
       $getdeveloper = $getdeveloper->where('developer_user.city_id', $city);
       $getcity = $citydb->where('city_id', $city)->first();
+    }
+
+    if( $status !== 'all' )
+    {
+      $getdeveloper = $developeruser->where('developer_user.status_verification', $status);
     }
 
     $filename = 'DeveloperUser-' . date('dmY') . '.pdf';

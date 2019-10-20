@@ -2411,6 +2411,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['getcity'],
   data: function data() {
@@ -2418,7 +2425,8 @@ __webpack_require__.r(__webpack_exports__);
       forms: {
         keywords: '',
         limit: 10,
-        city: 'all'
+        city: 'all',
+        status: 'all'
       },
       message: {
         errors: {},
@@ -2442,7 +2450,7 @@ __webpack_require__.r(__webpack_exports__);
     getDeveloperList: function getDeveloperList(p) {
       var _this = this;
 
-      var param = 'keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&city=' + this.forms.city;
+      var param = 'status=' + this.forms.status + '&keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&city=' + this.forms.city;
       var url = this.$root.url + '/cp/developer/get_developer?page=' + this.getdeveloper.paginate.current_page + '&' + param;
       if (p !== undefined) url = p + '&' + param;
       axios({
@@ -2467,7 +2475,7 @@ __webpack_require__.r(__webpack_exports__);
       UIkit.modal('#modal-developer').show();
     },
     saveReport: function saveReport() {
-      var param = 'city=' + this.forms.city;
+      var param = 'status=' + this.forms.status + '&city=' + this.forms.city;
       var url = this.$root.url + '/cp/developer/save_report?' + param;
       window.open(url, '_blank');
     }
@@ -61140,6 +61148,60 @@ var render = function() {
                   _c("option", { attrs: { value: "50" } }, [_vm._v("50")]),
                   _vm._v(" "),
                   _c("option", { attrs: { value: "100" } }, [_vm._v("100")])
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.forms.status,
+                      expression: "forms.status"
+                    }
+                  ],
+                  staticClass: "uk-select",
+                  on: {
+                    change: [
+                      function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.forms,
+                          "status",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      },
+                      function($event) {
+                        return _vm.getDeveloperList()
+                      }
+                    ]
+                  }
+                },
+                [
+                  _c("option", { attrs: { value: "all" } }, [
+                    _vm._v("Semua status")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "N" } }, [
+                    _vm._v("Belum Verifikasi")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "Y" } }, [
+                    _vm._v("Terverifikasi")
+                  ])
                 ]
               )
             ]),

@@ -80,6 +80,13 @@
             </select>
           </div>
           <div>
+            <select class="uk-select" v-model="forms.status" @change="getDeveloperList()">
+              <option value="all">Semua status</option>
+              <option value="N">Belum Verifikasi</option>
+              <option value="Y">Terverifikasi</option>
+            </select>
+          </div>
+          <div>
             <select class="uk-select" v-model="forms.city" @change="getDeveloperList()">
               <option value="all">Semua kota</option>
               <option v-for="city in getcity" :value="city.city_id">{{ city.city_name }}</option>
@@ -163,7 +170,8 @@ export default {
       forms: {
         keywords: '',
         limit: 10,
-        city: 'all'
+        city: 'all',
+        status: 'all'
       },
       message: {
         errors: {},
@@ -186,7 +194,7 @@ export default {
   methods: {
     getDeveloperList( p )
     {
-      var param = 'keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&city=' + this.forms.city;
+      var param = 'status=' + this.forms.status + '&keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&city=' + this.forms.city;
       var url = this.$root.url + '/cp/developer/get_developer?page=' + this.getdeveloper.paginate.current_page + '&' + param;
       if( p !== undefined ) url = p + '&' + param;
 
@@ -214,7 +222,7 @@ export default {
     },
     saveReport()
     {
-      let param = 'city=' + this.forms.city;
+      let param = 'status=' + this.forms.status + '&city=' + this.forms.city;
       let url = this.$root.url + '/cp/developer/save_report?' + param;
       window.open( url, '_blank' );
     }

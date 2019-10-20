@@ -5,11 +5,30 @@ namespace App\Http\Controllers\ControlPanel\Pages;
 use Illuminate\Http\Request;
 use App\Database\MarketingUser;
 use App\Database\AdminOwner;
+use App\Database\CityDB;
 use App\Http\Controllers\Controller;
-use DB;
+use PDF;
 
 class MarketingController extends Controller
 {
+  public function index( Request $request, AdminOwner $owner, CityDB $city )
+  {
+    if( session()->has('isControlPanel') )
+    {
+      $getcity = $city->orderBy('city_name', 'asc')->get();
+      $data = [
+        'request' => $request,
+        'session_user' => $owner->getinfo(),
+        'getcity' => $getcity
+      ];
+      return response()->view('controlpanel.pages.developer.marketing', $data);
+    }
+    else
+    {
+      return redirect()->route('cp_login_page');
+    }
+  }
+
   public function get_marketing( Request $request, MarketingUser $marketing )
   {
     $keywords = $request->keywords;
@@ -26,11 +45,10 @@ class MarketingController extends Controller
       'marketing_user.mkt_address',
       'marketing_user.mkt_profile_photo',
       'marketing_user.created_at',
-      'marketing_user.updated_at',
       'developer_user.dev_name',
       'city.city_id',
       'city.city_name',
-      'province.province_name',
+      'province.province_name'
     )
     ->join('developer_user', 'marketing_user.dev_user_id', '=', 'developer_user.dev_user_id')
     ->join('city', 'marketing_user.city_id', '=', 'city.city_id')
@@ -43,22 +61,13 @@ class MarketingController extends Controller
     }
     if( ! empty( $keywords ) )
     {
-      $getmarketing = $getmarketing->where('marketing_user.mkt_fullname', 'like', '%' . $keywords . '%')
-      ->orWhere('marketing_user.mkt_email', 'like', '%' . $keywords . '%');
+      $getmarketing = $getmarketing->where(function($query) use ($keywords) {
+        $query->where('marketing_user.mkt_fullname', 'like', '%' . $keywords . '%')
+        ->orWhere('marketing_user.mkt_email', 'like', '%' . $keywords . '%');
+      });
     }
 
     $result = $getmarketing->paginate( $limit );
     return response()->json( $result, 200 );
-  }
-
-  public function destroy( MarketingUser $marketing, $user_id )
-  {
-    $getmarketing = $marketing->where('mkt_user_id', $user_id);
-    $getmarketing->delete();
-    $res = [
-      'status' => 200,
-      'statusText' => 'success'
-    ];
-    return response()->json( $res, $res['status'] );
   }
 }

@@ -3,7 +3,7 @@
 @section('main_content')
 <div class="uk-width-1-1">
   <div class="uk-margin-bottom uk-text-center">
-    <!--<img style="width: 130px;" src="{{ asset('images/brand/logo_maps_primary.png') }}" alt="">-->
+    <img style="width: 130px;" src="{{ asset('images/brand/logo_maps_primary.png') }}" alt="">
   </div>
   <article class="uk-article uk-margin-top">
     <h2 class="uk-h2 uk-text-center uk-margin-remove-bottom">

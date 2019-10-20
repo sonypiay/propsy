@@ -34,6 +34,7 @@ class MarketingController extends Controller
     $keywords = $request->keywords;
     $limit = $request->limit;
     $city = $request->city;
+
     $getmarketing = $marketing->select(
       'marketing_user.mkt_user_id',
       'marketing_user.mkt_fullname',
@@ -69,5 +70,46 @@ class MarketingController extends Controller
 
     $result = $getmarketing->paginate( $limit );
     return response()->json( $result, 200 );
+  }
+
+  public function save_report( Request $request, MarketingUser $marketing, CityDB $citydb )
+  {
+    $city = $request->city;
+
+    $getmarketing = $marketing->select(
+      'marketing_user.mkt_user_id',
+      'marketing_user.mkt_fullname',
+      'marketing_user.mkt_email',
+      'marketing_user.mkt_username',
+      'marketing_user.mkt_password',
+      'marketing_user.mkt_phone_number',
+      'marketing_user.mkt_mobile_phone',
+      'marketing_user.mkt_address',
+      'marketing_user.mkt_profile_photo',
+      'marketing_user.created_at',
+      'developer_user.dev_name',
+      'city.city_id',
+      'city.city_name',
+      'province.province_name'
+    )
+    ->join('developer_user', 'marketing_user.dev_user_id', '=', 'developer_user.dev_user_id')
+    ->join('city', 'marketing_user.city_id', '=', 'city.city_id')
+    ->join('province', 'city.province_id', '=', 'province.province_id')
+    ->orderBy('marketing_user.created_at', 'desc');
+    $getcity = '';
+
+    if( $city !== 'all' )
+    {
+      $getmarketing = $getmarketing->where('marketing_user.city_id', $city);
+      $getcity = $citydb->where('city_id', $city)->first();
+    }
+
+    $filename = 'MarketingUser-' . date('dmY') . '.pdf';
+    $res = [
+      'filename' => $filename,
+      'result' => $getmarketing->get(),
+      'getcity' => $getcity
+    ];
+    return PDF::loadView('controlpanel.pages.reports.marketing', $res)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
   }
 }

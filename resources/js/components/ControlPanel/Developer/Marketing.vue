@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="modal-marketing" class="uk-modal-container" uk-modal>
+    <div id="modal-marketing" uk-modal>
       <div class="uk-modal-dialog uk-modal-body">
         <a class="uk-modal-close uk-modal-close-default" uk-close></a>
         <h3 class="uk-h3">Detail Marketing</h3>
@@ -13,7 +13,13 @@
           </div>
           <div class="uk-width-expand">
             <div class="uk-panel uk-margin">
-              <h4 class="uk-h5 uk-margin-remove-bottom">{{ getmarketing.detail.dev_name }}</h4>
+              <h4 class="uk-h5 uk-margin-remove-bottom">No. ID</h4>
+              <p class="uk-text-meta uk-margin-remove-top">
+                {{ getmarketing.detail.mkt_user_id }}
+              </p>
+            </div>
+            <div class="uk-panel uk-margin">
+              <h4 class="uk-h5 uk-margin-remove-bottom">{{ getmarketing.detail.mkt_fullname }}</h4>
               <p class="uk-text-meta uk-margin-remove-top">
                 Bergabung pada
                 <span v-show="getmarketing.detail.created_at">
@@ -36,14 +42,14 @@
             <div class="uk-panel uk-margin">
               <h4 class="uk-h5 uk-margin-remove-bottom">Telepon</h4>
               <p class="uk-text-meta uk-margin-remove-top">
-                Kantor: {{ getmarketing.detail.customer_phone_number }} <br />
-                Whatsapp: {{ getmarketing.detail.dev_mobile_phone }}
+                <span uk-icon="receiver"></span> {{ getmarketing.detail.mkt_phone_number }} <br />
+                <span uk-icon="whatsapp"></span> {{ getmarketing.detail.mkt_mobile_phone }}
               </p>
             </div>
             <div class="uk-panel uk-margin">
               <h4 class="uk-h5 uk-margin-remove-bottom">Alamat</h4>
               <p class="uk-text-meta uk-margin-remove-top">
-                {{ getmarketing.detail.dev_address }} <br>
+                {{ getmarketing.detail.mkt_address }} <br>
                 {{ getmarketing.detail.city_name }}
               </p>
             </div>
@@ -214,7 +220,7 @@ export default {
     }
   },
   mounted() {
-    this.getDeveloperList();
+    this.getMarketingList();
   }
 }
 </script>

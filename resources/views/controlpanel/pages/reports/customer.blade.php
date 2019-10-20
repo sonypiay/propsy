@@ -13,7 +13,7 @@
       @endif
     </h2>
     <div class="uk-article-meta uk-text-center uk-margin-remove-top">Tanggal cetak {{ date('d/m/Y') }}</div>
-    <table class="uk-table uk-table-striped uk-table-divider uk-table-expand uk-margin-top">
+    <table class="uk-table uk-table-striped uk-table-divider uk-table-expand uk-margin-top uk-text-small">
       <thead>
         <tr>
           <th>ID</th>
@@ -34,9 +34,9 @@
           <td>{{ $res->created_at->format('d/m/Y') }}</td>
           <td>
             @if( $res->status_verification === 'N' )
-              Belum Verifikasi
+              <label class="uk-label uk-label-warning">Belum Verifikasi</label>
             @else
-              Terverifikasi
+              <label class="uk-label uk-label-success">Terverifikasi</label>
             @endif
           </td>
         </tr>

@@ -353,8 +353,7 @@ export default {
     },
     saveReport( p )
     {
-      let param = 'keywords=' + this.forms.keywords;
-      let url = this.$root.url + '/cp/wilayah/city/save_report/' + p + '?' + param;
+      let url = this.$root.url + '/cp/wilayah/city/save_report/' + p;
       window.open( url, '_blank' );
     }
   },

@@ -61,7 +61,6 @@ class ProjectRequestController extends Controller
 
   public function save_report( Request $request, ProjectRequest $project_request )
   {
-    $keywords = $request->keywords;
     $status = $request->status;
 
     $getrequest = $project_request->select(
@@ -79,11 +78,6 @@ class ProjectRequestController extends Controller
     if( $status !== 'all' )
     {
       $getrequest = $getrequest->where('project_request.status_request', $status);
-    }
-
-    if( ! empty( $keywords ) )
-    {
-      $getrequest = $getrequest->where('project_request.request_id', 'like', '%' . $keywords . '%');
     }
 
     $filename = 'DataRiwayatPesanan-' . date('dmY') . '.pdf';

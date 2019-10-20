@@ -77,7 +77,6 @@ class DeveloperController extends Controller
 
   public function save_report( Request $request, DeveloperUser $developeruser, CityDB $citydb )
   {
-    $keywords = $request->keywords;
     $city = $request->city;
 
     $getdeveloper = $developeruser->select(
@@ -108,14 +107,6 @@ class DeveloperController extends Controller
     {
       $getdeveloper = $getdeveloper->where('developer_user.city_id', $city);
       $getcity = $citydb->where('city_id', $city)->first();
-    }
-
-    if( ! empty( $keywords ) )
-    {
-      $getdeveloper = $getdeveloper->where(function( $query ) use ( $keywords ) {
-        $query->where('developer_user.dev_name', 'like', '%' . $keywords . '%')
-        ->orWhere('developer_user.dev_ownername', 'like', '%' . $keywords . '%');
-      });
     }
 
     $filename = 'DeveloperUser-' . date('dmY') . '.pdf';

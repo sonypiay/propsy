@@ -86,7 +86,6 @@ class ProjectController extends Controller
 
   public function save_report_project( Request $request, ProjectList $project_list )
   {
-    $keywords = $request->keywords;
     $status = $request->status;
     $city = $request->city;
 
@@ -120,16 +119,10 @@ class ProjectController extends Controller
       $getproject = $getproject->where('project_list.city_id', '=', $city);
       $getcity = CityDB::where('city_id', $city)->first();
     }
+    
     if( $status !== 'all' )
     {
       $getproject = $getproject->where('project_list.project_status', $status);
-    }
-    if( ! empty( $keywords ) )
-    {
-      $getproject = $getproject->where(function($query) use ($keywords){
-        $query->where('project_list.project_name', 'like', '%' . $keywords . '%')
-        ->orWhere('project_list.project_id', 'like', '%' . $keywords . '%');
-      });
     }
 
     $filename = 'DataProyek-' . date('dmY') . '.pdf';
@@ -218,7 +211,6 @@ class ProjectController extends Controller
 
   public function save_report_unit( Request $request, ProjectUnitType $unit_type )
   {
-    $keywords = $request->keywords;
     $city = $request->city;
     $status = $request->status;
 
@@ -242,17 +234,10 @@ class ProjectController extends Controller
       $getunit = $getunit->where('project_list.city_id', '=', $city);
       $getcity = CityDB::where('city_id', $city)->first();
     }
+
     if( $status !== 'all' )
     {
       $getunit = $getunit->where('project_unit_type.unit_status', '=', $status);
-    }
-    if( ! empty( $keywords ) )
-    {
-      $getunit = $getunit->where(function($query) use ($keywords) {
-        $query->where('project_list.unit_name', 'like', '%' . $keywords . '%')
-        ->orWhere('project_list.unit_type_id', 'like', '%' . $keywords . '%')
-        ->orWhere('project_list.project_name', 'like', '%' . $keywords . '%');
-      });
     }
 
     $filename = 'DataTipeUnit-' . date('dmY') . '.pdf';

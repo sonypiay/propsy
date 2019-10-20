@@ -13,7 +13,7 @@
       @endif
     </h2>
     <div class="uk-article-meta uk-text-center uk-margin-remove-top">Tanggal cetak {{ date('d/m/Y') }}</div>
-    <table class="uk-table uk-table-striped uk-table-divider uk-table-expand uk-margin-top">
+    <table class="uk-table uk-table-striped uk-table-divider uk-table-expand uk-margin-top uk-text-small">
       <thead>
         <tr>
           <th>ID</th>

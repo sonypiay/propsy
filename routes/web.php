@@ -285,5 +285,17 @@ Route::group(['prefix' => 'cp'], function() {
       Route::put('/approval/{id}/{approval}', 'ControlPanel\Pages\RequestVerificationController@approval_request');
       Route::get('/save_report', 'ControlPanel\Pages\RequestVerificationController@save_report');
     });
+
+    Route::group(['prefix' => 'marketing'], function() {
+      Route::get('/', 'ControlPanel\Pages\MarketingController@index')->name('cp_marketing_page');
+      Route::get('/get_marketing', 'ControlPanel\Pages\MarketingController@get_marketing');
+      Route::get('/save_report', 'ControlPanel\Pages\MarketingController@save_report');
+    });
+
+    Route::group(['prefix' => 'meeting'], function() {
+      Route::get('/', 'ControlPanel\Pages\MeetingListController@index')->name('cp_meeting_page');
+      Route::get('/get_meeting', 'ControlPanel\Pages\MeetingListController@get_meeting_list');
+      Route::get('/save_report', 'ControlPanel\Pages\MeetingListController@save_report');
+    });
   });
 });

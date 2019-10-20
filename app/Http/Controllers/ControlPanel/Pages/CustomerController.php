@@ -81,7 +81,6 @@ class CustomerController extends Controller
 
   public function save_report( Request $request, Customer $customer )
   {
-    $keywords = $request->keywords;
     $city = $request->city;
     $status = $request->status;
 
@@ -115,15 +114,6 @@ class CustomerController extends Controller
     if( $status !== 'all' )
     {
       $getcustomer = $getcustomer->where('customer.status_verification', $status);
-    }
-
-    if( ! empty( $keywords ) )
-    {
-      $getcustomer = $getcustomer->where(function($query) use ($keywords){
-        $query->where('customer.customer_name', 'like', '%' . $keywords . '%')
-        ->orWhere('customer.customer_email', 'like', '%' . $keywords . '%')
-        ->orWhere('customer.customer_phone_number', 'like', '%' . $keywords . '%');
-      });
     }
 
     $filename = 'CustomerUser-' . date('dmY') . '.pdf';

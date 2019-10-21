@@ -53,6 +53,7 @@ class ReportController extends Controller
     ];
 
     $whereClauses = [];
+    array_push( $whereClauses, ['project_request.status_request', 'accept']);
     array_push( $whereClauses, ['project_unit_type.unit_status', $status]);
     array_push( $whereClauses, ['project_request.dev_user_id', $developer->dev_user_id]);
 
@@ -60,6 +61,7 @@ class ReportController extends Controller
       'project_request.request_id',
       'project_request.created_at',
       'project_request.updated_at',
+      'project_request.status_request',
       'project_unit_type.unit_name',
       'project_unit_type.unit_status',
       'customer.customer_name'
@@ -75,7 +77,8 @@ class ReportController extends Controller
       });
     }
 
-    $result = $getrequest->orderBy('project_request.created_at', 'desc')
+    $result = $getrequest
+    ->orderBy('project_request.created_at', 'desc')
     ->paginate( 10 );
 
     return response()->json( $result, 200 );
@@ -92,6 +95,7 @@ class ReportController extends Controller
     ];
 
     $whereClauses = [];
+    array_push( $whereClauses, ['project_request.status_request', 'accept']);
     array_push( $whereClauses, ['project_unit_type.unit_status', '=', $status]);
     array_push( $whereClauses, ['project_request.dev_user_id', '=', $developer->dev_user_id]);
 

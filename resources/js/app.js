@@ -34,7 +34,8 @@ Vue.component('developer-edit-project', require('./components/Frontend/Developer
 Vue.component('developer-add-unit', require('./components/Frontend/Developer/AddUnit.vue').default);
 Vue.component('developer-edit-unit', require('./components/Frontend/Developer/EditUnit.vue').default);
 Vue.component('developer-request-unit', require('./components/Frontend/Developer/RequestUnit.vue').default);
-Vue.component('developer-report-unit', require('./components/Frontend/Developer/Report/UnitReport.vue').default);
+Vue.component('developer-report-unitsold', require('./components/Frontend/Developer/Report/UnitSold.vue').default);
+Vue.component('developer-report-unitbooked', require('./components/Frontend/Developer/Report/UnitBooked.vue').default);
 Vue.component('developer-request-verification', require('./components/Frontend/Developer/RequestVerification.vue').default);
 
 // customer

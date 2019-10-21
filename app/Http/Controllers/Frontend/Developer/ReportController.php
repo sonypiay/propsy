@@ -13,7 +13,7 @@ use PDF;
 
 class ReportController extends Controller
 {
-  public function page_report_unit( Request $request, DeveloperUser $developeruser )
+  public function page_report_unit( Request $request, DeveloperUser $developeruser, $status )
   {
     if( session()->has('isDeveloper') )
     {
@@ -23,7 +23,18 @@ class ReportController extends Controller
         'hasrequest' => $developeruser->hasrequest()
       ];
 
-      return response()->view('frontend.pages.developer.report.unit', $data);
+      if( $status === 'sold' )
+      {
+        return response()->view('frontend.pages.developer.report.unitsold', $data);
+      }
+      else if( $status === 'booked' )
+      {
+        return response()->view('frontend.pages.developer.report.unitbooked', $data);
+      }
+      else
+      {
+        abort(404);
+      }
     }
     else
     {
@@ -31,15 +42,19 @@ class ReportController extends Controller
     }
   }
 
-  public function get_unit_sold( Request $request, DeveloperUser $developeruser, ProjectRequest $project_request )
+  public function get_unit_report( Request $request, DeveloperUser $developeruser, ProjectRequest $project_request, $status )
   {
     $start_date = $request->start_date;
     $end_date = $request->end_date;
     $developer = $developeruser->getinfo();
+    $arr_date = [
+      'start_date' => $start_date,
+      'end_date' => $end_date
+    ];
 
     $whereClauses = [];
-    array_push( $whereClauses, ['project_unit_type.unit_status', '=', 'sold']);
-    array_push( $whereClauses, ['project_request.dev_user_id', '=', $developer->dev_user_id]);
+    array_push( $whereClauses, ['project_unit_type.unit_status', $status]);
+    array_push( $whereClauses, ['project_request.dev_user_id', $developer->dev_user_id]);
 
     $getrequest = $project_request->select(
       'project_request.request_id',
@@ -55,7 +70,9 @@ class ReportController extends Controller
 
     if( ! empty( $start_date ) && ! empty( $end_date ) )
     {
-      $getrequest = $getrequest->whereBetween(DB::raw('date_format(project_request.created_at, "%Y-%m-%d")'), [$start_date, $end_date]);
+      $getrequest = $getrequest->where(function($query) use ($arr_date){
+        $query->whereBetween(DB::raw('date_format(project_request.created_at, "%Y-%m-%d")'), [$arr_date['start_date'], $arr_date['end_date']]);
+      });
     }
 
     $result = $getrequest->orderBy('project_request.created_at', 'desc')
@@ -64,14 +81,18 @@ class ReportController extends Controller
     return response()->json( $result, 200 );
   }
 
-  public function report_save_unit( Request $request, ProjectRequest $project_request, DeveloperUser $developeruser, $type )
+  public function report_save_unit( Request $request, ProjectRequest $project_request, DeveloperUser $developeruser, $status )
   {
     $start_date = $request->start_date;
     $end_date = $request->end_date;
     $developer = $developeruser->getinfo();
+    $arr_date = [
+      'start_date' => $start_date,
+      'end_date' => $end_date
+    ];
 
     $whereClauses = [];
-    array_push( $whereClauses, ['project_unit_type.unit_status', '=', 'sold']);
+    array_push( $whereClauses, ['project_unit_type.unit_status', '=', $status]);
     array_push( $whereClauses, ['project_request.dev_user_id', '=', $developer->dev_user_id]);
 
     $getrequest = $project_request->select(
@@ -87,18 +108,22 @@ class ReportController extends Controller
 
     if( ! empty( $start_date ) && ! empty( $end_date ) )
     {
-      $getrequest = $getrequest->whereBetween(DB::raw('date_format(project_request.created_at, "%Y-%m-%d")'), [$start_date, $end_date]);
+      $getrequest = $getrequest->where(function($query) use ($arr_date){
+        $query->whereBetween(DB::raw('date_format(project_request.created_at, "%Y-%m-%d")'), [$arr_date['start_date'], $arr_date['end_date']]);
+      });
     }
+
     $result = $getrequest->orderBy('project_request.created_at', 'desc')->get();
-    $filename = 'UnitTerjual-' . date('Ymd') . '.pdf';
+    $filename = 'Unit' . $status . '-' . date('Ymd') . '.pdf';
 
     $data = [
       'result' => $result,
       'filename' => $filename,
       'start_date' => $start_date,
-      'end_date' => $end_date
+      'end_date' => $end_date,
+      'status' => $status
     ];
-    //return response()->view('frontend.pages.export.unit', $data);
+
     return PDF::loadView('frontend.pages.export.unit', $data)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
   }
 
@@ -140,7 +165,7 @@ class ReportController extends Controller
       'filename' => $filename,
       'result' => $getrequest
     ];
-    //return response()->view('frontend.pages.export.request_unit', $res);
+
     return PDF::loadView('frontend.pages.export.request_unit', $res)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
   }
 }

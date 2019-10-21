@@ -285,6 +285,11 @@ class ProjectListController extends Controller
     }
     else
     {
+      $getrequest = $project_request->where([
+        ['customer_id', $getcustomer->customer_id],
+        ['unit_type_id', $unit_id]
+      ]);
+
       $get_last_id = $project_request->select('request_id')->orderBy('request_id', 'desc')->first();
       $generate_request_id = $project_request->generateId();
       $data_log = [
@@ -292,24 +297,51 @@ class ProjectListController extends Controller
         'request_id' => $generate_request_id
       ];
 
-      $insert_request = new $project_request;
-      $insert_request->request_id = $generate_request_id;
-      $insert_request->dev_user_id = $dev_user;
-      $insert_request->customer_id = $getcustomer->customer_id;
-      $insert_request->unit_type_id = $unit_id;
-      $insert_request->installment = $selectinstallment;
-      $insert_request->request_message = $message;
-      $insert_request->save();
+      if( $getrequest->count() === 0 )
+      {
+        $insert_request = new $project_request;
+        $insert_request->request_id = $generate_request_id;
+        $insert_request->dev_user_id = $dev_user;
+        $insert_request->customer_id = $getcustomer->customer_id;
+        $insert_request->unit_type_id = $unit_id;
+        $insert_request->installment = $selectinstallment;
+        $insert_request->request_message = $message;
+        $insert_request->save();
+        $log_request->insert_log($data_log);
 
-      $getunit->unit_status = 'booked';
-      $getunit->save();
+        $res = [
+          'status' => 200,
+          'statusText' => 'success'
+        ];
+      }
+      else
+      {
+        $request_exists = $getrequest->orderBy('created_at', 'desc')->first();
+        if( $request_exists->status_request === 'reject' || $request_exists->status_request === 'cancel' )
+        {
+          $insert_request = new $project_request;
+          $insert_request->request_id = $generate_request_id;
+          $insert_request->dev_user_id = $dev_user;
+          $insert_request->customer_id = $getcustomer->customer_id;
+          $insert_request->unit_type_id = $unit_id;
+          $insert_request->installment = $selectinstallment;
+          $insert_request->request_message = $message;
+          $insert_request->save();
+          $log_request->insert_log($data_log);
 
-      $log_request->insert_log($data_log);
-
-      $res = [
-        'status' => 200,
-        'statusText' => 'success'
-      ];
+          $res = [
+            'status' => 200,
+            'statusText' => 'success'
+          ];
+        }
+        else
+        {
+          $res = [
+            'status' => 409,
+            'statusText' => 'Anda sudah mengajukan pesanan properti ini.'
+          ];
+        }
+      }
     }
 
     return response()->json( $res, $res['status'] );

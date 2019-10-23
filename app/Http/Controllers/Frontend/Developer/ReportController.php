@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Frontend\Developer;
 
 use Illuminate\Http\Request;
+use App\Database\Customer;
 use App\Database\DeveloperUser;
 use App\Database\ProjectRequest;
 use App\Database\ProjectUnitType;
 use App\Database\LogProjectRequest;
+use App\Database\CityDB;
 use App\Http\Controllers\Controller;
 use DB;
 use PDF;
@@ -19,8 +21,7 @@ class ReportController extends Controller
     {
       $data = [
         'request' => $request,
-        'session_user' => $developeruser->getinfo(),
-        'hasrequest' => $developeruser->hasrequest()
+        'session_user' => $developeruser->getinfo()
       ];
 
       if( $status === 'sold' )
@@ -35,6 +36,24 @@ class ReportController extends Controller
       {
         abort(404);
       }
+    }
+    else
+    {
+      return redirect()->route('developer_login_page');
+    }
+  }
+
+  public function page_report_customer( Request $request, DeveloperUser $developeruser, CityDB $city )
+  {
+    if( session()->has('isDeveloper') )
+    {
+      $data = [
+        'request' => $request,
+        'session_user' => $developeruser->getinfo(),
+        'getcity' => $city->getcity()
+      ];
+
+      return response()->view('frontend.pages.developer.report.customer', $data);
     }
     else
     {
@@ -81,6 +100,43 @@ class ReportController extends Controller
     ->orderBy('project_request.created_at', 'desc')
     ->paginate( 10 );
 
+    return response()->json( $result, 200 );
+  }
+
+  public function get_customer_report( Request $request, Customer $customer )
+  {
+    $keywords = $request->keywords;
+    $filtercity = $request->city;
+    $limit = $request->limit;
+
+    $getcustomer = $customer->select(
+      'customer.customer_name',
+      'customer.customer_email',
+      'customer.customer_phone_number',
+      'city.city_name',
+      'project_request.request_id'
+    )
+    ->join('city', 'customer.city_id', '=', 'city.city_id')
+    ->join('project_request', 'customer.customer_id', '=', 'project_request.customer_id')
+    ->where('project_request.dev_user_id', session()->get('dev_user_id'))
+    ->groupBy('project_request.customer_id')
+    ->orderBy('customer.customer_name', 'asc');
+
+    if( $filtercity !== 'all' )
+    {
+      $getcustomer = $getcustomer->where('customer.city_id', $filtercity);
+    }
+
+    if( ! empty( $keywords ) )
+    {
+      $getcustomer = $getcustomer->where(function( $query ) use ( $keywords ) {
+        $query->where('customer.customer_name', 'like', '%' . $keywords . '%')
+        ->orWhere('customer.customer_email', 'like', '%' . $keywords . '%')
+        ->orWhere('customer.customer_phone_number', 'like', '%' . $keywords . '%');
+      });
+    }
+
+    $result = $getcustomer->paginate( $limit );
     return response()->json( $result, 200 );
   }
 
@@ -171,5 +227,37 @@ class ReportController extends Controller
     ];
 
     return PDF::loadView('frontend.pages.export.request_unit', $res)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
+  }
+
+  public function report_save_customer( Request $request, Customer $customer )
+  {
+    $filtercity = $request->city;
+
+    $getcustomer = $customer->select(
+      'customer.customer_name',
+      'customer.customer_email',
+      'customer.customer_phone_number',
+      'city.city_name',
+      'project_request.request_id'
+    )
+    ->join('city', 'customer.city_id', '=', 'city.city_id')
+    ->join('project_request', 'customer.customer_id', '=', 'project_request.customer_id')
+    ->where('project_request.dev_user_id', session()->get('dev_user_id'))
+    ->groupBy('project_request.customer_id')
+    ->orderBy('customer.customer_name', 'asc');
+
+    if( $filtercity !== 'all' )
+    {
+      $getcustomer = $getcustomer->where('customer.city_id', $filtercity);
+    }
+
+    $filename = 'LaporanDataPelanggan-' . date('Ymd') . '.pdf';
+
+    $res = [
+      'filename' => $filename,
+      'result' => $getcustomer->get()
+    ];
+    
+    return PDF::loadView('frontend.pages.export.customer', $res)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
   }
 }

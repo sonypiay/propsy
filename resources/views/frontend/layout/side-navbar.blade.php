@@ -50,6 +50,7 @@
       <ul class="uk-nav-sub side-nav-sub">
         <li><a href="{{ route('developer_report_unit_page', ['status' => 'sold']) }}"><span class="uk-margin-small-right" uk-icon="icon: list; ratio: 1"></span> Unit Terjual</a></li>
         <li><a href="{{ route('developer_report_unit_page', ['status' => 'booked']) }}"><span class="uk-margin-small-right" uk-icon="icon: list; ratio: 1"></span> Unit Dipesan</a></li>
+        <li><a href="{{ route('developer_report_customer_page') }}"><span class="uk-margin-small-right" uk-icon="icon: list; ratio: 1"></span> Pelanggan</a></li>
       </ul>
     </li>
     <li>

@@ -10,7 +10,7 @@
   <div class="uk-margin-bottom">
     <img style="width: 130px;" src="{{ asset('images/brand/logo_maps_primary.png') }}" alt="">
   </div>
-  <table class="uk-table uk-table-divider uk-table-small">
+  <table class="uk-table uk-table-divider uk-table-small uk-text-small">
     <tr>
       <td class="uk-text-bold uk-width-small">Request ID</td>
       <td>: {{ $result->request_id }}</td>
@@ -45,7 +45,7 @@
     </tr>
   </table>
 
-  <table class="uk-table uk-table-divider uk-table-hover uk-table-middle uk-table-striped uk-table-small">
+  <table class="uk-table uk-table-divider uk-table-hover uk-table-middle uk-table-striped uk-table-small uk-text-small">
     <tbody>
       <tr>
         <th>Nama Pelanggan</th>
@@ -76,7 +76,7 @@
     </tbody>
   </table>
 
-  <table class="uk-table uk-table-hover uk-table-striped uk-table-divider uk-table-small uk-table-middle">
+  <table class="uk-table uk-table-hover uk-table-striped uk-table-divider uk-table-small uk-table-middle uk-text-small">
     <thead>
       <tr>
         <th>DP</th>

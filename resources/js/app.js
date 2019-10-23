@@ -36,6 +36,7 @@ Vue.component('developer-edit-unit', require('./components/Frontend/Developer/Ed
 Vue.component('developer-request-unit', require('./components/Frontend/Developer/RequestUnit.vue').default);
 Vue.component('developer-report-unitsold', require('./components/Frontend/Developer/Report/UnitSold.vue').default);
 Vue.component('developer-report-unitbooked', require('./components/Frontend/Developer/Report/UnitBooked.vue').default);
+Vue.component('developer-report-customer', require('./components/Frontend/Developer/Report/Customer.vue').default);
 Vue.component('developer-request-verification', require('./components/Frontend/Developer/RequestVerification.vue').default);
 
 // customer

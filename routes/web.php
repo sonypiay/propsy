@@ -160,6 +160,12 @@ Route::group(['prefix' => 'developer'], function() {
     Route::get('/save_report/{status}', 'Frontend\Developer\ReportController@report_save_unit');
     Route::get('/get_unit/{status}', 'Frontend\Developer\ReportController@get_unit_report');
     Route::get('/request_unit/save/{request_id}', 'Frontend\Developer\ReportController@report_save_project_request');
+
+    Route::group(['prefix' => 'customer'], function() {
+      Route::get('/', 'Frontend\Developer\ReportController@page_report_customer')->name('developer_report_customer_page');
+      Route::get('/get_customer', 'Frontend\Developer\ReportController@get_customer_report');
+      Route::get('/save_report', 'Frontend\Developer\ReportController@report_save_customer');
+    });
   });
 });
 

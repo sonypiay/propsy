@@ -24,6 +24,7 @@
     <table class="uk-table uk-table-small uk-table-striped uk-table-middle uk-table-divider uk-table-expand uk-margin-small-top uk-text-small">
       <thead>
         <tr>
+          <th>No.</th>
           <th>ID</th>
           <th>Tipe Unit</th>
           <th>Nama Pelanggan</th>
@@ -31,8 +32,12 @@
         </tr>
       </thead>
       <tbody>
+        @php $i = 1 @endphp
         @foreach( $result as $res )
         <tr>
+          <td>
+            {{ $i++ }}
+          </td>
           <td>{{ $res->request_id }}</td>
           <td>{{ $res->unit_name }}</td>
           <td>{{ $res->customer_name }}</td>

@@ -100,7 +100,7 @@ class AuthController extends Controller
         'expire_date' => $expire_date
       ];
 
-      $send = new CustomerEmailValidation( $data_verify['hash_id'], $getuser->customer_email );
+      $send = new CustomerEmailValidation( $data_verify['hash_id'], $email );
       Mail::send( $send );
 
       $insert = new $customer;

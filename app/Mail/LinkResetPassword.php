@@ -32,6 +32,6 @@ class LinkResetPassword extends Mailable
       ])
       ->from( $from )
       ->subject( $subject )
-      ->to( $emailTo );
+      ->to( $this->email );
     }
 }

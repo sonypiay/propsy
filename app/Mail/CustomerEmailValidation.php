@@ -27,7 +27,7 @@ class CustomerEmailValidation extends Mailable
       $subject = 'Verifikasi Email';
 
       return $this->view('frontend.mailing.verification_customer', [
-        'token' => $this->hash_id,
+        'hash_id' => $this->hash_id,
         'email' => $this->email
       ])
       ->from( $from )

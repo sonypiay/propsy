@@ -8,9 +8,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Database\Customer;
 use App\Database\VerificationCustomer;
+use App\Database\ResetPassword;
 use App\Database\ProjectRequest;
 use App\Http\Controllers\Controller;
 use App\Mail\CustomerEmailValidation;
+use App\Mail\LinkResetPassword;
 use Mail;
 
 class CustomerController extends Controller
@@ -232,6 +234,43 @@ class CustomerController extends Controller
       $res = ['status' => 200, 'statusText' => 'Anda sudah terverifikasi'];
     }
 
+    return response()->json( $res, $res['status'] );
+  }
+
+  public function reset_password_page( Request $request )
+  {
+    if( ! session()->has('isCustomer') )
+    {
+      $data = [ 'request' => $request ];
+      return response()->view('frontend.pages.customer.reset_password', $data);
+    }
+    else
+    {
+      return redirect()->route('customer_profile_page');
+    }
+  }
+
+  public function send_password_token( Request $request, ResetPassword $resetpassword, Customer $customer )
+  {
+    $email = $request->email;
+    $expired_date = time() + 60 * 30;
+    $token = sha1( Hash::make( $email ) );
+    $check_email = $customer->where('customer_email', $email)->count();
+
+    if( $check_email === 1 )
+    {
+      $data_reset_password = [
+        'token' => $token,
+        'expired' => $expired_date,
+        'email' => $email,
+        'usertype' => 'customer'
+      ];
+
+      $resetpassword->insertResetPassword( $data_reset_password );
+      Mail::send( new LinkResetPassword( $token, $email ) );
+    }
+
+    $res = ['status' => 200, 'statusText' => 'success'];
     return response()->json( $res, $res['status'] );
   }
 }

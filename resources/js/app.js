@@ -38,10 +38,12 @@ Vue.component('developer-report-unitsold', require('./components/Frontend/Develo
 Vue.component('developer-report-unitbooked', require('./components/Frontend/Developer/Report/UnitBooked.vue').default);
 Vue.component('developer-report-customer', require('./components/Frontend/Developer/Report/Customer.vue').default);
 Vue.component('developer-request-verification', require('./components/Frontend/Developer/RequestVerification.vue').default);
+Vue.component('developer-reset-password', require('./components/Frontend/Developer/ForgotPassword.vue').default);
 
 // customer
 Vue.component('customer-register-page', require('./components/Frontend/Customer/Daftar.vue').default);
 Vue.component('customer-login-page', require('./components/Frontend/Customer/Masuk.vue').default);
+Vue.component('customer-reset-password', require('./components/Frontend/Customer/ForgotPassword.vue').default);
 Vue.component('customer-profile-page', require('./components/Frontend/Customer/Profile.vue').default);
 Vue.component('customer-list-request', require('./components/Frontend/Customer/ListRequestUnit.vue').default);
 Vue.component('customer-meeting-invitation', require('./components/Frontend/Customer/MeetingInvitation.vue').default);
@@ -53,7 +55,7 @@ Vue.component('page-view-unit', require('./components/Frontend/ViewDetailUnit.vu
 Vue.component('page-browse-project', require('./components/Frontend/BrowseProject.vue').default);
 Vue.component('page-search-project', require('./components/Frontend/SearchProject.vue').default);
 Vue.component('page-view-developer', require('./components/Frontend/DeveloperProfile.vue').default);
-
+Vue.component('reset-password-page', require('./components/Frontend/ResetPassword.vue').default);
 
 import VueCurrencyFilter from 'vue-currency-filter';
 Vue.use(VueCurrencyFilter);

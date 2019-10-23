@@ -34,6 +34,8 @@ Route::group(['prefix' => 'customer'], function() {
   Route::get('/masuk', 'Frontend\Customer\CustomerController@login_page')->name('customer_login_page');
   Route::get('/daftar', 'Frontend\Customer\CustomerController@register_page')->name('customer_register_page');
   Route::post('/resend_verification', 'Frontend\Customer\CustomerController@resend_verification');
+  Route::get('/reset_password', 'Frontend\Customer\CustomerController@reset_password_page');
+  Route::post('/send_password_token', 'Frontend\Customer\CustomerController@send_password_token');
   Route::group(['prefix' => 'profile'], function() {
     Route::put('/change_password', 'Frontend\Customer\CustomerController@change_password');
     Route::put('/change_email', 'Frontend\Customer\CustomerController@change_email');
@@ -96,6 +98,9 @@ Route::group(['prefix' => 'developer'], function() {
   Route::get('/daftar', 'Frontend\Developer\DeveloperController@register_page')->name('developer_register_page');
   Route::get('/request_verification', 'Frontend\Verification\DeveloperController@index')->name('developer_request_verification');
   Route::post('/request_verification', 'Frontend\Verification\DeveloperController@request_verification')->name('developer_request_verification');
+  Route::get('/reset_password', 'Frontend\Developer\DeveloperController@reset_password_page');
+  Route::post('/send_password_token/{usertype}', 'Frontend\Developer\DeveloperController@send_password_token');
+
   Route::group(['prefix' => 'project'], function() {
     Route::get('/detail/{project_id}', 'Frontend\Developer\ProjectListController@detail_project')->name('developer_detail_project');
     Route::get('/manage_project', 'Frontend\Developer\ProjectListController@dev_manage_project')->name('developer_manage_project');
@@ -185,7 +190,6 @@ Route::group(['prefix' => 'project'], function() {
   Route::get('/get_installment/{unit_id}', 'Frontend\Projects\ProjectListController@get_installment');
 });
 
-
 Route::group(['prefix' => 'verification'], function() {
   Route::get('/email_account', 'Frontend\Verification\CustomerController@view_template');
   Route::get('/validate/{hash_id}', 'Frontend\Verification\CustomerController@validate_email')->name('validate_email_customer');
@@ -198,6 +202,11 @@ Route::group(['prefix' => 'overview'], function() {
   Route::get('/latest_log_request', 'RestApi\ProjectApi@latest_log_request');
 });
 
+Route::group(['prefix' => 'password'], function() {
+  Route::get('/email', 'Frontend\ResetPasswordController@email_page');
+  Route::get('/change_password', 'Frontend\ResetPasswordController@change_password_page')->name('change_password_page');
+  Route::put('/change_password', 'Frontend\ResetPasswordController@change_password');
+});
 
 // Control Panel
 

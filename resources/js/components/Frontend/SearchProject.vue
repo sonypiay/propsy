@@ -41,6 +41,14 @@
               <label class="uk-form-label">Maksimum</label>
               <input type="number" class="uk-input uk-width-1-1 search-form-sidebar" v-model="forms.price.max" :step="forms.price.step">
             </div>
+            <div class="uk-margin-small">
+              <label class="uk-form-label">Filter Harga</label>
+              <select class="uk-width-1-1 uk-select search-form-sidebar" v-model="forms.filterprice">
+                <option value="all">Semua Harga</option>
+                <option value="lower_price">Harga Terendah</option>
+                <option value="high_price">Harga Tertinggi</option>
+              </select>
+            </div>
           </div>
           <hr>
           <div class="uk-margin">
@@ -168,6 +176,7 @@ export default {
       forms: {
         keywords: this.keywords,
         type: this.type === '' ? 'all' : this.type,
+        filterprice: 'all',
         city: {
           value: 'all',
           name: 'Semua Kota'
@@ -175,7 +184,7 @@ export default {
         price: {
           min: this.pricemin === '' ? '' : this.pricemin,
           max: this.pricemax === '' ? '' : this.pricemax,
-          step: 10000000
+          step: 100000000
         },
         facility: [],
         submitsearch: 'Cari proyek'
@@ -206,7 +215,8 @@ export default {
       + this.forms.city.value
       + '&facility=' + this.forms.facility
       + '&price_min=' + this.forms.price.min
-      + '&price_max=' + this.forms.price.max;
+      + '&price_max=' + this.forms.price.max
+      + '&filterprice=' + this.forms.filterprice;
       var url = this.$root.url + '/project/search_list?page=' + this.getproject.pagination.current_page + '&' + param;
       if( p !== undefined ) url = p + '&' + param;
 

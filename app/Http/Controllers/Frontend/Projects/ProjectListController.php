@@ -535,6 +535,7 @@ class ProjectListController extends Controller
     $keywords = $request->keywords;
     $type = isset( $request->type ) ? $request->type : 'all';
     $filtercity = $request->filtercity;
+    $filterprice = $request->filterprice;
     $price_min = isset( $request->price_min ) ? $request->price_min : '';
     $price_max = isset( $request->price_max ) ? $request->price_max : '';
     $facility = empty( $request->facility ) ? [] : explode(',', $request->facility);
@@ -635,12 +636,24 @@ class ProjectListController extends Controller
       }
     }
 
-    $result = $result->orderBy( 'project_unit_type.created_at', 'desc' )
-    ->paginate( 12 );
-    $res = [
-      'results' => $result
-    ];
+    if( $filterprice === 'all' )
+    {
+      $result = $result->orderBy( 'project_unit_type.created_at', 'desc' );
+    }
+    else
+    {
+      if( $filterprice === 'lower_price' )
+      {
+        $result = $result->orderBy( 'project_unit_type.unit_price', 'asc' );
+      }
+      else
+      {
+        $result = $result->orderBy( 'project_unit_type.unit_price', 'desc' );
+      }
+    }
 
+    $result = $result->paginate( 12 );
+    $res = [ 'results' => $result ];
     return response()->json( $res, 200 );
   }
 

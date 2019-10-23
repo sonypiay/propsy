@@ -53,6 +53,7 @@ class RequestUnitController extends Controller
       'project_unit_type.unit_type_id',
       'project_unit_type.unit_name',
       'project_unit_type.unit_price',
+      'project_unit_type.unit_status',
       'city.city_name',
       'province.province_name',
       'meeting_appointment.meeting_time',
@@ -217,7 +218,7 @@ class RequestUnitController extends Controller
         endforeach;
 
         $log_request->insert_log([ 'request_id' => $request_id, 'message' => 'Developer telah me-review pengajuan pemesanan unit.' ]);
-        $log_request->insert_log([ 'request_id' => $request_id, 'message' => 'Developer menyetujui pesanan pelanggan. <br /> Unit telah terjual.' ]);
+        $log_request->insert_log([ 'request_id' => $request_id, 'message' => 'Developer menyetujui pesanan pelanggan. <br /> Unit telah dipesan.' ]);
       }
 
       $getunit->save();

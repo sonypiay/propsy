@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ControlPanel\Pages;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Database\Customer;
 use App\Database\CityDB;
 use App\Database\AdminOwner;
@@ -81,7 +82,6 @@ class CustomerController extends Controller
 
   public function save_report( Request $request, Customer $customer )
   {
-    $keywords = $request->keywords;
     $city = $request->city;
     $status = $request->status;
 
@@ -117,15 +117,6 @@ class CustomerController extends Controller
       $getcustomer = $getcustomer->where('customer.status_verification', $status);
     }
 
-    if( ! empty( $keywords ) )
-    {
-      $getcustomer = $getcustomer->where(function($query) use ($keywords){
-        $query->where('customer.customer_name', 'like', '%' . $keywords . '%')
-        ->orWhere('customer.customer_email', 'like', '%' . $keywords . '%')
-        ->orWhere('customer.customer_phone_number', 'like', '%' . $keywords . '%');
-      });
-    }
-
     $filename = 'CustomerUser-' . date('dmY') . '.pdf';
     $res = [
       'filename' => $filename,
@@ -133,5 +124,29 @@ class CustomerController extends Controller
       'getcity' => $getcity
     ];
     return PDF::loadView('controlpanel.pages.reports.customer', $res)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
+  }
+
+  public function destroy( Customer $customer, $id )
+  {
+    $getcustomer = $customer->where('customer_id', $id);
+    $result = $getcustomer->first();
+
+    if( ! empty( $result->customer_photo ) )
+    {
+      $image_path = 'images/avatar';
+      $storage = Storage::disk('assets');
+      if( $storage->exists( $image_path . '/' . $result->customer_photo ) )
+      {
+        $storage->delete( $image_path . '/' . $result->customer_photo );
+      }
+    }
+
+    $getcustomer->delete();
+    $res = [
+      'status' => 200,
+      'statusText' => 'deleted...'
+    ];
+
+    return response( $res, $res['status'] );
   }
 }

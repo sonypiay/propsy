@@ -239,7 +239,7 @@ export default {
     },
     saveReport()
     {
-      let param = 'city=' + this.forms.city + '&keywords=' + this.forms.keywords + '&status=' + this.forms.status;
+      let param = 'city=' + this.forms.city + '&status=' + this.forms.status;
       let url = this.$root.url + '/cp/property/unit/save_report?' + param;
       window.open( url, '_blank' );
     },

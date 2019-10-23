@@ -34,6 +34,8 @@ Route::group(['prefix' => 'customer'], function() {
   Route::get('/masuk', 'Frontend\Customer\CustomerController@login_page')->name('customer_login_page');
   Route::get('/daftar', 'Frontend\Customer\CustomerController@register_page')->name('customer_register_page');
   Route::post('/resend_verification', 'Frontend\Customer\CustomerController@resend_verification');
+  Route::get('/reset_password', 'Frontend\Customer\CustomerController@reset_password_page');
+  Route::post('/send_password_token', 'Frontend\Customer\CustomerController@send_password_token');
   Route::group(['prefix' => 'profile'], function() {
     Route::put('/change_password', 'Frontend\Customer\CustomerController@change_password');
     Route::put('/change_email', 'Frontend\Customer\CustomerController@change_email');
@@ -96,6 +98,9 @@ Route::group(['prefix' => 'developer'], function() {
   Route::get('/daftar', 'Frontend\Developer\DeveloperController@register_page')->name('developer_register_page');
   Route::get('/request_verification', 'Frontend\Verification\DeveloperController@index')->name('developer_request_verification');
   Route::post('/request_verification', 'Frontend\Verification\DeveloperController@request_verification')->name('developer_request_verification');
+  Route::get('/reset_password', 'Frontend\Developer\DeveloperController@reset_password_page');
+  Route::post('/send_password_token/{usertype}', 'Frontend\Developer\DeveloperController@send_password_token');
+
   Route::group(['prefix' => 'project'], function() {
     Route::get('/detail/{project_id}', 'Frontend\Developer\ProjectListController@detail_project')->name('developer_detail_project');
     Route::get('/manage_project', 'Frontend\Developer\ProjectListController@dev_manage_project')->name('developer_manage_project');
@@ -152,14 +157,20 @@ Route::group(['prefix' => 'developer'], function() {
     Route::get('/get_request_unit', 'Frontend\Developer\RequestUnitController@get_request_unit');
     Route::get('/detail_request/{request_id}', 'Frontend\Developer\RequestUnitController@detail_request');
     Route::put('/review_request_unit/{request_id}/{status_review}', 'Frontend\Developer\RequestUnitController@review_request_unit');
-    Route::put('/reject_request_unit/{request_id}', 'Frontend\Developer\RequestUnitController@review_request_unit');
+    //Route::put('/reject_request_unit/{request_id}', 'Frontend\Developer\RequestUnitController@review_request_unit');
   });
 
   Route::group(['prefix' => 'report'], function() {
-    Route::get('/unit', 'Frontend\Developer\ReportController@page_report_unit')->name('developer_report_unit_page');
-    Route::get('/unit/save/{type}', 'Frontend\Developer\ReportController@report_save_unit');
-    Route::get('/get_unit', 'Frontend\Developer\ReportController@get_unit_sold');
+    Route::get('/unit/{status}', 'Frontend\Developer\ReportController@page_report_unit')->name('developer_report_unit_page');
+    Route::get('/save_report/{status}', 'Frontend\Developer\ReportController@report_save_unit');
+    Route::get('/get_unit/{status}', 'Frontend\Developer\ReportController@get_unit_report');
     Route::get('/request_unit/save/{request_id}', 'Frontend\Developer\ReportController@report_save_project_request');
+
+    Route::group(['prefix' => 'customer'], function() {
+      Route::get('/', 'Frontend\Developer\ReportController@page_report_customer')->name('developer_report_customer_page');
+      Route::get('/get_customer', 'Frontend\Developer\ReportController@get_customer_report');
+      Route::get('/save_report', 'Frontend\Developer\ReportController@report_save_customer');
+    });
   });
 });
 
@@ -179,7 +190,6 @@ Route::group(['prefix' => 'project'], function() {
   Route::get('/get_installment/{unit_id}', 'Frontend\Projects\ProjectListController@get_installment');
 });
 
-
 Route::group(['prefix' => 'verification'], function() {
   Route::get('/email_account', 'Frontend\Verification\CustomerController@view_template');
   Route::get('/validate/{hash_id}', 'Frontend\Verification\CustomerController@validate_email')->name('validate_email_customer');
@@ -192,6 +202,11 @@ Route::group(['prefix' => 'overview'], function() {
   Route::get('/latest_log_request', 'RestApi\ProjectApi@latest_log_request');
 });
 
+Route::group(['prefix' => 'password'], function() {
+  Route::get('/email', 'Frontend\ResetPasswordController@email_page');
+  Route::get('/change_password', 'Frontend\ResetPasswordController@change_password_page')->name('change_password_page');
+  Route::put('/change_password', 'Frontend\ResetPasswordController@change_password');
+});
 
 // Control Panel
 
@@ -265,6 +280,7 @@ Route::group(['prefix' => 'cp'], function() {
     Route::get('/', 'ControlPanel\Pages\CustomerController@index')->name('cp_customer_page');
     Route::get('/get_customer', 'ControlPanel\Pages\CustomerController@get_customer');
     Route::get('/save_report', 'ControlPanel\Pages\CustomerController@save_report');
+    Route::delete('/delete/{id}', 'ControlPanel\Pages\CustomerController@destroy');
 
     Route::group(['prefix' => 'request_unit'], function() {
       Route::get('/', 'ControlPanel\Pages\ProjectRequestController@index')->name('cp_request_history_page');
@@ -278,12 +294,25 @@ Route::group(['prefix' => 'cp'], function() {
     Route::get('/', 'ControlPanel\Pages\DeveloperController@index')->name('cp_developer_page');
     Route::get('/get_developer', 'ControlPanel\Pages\DeveloperController@get_developer');
     Route::get('/save_report', 'ControlPanel\Pages\DeveloperController@save_report');
+    Route::delete('/delete/{id}', 'ControlPanel\Pages\DeveloperController@destroy');
 
     Route::group(['prefix' => 'verification'], function() {
       Route::get('/', 'ControlPanel\Pages\RequestVerificationController@index')->name('cp_request_verification_page');
       Route::get('/get_verification', 'ControlPanel\Pages\RequestVerificationController@get_request_verification');
       Route::put('/approval/{id}/{approval}', 'ControlPanel\Pages\RequestVerificationController@approval_request');
       Route::get('/save_report', 'ControlPanel\Pages\RequestVerificationController@save_report');
+    });
+
+    Route::group(['prefix' => 'marketing'], function() {
+      Route::get('/', 'ControlPanel\Pages\MarketingController@index')->name('cp_marketing_page');
+      Route::get('/get_marketing', 'ControlPanel\Pages\MarketingController@get_marketing');
+      Route::get('/save_report', 'ControlPanel\Pages\MarketingController@save_report');
+    });
+
+    Route::group(['prefix' => 'meeting'], function() {
+      Route::get('/', 'ControlPanel\Pages\MeetingListController@index')->name('cp_meeting_page');
+      Route::get('/get_meeting', 'ControlPanel\Pages\MeetingListController@get_meeting_list');
+      Route::get('/save_report', 'ControlPanel\Pages\MeetingListController@save_report');
     });
   });
 });

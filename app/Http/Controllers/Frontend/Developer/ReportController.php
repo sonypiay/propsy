@@ -3,27 +3,39 @@
 namespace App\Http\Controllers\Frontend\Developer;
 
 use Illuminate\Http\Request;
+use App\Database\Customer;
 use App\Database\DeveloperUser;
 use App\Database\ProjectRequest;
 use App\Database\ProjectUnitType;
 use App\Database\LogProjectRequest;
+use App\Database\CityDB;
 use App\Http\Controllers\Controller;
 use DB;
 use PDF;
 
 class ReportController extends Controller
 {
-  public function page_report_unit( Request $request, DeveloperUser $developeruser )
+  public function page_report_unit( Request $request, DeveloperUser $developeruser, $status )
   {
     if( session()->has('isDeveloper') )
     {
       $data = [
         'request' => $request,
-        'session_user' => $developeruser->getinfo(),
-        'hasrequest' => $developeruser->hasrequest()
+        'session_user' => $developeruser->getinfo()
       ];
 
-      return response()->view('frontend.pages.developer.report.unit', $data);
+      if( $status === 'sold' )
+      {
+        return response()->view('frontend.pages.developer.report.unitsold', $data);
+      }
+      else if( $status === 'booked' )
+      {
+        return response()->view('frontend.pages.developer.report.unitbooked', $data);
+      }
+      else
+      {
+        abort(404);
+      }
     }
     else
     {
@@ -31,20 +43,44 @@ class ReportController extends Controller
     }
   }
 
-  public function get_unit_sold( Request $request, DeveloperUser $developeruser, ProjectRequest $project_request )
+  public function page_report_customer( Request $request, DeveloperUser $developeruser, CityDB $city )
+  {
+    if( session()->has('isDeveloper') )
+    {
+      $data = [
+        'request' => $request,
+        'session_user' => $developeruser->getinfo(),
+        'getcity' => $city->getcity()
+      ];
+
+      return response()->view('frontend.pages.developer.report.customer', $data);
+    }
+    else
+    {
+      return redirect()->route('developer_login_page');
+    }
+  }
+
+  public function get_unit_report( Request $request, DeveloperUser $developeruser, ProjectRequest $project_request, $status )
   {
     $start_date = $request->start_date;
     $end_date = $request->end_date;
     $developer = $developeruser->getinfo();
+    $arr_date = [
+      'start_date' => $start_date,
+      'end_date' => $end_date
+    ];
 
     $whereClauses = [];
-    array_push( $whereClauses, ['project_unit_type.unit_status', '=', 'sold']);
-    array_push( $whereClauses, ['project_request.dev_user_id', '=', $developer->dev_user_id]);
+    array_push( $whereClauses, ['project_request.status_request', 'accept']);
+    array_push( $whereClauses, ['project_unit_type.unit_status', $status]);
+    array_push( $whereClauses, ['project_request.dev_user_id', $developer->dev_user_id]);
 
     $getrequest = $project_request->select(
       'project_request.request_id',
       'project_request.created_at',
       'project_request.updated_at',
+      'project_request.status_request',
       'project_unit_type.unit_name',
       'project_unit_type.unit_status',
       'customer.customer_name'
@@ -55,23 +91,68 @@ class ReportController extends Controller
 
     if( ! empty( $start_date ) && ! empty( $end_date ) )
     {
-      $getrequest = $getrequest->whereBetween(DB::raw('date_format(project_request.created_at, "%Y-%m-%d")'), [$start_date, $end_date]);
+      $getrequest = $getrequest->where(function($query) use ($arr_date){
+        $query->whereBetween(DB::raw('date_format(project_request.created_at, "%Y-%m-%d")'), [$arr_date['start_date'], $arr_date['end_date']]);
+      });
     }
 
-    $result = $getrequest->orderBy('project_request.created_at', 'desc')
+    $result = $getrequest
+    ->orderBy('project_request.created_at', 'desc')
     ->paginate( 10 );
 
     return response()->json( $result, 200 );
   }
 
-  public function report_save_unit( Request $request, ProjectRequest $project_request, DeveloperUser $developeruser, $type )
+  public function get_customer_report( Request $request, Customer $customer )
+  {
+    $keywords = $request->keywords;
+    $filtercity = $request->city;
+    $limit = $request->limit;
+
+    $getcustomer = $customer->select(
+      'customer.customer_name',
+      'customer.customer_email',
+      'customer.customer_phone_number',
+      'city.city_name',
+      'project_request.request_id'
+    )
+    ->join('city', 'customer.city_id', '=', 'city.city_id')
+    ->join('project_request', 'customer.customer_id', '=', 'project_request.customer_id')
+    ->where('project_request.dev_user_id', session()->get('dev_user_id'))
+    ->groupBy('project_request.customer_id')
+    ->orderBy('customer.customer_name', 'asc');
+
+    if( $filtercity !== 'all' )
+    {
+      $getcustomer = $getcustomer->where('customer.city_id', $filtercity);
+    }
+
+    if( ! empty( $keywords ) )
+    {
+      $getcustomer = $getcustomer->where(function( $query ) use ( $keywords ) {
+        $query->where('customer.customer_name', 'like', '%' . $keywords . '%')
+        ->orWhere('customer.customer_email', 'like', '%' . $keywords . '%')
+        ->orWhere('customer.customer_phone_number', 'like', '%' . $keywords . '%');
+      });
+    }
+
+    $result = $getcustomer->paginate( $limit );
+    return response()->json( $result, 200 );
+  }
+
+  public function report_save_unit( Request $request, ProjectRequest $project_request, DeveloperUser $developeruser, $status )
   {
     $start_date = $request->start_date;
     $end_date = $request->end_date;
     $developer = $developeruser->getinfo();
+    $arr_date = [
+      'start_date' => $start_date,
+      'end_date' => $end_date
+    ];
 
     $whereClauses = [];
-    array_push( $whereClauses, ['project_unit_type.unit_status', '=', 'sold']);
+    array_push( $whereClauses, ['project_request.status_request', 'accept']);
+    array_push( $whereClauses, ['project_unit_type.unit_status', '=', $status]);
     array_push( $whereClauses, ['project_request.dev_user_id', '=', $developer->dev_user_id]);
 
     $getrequest = $project_request->select(
@@ -87,18 +168,22 @@ class ReportController extends Controller
 
     if( ! empty( $start_date ) && ! empty( $end_date ) )
     {
-      $getrequest = $getrequest->whereBetween(DB::raw('date_format(project_request.created_at, "%Y-%m-%d")'), [$start_date, $end_date]);
+      $getrequest = $getrequest->where(function($query) use ($arr_date){
+        $query->whereBetween(DB::raw('date_format(project_request.created_at, "%Y-%m-%d")'), [$arr_date['start_date'], $arr_date['end_date']]);
+      });
     }
+
     $result = $getrequest->orderBy('project_request.created_at', 'desc')->get();
-    $filename = 'UnitTerjual-' . date('Ymd') . '.pdf';
+    $filename = 'Unit' . $status . '-' . date('Ymd') . '.pdf';
 
     $data = [
       'result' => $result,
       'filename' => $filename,
       'start_date' => $start_date,
-      'end_date' => $end_date
+      'end_date' => $end_date,
+      'status' => $status
     ];
-    //return response()->view('frontend.pages.export.unit', $data);
+
     return PDF::loadView('frontend.pages.export.unit', $data)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
   }
 
@@ -140,7 +225,39 @@ class ReportController extends Controller
       'filename' => $filename,
       'result' => $getrequest
     ];
-    //return response()->view('frontend.pages.export.request_unit', $res);
+
     return PDF::loadView('frontend.pages.export.request_unit', $res)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
+  }
+
+  public function report_save_customer( Request $request, Customer $customer )
+  {
+    $filtercity = $request->city;
+
+    $getcustomer = $customer->select(
+      'customer.customer_name',
+      'customer.customer_email',
+      'customer.customer_phone_number',
+      'city.city_name',
+      'project_request.request_id'
+    )
+    ->join('city', 'customer.city_id', '=', 'city.city_id')
+    ->join('project_request', 'customer.customer_id', '=', 'project_request.customer_id')
+    ->where('project_request.dev_user_id', session()->get('dev_user_id'))
+    ->groupBy('project_request.customer_id')
+    ->orderBy('customer.customer_name', 'asc');
+
+    if( $filtercity !== 'all' )
+    {
+      $getcustomer = $getcustomer->where('customer.city_id', $filtercity);
+    }
+
+    $filename = 'LaporanDataPelanggan-' . date('Ymd') . '.pdf';
+
+    $res = [
+      'filename' => $filename,
+      'result' => $getcustomer->get()
+    ];
+    
+    return PDF::loadView('frontend.pages.export.customer', $res)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
   }
 }

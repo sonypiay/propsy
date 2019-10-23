@@ -14,6 +14,8 @@ Vue.component('wilayah-city-component', require('./components/ControlPanel/Wilay
 Vue.component('facility-component', require('./components/ControlPanel/Property/Facility.vue').default);
 Vue.component('admin-page-component', require('./components/ControlPanel/Manajemen/Admin.vue').default);
 Vue.component('developer-page-component', require('./components/ControlPanel/Developer/Developer.vue').default);
+Vue.component('marketing-page-component', require('./components/ControlPanel/Developer/Marketing.vue').default);
+Vue.component('meetinglist-page-component', require('./components/ControlPanel/Developer/MeetingList.vue').default);
 Vue.component('customer-page-component', require('./components/ControlPanel/Customer/Customer.vue').default);
 Vue.component('requesthistory-page-component', require('./components/ControlPanel/Customer/RequestHistory.vue').default);
 Vue.component('admin-page-component', require('./components/ControlPanel/Manajemen/Admin.vue').default);

@@ -157,7 +157,6 @@ class CityController extends Controller
       'table' => $table
     ];
 
-    //return response()->json( $res );
     return PDF::loadView('controlpanel.pages.reports.kota', $res)->setPaper('a4', 'portrait')->setWarnings(false)->stream( $filename );
   }
 }

@@ -13,6 +13,12 @@
           </div>
           <div class="uk-width-expand">
             <div class="uk-panel uk-margin">
+              <h4 class="uk-h5 uk-margin-remove-bottom">No. ID</h4>
+              <p class="uk-text-meta uk-margin-remove-top">
+                {{ getdeveloper.detail.dev_user_id }}
+              </p>
+            </div>
+            <div class="uk-panel uk-margin">
               <h4 class="uk-h5 uk-margin-remove-bottom">{{ getdeveloper.detail.dev_name }}</h4>
               <p class="uk-text-meta uk-margin-remove-top">
                 Bergabung pada
@@ -36,8 +42,8 @@
             <div class="uk-panel uk-margin">
               <h4 class="uk-h5 uk-margin-remove-bottom">Telepon</h4>
               <p class="uk-text-meta uk-margin-remove-top">
-                Kantor: {{ getdeveloper.detail.customer_phone_number }} <br />
-                Whatsapp: {{ getdeveloper.detail.dev_mobile_phone }}
+                <span uk-icon="receiver"></span> {{ getdeveloper.detail.dev_phone_office }} <br />
+                <span uk-icon="whatsapp"></span> {{ getdeveloper.detail.dev_mobile_phone }}
               </p>
             </div>
             <div class="uk-panel uk-margin">
@@ -74,6 +80,13 @@
             </select>
           </div>
           <div>
+            <select class="uk-select" v-model="forms.status" @change="getDeveloperList()">
+              <option value="all">Semua status</option>
+              <option value="N">Belum Verifikasi</option>
+              <option value="Y">Terverifikasi</option>
+            </select>
+          </div>
+          <div>
             <select class="uk-select" v-model="forms.city" @change="getDeveloperList()">
               <option value="all">Semua kota</option>
               <option v-for="city in getcity" :value="city.city_id">{{ city.city_name }}</option>
@@ -104,12 +117,14 @@
                   <th>Email</th>
                   <th>Kota</th>
                   <th>Status Verifikasi</th>
+                  <th>Tanggal Registrasi</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="dev in getdeveloper.results">
                   <td>
                     <a uk-tooltip="Lihat Detail" @click="onDetailDeveloper( dev )" class="uk-icon-link" uk-icon="forward"></a>
+                    <a uk-tooltip="Hapus" @click="onDeleteDeveloper( dev.dev_user_id )" class="uk-icon-link" uk-icon="trash"></a>
                   </td>
                   <td>{{ dev.dev_name }}</td>
                   <td>{{ dev.dev_email }}</td>
@@ -118,6 +133,7 @@
                     <label v-if="dev.status_verification === 'Y'" class="uk-label uk-label-success">Terverifikasi</label>
                     <label v-else class="uk-label uk-label-warning">Belum Verifikasi</label>
                   </td>
+                  <td>{{ $root.formatDate( dev.created_at, 'DD/MM/YYYY' ) }}</td>
                 </tr>
               </tbody>
             </table>
@@ -155,7 +171,8 @@ export default {
       forms: {
         keywords: '',
         limit: 10,
-        city: 'all'
+        city: 'all',
+        status: 'all'
       },
       message: {
         errors: {},
@@ -178,7 +195,7 @@ export default {
   methods: {
     getDeveloperList( p )
     {
-      var param = 'keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&city=' + this.forms.city;
+      var param = 'status=' + this.forms.status + '&keywords=' + this.forms.keywords + '&limit=' + this.forms.limit + '&city=' + this.forms.city;
       var url = this.$root.url + '/cp/developer/get_developer?page=' + this.getdeveloper.paginate.current_page + '&' + param;
       if( p !== undefined ) url = p + '&' + param;
 
@@ -206,9 +223,43 @@ export default {
     },
     saveReport()
     {
-      let param = 'city=' + this.forms.city + '&keywords=' + this.forms.keywords;
+      let param = 'status=' + this.forms.status + '&city=' + this.forms.city;
       let url = this.$root.url + '/cp/developer/save_report?' + param;
       window.open( url, '_blank' );
+    },
+    onDeleteDeveloper( id )
+    {
+      swal({
+        title: 'Konfirmasi',
+        text: 'Apakah anda ingin menghapus developer ini?',
+        icon: 'warning',
+        buttons: {
+          confirm: { value: true, text: 'Ya' },
+          cancel: 'Tidak'
+        }
+      }).then( val => {
+        if( val )
+        {
+          axios({
+            method: 'delete',
+            url: this.$root.url + '/cp/developer/delete/' + id
+          }).then( res => {
+            swal({
+              title: 'Berhasil',
+              text: 'Developer telah dihapus',
+              icon: 'success'
+            });
+            this.getDeveloperList();
+          }).catch( err => {
+            swal({
+              title: 'Whoops',
+              text: 'Terjadi kesalahan',
+              icon: 'error',
+              dangerMode: true
+            });
+          });
+        }
+      });
     }
   },
   mounted() {

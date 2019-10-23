@@ -3,7 +3,7 @@
 @section('main_content')
 <div class="uk-width-1-1">
   <div class="uk-margin-bottom uk-text-center">
-    <!--<img style="width: 130px;" src="{{ asset('images/brand/logo_maps_primary.png') }}" alt="">-->
+    <img style="width: 130px;" src="{{ asset('images/brand/logo_maps_primary.png') }}" alt="">
   </div>
   <article class="uk-article uk-margin-top">
     <h2 class="uk-h2 uk-text-center uk-margin-remove-bottom">
@@ -13,7 +13,7 @@
       @endif
     </h2>
     <div class="uk-article-meta uk-text-center uk-margin-remove-top">Tanggal cetak {{ date('d/m/Y') }}</div>
-    <table class="uk-table uk-table-striped uk-table-divider uk-table-expand uk-margin-top">
+    <table class="uk-table uk-table-striped uk-table-divider uk-table-expand uk-margin-top uk-text-small">
       <thead>
         <tr>
           <th>ID</th>

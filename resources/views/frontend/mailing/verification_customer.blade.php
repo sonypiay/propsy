@@ -86,7 +86,7 @@
       Harap beritahu kami bahwa Anda bukanlah robot. <a href="{{ route('validate_email_customer', ['hash_id' => $hash_id]) }}" class="bt-verify">Click Here</a>
 
       <br /><br />
-      Greetings,<br />
+      Salam,<br />
       Propsy
     </div>
   </div>

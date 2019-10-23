@@ -56,8 +56,12 @@
               <tbody>
                 <tr v-for="req in getrequest.results">
                   <td>{{ req.dev_name }}</td>
-                  <td><a target="_blank" :href="$root.url + '/storage/assets/document_file/request_verification/' + req.npwp_image" class="uk-width-1-1 uk-button uk-button-small uk-button-default">Lihat</a></td>
-                  <td><a target="_blank" :href="$root.url + '/storage/assets/document_file/request_verification/' + req.official_certificate" class="uk-width-1-1 uk-button uk-button-small uk-button-default">Lihat</a></td>
+                  <td uk-lightbox>
+                    <a :href="$root.url + '/storage/assets/document/request_verification/' + req.npwp_image" class="uk-width-1-1 uk-button uk-button-small uk-button-default">Lihat</a>
+                  </td>
+                  <td uk-lightbox>
+                    <a :href="$root.url + '/storage/assets/document/request_verification/' + req.official_certificate" class="uk-width-1-1 uk-button uk-button-small uk-button-default">Lihat</a>
+                  </td>
                   <td>{{ $root.formatDate( req.created_at, 'DD/MM/YYYY' ) }}</td>
                   <td>
                     <label class="uk-label" v-if="req.status_verification === 'N'">Menunggu Verifikasi</label>
@@ -66,7 +70,7 @@
                   </td>
                   <td>
                     <a v-if="req.status_verification === 'N'" @click="onApprovalRequest( req.hash_id, 'accept' )" uk-tooltip="Setuju" class="uk-button uk-button-default uk-button-small" uk-icon="check"></a>
-                    <a v-if="req.status_verification === 'N'" @click="onApprovalRequest( req.hash_id, 'reject' )" uk-tooltip="Tolak" class="uk-button uk-button-default uk-button-small" uk-icon="close"></a>
+                    <a v-if="req.status_verification === 'N'" @click="onApprovalRequest( req.hash_id, 'reject' )" uk-tooltip="Tolak" class="uk-button uk-button-danger uk-button-small" uk-icon="close"></a>
                   </td>
                 </tr>
               </tbody>

@@ -1,8 +1,8 @@
 @extends('frontend.pages.developer.master')
-@section('tag_title', 'Laporan Unit Proyek')
+@section('tag_title', 'Laporan Unit Dipesan')
 @section('main_content')
 <div id="app">
-  <developer-report-unit
+  <developer-report-unitbooked
   :session_user="{{ json_encode( $session_user ) }}"
    />
 </div>

@@ -36,15 +36,13 @@ class DeveloperController extends Controller
   {
     $npwp = $request->npwp;
     $cerificate = $request->certificate;
-    $additional_document = $request->additional_document;
     $getdeveloper = $developeruser->getinfo();
     $getverification = $verification->where('dev_user_id', $getdeveloper->dev_user_id);
     $storage = Storage::disk('assets');
-    $storage_path = 'document_file/request_verification';
+    $storage_path = 'document/request_verification';
 
     $npwp_filename = 'NPWP-' . $npwp->hashName();
     $cerificate_filename = 'Cert-' . $cerificate->hashName();
-    $document_file = ! empty( $additional_document ) ? 'Doc-' . $additional_document->hashName() : '';
 
     if( $getverification->count() === 0 )
     {
@@ -55,15 +53,10 @@ class DeveloperController extends Controller
       $verification->official_certificate = $cerificate_filename;
       $verification->dev_user_id = $getdeveloper->dev_user_id;
       $verification->status_verification = 'N';
-      if( ! empty( $document_file ) ) $verification->additional_document = $document_file;
       $verification->save();
 
       $storage->putFileAs( $storage_path, $npwp, $npwp_filename );
       $storage->putFileAs( $storage_path, $cerificate, $cerificate_filename );
-      if( ! empty( $document_file ) )
-      {
-        $storage->putFileAs( $storage_path, $additional_document, $document_file );
-      }
     }
     else
     {
@@ -86,14 +79,6 @@ class DeveloperController extends Controller
         {
           $storage->delete( $storage_path . '/' . $result->official_certificate );
         }
-        if( ! empty( $document_file ) )
-        {
-          if( $storage->exists( $storage_path . '/' . $result->additional_document ) )
-          {
-            $storage->delete( $storage_path . '/' . $result->additional_document );
-          }
-          $update->additional_document = $document_file;
-        }
 
         $update = $verification->where('hash_id', $result->hash_id)->first();
         $update->npwp_image = $npwp_filename;
@@ -104,10 +89,6 @@ class DeveloperController extends Controller
 
         $storage->putFileAs( $storage_path, $npwp, $npwp_filename );
         $storage->putFileAs( $storage_path, $cerificate, $cerificate_filename );
-        if( ! empty( $document_file ) )
-        {
-          $storage->putFileAs( $storage_path, $additional_document, $document_file );
-        }
       }
     }
 

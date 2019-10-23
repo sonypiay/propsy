@@ -39,7 +39,10 @@
           </form>
         </div>
         <div class="uk-margin-top signin-box-signup">
-          Belum punya akun? <a :href="$root.url + '/developer/daftar'">Daftar Sekarang</a>
+          <div>
+            <a :href="$root.url + '/developer/reset_password'">Lupa Password?</a>
+          </div>
+          <div>Belum punya akun? <a :href="$root.url + '/developer/daftar'">Daftar Sekarang</a></div>
         </div>
       </div>
     </div>

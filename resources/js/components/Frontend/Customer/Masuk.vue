@@ -26,7 +26,12 @@
           </form>
         </div>
         <div class="uk-margin-top signin-box-signup">
-          Belum punya akun? <a :href="$root.url + '/customer/daftar'">Daftar Sekarang</a>
+          <div>
+            <a :href="$root.url + '/customer/reset_password'">Lupa Password?</a>
+          </div>
+          <div>
+            Belum punya akun? <a :href="$root.url + '/customer/daftar'">Daftar Sekarang</a>
+          </div>
         </div>
       </div>
     </div>

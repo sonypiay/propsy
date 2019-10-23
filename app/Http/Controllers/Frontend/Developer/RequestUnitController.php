@@ -53,6 +53,7 @@ class RequestUnitController extends Controller
       'project_unit_type.unit_type_id',
       'project_unit_type.unit_name',
       'project_unit_type.unit_price',
+      'project_unit_type.unit_status',
       'city.city_name',
       'province.province_name',
       'meeting_appointment.meeting_time',
@@ -184,30 +185,44 @@ class RequestUnitController extends Controller
 
   public function review_request_unit( ProjectRequest $project_request, LogProjectRequest $log_request, ProjectUnitType $unit_type, $request_id, $status_review )
   {
-    $getrequest = $project_request->where('request_id', $request_id)
-    ->first();
+    $getrequest = $project_request->where('request_id', $request_id)->first();
 
     if( $getrequest->isReviewed === 'N' )
     {
       $getunit = $unit_type->where('unit_type_id', '=', $getrequest->unit_type_id)->first();
-      $getunit->unit_status = $status_review === 'reject' ? 'available' : 'sold';
-
-      $getunit->save();
+      $getunit->unit_status = $status_review === 'reject' ? 'available' : 'booked';
 
       $getrequest->status_request = $status_review;
       $getrequest->isReviewed = 'Y';
+
+
+      if( $status_review === 'reject' )
+      {
+        $log_request->insert_log([ 'request_id' => $request_id, 'message' => 'Developer telah me-review pengajuan pemesanan unit.' ]);
+        $log_request->insert_log([ 'request_id' => $request_id, 'message' => 'Developer menolak pesanan pelanggan.' ]);
+      }
+      else
+      {
+        $reject_request = $project_request->where([
+          ['unit_type_id', $getrequest->unit_type_id],
+          ['request_id', '!=', $request_id],
+          ['status_request', '!=', 'reject']
+        ]); $reject_request->update([
+          'isReviewed' => 'Y',
+          'status_request' => 'reject'
+        ]);
+
+        foreach( $reject_request->get() as $r ):
+          $log_request->insert_log(['request_id' => $r->request_id, 'message' => 'Developer telah me-review pengajuan pemesanan unit.' ]);
+          $log_request->insert_log([ 'request_id' => $r->request_id, 'message' => 'Developer menolak pesanan pelanggan.' ]);
+        endforeach;
+
+        $log_request->insert_log([ 'request_id' => $request_id, 'message' => 'Developer telah me-review pengajuan pemesanan unit.' ]);
+        $log_request->insert_log([ 'request_id' => $request_id, 'message' => 'Developer menyetujui pesanan pelanggan. <br /> Unit telah dipesan.' ]);
+      }
+
+      $getunit->save();
       $getrequest->save();
-
-      $log_request->insert_log([
-        'request_id' => $request_id,
-        'message' => 'Developer telah me-review pengajuan pemesanan unit.'
-      ]);
-
-      $log_message = $status_review === 'reject' ? 'Developer menolak pesanan pelanggan.' : 'Developer menyetujui pesanan pelanggan. <br /> Unit telah terjual.';
-      $log_request->insert_log([
-        'request_id' => $request_id,
-        'message' => $log_message
-      ]);
     }
 
     $res = [

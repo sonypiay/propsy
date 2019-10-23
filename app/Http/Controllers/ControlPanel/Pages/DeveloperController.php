@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\ControlPanel\Pages;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Database\DeveloperUser;
+use App\Database\VerificationDeveloper;
 use App\Database\AdminOwner;
 use App\Database\CityDB;
 use App\Http\Controllers\Controller;
@@ -33,6 +35,7 @@ class DeveloperController extends Controller
   {
     $keywords = $request->keywords;
     $city = $request->city;
+    $status = $request->status;
     $limit = isset( $request->limit ) ? $request->limit : 10;
 
     $getdeveloper = $developeruser->select(
@@ -63,6 +66,11 @@ class DeveloperController extends Controller
       $getdeveloper = $getdeveloper->where('developer_user.city_id', $city);
     }
 
+    if( $status !== 'all' )
+    {
+      $getdeveloper = $developeruser->where('developer_user.status_verification', $status);
+    }
+
     if( ! empty( $keywords ) )
     {
       $getdeveloper = $getdeveloper->where(function( $query ) use ( $keywords ) {
@@ -77,8 +85,8 @@ class DeveloperController extends Controller
 
   public function save_report( Request $request, DeveloperUser $developeruser, CityDB $citydb )
   {
-    $keywords = $request->keywords;
     $city = $request->city;
+    $status = $request->status;
 
     $getdeveloper = $developeruser->select(
       'developer_user.dev_user_id',
@@ -110,12 +118,9 @@ class DeveloperController extends Controller
       $getcity = $citydb->where('city_id', $city)->first();
     }
 
-    if( ! empty( $keywords ) )
+    if( $status !== 'all' )
     {
-      $getdeveloper = $getdeveloper->where(function( $query ) use ( $keywords ) {
-        $query->where('developer_user.dev_name', 'like', '%' . $keywords . '%')
-        ->orWhere('developer_user.dev_ownername', 'like', '%' . $keywords . '%');
-      });
+      $getdeveloper = $developeruser->where('developer_user.status_verification', $status);
     }
 
     $filename = 'DeveloperUser-' . date('dmY') . '.pdf';
@@ -125,5 +130,43 @@ class DeveloperController extends Controller
       'getcity' => $getcity
     ];
     return PDF::loadView('controlpanel.pages.reports.developer', $res)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
+  }
+
+  public function destroy( DeveloperUser $developer, VerificationDeveloper $verification, $id )
+  {
+    $getdeveloper = $developer->where('dev_user_id', $id);
+    $getverification = $verification->where('dev_user_id', $id)->first();
+    $result = $getdeveloper->first();
+    $storage = Storage::disk('assets');
+
+    if( ! empty( $result->dev_logo ) )
+    {
+      $image_path = 'images/devlogo';
+      if( $storage->exists( $image_path . '/' . $result->dev_logo ) )
+      {
+        $storage->delete( $image_path . '/' . $result->dev_logo );
+      }
+    }
+
+    if( ! empty( $getverification->npwp_image ) AND ! empty( $getverification->official_certificate ) )
+    {
+      $docpath = 'document/request_verification';
+      if( $storage->exists( $docpath . '/' . $getverification->npwp_image ) )
+      {
+        $storage->delete( $docpath . '/' . $getverification->npwp_image );
+      }
+      if( $storage->exists( $docpath . '/' . $getverification->official_certificate ) )
+      {
+        $storage->delete( $docpath . '/' . $getverification->official_certificate );
+      }
+    }
+
+    $getdeveloper->delete();
+    $res = [
+      'status' => 200,
+      'statusText' => 'deleted...'
+    ];
+
+    return response( $res, $res['status'] );
   }
 }

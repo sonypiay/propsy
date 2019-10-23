@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="uk-card dashboard-content">
-      <div class="uk-card-title uk-margin dashboard-content-heading">Laporan Unit Terjual</div>
+      <div class="uk-card-title uk-margin dashboard-content-heading">Laporan Unit Dipesan</div>
       <div class="uk-width-1-1 uk-inline uk-margin">
         <button type="button" class="uk-button uk-button-primary dash-btn" v-html="filterdate.text"></button>
         <div id="dropdown-date" class="uk-width-3-4@xl uk-width-3-4@l uk-width-2-3@m uk-width-1-1@s" uk-dropdown="mode: click">
@@ -220,7 +220,7 @@ export default {
       let end_datepicker = this.filterdate.isfiltered === false ? '' : this.$root.formatDate( datepicker.end, 'YYYY-MM-DD' );
 
       var param = 'start_date=' + start_datepicker + '&end_date=' + end_datepicker;
-      var url = this.$root.url + '/developer/report/get_unit?page=' + this.getunit.paginate.current_page + '&' + param;
+      var url = this.$root.url + '/developer/report/get_unit/booked?page=' + this.getunit.paginate.current_page + '&' + param;
       if( p !== undefined ) url = p + '&' + param;
 
       axios({
@@ -245,7 +245,7 @@ export default {
       let end_datepicker = this.filterdate.isfiltered === false ? '' : this.$root.formatDate( datepicker.end, 'YYYY-MM-DD' );
 
       var param = 'start_date=' + start_datepicker + '&end_date=' + end_datepicker;
-      var url = this.$root.url + '/developer/report/unit/save/' + file + '?' + param;
+      var url = this.$root.url + '/developer/report/save_report/booked?' + param;
       window.open( url, '_blank' );
     }
   },

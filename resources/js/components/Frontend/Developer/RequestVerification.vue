@@ -33,7 +33,7 @@
               <strong>Sepertinya pengajuan Anda telah ditolak. Silakan lengkapi formulir kembali untuk pengajuan verifikasi.</strong>
             </div>
           </div>
-          <div class="uk-margin">
+          <div v-show="getverification === null || getverification.status_verification === 'R'" class="uk-margin">
             <div class="uk-form-controls">
               <div class="uk-width-1-1 uk-margin-small-top" uk-form-custom>
                 <input accept="image/*" type="file" @change="onGetNpwp">
@@ -48,7 +48,7 @@
               <div v-show="message.errors.npwp" class="uk-text-small uk-text-danger">{{ message.errors.npwp }}</div>
             </div>
           </div>
-          <div class="uk-margin">
+          <div v-show="getverification === null || getverification.status_verification === 'R'" class="uk-margin">
             <div class="uk-form-controls">
               <div class="uk-width-1-1 uk-margin-small-top" uk-form-custom>
                 <input accept="image/*" type="file" @change="onGetCertificate">
@@ -63,23 +63,12 @@
               <div v-show="message.errors.certificate" class="uk-text-small uk-text-danger">{{ message.errors.certificate }}</div>
             </div>
           </div>
-          <div class="uk-margin">
-            <label class="uk-form-label form-label">Dokumen tambahan</label>
-            <div class="uk-form-controls">
-              <div class="uk-width-1-1" uk-form-custom="target: true">
-                <input type="file" accept="application/x-zip-compressed" @change="onGetAdditionalDocument">
-                <input class="uk-input uk-width-1-1" type="text" placeholder="Select a zip file" disabled>
-                <span class="uk-text-small uk-text-muted"><i>Opsional</i> </span>
-              </div>
-            </div>
-          </div>
-          <div class="uk-margin">
+          <div v-show="getverification === null || getverification.status_verification === 'R'" class="uk-margin">
             <div v-if="getverification === null">
               <button class="uk-width-1-1 uk-button uk-button-default form-submit-verification" v-html="forms.submit"></button>
             </div>
             <div v-else>
-              <button v-if="getverification.status_verification === 'R'" class="uk-width-1-1 uk-button uk-button-default form-submit-verification" v-html="forms.submit"></button>
-              <button v-if="getverification.status_verification === 'N'" class="uk-width-1-1 uk-button uk-button-default form-submit-verification" v-html="forms.submit" disabled></button>
+              <button class="uk-width-1-1 uk-button uk-button-default form-submit-verification" v-html="forms.submit" :disabled="getverification.status_verification === 'N'"></button>
             </div>
           </div>
         </form>
@@ -105,7 +94,6 @@ export default {
           url: '',
           data: ''
         },
-        additional_document: '',
         submit: 'Kirim Permohonan'
       },
       message: {
@@ -154,15 +142,6 @@ export default {
         }
       }
     },
-    onGetAdditionalDocument(event)
-    {
-      var targetfile = event.target.files;
-      this.forms.additional_document = '';
-      if( targetfile.length !== 0 )
-      {
-        this.forms.additional_document = targetfile[0];
-      }
-    },
     onSubmitRequest()
     {
       this.message.errors = {};
@@ -186,7 +165,6 @@ export default {
       let formdata = new FormData();
       formdata.append( 'npwp', this.forms.npwp.data);
       formdata.append( 'certificate', this.forms.certificate.data);
-      formdata.append( 'additional_document', this.forms.additional_document === '' ? '' : this.forms.additional_document );
       this.forms.submit = '<span uk-spinner></span>';
 
       axios.post( url, formdata).then( res => {

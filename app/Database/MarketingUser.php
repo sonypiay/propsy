@@ -45,7 +45,7 @@ class MarketingUser extends Model
   public function generateId()
   {
     $id = 1;
-    $getlastid = MeetingAppointment::select('seqid')->orderBy('seqid', 'desc')->first();
+    $getlastid = MarketingUser::select('seqid')->orderBy('seqid', 'desc')->first();
 
     if( $getlastid !== null )
       $id = $getlastid->seqid + 1;

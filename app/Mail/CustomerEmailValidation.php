@@ -25,8 +25,9 @@ class CustomerEmailValidation extends Mailable
       $emailTo = 'labmode-b368cf@inbox.mailtrap.io';
       $from = 'no-reply@propsy.com';
       $subject = 'Verifikasi Email';
+      
       return $this->view('frontend.mailing.verification_customer', [
-        'hash_id' => $this->hash_id,
+        'token' => $this->hash_id,
         'email' => $this->email
       ])
       ->from( $from )

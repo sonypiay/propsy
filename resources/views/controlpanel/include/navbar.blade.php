@@ -10,6 +10,13 @@
               <ul class="uk-nav uk-navbar-dropdown-nav">
                 <li><a href="{{ route('cp_developer_page') }}">Developer</a></li>
                 <li><a href="{{ route('cp_request_verification_page') }}">Pengajuan Verifikasi</a></li>
+                <li><a href="{{ route('cp_marketing_page') }}">Marketing <span class="uk-float-right" uk-icon="chevron-right"></span> </a>
+                  <div class="uk-navbar-dropdown" uk-dropdown="pos: right; offset: 25">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                      <li><a href="{{ route('cp_meeting_page') }}">Jadwal Meeting</a></li>
+                    </ul>
+                  </div>
+                </li>
               </ul>
             </div>
           </li>

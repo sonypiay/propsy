@@ -181,6 +181,7 @@
                               <li><a @click="onDetailRequest( unit.request_id )">Lihat Rincian</a></li>
                               <li><a target="_blank" :href="$root.url + '/developer/report/request_unit/save/' + unit.request_id">Cetak</a></li>
                               <li v-show="unit.status_request !== 'cancel' && unit.status_request !== 'reject' && unit.status_request !== 'accept'"><a @click="onRejectRequest( unit.request_id )">Tolak Pengajuan</a></li>
+                              <li target="_blank" v-if="unit.unit_status === 'booked' && unit.status_request === 'accept'"><a :href="$root.url + '/developer/project/edit_unit/' + unit.unit_type_id">Edit Status Unit </a></li>
                             </ul>
                           </div>
                         </div>
@@ -200,6 +201,12 @@
                 </div>
                 <div class="card-unit-footer">
                   <div class="uk-grid-small uk-child-width-auto" uk-grid>
+                    <div v-show="unit.status_request === 'accept'">
+                      <a class="uk-button uk-button-small uk-button-primary unit-readmore">
+                        <span v-if="unit.unit_status === 'booked'">Unit telah dipesan</span>
+                        <span v-else>Unit telah terjual</span>
+                      </a>
+                    </div>
                     <div>
                       <a class="uk-button uk-button-small uk-button-primary unit-readmore">Cicilan dipilih</a>
                       <div class="uk-width-2-3" uk-dropdown="mode: click;">
@@ -239,7 +246,7 @@
                     </div>
                   </div>
                 </div>
-                <div v-if="unit.meeting_status === 'done' && unit.isReviewed === 'N'" class="uk-margin-small-top card-unit-header">
+                <div v-show="unit.meeting_status === 'done' && unit.isReviewed === 'N'" class="uk-margin-small-top card-unit-header">
                   <a @click="onReviewRequest('accept', unit.request_id)" class="uk-button uk-button-primary uk-button-small status-review status-review-accept">Terima</a>
                   <a @click="onReviewRequest('reject', unit.request_id)" class="uk-button uk-button-primary uk-button-small status-review status-review-reject">Tolak</a>
                 </div>

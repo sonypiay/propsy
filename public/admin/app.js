@@ -1846,6 +1846,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['getcity'],
   data: function data() {
@@ -1906,6 +1907,44 @@ __webpack_require__.r(__webpack_exports__);
       var param = 'city=' + this.forms.city + '&status=' + this.forms.status;
       var url = this.$root.url + '/cp/customer/save_report?' + param;
       window.open(url, '_blank');
+    },
+    onDeleteCustomer: function onDeleteCustomer(id) {
+      var _this2 = this;
+
+      swal({
+        title: 'Konfirmasi',
+        text: 'Apakah anda ingin menghapus pelanggan ini?',
+        icon: 'warning',
+        buttons: {
+          confirm: {
+            value: true,
+            text: 'Ya'
+          },
+          cancel: 'Tidak'
+        }
+      }).then(function (val) {
+        if (val) {
+          axios({
+            method: 'delete',
+            url: _this2.$root.url + '/cp/customer/delete/' + id
+          }).then(function (res) {
+            swal({
+              title: 'Berhasil',
+              text: 'Pelanggan telah dihapus',
+              icon: 'success'
+            });
+
+            _this2.getCustomerList();
+          })["catch"](function (err) {
+            swal({
+              title: 'Whoops',
+              text: 'Terjadi kesalahan',
+              icon: 'error',
+              dangerMode: true
+            });
+          });
+        }
+      });
     }
   },
   mounted: function mounted() {
@@ -2418,6 +2457,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['getcity'],
   data: function data() {
@@ -2478,6 +2518,44 @@ __webpack_require__.r(__webpack_exports__);
       var param = 'status=' + this.forms.status + '&city=' + this.forms.city;
       var url = this.$root.url + '/cp/developer/save_report?' + param;
       window.open(url, '_blank');
+    },
+    onDeleteDeveloper: function onDeleteDeveloper(id) {
+      var _this2 = this;
+
+      swal({
+        title: 'Konfirmasi',
+        text: 'Apakah anda ingin menghapus developer ini?',
+        icon: 'warning',
+        buttons: {
+          confirm: {
+            value: true,
+            text: 'Ya'
+          },
+          cancel: 'Tidak'
+        }
+      }).then(function (val) {
+        if (val) {
+          axios({
+            method: 'delete',
+            url: _this2.$root.url + '/cp/developer/delete/' + id
+          }).then(function (res) {
+            swal({
+              title: 'Berhasil',
+              text: 'Developer telah dihapus',
+              icon: 'success'
+            });
+
+            _this2.getDeveloperList();
+          })["catch"](function (err) {
+            swal({
+              title: 'Whoops',
+              text: 'Terjadi kesalahan',
+              icon: 'error',
+              dangerMode: true
+            });
+          });
+        }
+      });
     }
   },
   mounted: function mounted() {
@@ -2916,6 +2994,10 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
 //
 //
 //
@@ -59847,6 +59929,21 @@ var render = function() {
                                   return _vm.onDetailCustomer(customer)
                                 }
                               }
+                            }),
+                            _vm._v(" "),
+                            _c("a", {
+                              staticClass: "uk-icon-link",
+                              attrs: {
+                                "uk-tooltip": "Hapus",
+                                "uk-icon": "trash"
+                              },
+                              on: {
+                                click: function($event) {
+                                  return _vm.onDeleteCustomer(
+                                    customer.customer_id
+                                  )
+                                }
+                              }
                             })
                           ]),
                           _vm._v(" "),
@@ -61352,6 +61449,19 @@ var render = function() {
                                   return _vm.onDetailDeveloper(dev)
                                 }
                               }
+                            }),
+                            _vm._v(" "),
+                            _c("a", {
+                              staticClass: "uk-icon-link",
+                              attrs: {
+                                "uk-tooltip": "Hapus",
+                                "uk-icon": "trash"
+                              },
+                              on: {
+                                click: function($event) {
+                                  return _vm.onDeleteDeveloper(dev.dev_user_id)
+                                }
+                              }
                             })
                           ]),
                           _vm._v(" "),
@@ -62704,17 +62814,16 @@ var render = function() {
                         return _c("tr", [
                           _c("td", [_vm._v(_vm._s(req.dev_name))]),
                           _vm._v(" "),
-                          _c("td", [
+                          _c("td", { attrs: { "uk-lightbox": "" } }, [
                             _c(
                               "a",
                               {
                                 staticClass:
                                   "uk-width-1-1 uk-button uk-button-small uk-button-default",
                                 attrs: {
-                                  target: "_blank",
                                   href:
                                     _vm.$root.url +
-                                    "/storage/assets/document_file/request_verification/" +
+                                    "/storage/assets/document/request_verification/" +
                                     req.npwp_image
                                 }
                               },
@@ -62722,17 +62831,16 @@ var render = function() {
                             )
                           ]),
                           _vm._v(" "),
-                          _c("td", [
+                          _c("td", { attrs: { "uk-lightbox": "" } }, [
                             _c(
                               "a",
                               {
                                 staticClass:
                                   "uk-width-1-1 uk-button uk-button-small uk-button-default",
                                 attrs: {
-                                  target: "_blank",
                                   href:
                                     _vm.$root.url +
-                                    "/storage/assets/document_file/request_verification/" +
+                                    "/storage/assets/document/request_verification/" +
                                     req.official_certificate
                                 }
                               },
@@ -62792,7 +62900,7 @@ var render = function() {
                             req.status_verification === "N"
                               ? _c("a", {
                                   staticClass:
-                                    "uk-button uk-button-default uk-button-small",
+                                    "uk-button uk-button-danger uk-button-small",
                                   attrs: {
                                     "uk-tooltip": "Tolak",
                                     "uk-icon": "close"

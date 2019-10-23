@@ -84,6 +84,7 @@ class ProjectListController extends Controller
     ->join('developer_user', 'project_list.dev_user_id', '=', 'developer_user.dev_user_id')
     ->join('city', 'project_list.city_id', '=', 'city.city_id')
     ->join('province', 'city.province_id', '=', 'province.province_id')
+    ->where('project_unit_type.unit_status', 'available')
     ->orderBy('project_unit_type.created_at', 'desc')
     ->take(9)
     ->get();
@@ -574,39 +575,63 @@ class ProjectListController extends Controller
       array_push( $whereClause, [ 'project_list.project_type','=', $type ]);
       $hasFilter = true;
     }
+
     if( $filtercity !== 'all' )
     {
       array_push( $whereClause, [ 'project_list.city_id', '=', $filtercity ]);
       $hasFilter = true;
     }
 
-    $result = $getunit->where($whereClause)
-    ->where(function( $query ) use ($keywords) {
-      $query->where('project_unit_type.unit_name', 'like', '%' . $keywords . '%')
-      ->orWhere('project_list.project_name', 'like', '%' . $keywords . '%')
-      ->orWhere('developer_user.dev_name', 'like', '%' . $keywords . '%');
-    });
-    if( ! empty( $price_min ) && ! empty( $price_max ) )
-    {
-      $result = $result->whereBetween('project_unit_type.unit_price', [$price_min, $price_max]);
-    }
-
     if( count( $facility ) != 0 )
     {
+      if( ! empty( $price_min ) && ! empty( $price_max ) )
+      {
+        array_push( $whereClause, ['project_unit_type.unit_price', '>=', $price_min]);
+        array_push( $whereClause, ['project_unit_type.unit_price', '<=', $price_max]);
+      }
+
       foreach( $facility as $key => $val )
       {
         if( $key === 0 )
         {
-          $result = $result->where(function($query) use ($val){
-            $query->where('project_unit_type.unit_facility', 'like', '%' . $val . '%');
+          $result = $getunit->where(function($query) use ($val, $whereClause, $keywords, $price_min, $price_max) {
+            $query->where('project_unit_type.unit_facility', 'like', '%' . $val . '%')
+            ->where( function( $q1 ) use ( $keywords ) {
+              $q1->where('project_unit_type.unit_name', 'like', '%' . $keywords . '%')
+              ->orWhere('project_list.project_name', 'like', '%' . $keywords . '%')
+              ->orWhere('developer_user.dev_name', 'like', '%' . $keywords . '%');
+            })
+            ->where($whereClause);
           });
         }
         else
         {
-          $result = $result->orWhere(function($query) use ($val){
-            $query->where('project_unit_type.unit_facility', 'like', '%' . $val . '%');
+          $result = $getunit->orWhere(function($query) use ($val, $whereClause, $keywords, $price_min, $price_max) {
+            $query->where('project_unit_type.unit_facility', 'like', '%' . $val . '%')
+            ->where( function( $q1 ) use ( $keywords ) {
+              $q1->where('project_unit_type.unit_name', 'like', '%' . $keywords . '%')
+              ->orWhere('project_list.project_name', 'like', '%' . $keywords . '%')
+              ->orWhere('developer_user.dev_name', 'like', '%' . $keywords . '%');
+            })
+            ->where($whereClause);
           });
         }
+      }
+    }
+    else
+    {
+      $result = $getunit->where(function($query) use ($whereClause) {
+        $query->where($whereClause);
+      })
+      ->where(function( $query ) use ($keywords) {
+        $query->where('project_unit_type.unit_name', 'like', '%' . $keywords . '%')
+        ->orWhere('project_list.project_name', 'like', '%' . $keywords . '%')
+        ->orWhere('developer_user.dev_name', 'like', '%' . $keywords . '%');
+      });
+
+      if( ! empty( $price_min ) && ! empty( $price_max ) )
+      {
+        $result = $result->whereBetween('project_unit_type.unit_price', [$price_min, $price_max]);
       }
     }
 

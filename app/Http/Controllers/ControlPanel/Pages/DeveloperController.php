@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\ControlPanel\Pages;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Database\DeveloperUser;
+use App\Database\VerificationDeveloper;
 use App\Database\AdminOwner;
 use App\Database\CityDB;
 use App\Http\Controllers\Controller;
@@ -128,5 +130,43 @@ class DeveloperController extends Controller
       'getcity' => $getcity
     ];
     return PDF::loadView('controlpanel.pages.reports.developer', $res)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
+  }
+
+  public function destroy( DeveloperUser $developer, VerificationDeveloper $verification, $id )
+  {
+    $getdeveloper = $developer->where('dev_user_id', $id);
+    $getverification = $verification->where('dev_user_id', $id)->first();
+    $result = $getdeveloper->first();
+    $storage = Storage::disk('assets');
+
+    if( ! empty( $result->dev_logo ) )
+    {
+      $image_path = 'images/devlogo';
+      if( $storage->exists( $image_path . '/' . $result->dev_logo ) )
+      {
+        $storage->delete( $image_path . '/' . $result->dev_logo );
+      }
+    }
+
+    if( ! empty( $getverification->npwp_image ) AND ! empty( $getverification->official_certificate ) )
+    {
+      $docpath = 'document/request_verification';
+      if( $storage->exists( $docpath . '/' . $getverification->npwp_image ) )
+      {
+        $storage->delete( $docpath . '/' . $getverification->npwp_image );
+      }
+      if( $storage->exists( $docpath . '/' . $getverification->official_certificate ) )
+      {
+        $storage->delete( $docpath . '/' . $getverification->official_certificate );
+      }
+    }
+
+    $getdeveloper->delete();
+    $res = [
+      'status' => 200,
+      'statusText' => 'deleted...'
+    ];
+
+    return response( $res, $res['status'] );
   }
 }

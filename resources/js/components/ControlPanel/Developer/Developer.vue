@@ -124,6 +124,7 @@
                 <tr v-for="dev in getdeveloper.results">
                   <td>
                     <a uk-tooltip="Lihat Detail" @click="onDetailDeveloper( dev )" class="uk-icon-link" uk-icon="forward"></a>
+                    <a uk-tooltip="Hapus" @click="onDeleteDeveloper( dev.dev_user_id )" class="uk-icon-link" uk-icon="trash"></a>
                   </td>
                   <td>{{ dev.dev_name }}</td>
                   <td>{{ dev.dev_email }}</td>
@@ -225,6 +226,40 @@ export default {
       let param = 'status=' + this.forms.status + '&city=' + this.forms.city;
       let url = this.$root.url + '/cp/developer/save_report?' + param;
       window.open( url, '_blank' );
+    },
+    onDeleteDeveloper( id )
+    {
+      swal({
+        title: 'Konfirmasi',
+        text: 'Apakah anda ingin menghapus developer ini?',
+        icon: 'warning',
+        buttons: {
+          confirm: { value: true, text: 'Ya' },
+          cancel: 'Tidak'
+        }
+      }).then( val => {
+        if( val )
+        {
+          axios({
+            method: 'delete',
+            url: this.$root.url + '/cp/developer/delete/' + id
+          }).then( res => {
+            swal({
+              title: 'Berhasil',
+              text: 'Developer telah dihapus',
+              icon: 'success'
+            });
+            this.getDeveloperList();
+          }).catch( err => {
+            swal({
+              title: 'Whoops',
+              text: 'Terjadi kesalahan',
+              icon: 'error',
+              dangerMode: true
+            });
+          });
+        }
+      });
     }
   },
   mounted() {

@@ -265,6 +265,7 @@ Route::group(['prefix' => 'cp'], function() {
     Route::get('/', 'ControlPanel\Pages\CustomerController@index')->name('cp_customer_page');
     Route::get('/get_customer', 'ControlPanel\Pages\CustomerController@get_customer');
     Route::get('/save_report', 'ControlPanel\Pages\CustomerController@save_report');
+    Route::delete('/delete/{id}', 'ControlPanel\Pages\CustomerController@destroy');
 
     Route::group(['prefix' => 'request_unit'], function() {
       Route::get('/', 'ControlPanel\Pages\ProjectRequestController@index')->name('cp_request_history_page');
@@ -278,6 +279,7 @@ Route::group(['prefix' => 'cp'], function() {
     Route::get('/', 'ControlPanel\Pages\DeveloperController@index')->name('cp_developer_page');
     Route::get('/get_developer', 'ControlPanel\Pages\DeveloperController@get_developer');
     Route::get('/save_report', 'ControlPanel\Pages\DeveloperController@save_report');
+    Route::delete('/delete/{id}', 'ControlPanel\Pages\DeveloperController@destroy');
 
     Route::group(['prefix' => 'verification'], function() {
       Route::get('/', 'ControlPanel\Pages\RequestVerificationController@index')->name('cp_request_verification_page');

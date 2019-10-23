@@ -110,6 +110,7 @@
                 <tr v-for="customer in getcustomer.results">
                   <td>
                     <a uk-tooltip="Lihat Detail" @click="onDetailCustomer( customer )" class="uk-icon-link" uk-icon="forward"></a>
+                    <a uk-tooltip="Hapus" @click="onDeleteCustomer( customer.customer_id )" class="uk-icon-link" uk-icon="trash"></a>
                   </td>
                   <td>{{ customer.customer_name }}</td>
                   <td>{{ customer.customer_email }}</td>
@@ -210,6 +211,40 @@ export default {
       let param = 'city=' + this.forms.city + '&status=' + this.forms.status;
       let url = this.$root.url + '/cp/customer/save_report?' + param;
       window.open( url, '_blank' );
+    },
+    onDeleteCustomer( id )
+    {
+      swal({
+        title: 'Konfirmasi',
+        text: 'Apakah anda ingin menghapus pelanggan ini?',
+        icon: 'warning',
+        buttons: {
+          confirm: { value: true, text: 'Ya' },
+          cancel: 'Tidak'
+        }
+      }).then( val => {
+        if( val )
+        {
+          axios({
+            method: 'delete',
+            url: this.$root.url + '/cp/customer/delete/' + id
+          }).then( res => {
+            swal({
+              title: 'Berhasil',
+              text: 'Pelanggan telah dihapus',
+              icon: 'success'
+            });
+            this.getCustomerList();
+          }).catch( err => {
+            swal({
+              title: 'Whoops',
+              text: 'Terjadi kesalahan',
+              icon: 'error',
+              dangerMode: true
+            });
+          });
+        }
+      });
     }
   },
   mounted() {

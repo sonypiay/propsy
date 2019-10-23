@@ -80,6 +80,8 @@ class MeetingListController extends Controller
       'meeting_appointment.meeting_note',
       'meeting_appointment.meeting_result',
       'meeting_appointment.document_file',
+      'meeting_appointment.created_by',
+      'meeting_appointment.updated_by',
       'meeting_appointment.created_at',
       'meeting_appointment.updated_at',
       'project_request.request_id',

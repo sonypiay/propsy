@@ -65,7 +65,7 @@
           </div>
           <div v-else class="uk-margin">
             <div v-if="getproject.total === 0" class="uk-alert-warning" uk-alert>
-              Unit tidak ada
+              <strong>{{ getproject.total }}</strong> Unit ditemukan di {{ forms.city.name }}
             </div>
             <div v-else class="uk-margin uk-grid-medium uk-grid-match" uk-grid>
               <div class="uk-width-1-1">
@@ -167,7 +167,7 @@ export default {
     return {
       forms: {
         keywords: this.keywords,
-        type: this.type,
+        type: this.type === '' ? 'all' : this.type,
         city: {
           value: 'all',
           name: 'Semua Kota'
@@ -233,6 +233,11 @@ export default {
                return this.forms.city.name = f.city_name;
             }
           });
+        }
+        else
+        {
+          this.forms.city.name = 'Semua Kota';
+          this.forms.city.value = 'all';
         }
         this.getproject.isLoading = false;
       }).catch( err => {

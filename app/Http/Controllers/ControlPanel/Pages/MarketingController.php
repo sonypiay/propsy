@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ControlPanel\Pages;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Database\MarketingUser;
 use App\Database\AdminOwner;
 use App\Database\CityDB;
@@ -111,5 +112,29 @@ class MarketingController extends Controller
       'getcity' => $getcity
     ];
     return PDF::loadView('controlpanel.pages.reports.marketing', $res)->setPaper('a4', 'landscape')->setWarnings(false)->stream( $filename );
+  }
+
+  public function destroy( MarketingUser $marketing, $id )
+  {
+    $getmarketing = $marketing->where('mkt_user_id', $id);
+    $result = $getmarketing->first();
+
+    if( ! empty( $result->mkt_profile_photo ) )
+    {
+      $image_path = 'images/avatar/marketing';
+      $storage = Storage::disk('assets');
+      if( $storage->exists( $image_path . '/' . $result->mkt_profile_photo ) )
+      {
+        $storage->delete( $image_path . '/' . $result->mkt_profile_photo );
+      }
+    }
+
+    $getmarketing->delete();
+    $res = [
+      'status' => 200,
+      'statusText' => 'deleted...'
+    ];
+
+    return response( $res, $res['status'] );
   }
 }

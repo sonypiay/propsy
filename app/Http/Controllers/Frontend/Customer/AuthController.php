@@ -91,30 +91,32 @@ class AuthController extends Controller
     }
     else
     {
+      $customerid = $customer->generateId();
+      $expire_date = time() + 60 * 30;
+      $hash_id = sha1( Hash::make($email.$hash_password) );
+      $data_verify = [
+        'customer_id' => $customerid,
+        'hash_id' => $hash_id,
+        'expire_date' => $expire_date
+      ];
+
+      $send = new CustomerEmailValidation( $data_verify['hash_id'], $getuser->customer_email );
+      Mail::send( $send );
+
       $insert = new $customer;
-      $insert->customer_id = $customer->generateId();
+      $insert->customer_id = $customerid;
       $insert->customer_name = $fullname;
       $insert->customer_email = $email;
       $insert->customer_username = $username;
       $insert->customer_password = $hash_password;
       $insert->save();
 
+      $verificationCustomer->makeVerification($data_verify);
+
       $getuser = $customer->where([
         ['customer_username', $username],
         ['customer_password', $hash_password]
       ])->first();
-
-      $expire_date = time() + 60 * 30;
-      $hash_id = sha1( Hash::make($email.$hash_password) );
-      $data_verify = [
-        'customer_id' => $getuser->customer_id,
-        'hash_id' => $hash_id,
-        'expire_date' => $expire_date
-      ];
-
-      $verificationCustomer->makeVerification($data_verify);
-      $send = new CustomerEmailValidation( $data_verify['hash_id'], $getuser->customer_email );
-      Mail::send( $send );
 
       session()->put('isCustomer', true);
       session()->put('customer_id', $getuser->customer_id);

@@ -19,3 +19,60 @@ body {
   text-transform: capitalize;
 }
 
+.dashboard_container {
+  margin-top: 2rem;
+}
+
+.dashboard_container .heading {
+  color: #333333;
+  font-size: 28px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+.dashboard_container .stats_container {
+  margin-top: 1rem;
+  border-bottom: 1px solid #dddddd;
+  padding-bottom: 1rem;
+}
+
+.dashboard_container .stats_container:last-child {
+  border-bottom: 0;
+}
+
+.dashboard_container .stats_container .stats_heading {
+  color: #333333;
+  font-size: 18px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  margin-bottom: 0.7rem;
+}
+
+.dashboard_container .stats_container .stats_body .stats_gridbox .stats_item {
+  color: #333333;
+  font-size: 32px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-align: center;
+}
+
+.dashboard_container .stats_container .stats_body .stats_gridbox .stats_lead {
+  color: #333333;
+  font-size: 20px;
+  font-style: normal;
+  font-stretch: normal;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  text-align: center;
+}
+

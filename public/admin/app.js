@@ -2280,7 +2280,244 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: [],
+  data: function data() {
+    return {
+      stats_users: {
+        customer: {
+          all: 0,
+          verified: 0,
+          unverified: 0,
+          current_registered: 0
+        },
+        developer: {
+          all: 0,
+          verified: 0,
+          unverified: 0,
+          current_registered: 0
+        },
+        marketing: {
+          all: 0
+        }
+      },
+      stats_project: {
+        project: {
+          all: 0,
+          available: 0,
+          soon: 0,
+          sold: 0
+        },
+        unit: {
+          all: 0,
+          available: 0,
+          sold: 0,
+          booked: 0
+        }
+      }
+    };
+  },
+  methods: {
+    getStatsUsers: function getStatsUsers() {
+      var _this = this;
+
+      axios({
+        method: 'get',
+        url: this.$root.url + '/cp/stats/users'
+      }).then(function (res) {
+        var result = res.data;
+        _this.stats_users.customer = result.data.customer;
+        _this.stats_users.developer = result.data.developer;
+        _this.stats_users.marketing = result.data.marketing;
+      })["catch"](function (err) {
+        console.log('Error ' + err.response.status + '. Unable to load data...');
+      });
+    },
+    getStatsProject: function getStatsProject() {
+      var _this2 = this;
+
+      axios({
+        method: 'get',
+        url: this.$root.url + '/cp/stats/project'
+      }).then(function (res) {
+        var result = res.data;
+        _this2.stats_project.project.available = result.data.project.available;
+        _this2.stats_project.project.soon = result.data.project.soon;
+        _this2.stats_project.project.sold = result.data.project.sold;
+        _this2.stats_project.project.all = result.data.project.all;
+        _this2.stats_project.unit.available = result.data.unit.available;
+        _this2.stats_project.unit.booked = result.data.unit.booked;
+        _this2.stats_project.unit.sold = result.data.unit.sold;
+        _this2.stats_project.unit.all = result.data.project.all;
+      })["catch"](function (err) {
+        console.log('Error ' + err.response.status + '. Unable to load data...');
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.getStatsUsers();
+    this.getStatsProject();
+  }
+});
 
 /***/ }),
 
@@ -61021,20 +61258,423 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("div", { staticClass: "uk-container" }, [
-        _vm._v("\n    Dashboard\n  ")
+  return _c("div", [
+    _c("div", { staticClass: "uk-container dashboard_container" }, [
+      _c("div", { staticClass: "heading" }, [_vm._v("Dashboard")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "stats_container" }, [
+        _c("div", { staticClass: "stats_heading" }, [_vm._v("Pelanggan")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "stats_body" }, [
+          _c(
+            "div",
+            { staticClass: "uk-grid-small", attrs: { "uk-grid": "" } },
+            [
+              _c("div", { staticClass: "uk-width-1-4" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "uk-card uk-card-body uk-card-default stats_gridbox"
+                  },
+                  [
+                    _c("div", { staticClass: "stats_item" }, [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.stats_users.customer.current_registered) +
+                          "\n              "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "stats_lead" }, [
+                      _vm._v("Terdaftar Hari ini")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-width-1-4" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "uk-card uk-card-body uk-card-default stats_gridbox"
+                  },
+                  [
+                    _c("div", { staticClass: "stats_item" }, [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.stats_users.customer.verified) +
+                          "\n              "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "stats_lead" }, [
+                      _vm._v("Terverifikasi")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-width-1-4" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "uk-card uk-card-body uk-card-default stats_gridbox"
+                  },
+                  [
+                    _c("div", { staticClass: "stats_item" }, [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.stats_users.customer.unverified) +
+                          "\n              "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "stats_lead" }, [
+                      _vm._v("Belum Verifikasi")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-width-1-4" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "uk-card uk-card-body uk-card-default stats_gridbox"
+                  },
+                  [
+                    _c("div", { staticClass: "stats_item" }, [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.stats_users.customer.all) +
+                          "\n              "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "stats_lead" }, [_vm._v("Total")])
+                  ]
+                )
+              ])
+            ]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "stats_container" }, [
+        _c("div", { staticClass: "stats_heading" }, [_vm._v("Pengembang")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "stats_body" }, [
+          _c(
+            "div",
+            { staticClass: "uk-grid-small", attrs: { "uk-grid": "" } },
+            [
+              _c("div", { staticClass: "uk-width-1-4" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "uk-card uk-card-body uk-card-default stats_gridbox"
+                  },
+                  [
+                    _c("div", { staticClass: "stats_item" }, [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.stats_users.developer.current_registered) +
+                          "\n              "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "stats_lead" }, [
+                      _vm._v("Terdaftar Hari ini")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-width-1-4" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "uk-card uk-card-body uk-card-default stats_gridbox"
+                  },
+                  [
+                    _c("div", { staticClass: "stats_item" }, [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.stats_users.developer.verified) +
+                          "\n              "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "stats_lead" }, [
+                      _vm._v("Terverifikasi")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-width-1-4" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "uk-card uk-card-body uk-card-default stats_gridbox"
+                  },
+                  [
+                    _c("div", { staticClass: "stats_item" }, [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.stats_users.developer.unverified) +
+                          "\n              "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "stats_lead" }, [
+                      _vm._v("Belum Verifikasi")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-width-1-4" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "uk-card uk-card-body uk-card-default stats_gridbox"
+                  },
+                  [
+                    _c("div", { staticClass: "stats_item" }, [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.stats_users.developer.all) +
+                          "\n              "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "stats_lead" }, [_vm._v("Total")])
+                  ]
+                )
+              ])
+            ]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "stats_container" }, [
+        _c("div", { staticClass: "stats_heading" }, [
+          _vm._v("Proyek Terdaftar")
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "stats_body" }, [
+          _c(
+            "div",
+            { staticClass: "uk-grid-small", attrs: { "uk-grid": "" } },
+            [
+              _c("div", { staticClass: "uk-width-1-4" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "uk-card uk-card-body uk-card-default stats_gridbox"
+                  },
+                  [
+                    _c("div", { staticClass: "stats_item" }, [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.stats_project.project.available) +
+                          "\n              "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "stats_lead" }, [
+                      _vm._v("Tersedia")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-width-1-4" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "uk-card uk-card-body uk-card-default stats_gridbox"
+                  },
+                  [
+                    _c("div", { staticClass: "stats_item" }, [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.stats_project.project.soon) +
+                          "\n              "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "stats_lead" }, [
+                      _vm._v("Segera Hadir")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-width-1-4" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "uk-card uk-card-body uk-card-default stats_gridbox"
+                  },
+                  [
+                    _c("div", { staticClass: "stats_item" }, [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.stats_project.project.sold) +
+                          "\n              "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "stats_lead" }, [
+                      _vm._v("Terjual")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-width-1-4" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "uk-card uk-card-body uk-card-default stats_gridbox"
+                  },
+                  [
+                    _c("div", { staticClass: "stats_item" }, [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.stats_project.project.all) +
+                          "\n              "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "stats_lead" }, [_vm._v("Total")])
+                  ]
+                )
+              ])
+            ]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "stats_container" }, [
+        _c("div", { staticClass: "stats_heading" }, [_vm._v("Unit Terdaftar")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "stats_body" }, [
+          _c(
+            "div",
+            { staticClass: "uk-grid-small", attrs: { "uk-grid": "" } },
+            [
+              _c("div", { staticClass: "uk-width-1-4" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "uk-card uk-card-body uk-card-default stats_gridbox"
+                  },
+                  [
+                    _c("div", { staticClass: "stats_item" }, [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.stats_project.unit.available) +
+                          "\n              "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "stats_lead" }, [
+                      _vm._v("Tersedia")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-width-1-4" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "uk-card uk-card-body uk-card-default stats_gridbox"
+                  },
+                  [
+                    _c("div", { staticClass: "stats_item" }, [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.stats_project.unit.booked) +
+                          "\n              "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "stats_lead" }, [
+                      _vm._v("Dipesan")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-width-1-4" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "uk-card uk-card-body uk-card-default stats_gridbox"
+                  },
+                  [
+                    _c("div", { staticClass: "stats_item" }, [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.stats_project.unit.sold) +
+                          "\n              "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "stats_lead" }, [
+                      _vm._v("Terjual")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "uk-width-1-4" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "uk-card uk-card-body uk-card-default stats_gridbox"
+                  },
+                  [
+                    _c("div", { staticClass: "stats_item" }, [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.stats_project.unit.all) +
+                          "\n              "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "stats_lead" }, [_vm._v("Total")])
+                  ]
+                )
+              ])
+            ]
+          )
+        ])
       ])
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 

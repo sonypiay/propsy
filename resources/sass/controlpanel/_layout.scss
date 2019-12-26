@@ -17,3 +17,36 @@ html, body {
     }
   }
 }
+
+.dashboard_container {
+  margin-top: 2rem;
+  .heading {
+    color: #333333;
+    @include fontsetting( $font-primary, 28px, 600, normal, normal, 0.4px );
+  }
+  .stats_container {
+    margin-top: 1rem;
+    border-bottom: 1px solid #dddddd;
+    &:last-child { border-bottom: 0; }
+    padding-bottom: 1rem;
+    .stats_heading {
+      color: #333333;
+      @include fontsetting( $font-primary, 18px, 600, normal, normal, 0.4px );
+      margin-bottom: .7rem;
+    }
+    .stats_body {
+      .stats_gridbox {
+        .stats_item {
+          color: #333333;
+          @include fontsetting( $font-primary, 32px, 600, normal, normal, 0.4px );
+          text-align: center;
+        }
+        .stats_lead {
+          color: #333333;
+          @include fontsetting( $font-primary, 20px, 400, normal, normal, 0.4px );
+          text-align: center;
+        }
+      }
+    }
+  }
+}

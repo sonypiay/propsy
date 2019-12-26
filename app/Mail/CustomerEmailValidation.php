@@ -31,7 +31,6 @@ class CustomerEmailValidation extends Mailable
         'email' => $this->email
       ])
       ->from( $from )
-      ->subject( $subject )
-      ->to( $this->email );
+      ->subject( $subject );
     }
 }

@@ -101,7 +101,8 @@ class AuthController extends Controller
       ];
 
       $send = new CustomerEmailValidation( $data_verify['hash_id'], $email );
-      Mail::send( $send );
+      $when = now()->addMinutes(5);
+      Mail::to( $email )->later( $when, $send );
 
       $insert = new $customer;
       $insert->customer_id = $customerid;

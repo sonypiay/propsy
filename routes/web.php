@@ -217,6 +217,11 @@ Route::group(['prefix' => 'cp'], function() {
   Route::post('/login', 'ControlPanel\LoginController@do_login');
   Route::get('/logout', 'ControlPanel\LoginController@do_logout')->name('cp_logout');
 
+  Route::group(['prefix' => 'stats'], function() {
+    Route::get('/users', 'ControlPanel\Pages\DashboardController@stats_users');
+    Route::get('/project', 'ControlPanel\Pages\DashboardController@stats_project');
+  });
+
   Route::group(['prefix' => 'manajemen'], function() {
     Route::get('/user_admin', 'ControlPanel\Pages\AdminOwnerController@admin_page')->name('cp_admin_page');
     Route::get('/get_user_admin', 'ControlPanel\Pages\AdminOwnerController@get_admin_owner');

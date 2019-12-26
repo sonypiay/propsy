@@ -118,7 +118,8 @@ class CustomerController extends Controller
 
         $verificationCustomer->makeVerification($data_verify);
         $send = new CustomerEmailValidation( $data_verify['hash_id'], $email );
-        Mail::send( $send );
+        $when = now()->addMinutes(5);
+        Mail::to( $email )->later( $when, $send );
 
         $getinfo->customer_email = $email;
         $getinfo->status_verification = 'N';
@@ -226,7 +227,8 @@ class CustomerController extends Controller
 
       $verificationCustomer->makeVerification($data_verify);
       $send = new CustomerEmailValidation( $data_verify['hash_id'], $getcustomer->customer_email );
-      Mail::send( $send );
+      $when = now()->addMinutes(5);
+      Mail::to( $email )->later( $when, $send );
       $res = ['status' => 200, 'statusText' => 'Link verifikasi telah terkirim. Silakan cek inbox / spam Anda'];
     }
     else
@@ -267,7 +269,8 @@ class CustomerController extends Controller
       ];
 
       $resetpassword->insertResetPassword( $data_reset_password );
-      Mail::send( new LinkResetPassword( $token, $email ) );
+      $when = now()->addMinutes(5);
+      Mail::to( $email )->later( $when, new LinkResetPassword( $token, $email ) );
     }
 
     $res = ['status' => 200, 'statusText' => 'success'];

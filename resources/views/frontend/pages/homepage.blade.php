@@ -1,5 +1,5 @@
 @extends('frontend.master')
-@section('tag_title', 'Manajemen Properti Syariah')
+@section('tag_title', 'Properti Syariah')
 @section('main_content')
 <div id="app">
   <homepage-available-project :session_user="{{ json_encode( $session_user ) }}" />

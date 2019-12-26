@@ -6,9 +6,9 @@
 <meta name="copyright" content="&copy;  {{ date('Y') }} | Maps All Right Reserved">
 <meta name="author" property="author" content="mastershifu" />
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="application-name" content="MAPS">
-<meta name="description" property="description" content="Aplikasi Manajemen Properti Syariah" />
-<meta name="keywords" property="keywords" content="properti, syariah, tugas akhir" />
+<meta name="application-name" content="PROPSY">
+<meta name="description" property="description" content="Aplikasi Marketplace Properti Syariah" />
+<meta name="keywords" property="keywords" content="properti, properti syariah, marketplace" />
 <link rel="canonical" href="{{ url('/') }}">
 <link rel="dns-prefetch" href="https://fonts.googleapis.com">
 <!--<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@voerro/vue-tagsinput@2.0.0/dist/style.css" media="screen" />-->

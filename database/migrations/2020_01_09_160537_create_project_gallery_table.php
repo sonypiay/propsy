@@ -14,8 +14,10 @@ class CreateProjectGalleryTable extends Migration
     public function up()
     {
         Schema::create('project_gallery', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->smallIncrements('gallery_id');
+            $table->string('gallery_filename', 50);
+            $table->string('project_id', 10);
+            $table->foreign('project_id')->on('project_list')->references('project_id')->onDelete('cascade');
         });
     }
 

@@ -19,7 +19,6 @@ class CreatePriceInstallmentTable extends Migration
             $table->unsignedInteger('dp_price');
             $table->unsignedInteger('installment_price');
             $table->unsignedTinyInteger('installment_tenor');
-            $table->timestamps();
             $table->foreign('unit_type_id')->references('unit_type_id')->on('project_unit_type')
             ->onDelete('cascade');
         });

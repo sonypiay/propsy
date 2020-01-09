@@ -32,6 +32,8 @@ class CreateProjectRequestTable extends Migration
             $table->unsignedSmallInteger('installment');
             $table->timestamps();
             $table->foreign('installment')->references('id')->on('price_installment');
+            $table->foreign('customer_id')->references('customer_id')->on('customer')
+            ->onDelete('cascade');
         });
 
         DB::statement('alter table project_request modify seqid smallint(4) unsigned not null auto_increment unique');

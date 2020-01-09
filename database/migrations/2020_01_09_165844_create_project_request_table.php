@@ -27,7 +27,7 @@ class CreateProjectRequestTable extends Migration
               'accept',
               'reject'
             ])->default('waiting_response');
-            $table->enum('isReviewed', ['Y', 'N']);
+            $table->enum('isReviewed', ['Y', 'N'])->default('N');
             $table->unsignedSmallInteger('seqid');
             $table->unsignedSmallInteger('installment');
             $table->timestamps();

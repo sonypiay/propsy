@@ -14,7 +14,7 @@ class CreateLogProjectRequestTable extends Migration
     public function up()
     {
         Schema::create('log_project_request', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('log_id');
             $table->text('log_message');
             $table->string('request_id', 18);
             $table->dateTime('log_date');

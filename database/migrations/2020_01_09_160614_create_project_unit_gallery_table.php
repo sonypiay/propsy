@@ -15,7 +15,7 @@ class CreateProjectUnitGalleryTable extends Migration
     {
         Schema::create('project_unit_gallery', function (Blueprint $table) {
             $table->smallIncrements('unit_gallery_id');
-            $table->string('unit_gallery_thumbnail', 60);
+            $table->string('unit_gallery_filename', 60);
             $table->string('unit_type_id', 8);
             $table->foreign('unit_type_id')->on('project_unit_type')->references('unit_type_id')->onDelete('cascade');
         });

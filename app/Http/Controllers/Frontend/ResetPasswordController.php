@@ -86,7 +86,7 @@ class ResetPasswordController extends Controller
         }
 
         $update->save();
-        $gettoken->delete();
+        $resetpassword->where('useremail', $result->useremail)->delete();
 
         $res = [
           'status' => 200,

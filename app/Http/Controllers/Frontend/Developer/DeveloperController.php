@@ -11,9 +11,8 @@ use App\Database\MarketingUser;
 use App\Database\ProvinceDB;
 use App\Database\CityDB;
 use App\Database\ResetPassword;
-use App\Mail\LinkResetPassword;
 use App\Http\Controllers\Controller;
-use Mail;
+use App\Events\ResetPasswordEvent;
 
 class DeveloperController extends Controller
 {
@@ -214,9 +213,7 @@ class DeveloperController extends Controller
         'email' => $email,
         'usertype' => $usertype
       ];
-
-      $resetpassword->insertResetPassword( $data_reset_password );
-      Mail::send( new LinkResetPassword( $token, $email ) );
+      event( new ResetPasswordEvent( $data_reset_password ) );
     }
 
     $res = ['status' => 200, 'statusText' => 'success'];

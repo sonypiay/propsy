@@ -8,7 +8,7 @@ use App\Database\Customer;
 use App\Database\VerificationCustomer;
 use App\Http\Controllers\Controller;
 use App\Mail\CustomerEmailValidation;
-use Mail;
+use App\Events\CustomerEmailVerificationEvent;
 
 class AuthController extends Controller
 {
@@ -100,9 +100,6 @@ class AuthController extends Controller
         'expire_date' => $expire_date
       ];
 
-      $send = new CustomerEmailValidation( $data_verify['hash_id'], $email );
-      $when = now()->addMinutes(5);
-      Mail::to( $email )->later( $when, $send );
 
       $insert = new $customer;
       $insert->customer_id = $customerid;
@@ -112,7 +109,7 @@ class AuthController extends Controller
       $insert->customer_password = $hash_password;
       $insert->save();
 
-      $verificationCustomer->makeVerification($data_verify);
+      event( new CustomerEmailVerificationEvent( $data_verify, $email ) );
 
       $getuser = $customer->where([
         ['customer_username', $username],

@@ -11,9 +11,8 @@ use App\Database\VerificationCustomer;
 use App\Database\ResetPassword;
 use App\Database\ProjectRequest;
 use App\Http\Controllers\Controller;
-use App\Mail\CustomerEmailValidation;
-use App\Mail\LinkResetPassword;
-use Mail;
+use App\Events\CustomerEmailVerificationEvent;
+use App\Events\ResetPasswordEvent;
 
 class CustomerController extends Controller
 {
@@ -116,10 +115,7 @@ class CustomerController extends Controller
           'expire_date' => $expire_date
         ];
 
-        $verificationCustomer->makeVerification($data_verify);
-        $send = new CustomerEmailValidation( $data_verify['hash_id'], $email );
-        $when = now()->addMinutes(5);
-        Mail::to( $email )->later( $when, $send );
+        event( new CustomerEmailVerificationEvent( $data_verify, $email ) );
 
         $getinfo->customer_email = $email;
         $getinfo->status_verification = 'N';
@@ -225,10 +221,7 @@ class CustomerController extends Controller
         'expire_date' => $expire_date
       ];
 
-      $verificationCustomer->makeVerification($data_verify);
-      $send = new CustomerEmailValidation( $data_verify['hash_id'], $getcustomer->customer_email );
-      $when = now()->addMinutes(5);
-      Mail::to( $email )->later( $when, $send );
+      event( new CustomerEmailVerificationEvent( $data_verify, $getcustomer->customer_email ) );
       $res = ['status' => 200, 'statusText' => 'Link verifikasi telah terkirim. Silakan cek inbox / spam Anda'];
     }
     else
@@ -268,9 +261,7 @@ class CustomerController extends Controller
         'usertype' => 'customer'
       ];
 
-      $resetpassword->insertResetPassword( $data_reset_password );
-      $when = now()->addMinutes(5);
-      Mail::to( $email )->later( $when, new LinkResetPassword( $token, $email ) );
+      event( new ResetPasswordEvent( $data_reset_password ) );
     }
 
     $res = ['status' => 200, 'statusText' => 'success'];

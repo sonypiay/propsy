@@ -63,10 +63,10 @@ class RequestUnitController extends Controller
       'price_installment.installment_tenor'
     )
     ->join('customer', 'project_request.customer_id', '=', 'customer.customer_id')
-    ->join('city', 'customer.city_id', '=', 'city.city_id')
-    ->join('province', 'city.province_id', '=', 'province.province_id')
     ->join('price_installment', 'project_request.installment', '=', 'price_installment.id')
     ->join('project_unit_type', 'project_request.unit_type_id', '=', 'project_unit_type.unit_type_id')
+    ->leftJoin('city', 'customer.city_id', '=', 'city.city_id')
+    ->leftJoin('province', 'city.province_id', '=', 'province.province_id')
     ->leftJoin('meeting_appointment', 'project_request.request_id', '=', 'meeting_appointment.request_id');
 
     if( empty( $keywords ) )

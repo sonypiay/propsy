@@ -37,7 +37,6 @@ class RequestVerificationController extends Controller
       'verification_developer.hash_id',
       'verification_developer.npwp_image',
       'verification_developer.official_certificate',
-      'verification_developer.additional_document',
       'verification_developer.status_verification',
       'verification_developer.created_at',
       'verification_developer.updated_at',
